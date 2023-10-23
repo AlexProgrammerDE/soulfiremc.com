@@ -1,8 +1,4 @@
 {
   "index": "Introduction",
-  "installation": "Installation",
-  "configuration": "Configuration",
-  "features": "Features",
-  "troubleshooting": "Troubleshooting",
-  "development": "Developer Guides"
+  "installation": "Installation"
 }

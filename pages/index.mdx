@@ -1,5 +1,5 @@
 ---
-title: SkinsRestorer
+title: ServerWrecker
 ---
 
 import Link from "next/link";
@@ -10,7 +10,7 @@ import Image from "next/image";
 import TimeAgo from "react-timeago";
 
 export const getStaticProps = ({params}) => {
-    return fetch(`https://api.github.com/repos/SkinsRestorer/SkinsRestorerX/releases/latest`)
+    return fetch(`https://api.github.com/repos/AlexProgrammerDE/ServerWrecker/releases/latest`)
         .then(res => res.json())
         .then(release => ({
             props: {
@@ -100,12 +100,12 @@ export const FeatureCard = ({title, description, icon}) => {
             <div className="p-4 flex flex-col">
                 <div className="mt-8 md:mt-16 flex flex-col md:flex-row mx-auto gap-2">
                     <Image src="/logo.png" width={128} height={128} className="w-24 md:w-16 h-24 md:h-16 mx-auto"
-                           alt="SkinsRestorer Logo"/>
+                           alt="ServerWrecker Logo"/>
                     <h1 className="my-auto text-center text-5xl font-bold">
-                        SkinsRestorer
+                        ServerWrecker
                     </h1>
                 </div>
-                <p className="text-center mt-2 text-lg">The most popular skin plugin for Minecraft</p>
+                <p className="text-center mt-2 text-lg"> Advanced Minecraft Server-Stresser Tool.<br/>Launch bot attacks on your servers to measure performance. </p>
                 <Link href="/docs/installation"
                       className="nextra-card front-button mt-6 p-2 group">
                     <span>Get Started</span>
@@ -117,7 +117,7 @@ export const FeatureCard = ({title, description, icon}) => {
                     >
                         <FeatureCard
                             title="Easy to use"
-                            description="SkinsRestorer is easy to use, just install it and you're ready to go!"
+                            description="ServerWrecker is easy to use, just install it and you're ready to go!"
                             icon={<RocketLaunchIcon className="w-6 h-6 mx-auto my-2"/>}
                         />
                     </Link>
@@ -128,14 +128,14 @@ export const FeatureCard = ({title, description, icon}) => {
                     />
                     <FeatureCard
                         title="Restore your skins"
-                        description="SkinsRestorer can restore your skins on offline mode servers!"
+                        description="ServerWrecker can restore your skins on offline mode servers!"
                         icon={<CloudArrowDownIcon
                             className="w-6 h-6 mx-auto my-2"/>}
                     />
                     <a href={process.env.NEXT_PUBLIC_GITHUB_LINK}>
                         <FeatureCard
                             title="Open Source"
-                            description="SkinsRestorer is open source, you can contribute to it on GitHub!"
+                            description="ServerWrecker is open source, you can contribute to it on GitHub!"
                             icon={<svg xmlns="http://www.w3.org/2000/svg" height="32.666666666666664" width="32"
                                        viewBox="0 0 98 96" className="w-6 h-6 mx-auto my-2">
                                 <path fillRule="evenodd" clipRule="evenodd"
@@ -151,7 +151,7 @@ export const FeatureCard = ({title, description, icon}) => {
                     />
                     <FeatureCard
                         title="Use our GUI"
-                        description={<span>SkinsRestorer has a GUI to change your skin, just run <code
+                        description={<span>ServerWrecker has a GUI to change your skin, just run <code
                             className="highlight-code">/skins</code>!</span>}
                         icon={<Squares2X2Icon className="w-6 h-6 mx-auto my-2"/>}
                     />
