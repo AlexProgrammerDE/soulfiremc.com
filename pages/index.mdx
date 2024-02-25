@@ -52,7 +52,7 @@ export const getStaticProps = ({params}) => {
 export function mapAssetName(name) {
     if (name.includes(".jar")) return "Universal (.jar)"
     if (name.includes(".msi")) return "Windows (.msi)"
-    if (name.includes(".pkg") || name.includes(".dmg")) return "Mac (.pkg)"
+    if (name.includes(".pkg") || name.includes(".dmg")) return "macOS (.pkg)"
     if (name.includes(".deb")) return "Debian (.deb) "
     if (name.includes(".rpm")) return "RedHat (.rpm)"
     return "Unknown"
