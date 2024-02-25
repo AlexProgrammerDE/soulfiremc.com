@@ -2,20 +2,15 @@
 title: SoulFire
 ---
 
-
-
-
-
-
 import Link from "next/link";
 import {ArrowDownTrayIcon, ChevronDoubleRightIcon} from "@heroicons/react/20/solid";
-import {BoltIcon, CloudArrowDownIcon, PhotoIcon, RocketLaunchIcon, Squares2X2Icon} from "@heroicons/react/24/solid";
+import {BoltIcon, CloudArrowDownIcon, CubeTransparentIcon, RocketLaunchIcon, Squares2X2Icon} from "@heroicons/react/24/solid";
 import {useSSG} from 'nextra/ssg';
 import Image from "next/image";
 import TimeAgo from "react-timeago";
 
 export const getStaticProps = ({params}) => {
-    return fetch(`https://api.github.com/repos/AlexProgrammerDE/SoulFire/releases/latest`)
+    return fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFire/releases/latest")
         .then(res => res.json())
         .then(release => ({
             props: {
@@ -173,13 +168,13 @@ export const FeatureCard = ({title, description, icon}) => {
                         />
                     </Link>
                     <FeatureCard
-                        title="Change your skin"
-                        description={<span>Just run <code className="highlight-code">/skin &lt;name&gt;</code> to change your skin! It's that easy!</span>}
+                        title="High performance"
+                        description="With SoulFire you can have hundreds of bots with low CPU and RAM."
                         icon={<BoltIcon className="w-6 h-6 mx-auto my-2"/>}
                     />
                     <FeatureCard
-                        title="Restore your skins"
-                        description="SoulFire can restore your skins on offline mode servers!"
+                        title="Bring your own accounts"
+                        description="Add your own Offline, Java, Bedrock, The Altening and EasyMC accounts "
                         icon={<CloudArrowDownIcon
                             className="w-6 h-6 mx-auto my-2"/>}
                     />
@@ -196,14 +191,13 @@ export const FeatureCard = ({title, description, icon}) => {
                         />
                     </a>
                     <FeatureCard
-                        title="Use your own skin"
-                        description={<span>Use <code className="highlight-code">/skin url &lt;url&gt;</code> to use a skin from the internet!</span>}
-                        icon={<PhotoIcon className="w-6 h-6 mx-auto my-2"/>}
+                        title="Version support"
+                        description="You can use any Release, Beta, Alpha, April Fools version and even Bedrock!"
+                        icon={<CubeTransparentIcon className="w-6 h-6 mx-auto my-2"/>}
                     />
                     <FeatureCard
-                        title="Use our GUI"
-                        description={<span>SoulFire has a GUI to change your skin, just run <code
-                            className="highlight-code">/skins</code>!</span>}
+                        title="Use plugins"
+                        description="SoulFire has useful plugins built-in and you can also add your own!"
                         icon={<Squares2X2Icon className="w-6 h-6 mx-auto my-2"/>}
                     />
                 </div>
