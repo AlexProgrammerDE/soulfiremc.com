@@ -1,4 +1,4 @@
-# serverwrecker.net
+# soulfiremc.com
 The code for our website and documentation!
 
 <p align="center">

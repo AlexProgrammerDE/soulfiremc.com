@@ -1,12 +1,12 @@
 {
-  "name": "serverwrecker.net",
+  "name": "soulfiremc.com",
   "version": "1.0.0",
   "description": "The code for our website and documentation!",
   "scripts": {
     "start": "next"
   },
   "keywords": [],
-  "author": "SRTeam",
+  "author": "AlexProgrammerDE",
   "license": "ISC",
   "dependencies": {
     "@heroicons/react": "^2.0.18",

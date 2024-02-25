@@ -2,9 +2,9 @@ import Image from "next/image";
 import {DocsThemeConfig, useConfig} from "nextra-theme-docs";
 import {useRouter} from "next/router";
 
-const description = "ServerWrecker is a Minecraft plugin that allows the modification of ingame skins. That also allows the restoring of skins on offline mode servers."
+const description = "SoulFire is a Minecraft plugin that allows the modification of ingame skins. That also allows the restoring of skins on offline mode servers."
 const config: DocsThemeConfig = {
-  docsRepositoryBase: "https://github.com/AlexProgrammerDE/serverwrecker.net/tree/main/",
+  docsRepositoryBase: "https://github.com/AlexProgrammerDE/soulfiremc.com/tree/main/",
   useNextSeoProps() {
     const {pathname} = useRouter()
     if (pathname !== '/') {
@@ -38,8 +38,8 @@ const config: DocsThemeConfig = {
   // banner: {
   //  key: 'v15-release',
   //  text: (
-  //      <a href="https://github.com/AlexProgrammerDE/ServerWrecker" target="_blank" rel="noreferrer">
-  //        🎉 ServerWrecker v2 is released. Read more →
+  //      <a href="https://github.com/AlexProgrammerDE/SoulFire" target="_blank" rel="noreferrer">
+  //        🎉 SoulFire v2 is released. Read more →
   //      </a>
   //  )
   // },
@@ -47,8 +47,8 @@ const config: DocsThemeConfig = {
     toggleButton: true
   },
   logo: <div style={{display: "flex", alignItems: "center", gap: "4px"}}>
-    <Image src={"/logo.png"} width={32} height={32} alt="ServerWrecker Logo"/>
-    <span>ServerWrecker</span>
+    <Image src={"/logo.png"} width={32} height={32} alt="SoulFire Logo"/>
+    <span>SoulFire</span>
   </div>,
   project: {
     link: process.env.NEXT_PUBLIC_GITHUB_LINK,
@@ -72,7 +72,7 @@ const config: DocsThemeConfig = {
     text: (
         <div className="flex flex-wrap gap-2">
           <span>
-            {new Date().getFullYear()} © <a href="https://serverwrecker.net" target="_blank">ServerWrecker</a>
+            {new Date().getFullYear()} © <a href="https://soulfiremc.com" target="_blank">SoulFire</a>
           </span>
           <a href="https://vercel.com/?utm_source=serverwrecker&utm_campaign=oss">
             <svg width={String(212 / 1.5)} height={String(44 / 1.5)} viewBox="0 0 212 44" fill="none"
