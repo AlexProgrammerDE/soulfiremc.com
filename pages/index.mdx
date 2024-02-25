@@ -2,6 +2,11 @@
 title: SoulFire
 ---
 
+
+
+
+
+
 import Link from "next/link";
 import {ArrowDownTrayIcon, ChevronDoubleRightIcon} from "@heroicons/react/20/solid";
 import {BoltIcon, CloudArrowDownIcon, PhotoIcon, RocketLaunchIcon, Squares2X2Icon} from "@heroicons/react/24/solid";
@@ -19,7 +24,22 @@ export const getStaticProps = ({params}) => {
                         url: release.html_url,
                         name: release.name,
                         tag: release.tag_name,
-                        download: release.assets[0].browser_download_url,
+                        assets: release.assets.map(asset => ({
+                            name: asset.name,
+                            url: asset.browser_download_url
+                        })).sort((a, b) => {
+                            // .jar first, then .msi, then .pkg, then .deb, then .rpm, then unknown
+                            if (a.name.includes(".jar")) return -1
+                            if (b.name.includes(".jar")) return 1
+                            if (a.name.includes(".msi")) return -1
+                            if (b.name.includes(".msi")) return 1
+                            if (a.name.includes(".pkg") || a.name.includes(".dmg")) return -1
+                            if (b.name.includes(".pkg") || b.name.includes(".dmg")) return 1
+                            if (a.name.includes(".deb")) return -1
+                            if (b.name.includes(".deb")) return 1
+                            if (a.name.includes(".rpm")) return -1
+                            if (b.name.includes(".rpm")) return 1
+                        }),
                         author: {
                             name: release.author.login,
                             url: release.author.html_url,
@@ -34,11 +54,20 @@ export const getStaticProps = ({params}) => {
         }))
 }
 
+export function mapAssetName(name) {
+    if (name.includes(".jar")) return "Universal (.jar)"
+    if (name.includes(".msi")) return "Windows (.msi)"
+    if (name.includes(".pkg") || name.includes(".dmg")) return "Mac (.pkg)"
+    if (name.includes(".deb")) return "Debian (.deb) "
+    if (name.includes(".rpm")) return "RedHat (.rpm)"
+    return "Unknown"
+}
+
 export const LatestRelease = () => {
     const {latest} = useSSG()
     return (
         <div
-            className="nextra-card mt-4 p-4 group flex flex-wrap gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800">
+            className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800">
             <div className="flex flex-col">
                 <div className="flex flex-wrap gap-1">
                     <a
@@ -67,13 +96,34 @@ export const LatestRelease = () => {
                     </a>
                 </div>
             </div>
-            <div className="flex flex-col justify-center">
-                <a
-                    href={latest.download}
-                    className="nextra-card front-button p-2 group">
-                    <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
-                    <span>Download</span>
-                </a>
+            <div className="flex max-md:flex-wrap md:flex-row gap-4 justify-start">
+                <div className="flex flex-col flex-shrink-0">
+                    <h3 className="text-lg font-semibold">Binaries</h3>
+                    <div className="flex flex-wrap gap-1">
+                        <a
+                            href={latest.assets[0].url}
+                            className="nextra-card front-button p-2 group">
+                            <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
+                            <span>{mapAssetName(latest.assets[0].name)}</span>
+                        </a>
+                    </div>
+                </div>
+                <div className="flex flex-col flex-grow-0">
+                    <h3 className="text-lg font-semibold">Installers</h3>
+                    <div className="grid grid-cols-2 gap-2 justify-start justify-items-start">
+                        {
+                            latest.assets.slice(1).map(asset => (
+                                <a
+                                    href={asset.url}
+                                    key={asset.name}
+                                    className="nextra-card front-button p-2 group w-full">
+                                    <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
+                                    <span>{mapAssetName(asset.name)}</span>
+                                </a>
+                            ))
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     )
@@ -105,7 +155,8 @@ export const FeatureCard = ({title, description, icon}) => {
                         SoulFire
                     </h1>
                 </div>
-                <p className="text-center mt-2 text-lg"> Advanced Minecraft Server-Stresser Tool.<br/>Launch bot attacks on your servers to measure performance. </p>
+                <p className="text-center mt-2 text-lg">Advanced Minecraft Server-Stresser Tool.<br/>Launch bot attacks
+                    on your servers to measure performance.</p>
                 <Link href="/docs/installation"
                       className="nextra-card front-button mt-6 p-2 group">
                     <span>Get Started</span>
