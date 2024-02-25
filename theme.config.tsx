@@ -2,7 +2,7 @@ import Image from "next/image";
 import {DocsThemeConfig, useConfig} from "nextra-theme-docs";
 import {useRouter} from "next/router";
 
-const description = "SoulFire is a Minecraft plugin that allows the modification of ingame skins. That also allows the restoring of skins on offline mode servers."
+const description = "Advanced Minecraft Server-Stresser Tool. Launch bot attacks on your servers to measure performance."
 const config: DocsThemeConfig = {
   docsRepositoryBase: "https://github.com/AlexProgrammerDE/soulfiremc.com/tree/main/",
   useNextSeoProps() {
@@ -19,8 +19,8 @@ const config: DocsThemeConfig = {
 
     return (
         <>
-          <meta name="msapplication-TileColor" content="#B2A711"/>
-          <meta name="theme-color" content="#B2A711"/>
+          <meta name="msapplication-TileColor" content="#3289BF"/>
+          <meta name="theme-color" content="#3289BF"/>
           <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
           <link rel="icon" href="/favicon.ico"/>
@@ -36,7 +36,7 @@ const config: DocsThemeConfig = {
     )
   },
   // banner: {
-  //  key: 'v15-release',
+  //  key: 'major-release',
   //  text: (
   //      <a href="https://github.com/AlexProgrammerDE/SoulFire" target="_blank" rel="noreferrer">
   //        🎉 SoulFire v2 is released. Read more →
