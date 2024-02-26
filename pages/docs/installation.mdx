@@ -17,7 +17,7 @@ To be able to use SoulFire, little is needed:
 * An internet connection to download the software.
 * A supported operating system (`Windows`, `macOS`, `Linux`) with an `amd64/x86_64` architecture.
 
-## About amd64/x86_64
+## Universal distribution (.jar)
 
 The software is fully able to run on `aarch64/arm64`, but we do not provide official support for it using the provided
 installation methods.
@@ -44,7 +44,7 @@ Select your operating system type below to get started.
                 width={24}
                 height={24}/>
         }
-        title="Windows"
+        title="Windows (.msi)"
         href="/docs/installation/windows"
     >
     </Card>
@@ -52,10 +52,11 @@ Select your operating system type below to get started.
         icon={
             <Image
                 src="/platform/macos.png"
-                Debian                width={24}
+                alt="macOS"
+                width={24}
                 height={24}/>
         }
-        title="macOS"
+        title="macOS (.pkg)"
         href="/docs/installation/macos"
     >
     </Card>
@@ -63,7 +64,8 @@ Select your operating system type below to get started.
         icon={
             <Image
                 src="/platform/debian.png"
-                Debian                width={24}
+                alt="Debian"
+                width={24}
                 height={24}/>
         }
         title="Debian (.deb)"
@@ -74,7 +76,8 @@ Select your operating system type below to get started.
         icon={
             <Image
                 src="/platform/redhat.png"
-                Debian                width={24}
+                alt="Red Hat"
+                width={24}
                 height={24}/>
         }
         title="Red Hat (.rpm)"
