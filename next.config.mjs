@@ -33,6 +33,11 @@ const securityHeaders = [
 
 export default withNextra({
     reactStrictMode: true,
+    cleanDistDir: true,
+    i18n: {
+        locales: ['en'],
+        defaultLocale: 'en'
+    },
     redirects: async () => {
         return [
             {
