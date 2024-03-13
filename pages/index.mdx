@@ -4,12 +4,18 @@ title: SoulFire
 
 import Link from "next/link";
 import {ArrowDownTrayIcon, ChevronDoubleRightIcon} from "@heroicons/react/20/solid";
-import {BoltIcon, CloudArrowDownIcon, CubeTransparentIcon, RocketLaunchIcon, Squares2X2Icon} from "@heroicons/react/24/solid";
+import {
+    BoltIcon,
+    CloudArrowDownIcon,
+    CubeTransparentIcon,
+    RocketLaunchIcon,
+    Squares2X2Icon
+} from "@heroicons/react/24/solid";
 import {useSSG} from 'nextra/ssg';
 import Image from "next/image";
 import TimeAgo from "react-timeago";
 
-export const getStaticProps = ({params}) => {
+export const getStaticProps = () => {
     return fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFire/releases/latest")
         .then(res => res.json())
         .then(release => ({
@@ -24,6 +30,7 @@ export const getStaticProps = ({params}) => {
                             url: asset.browser_download_url
                         })).sort((a, b) => {
                             // .jar first, then .msi, then .pkg, then .deb, then .rpm, then unknown
+                            if (a.name.includes(".jar") && b.name.includes(".jar")) return a.name.localeCompare(b.name)
                             if (a.name.includes(".jar")) return -1
                             if (b.name.includes(".jar")) return 1
                             if (a.name.includes(".msi")) return -1
@@ -50,9 +57,10 @@ export const getStaticProps = ({params}) => {
 }
 
 export function mapAssetName(name) {
-    if (name.includes(".jar")) return "Universal (.jar)"
+    if (name.includes("Client") && name.includes(".jar")) return "Client (.jar)"
+    if (name.includes("Dedicated") && name.includes(".jar")) return "Dedicated (.jar)"
     if (name.includes(".msi")) return "Windows (.msi)"
-    if (name.includes(".pkg") || name.includes(".dmg")) return "macOS (.pkg)"
+    if (name.includes(".pkg")) return "macOS (.pkg)"
     if (name.includes(".deb")) return "Debian (.deb) "
     if (name.includes(".rpm")) return "Red Hat (.rpm)"
     return "Unknown"
@@ -60,6 +68,16 @@ export function mapAssetName(name) {
 
 export const LatestRelease = () => {
     const {latest} = useSSG()
+    const createAssetButton = (asset) => (
+        <a
+            href={asset.url}
+            key={asset.name}
+            className="nextra-card front-button p-2 group w-full">
+            <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
+            <span>{mapAssetName(asset.name)}</span>
+        </a>
+    )
+
     return (
         <div
             className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800">
@@ -91,31 +109,19 @@ export const LatestRelease = () => {
                     </a>
                 </div>
             </div>
-            <div className="flex max-md:flex-wrap md:flex-row gap-4 justify-start">
+            <div className="min-w-fit flex max-md:flex-wrap md:flex-row gap-4 justify-start">
                 <div className="flex flex-col flex-shrink-0">
                     <h3 className="text-lg font-semibold">Binaries</h3>
-                    <div className="flex flex-wrap gap-1">
-                        <a
-                            href={latest.assets[0].url}
-                            className="nextra-card front-button p-2 group">
-                            <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
-                            <span>{mapAssetName(latest.assets[0].name)}</span>
-                        </a>
+                    <div className="grid grid-cols-1 gap-2 justify-start justify-items-start">
+                        {createAssetButton(latest.assets[0])}
+                        {createAssetButton(latest.assets[1])}
                     </div>
                 </div>
                 <div className="flex flex-col flex-grow-0">
                     <h3 className="text-lg font-semibold">Installers</h3>
                     <div className="grid grid-cols-2 gap-2 justify-start justify-items-start">
                         {
-                            latest.assets.slice(1).map(asset => (
-                                <a
-                                    href={asset.url}
-                                    key={asset.name}
-                                    className="nextra-card front-button p-2 group w-full">
-                                    <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
-                                    <span>{mapAssetName(asset.name)}</span>
-                                </a>
-                            ))
+                            latest.assets.slice(2).map(createAssetButton)
                         }
                     </div>
                 </div>
