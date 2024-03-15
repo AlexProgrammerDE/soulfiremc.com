@@ -9,7 +9,7 @@ const config: DocsThemeConfig = {
     const {pathname} = useRouter()
     if (pathname !== '/') {
       return {
-        titleTemplate: '%s – SR'
+        titleTemplate: '%s – SF'
       }
     }
   },
@@ -74,7 +74,7 @@ const config: DocsThemeConfig = {
           <span>
             {new Date().getFullYear()} © <a href="https://soulfiremc.com" target="_blank">SoulFire</a>
           </span>
-          <a href="https://vercel.com/?utm_source=serverwrecker&utm_campaign=oss">
+          <a href="https://vercel.com/?utm_source=soulfire&utm_campaign=oss">
             <svg width={String(212 / 1.5)} height={String(44 / 1.5)} viewBox="0 0 212 44" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
               <rect width="212" height="44" rx="8" fill="black"/>
