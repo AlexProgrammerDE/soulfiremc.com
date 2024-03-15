@@ -1,0 +1,8 @@
+{
+  "accounts": "Import Accounts",
+  "proxies": "Import Proxies",
+  "versions": "Supported Versions",
+  "commands": "Commands",
+  "plugins": "Plugins",
+  "cli-flags": "CLI Flags"
+}

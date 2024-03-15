@@ -1,0 +1,39 @@
+# Import Proxies
+
+SoulFire supports HTTP, SOCKS4 and SOCKS5 proxies.
+
+Select the proxy type in the GUI or CLI and use one of these formats with one proxy per line:
+
+## HTTP
+
+```text
+ip:port <- no authentication
+ip:port:username:password <- authentication
+```
+
+## SOCKS4
+
+```text
+ip:port <- no authentication
+ip:port:username <- authentication (socks4 doesn't support passwords)
+```
+
+## SOCKS5
+
+```text
+ip:port <- no authentication
+ip:port:username:password <- authentication
+```
+
+## URI
+
+This format allows you to use multiple proxy types in one file.
+
+```text
+socks5://ip:port <- no authentication
+socks5://username:password@ip:port <- authentication
+socks4://ip:port <- no authentication
+socks4://username@ip:port <- authentication
+http://ip:port <- no authentication
+http://username:password@ip:port <- authentication
+```
