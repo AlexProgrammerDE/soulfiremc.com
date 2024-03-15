@@ -9,7 +9,7 @@ const config: DocsThemeConfig = {
     const {pathname} = useRouter()
     if (pathname !== '/') {
       return {
-        titleTemplate: '%s – SR'
+        titleTemplate: '%s – SF'
       }
     }
   },
