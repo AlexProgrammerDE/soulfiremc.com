@@ -1,31 +1,45 @@
 # Import Proxies
 
+SoulFire allows you to use proxies to hide your IP address and bypass IP limits on servers.
+
+## Looking for proxies?
+
+There are many websites that offer free proxies, but be careful as many of them are not reliable or secure.
+
+If you need a good proxy service, I recommend [Webshare](https://www.webshare.io/?referral_code=36gneippfiwt)
+(I get commissions for purchases made through this link).
+I've used Webshare for my own projects and tried other services such as [ProxyScrape](https://proxyscrape.com/),
+but they come nowhere close to the quality of Webshare.
+Webshare offers both free and premium proxies and is a reliable and secure service.
+
+## Proxy types
+
 SoulFire supports HTTP, SOCKS4 and SOCKS5 proxies.
 
 Select the proxy type in the GUI or CLI and use one of these formats with one proxy per line:
 
-## HTTP
+### HTTP
 
 ```text
 ip:port <- no authentication
 ip:port:username:password <- authentication
 ```
 
-## SOCKS4
+### SOCKS4
 
 ```text
 ip:port <- no authentication
 ip:port:username <- authentication (socks4 doesn't support passwords)
 ```
 
-## SOCKS5
+### SOCKS5
 
 ```text
 ip:port <- no authentication
 ip:port:username:password <- authentication
 ```
 
-## URI
+### URI
 
 This format allows you to use multiple proxy types in one file.
 
