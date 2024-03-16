@@ -49,7 +49,15 @@ export default withNextra({
                 source: '/github',
                 destination: process.env.NEXT_PUBLIC_GITHUB_LINK,
                 permanent: false,
-            }
+            },
+        ]
+    },
+    async rewrites() {
+        return [
+            {
+                source: '/va/:match*',
+                destination: '/_vercel/insights/:match*',
+            },
         ]
     },
     async headers() {
