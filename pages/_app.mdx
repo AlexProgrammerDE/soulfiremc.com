@@ -1,16 +1,5 @@
 import '../style.css'
-import Script from "next/script";
 
 export default function App({ Component, pageProps }) {
-    return <>
-        <Component {...pageProps} />
-        {
-            process.env.NODE_ENV === 'production' && <>
-                <Script strategy="afterInteractive">
-                    {`window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };`}
-                </Script>
-                <Script src="/va/script.js" data-endpoint="/va" strategy="lazyOnload" async />
-            </>
-        }
-    </>
+    return <Component {...pageProps} />
 }
