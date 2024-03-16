@@ -35,8 +35,8 @@ export default withNextra({
     reactStrictMode: true,
     cleanDistDir: true,
     i18n: {
-        locales: ['en'],
-        defaultLocale: 'en'
+        locales: ['en-US'],
+        defaultLocale: 'en-US'
     },
     redirects: async () => {
         return [
