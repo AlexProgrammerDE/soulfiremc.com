@@ -1,0 +1,55 @@
+import {Callout} from "nextra-theme-docs";
+
+# CLI Mode
+
+<Callout type="info" emoji="ℹ️">
+    If you do not know what a Command Line Interface is, you may want to look at the [GUI Mode Guide](/docs/guides/gui-mode) instead.
+</Callout>
+
+CLIs are for power-users that either like to only use their keyboard or want to automate attacks.
+SoulFire has those types of advanced users covered with its powerful CLI.
+While the CLI does support many common uses, the GUI has more features.
+To get to know what you can and can't do, read this page.
+
+## Setting up your connection
+
+SoulFires CLI is part of the client distribution. So to run a CLI, you need to have the following:
+Make sure your machine is using Java 21.
+Next you can download the latest client `.jar` binary from the [download page](/)
+
+The base command is this:
+
+```bash
+java -Xmx<ram you want> -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+```
+
+Make sure to replace `<ram you want>` with the amount of ram you want to allocate to the server.
+If you omit the entire `-Xmx<ram you want>` part, the CLI will use 25% of your total ram.
+If your machine has 128GB of RAM and you want SF to use 120GB, you can use `-Xmx120G`.
+If you connect to a remove server.
+The ram can be extremely low, the RAM where the server runs matters.
+
+Now you need to decide, are we running the attack locally on your machine, or are we using a remote dedicated server for the attack?
+
+If locally, skip to the next section, if not, you need to configure how the CLi connects to the remote server.
+For that, configure the JVM properties:
+
+| Property             | Description            |
+|----------------------|------------------------|
+| `"sf.remoteAddress"` | The ip to connect to   |
+| `"sf.remoteToken"`   | The port to connect to |
+
+You can add these as JVM properties before the `-jar` like so:
+
+```bash
+java -Dsf.remoteAddress=domain.com -Dsf.remoteToken=abcdefg -Xmx<ram you want> -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+```
+
+## CLI flags
+
+After connecting, the CLI gets all info from either the integrated or remote server and allows you to use CLI flags.
+For a full list, visit the [CLI flags page](/docs/usage/cli-flags)
+
+## Executing commands
+
+You get a shell just like with a Minecraft server that allows you to run commands. Those are the same commands you get in GUI Mode.
