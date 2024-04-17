@@ -28,7 +28,6 @@ as well as multiple servers can be run on the same machine on different ports. (
 While a CLI is similar to a dedicated server, it lacks the ability for other clients to connect
 and also a CLI can only use settings for attacks that were specified when the CLI was started up.
 
-
 ## How to start the server in dedicated mode
 
 Make sure your machine is using Java 21.
@@ -36,11 +35,11 @@ Next you can download the latest dedicated server `.jar` binary from the [downlo
 and run it with the following command:
 
 ```bash
-java -Xmx<ram you want> -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireDedicated.jar
+java -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireDedicated.jar
 ```
 
-Make sure to replace `<ram you want>` with the amount of ram you want to allocate to the server.
-If you omit the entire `-Xmx<ram you want>` part, the server will use 25% of your total ram.
+Make sure to replace `$RAM` with the amount of ram you want to allocate to the server.
+If you omit the entire `-Xmx$RAM` part, the server will use 25% of your total ram.
 If your machine has 128GB of RAM and you want SF to use 120GB, you can use `-Xmx120G`.
 
 ## What options are available?
@@ -57,7 +56,7 @@ You can specify these options by passing them as system properties to the JVM.
 For example, run the server via:
 
 ```bash
-java -Dsf.grpc.port=12345 -Xmx<ram you want> -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireDedicated.jar
+java -Dsf.grpc.port=12345 -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireDedicated.jar
 ```
 
 ## Firewall
@@ -72,6 +71,12 @@ When you run a dedicated server, you get an interactive shell, just like with Mi
 You can use the `generate-token` command to generate an access token.
 Keep this token secure and only share it with people you trust and want to connect to your server.
 It allows anyone with access to it to connect to your server via the GUI or CLI and start attacks.
+
+## Docker images
+
+Are you a Docker user?
+We have a Docker image available for the dedicated server.
+You can find it on [Docker Hub](https://hub.docker.com/r/alexprogrammerde/soulfire).
 
 ## What now?
 

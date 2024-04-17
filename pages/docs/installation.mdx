@@ -17,19 +17,6 @@ To be able to use SoulFire, little is needed:
 * An internet connection to download the software.
 * A supported operating system (`Windows`, `macOS`, `Linux`) with an `amd64/x86_64` architecture.
 
-## Universal distribution (.jar)
-
-The software is fully able to run on `aarch64/arm64`, but we do not provide official support for it using the provided
-installation methods.
-If you want to run SoulFire on `aarch64/arm64`, you will have to manually install `Java 21 or newer`
-for your system and then download the universal jar file from the [front page](/).
-After that, you can run the jar file using
-`java -jar [filename].jar` in the terminal.
-
-Adoptium is the recommended way of installing Java for your system.
-You can find the download links for it
-[on their website](https://adoptium.net).
-
 ## Platform Installation
 
 In this section, you can read how to set up SoulFire for your PC!
@@ -85,3 +72,33 @@ Select your operating system type below to get started.
     >
     </Card>
 </Cards>
+
+## Universal distribution (.jar)
+
+<Callout type="info" emoji="ℹ️">
+    Universal installation is for power-users that want to run SoulFire on `aarch64/arm64` or other systems and setups.
+    It is not recommended for the average user. For simple installation, please use the platform-specific installation methods above.
+</Callout>
+
+The software is fully able to run on `aarch64/arm64`, but we do not provide official support for it using the provided
+platform installation methods.
+If you want to run SoulFire on `aarch64/arm64`, you will have to manually install `Java 21 or newer`
+for your system.
+
+Adoptium is the recommended way of installing Java for your system.
+You can find the download links for it
+[on their website](https://adoptium.net).
+
+Then download the universal jar file from the [front page](/).
+After that, you can run the jar file in the terminal using the following command:
+
+```bash
+java -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+```
+
+Replace `$RAM` with the amount of RAM you want to allocate to the instance.
+For example, to allocate 2GB of RAM, you would use `-Xmx2G`.
+If there is no RAM specified, the instance will use 25% of the total RAM available on the system.
+If your machine does not have a display, or you provide CLI flags after `SoulFireClient.jar`,
+you will be forced to use [CLI Mode](/docs/guides/cli-mode).
+In any other case, the software will launch in [GUI Mode](/docs/guides/gui-mode).

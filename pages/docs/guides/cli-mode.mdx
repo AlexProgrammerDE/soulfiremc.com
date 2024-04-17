@@ -11,6 +11,12 @@ SoulFire has those types of advanced users covered with its powerful CLI.
 While the CLI does support many common uses, the GUI has more features.
 To get to know what you can and can't do, read this page.
 
+CLI mode automatically starts if no display to show the GUI is available.
+CLI mode is also started if CLI flags are passed to the `java` command.
+You can force CLI mode
+by telling AWT that no display is available by setting the `java.awt.headless` property to `true`.
+The commands on this page use this property to force CLI mode.
+
 ## Setting up your connection
 
 SoulFires CLI is part of the client distribution. So to run a CLI, you need to have the following:
@@ -20,18 +26,17 @@ Next you can download the latest client `.jar` binary from the [download page](/
 The base command is this:
 
 ```bash
-java -Xmx<ram you want> -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+java -Djava.awt.headless=true -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
 ```
 
-Make sure to replace `<ram you want>` with the amount of ram you want to allocate to the server.
-If you omit the entire `-Xmx<ram you want>` part, the CLI will use 25% of your total ram.
+Make sure to replace `$RAM` with the amount of ram you want to allocate to the CLI instance.
+If you omit the entire `-Xmx$RAM` part, the CLI will use 25% of your total ram.
 If your machine has 128GB of RAM and you want SF to use 120GB, you can use `-Xmx120G`.
-If you connect to a remove server.
-The ram can be extremely low, the RAM where the server runs matters.
+If you connect to a remote server, the RAM on your machine does not matter, and you can use `-Xmx1G` if you want.
 
 Now you need to decide, are we running the attack locally on your machine, or are we using a remote dedicated server for the attack?
 
-If locally, skip to the next section, if not, you need to configure how the CLi connects to the remote server.
+If locally, skip to the next section, if not, you need to configure how the CLI connects to the remote server.
 For that, configure the JVM properties:
 
 | Property             | Description            |
@@ -42,7 +47,7 @@ For that, configure the JVM properties:
 You can add these as JVM properties before the `-jar` like so:
 
 ```bash
-java -Dsf.remoteAddress=domain.com -Dsf.remoteToken=abcdefg -Xmx<ram you want> -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+java -Dsf.remoteAddress=domain.com -Dsf.remoteToken=abcdefg -Djava.awt.headless=true -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
 ```
 
 ## CLI flags
@@ -50,6 +55,19 @@ java -Dsf.remoteAddress=domain.com -Dsf.remoteToken=abcdefg -Xmx<ram you want> -
 After connecting, the CLI gets all info from either the integrated or remote server and allows you to use CLI flags.
 For a full list, visit the [CLI flags page](/docs/usage/cli-flags)
 
+Here is an example of how to use them:
+
+```bash
+java -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar --host 127.0.0.1 --port 25565 --amount 100 --mc-version 1.20 --min-join-delay 1000 --max-join-delay 3000
+```
+
+Make sure to replace `$RAM` with the amount of ram you want to allocate to the CLI instance.
+The command above will connect to a local server on port 25565
+and start 100 clients with a delay between 1 and 3 seconds.
+
 ## Executing commands
 
-You get a shell just like with a Minecraft server that allows you to run commands. Those are the same commands you get in GUI Mode.
+You get a shell just like with a Minecraft server
+that allows you to run commands.
+Those are the same commands you get in GUI Mode.
+If you want to know more about commands, visit the [GUI Mode Commands Info](/docs/guides/gui-mode#commands)
