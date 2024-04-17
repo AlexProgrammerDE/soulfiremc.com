@@ -7,6 +7,16 @@ SoulFire itself is always coded for the latest stable release of Minecraft, and 
 downgraded/translated by ViaVersion.
 Below is a list of all versions that are supported by SoulFire.
 
+## How does this work?
+
+Thanks to a built-in implementation of [ViaVersion](https://github.com/ViaVersion/ViaVersion),
+[ViaLegacy](https://github.com/RaphiMC/ViaLegacy), [ViaBedrock](https://github.com/RaphiMC/ViaBedrock) and many others,
+a SoulFire bot can connect to all these versions even without the server having ViaVersion installed.
+The packet translation happens "client/bot side".
+This feature takes inspiration from services like [VIAaaS](https://github.com/ViaVersion/VIAaaS)
+and [ViaProxy](https://github.com/RaphiMC/ViaProxy),
+which include client-side translation externally.
+
 ## List of versions
 
 | Version           | Native | Java | Snapshot | Legacy | Bedrock |
@@ -96,6 +106,4 @@ Below is a list of all versions that are supported by SoulFire.
 
 ## How to generate this list
 
-```bash
-java -jar SoulFireClient.jar --generate-versions
-```
+Run the command `generate-versions` in the console of the GUI, CLI or Dedicated server.
