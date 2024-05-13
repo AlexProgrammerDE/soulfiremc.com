@@ -100,7 +100,7 @@ Then download the universal client jar file from the [front page](/).
 After that, you can run the jar file in the terminal using the following command:
 
 ```bash
-java -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+java -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
 ```
 
 Replace `$RAM` with the amount of RAM you want to allocate to the instance.

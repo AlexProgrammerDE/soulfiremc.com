@@ -26,7 +26,7 @@ Next you can download the latest client `.jar` binary from the [download page](/
 The base command is this:
 
 ```bash
-java -Djava.awt.headless=true -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+java -Djava.awt.headless=true -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
 ```
 
 Make sure to replace `$RAM` with the amount of ram you want to allocate to the CLI instance.
@@ -47,7 +47,7 @@ For that, configure the JVM properties:
 You can add these as JVM properties before the `-jar` like so:
 
 ```bash
-java -Dsf.remoteAddress=domain.com -Dsf.remoteToken=abcdefg -Djava.awt.headless=true -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
+java -Dsf.remoteAddress=domain.com -Dsf.remoteToken=abcdefg -Djava.awt.headless=true -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar
 ```
 
 ## CLI flags
@@ -58,7 +58,7 @@ For a full list, visit the [CLI flags page](/docs/usage/cli-flags)
 Here is an example of how to use them:
 
 ```bash
-java -Xmx$RAM -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar --address 127.0.0.1:25565 --amount 100 --protocol-version 1.20 --join-min-delay 1000 --join-max-delay 3000
+java -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireClient.jar --address 127.0.0.1:25565 --amount 100 --protocol-version 1.20 --join-min-delay 1000 --join-max-delay 3000
 ```
 
 Make sure to replace `$RAM` with the amount of ram you want to allocate to the CLI instance.
