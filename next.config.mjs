@@ -1,4 +1,5 @@
 import nextra from 'nextra'
+import {withPlausibleProxy} from "next-plausible";
 
 const withNextra = nextra({
     theme: 'nextra-theme-docs',
@@ -31,7 +32,9 @@ const securityHeaders = [
     }
 ]
 
-export default withNextra({
+export default withPlausibleProxy({
+    customDomain: process.env.PLAUSIBLE_URL
+})(withNextra({
     reactStrictMode: true,
     cleanDistDir: true,
     i18n: {
@@ -71,4 +74,4 @@ export default withNextra({
     images: {
         unoptimized: true
     }
-})
+}))
