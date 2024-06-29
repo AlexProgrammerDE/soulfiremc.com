@@ -65,6 +65,14 @@ Make sure to replace `$RAM` with the amount of ram you want to allocate to the C
 The command above will connect to a local server on port 25565
 and start 100 clients with a delay between 1 and 3 seconds.
 
+## Terminal flags
+
+Additionally, you can explicitly enable/disable
+having an interactive CLI in the terminal
+where you can run SoulFire commands by setting `-Dterminal.jline=false` or `-Dterminal.jline=true`.
+JLine is the library that allows for interactive CLI in the terminal.
+You can also turn terminal colors explicitly on and off using `-Dterminal.ansi=false` or `-Dterminal.ansi=true`.
+
 ## Importing data
 
 You can import profiles, accounts, and proxies using their CLI flags.

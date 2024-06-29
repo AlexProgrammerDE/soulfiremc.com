@@ -1,5 +1,8 @@
 # Plugins
 
+Plugins are a way to extend the functionality of SoulFire.
+SoulFire also comes with a few built-in plugins that can be enabled or disabled.
+
 ## 📻 Built-in plugins
 
 ### AutoRespawn
@@ -25,3 +28,40 @@ which is useful for testing the server's performance.
 Configurable client settings like chat visibility, chat colours, skin customization, and more.
 Client brand can also be changed to any string; by default, it's set to "vanilla".
 Useful for bypassing anti-bot plugins that check for client settings.
+
+## Community plugins
+
+Community plugins are plugins that are not built-in but are made by the community.
+Plugins can be written in Java or Kotlin and can be loaded at startup of the SoulFire server.
+Plugins are able to use Mixins, which is the same system used in Minecraft mods to modify the game.
+SoulFire does not use Minecraft code, so Minecraft mods are not compatible with SoulFire.
+Plugins normally only modify the SoulFire application server, not the gui/cli interface directly.
+
+Any questions regarding how SoulFire works and how to write a plugin can be asked in the [Discord](/discord).
+
+### How to write a plugin
+
+To write a plugin, you need to create a new Java or Kotlin project.
+Right now there is no full guide on how to write a plugin, but you can look at the built-in plugins for inspiration.
+There is also a [plugin template](https://github.com/AlexProgrammerDE/SoulFirePluginExample) available on GitHub.
+
+### How to install a plugin
+
+To install a plugin, you need to place the plugin `.jar` file in the `plugins` directory of the SoulFire server.
+The SoulFire server will automatically load all `.jar` files in the `plugins` directory at startup.
+The plugins directory is in different places depending on your setup and operating system.
+If you use the integrated server, you'll find the plugins directory at `%APPDATA%\SoulFire\integrated-server\plugins`.
+On linux, it's `~/.local/share/SoulFire/integrated-server/plugins`.
+If you use a dedicated server,
+you'll find the plugins directory located in the same directory as the server `.jar` file.
+
+### Plugin list
+
+Feel free to share your plugins with the community here.
+Open a pull request to add your plugin to the list.
+Plugins should be open-source and hosted on GitHub.
+If you want to share a paid plugin, please contact the developers.
+
+| Plugin name                                                                 | Description                                  | Author           |
+|-----------------------------------------------------------------------------|----------------------------------------------|------------------|
+| [Example Plugin](https://github.com/AlexProgrammerDE/SoulFirePluginExample) | An example plugin that adds jump boost hacks | AlexProgrammerDE |
