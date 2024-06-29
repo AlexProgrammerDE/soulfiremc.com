@@ -59,6 +59,15 @@ For example, run the server via:
 java -Dsf.grpc.port=12345 -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M -jar SoulFireDedicated.jar
 ```
 
+## Terminal flags
+
+Additionally, you can explicitly enable/disable
+having an interactive CLI in the terminal
+where you can run SoulFire commands by setting `-Dterminal.jline=false` or `-Dterminal.jline=true`.
+JLine is the library that allows for interactive CLI in the terminal,
+it's the same library Minecraft, Velocity and other applications use.
+You can also turn terminal colors explicitly on and off using `-Dterminal.ansi=false` or `-Dterminal.ansi=true`.
+
 ## Firewall
 
 Ensure that all clients can reach the server by opening the port on your firewall.
