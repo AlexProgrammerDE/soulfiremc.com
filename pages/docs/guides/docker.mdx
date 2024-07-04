@@ -1,0 +1,116 @@
+# Docker
+
+SoulFire + Docker = ❤️
+Official Docker images are available on [Docker Hub](https://hub.docker.com/r/alexprogrammerde/soulfire).
+This guide assumes you know Docker and Docker compose well and are able to troubleshoot issues on your own.
+
+## How to install Docker?
+
+Look at this [official guide](https://docs.docker.com/engine/install).
+
+## Basic setup
+
+Just setup SoulFire with no extra configuration or other services.
+
+```yaml
+services:
+  app:
+    image: alexprogrammerde/soulfire
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:38765/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - '38765:38765'
+    volumes:
+      - app_data:/soulfire/data
+
+volumes:
+  app_data:
+    driver: local
+```
+
+## HTTPS setup
+
+SoulFire runs on HTTP, but if you run a web endpoint you're going to need HTTPS for client-side requests from websites.
+You have two options, set up a reverse proxy with automatic HTTPS or use cloudflared as a https tunnel.
+
+### Reverse proxy
+
+You will have to change the placeholders for the domain and email.
+
+```yaml
+services:
+  app:
+    image: alexprogrammerde/soulfire
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:38765/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.soulfire.rule=Host(`your-domain.com`)"
+      - "traefik.http.services.soulfire.loadbalancer.server.port=38765"
+      - "traefik.http.routers.soulfire.entrypoints=websecure"
+      - "traefik.http.routers.soulfire.tls.certresolver=myresolver"
+    volumes:
+      - app_data:/soulfire/data
+
+  traefik:
+    image: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=your@email.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+
+volumes:
+  app_data:
+      driver: local
+  letsencrypt:
+    driver: local
+```
+
+### Cloudflared
+
+You get the token from the [cloudflare dashboard](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/).
+
+```yaml
+services:
+  app:
+    image: alexprogrammerde/soulfire
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:38765/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - '38765:38765'
+    volumes:
+      - app_data:/soulfire/data
+
+  cloudflared:
+    image: cloudflare/cloudflared
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=mytokengoeshere
+
+volumes:
+  app_data:
+    driver: local
+```
