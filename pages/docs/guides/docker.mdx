@@ -30,7 +30,7 @@ If you are a user of Pterodactyl/Pelican, you can use this egg:
     "startup": "/bin/sh /soulfire/start.sh",
     "config": {
         "files": "{}",
-        "startup": "{\r\n    \"done\": \"change this text\"\r\n}",
+        "startup": "{\r\n    \"done\": \"Finished loading!\"\r\n}",
         "logs": "{}",
         "stop": "^C"
     },
@@ -163,8 +163,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    ports:
-      - '38765:38765'
     volumes:
       - app_data:/soulfire/data
 
