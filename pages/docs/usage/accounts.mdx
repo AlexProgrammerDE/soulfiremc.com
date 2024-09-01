@@ -1,5 +1,35 @@
 # Import Accounts
 
+SoulFire allows you to configure accounts to use for attacks.
+
+## How does this look in practice?
+
+When you start an attack, SoulFire will use the accounts you provide to log in to the server.
+
+Here is an example of how accounts work:
+
+```mermaid
+graph LR
+    subgraph Y[SoulFire]
+        S[SoulFire server]
+        B1["Bot_1 (Offline)"]
+        B2["Pistonmaster (Microsoft Java)"]
+        B3["BotAccount (EasyMC)"]
+    end
+    subgraph M[Minecraft Server]
+    end
+    S --> B1
+    S --> B2
+    S --> B3
+    B1 --> M
+    B2 --> M
+    B3 --> M
+```
+
+Your setup may use more accounts/only one type of account, but the concept is the same.
+
+## Account types
+
 SoulFire supports Microsoft Java, Microsoft Bedrock, EasyMC, The Altening and Offline accounts.
 
 If no account is selected, SoulFire will generate offline accounts based on the configured name format.
@@ -60,3 +90,11 @@ Username
 Username2
 Username3
 ```
+
+## Shuffling accounts
+
+SoulFire supports shuffling accounts, but it's disabled by default.
+When enabled, SoulFire will shuffle the accounts randomly before starting the attack.
+If disabled, SoulFire will use the accounts in the order they are in the settings.
+
+The shuffling feature is useful if you want to randomize the order of the accounts to make it harder for servers to detect which accounts are bots.

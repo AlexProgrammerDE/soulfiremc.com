@@ -2,6 +2,40 @@
 
 SoulFire allows you to use proxies to hide your IP address and bypass IP limits on servers.
 
+## How do proxies work?
+
+Proxies work by hiding your IP similar to how VPNs work.
+When you start an attack, SoulFire will connect through the proxies you provide instead of directly connecting to the server.
+This way, the server will see the proxy IP address instead of the IP address of your computer/server.
+
+Here is an example of how proxies work:
+
+```mermaid
+graph LR
+    subgraph Y[SoulFire IP: 20.20.20.20]
+        S[SoulFire server]
+    end
+    subgraph P1[Proxy IP: 33.33.33.33]
+      P1S[HTTP Proxy]
+    end
+    subgraph P2[Proxy IP: 44.44.44.44]
+      P2S[SOCKS4 Proxy]
+    end
+    subgraph P3[Proxy IP: 55.55.55.55]
+      P3S[SOCKS5 Proxy]
+    end
+    subgraph M[Minecraft Server]
+    end
+    S --> P1S
+    S --> P2S
+    S --> P3S
+    P1S --> M
+    P2S --> M
+    P3S --> M
+```
+
+Your setup may use more proxies/only one type of proxy, but the concept is the same.
+
 ## Looking for proxies?
 
 There are many websites that offer free proxies, but be careful as many of them are not reliable or secure.
@@ -51,3 +85,51 @@ socks4://username@ip:port <- socks4 & authentication
 http://ip:port <- http & no authentication
 http://username:password@ip:port <- http & authentication
 ```
+
+## Multiple bots on one proxy?
+
+Yes, you can run multiple bots on one proxy.
+This is useful if you have a limited number of proxies and want to run more bots than proxies.
+Please be aware some servers can detect this and ban the proxy, so use this feature with caution.
+Many servers work by limiting the amount of connections per IP, so if you run too many bots on one proxy, the server may not allow more connections from that proxy.
+
+SoulFire defaults to `-1` connections per proxy, which means unlimited bots can connect through one proxy.
+But it will always try to evenly distribute the bots across all proxies.
+If you set any value like `10`, SoulFire will only allow 10 bots to connect through one proxy.
+If you request more bots than the `limit per proxy * amount of proxies`, SoulFire will reduce the amount of bots to the maximum possible amount.
+
+Here is an example of how multiple bots on one proxy work:
+
+```mermaid
+graph LR
+    subgraph Y[SoulFire]
+        S[SoulFire server]
+        B1[Bot_1]
+        B2[Bot_2]
+        B3[Bot_3]
+    end
+    subgraph P1[Proxy 1]
+      P1S[HTTP Proxy]
+    end
+    subgraph P2[Proxy 2]
+      P2S[SOCKS5 Proxy]
+    end
+    subgraph M[Minecraft Server]
+    end
+    S --> B1
+    S --> B2
+    S --> B3
+    B1 --> P1S
+    B2 --> P1S
+    B3 --> P2S
+    P1S --> M
+    P2S --> M
+```
+
+## Shuffling proxies
+
+SoulFire supports shuffling proxies, but it's disabled by default.
+When enabled, SoulFire will shuffle the proxies randomly before starting the attack.
+If disabled, SoulFire will use the proxies in the order they are in the settings.
+
+The shuffling feature is useful if you want to randomize the order of the proxies to make it harder for servers to detect which proxies are bots.
