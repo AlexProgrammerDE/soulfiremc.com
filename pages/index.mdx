@@ -65,7 +65,7 @@ export const getStaticProps = async () => {
     }
 }
 
-export const ReleaseCard = ({data, type}) => {
+export const ReleaseCard = ({data, type, hint}) => {
     return (
         <div
             className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800">
@@ -103,7 +103,7 @@ export const ReleaseCard = ({data, type}) => {
                         href={data.url}
                         className="nextra-card front-button p-2 group w-full">
                         <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
-                        <span>Download</span>
+                        <span>Download {hint}</span>
                     </a>
                 </div>
             </div>
@@ -116,8 +116,8 @@ export const LatestRelease = () => {
 
     return (
         <>
-            <ReleaseCard data={clientData} type="Client"/>
-            <ReleaseCard data={serverData} type="Server"/>
+            <ReleaseCard data={clientData} type="Client" hint="Client (Recommended)"/>
+            <ReleaseCard data={serverData} type="Server" hint="Server (Advanced)"/>
         </>
     )
 }
