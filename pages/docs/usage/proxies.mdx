@@ -44,10 +44,10 @@ ip:port:username:password <- authentication
 This format allows you to use multiple proxy types in one file.
 
 ```text
-socks5://ip:port <- no authentication
-socks5://username:password@ip:port <- authentication
-socks4://ip:port <- no authentication
-socks4://username@ip:port <- authentication
-http://ip:port <- no authentication
-http://username:password@ip:port <- authentication
+socks5://ip:port <- socks5 & no authentication
+socks5://username:password@ip:port <- socks5 & authentication
+socks4://ip:port <- socks4 & no authentication
+socks4://username@ip:port <- socks4 & authentication
+http://ip:port <- http & no authentication
+http://username:password@ip:port <- http & authentication
 ```
