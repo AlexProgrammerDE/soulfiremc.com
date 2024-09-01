@@ -15,118 +15,110 @@ import {useSSG} from 'nextra/ssg';
 import Image from "next/image";
 import TimeAgo from "react-timeago";
 
-export const getStaticProps = () => {
-    return fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFire/releases/latest")
-        .then(res => res.json())
-        .then(release => ({
-            props: {
-                ssg: {
-                    latest: {
-                        url: release.html_url,
-                        name: release.name,
-                        tag: release.tag_name,
-                        assets: release.assets.map(asset => ({
-                            name: asset.name,
-                            url: asset.browser_download_url
-                        })).sort((a, b) => {
-                            // .jar first, then .msi, then .pkg, then .deb, then .rpm, then unknown
-                            if (a.name.includes(".jar") && b.name.includes(".jar")) return a.name.localeCompare(b.name)
-                            if (a.name.includes(".jar")) return -1
-                            if (b.name.includes(".jar")) return 1
-                            if (a.name.includes(".msi")) return -1
-                            if (b.name.includes(".msi")) return 1
-                            if (a.name.includes(".pkg") || a.name.includes(".dmg")) return -1
-                            if (b.name.includes(".pkg") || b.name.includes(".dmg")) return 1
-                            if (a.name.includes(".deb")) return -1
-                            if (b.name.includes(".deb")) return 1
-                            if (a.name.includes(".rpm")) return -1
-                            if (b.name.includes(".rpm")) return 1
-                        }),
-                        author: {
-                            name: release.author.login,
-                            url: release.author.html_url,
-                            avatar: release.author.avatar_url
-                        },
-                        time: release.published_at
-                    }
-                }
-            },
-            // The page will be considered as stale and regenerated every 60 seconds.
-            revalidate: 60
-        }))
+export const getStaticProps = async () => {
+    const [clientData, serverData] = await Promise.all([
+        fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFireClient/releases/latest")
+            .then(res => res.json())
+            .then(release => ({
+                url: release.html_url,
+                name: release.name,
+                tag: release.tag_name,
+                assets: release.assets.map(asset => ({
+                    name: asset.name,
+                    url: asset.browser_download_url
+                })),
+                author: {
+                    name: release.author.login,
+                    url: release.author.html_url,
+                    avatar: release.author.avatar_url
+                },
+                time: release.published_at
+            })),
+        fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFire/releases/latest")
+            .then(res => res.json())
+            .then(release => ({
+                url: release.html_url,
+                name: release.name,
+                tag: release.tag_name,
+                assets: release.assets.map(asset => ({
+                    name: asset.name,
+                    url: asset.browser_download_url
+                })),
+                author: {
+                    name: release.author.login,
+                    url: release.author.html_url,
+                    avatar: release.author.avatar_url
+                },
+                time: release.published_at
+            }))
+    ])
+
+    return {
+        props: {
+            ssg: {
+                clientData,
+                serverData
+            }
+        },
+        // The page will be considered as stale and regenerated every 60 seconds.
+        revalidate: 60
+    }
 }
 
-export function mapAssetName(name) {
-    if (name.includes("Client") && name.includes(".jar")) return "Client (.jar)"
-    if (name.includes("Dedicated") && name.includes(".jar")) return "Dedicated (.jar)"
-    if (name.includes(".msi")) return "Windows (.msi)"
-    if (name.includes(".pkg")) return "macOS (.pkg)"
-    if (name.includes(".deb")) return "Debian (.deb) "
-    if (name.includes(".rpm")) return "Red Hat (.rpm)"
-    return "Unknown"
-}
-
-export const LatestRelease = () => {
-    const {latest} = useSSG()
-    const createAssetButton = (asset) => (
-        <a
-            href={asset.url}
-            key={asset.name}
-            className="nextra-card front-button p-2 group w-full">
-            <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
-            <span>{mapAssetName(asset.name)}</span>
-        </a>
-    )
-
+export const ReleaseCard = ({data, type}) => {
     return (
         <div
             className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800">
             <div className="flex flex-col">
                 <div className="flex flex-wrap gap-1">
                     <a
-                        href={latest.url}
-                        className="flex font-semibold text-lg items-start text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">{latest.name}</a>
+                        href={data.url}
+                        className="flex font-semibold text-lg items-start text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">{data.name}</a>
                     <div className="flex flex-row gap-1">
                         <div>
                             <span
-                                className="rounded-full border w-fit px-1 text-xs border-green-400 text-green-400 justify-center">Latest Release</span>
+                                className="rounded-full border w-fit px-1 text-xs border-green-400 text-green-400 justify-center">Latest {type} Release</span>
                         </div>
                         <div>
                             <span
-                                className="rounded-full border w-fit px-1 text-xs border-gray-400 text-gray-400 justify-center">{latest.tag}</span>
+                                className="rounded-full border w-fit px-1 text-xs border-gray-400 text-gray-400 justify-center">{data.tag}</span>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-row mt-1">
                     <span className="flex flex-row cursor-pointer">Released by </span>
                     <a
-                        href={latest.author.url}
+                        href={data.author.url}
                         className="flex items-start text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
-                        <Image className="rounded-full w-6 h-6 my-auto mx-1" src={latest.author.avatar}
-                               width={16} height={16} alt={latest.author.name}/>
-                        <span className="font-semibold">{latest.author.name}</span>
-                        <span className="mx-1"><TimeAgo date={latest.time}/></span>
+                        <Image className="rounded-full w-6 h-6 my-auto mx-1" src={data.author.avatar}
+                               width={16} height={16} alt={data.author.name}/>
+                        <span className="font-semibold">{data.author.name}</span>
+                        <span className="mx-1"><TimeAgo date={data.time}/></span>
                     </a>
                 </div>
             </div>
             <div className="min-w-fit flex max-md:flex-wrap md:flex-row gap-4 justify-start">
-                <div className="flex flex-col flex-shrink-0">
-                    <h3 className="text-lg font-semibold">Binaries</h3>
-                    <div className="grid grid-cols-1 gap-2 justify-start justify-items-start">
-                        {createAssetButton(latest.assets[0])}
-                        {createAssetButton(latest.assets[1])}
-                    </div>
-                </div>
-                <div className="flex flex-col flex-grow-0">
-                    <h3 className="text-lg font-semibold">Installers</h3>
-                    <div className="grid grid-cols-2 gap-2 justify-start justify-items-start">
-                        {
-                            latest.assets.slice(2).map(createAssetButton)
-                        }
-                    </div>
+                <div className="flex flex-col flex-grow-0 justify-center">
+                    <a
+                        href={data.url}
+                        className="nextra-card front-button p-2 group w-full">
+                        <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
+                        <span>Download</span>
+                    </a>
                 </div>
             </div>
         </div>
+    )
+}
+
+export const LatestRelease = () => {
+    const {clientData, serverData} = useSSG()
+
+    return (
+        <>
+            <ReleaseCard data={clientData} type="Client"/>
+            <ReleaseCard data={serverData} type="Server"/>
+        </>
     )
 }
 
