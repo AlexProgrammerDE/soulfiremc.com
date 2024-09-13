@@ -35,14 +35,14 @@ const config: DocsThemeConfig = {
         </>
     )
   },
-  // banner: {
-  //  key: 'major-release',
-  //  text: (
-  //      <a href="https://github.com/AlexProgrammerDE/SoulFire" target="_blank" rel="noreferrer">
-  //        🎉 SoulFire v2 is released. Read more →
-  //      </a>
-  //  )
-  // },
+  banner: {
+   key: 'new-client',
+   text: (
+       <a href="https://github.com/AlexProgrammerDE/SoulFireClient/releases" target="_blank" rel="noreferrer">
+         🎉 SoulFire has a brand new client. Download →
+       </a>
+   )
+  },
   sidebar: {
     toggleButton: true
   },
