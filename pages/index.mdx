@@ -2,6 +2,7 @@
 title: SoulFire
 ---
 
+
 import Link from "next/link";
 import {ArrowDownTrayIcon, ChevronDoubleRightIcon} from "@heroicons/react/20/solid";
 import {
@@ -200,9 +201,16 @@ export const FeatureCard = ({title, description, icon}) => {
                     />
                 </div>
                 <div className="mt-8 md:mt-16 flex flex-col mx-auto gap-2">
-                    <h2 className="text-center text-xl font-semibold">Built-in GUI</h2>
-                    <Image src="/assets/demo.png" width={2560 * 0.5} height={1440 * 0.5} className="w-full h-full"
-                           alt="SoulFire Demo"/>
+                    <h2 className="text-center text-xl font-semibold">GUI Showcase</h2>
+                    <span className="text-center">
+                        Do you want to check out a live demo of SoulFire in your browser? Try out the <a
+                        className="underline" href="https://demo.soulfiremc.com">demo page</a>.
+                    </span>
+                    <video width={1920} height={1080} className="w-full h-full rounded-md aspect-video"
+                           autoPlay controls>
+                        <source src="https://github.com/user-attachments/assets/81fbf91b-1aae-49ca-a101-bc3467e048e6"
+                                type="video/mp4"/>
+                    </video>
                 </div>
             </div>
         </div>
