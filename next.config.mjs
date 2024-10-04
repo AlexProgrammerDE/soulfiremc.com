@@ -36,7 +36,6 @@ export default withPlausibleProxy({
   customDomain: process.env.PLAUSIBLE_URL
 })(withNextra({
   reactStrictMode: true,
-  cleanDistDir: true,
   redirects: async () => {
     return [
       {
@@ -66,8 +65,5 @@ export default withPlausibleProxy({
         headers: securityHeaders
       }
     ]
-  },
-  images: {
-    unoptimized: true
   }
 }))
