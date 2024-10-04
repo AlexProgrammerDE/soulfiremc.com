@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: "https://soulfiremc.com",
-    generateRobotsTxt: true,
-    generateIndexSitemap: false,
+  siteUrl: "https://soulfiremc.com",
+  generateRobotsTxt: true,
+  generateIndexSitemap: false,
 };
