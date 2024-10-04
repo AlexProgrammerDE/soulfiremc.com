@@ -10,7 +10,7 @@ const config: DocsThemeConfig = {
     const isDefault = route === '/' || !config.title
     const image =
         'https://soulfiremc.com/' +
-        (isDefault ? 'og.jpeg' : `api/og?title=${config.title}`)
+        (isDefault ? 'logo.png' : `api/og?title=${config.title}`)
 
     const description =
         config.frontMatter.description ||
@@ -28,7 +28,7 @@ const config: DocsThemeConfig = {
             <meta name="msapplication-TileColor" content="#3289BF"/>
             <meta name="theme-color" content="#3289BF"/>
             <meta httpEquiv="Content-Language" content="en"/>
-            <meta name="twitter:card" content="summary_large_image"/>
+            <meta name="twitter:card" content={isDefault ? "summary" : "summary_large_image"}/>
             <meta name="twitter:site:domain" content="soulfiremc.com"/>
             <meta name="twitter:url" content="https://soulfiremc.com"/>
 
