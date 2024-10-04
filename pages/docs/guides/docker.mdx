@@ -18,7 +18,7 @@ Look at this [official guide](https://docs.docker.com/engine/install).
 
 Just setup SoulFire with no extra configuration or other services.
 
-```yaml
+```yaml filename="docker-compose.yml"
 services:
   app:
     image: alexprogrammerde/soulfire
@@ -47,7 +47,7 @@ You have two options, set up a reverse proxy with automatic HTTPS or use cloudfl
 
 You will have to change the placeholders for the domain and email.
 
-```yaml
+```yaml filename="docker-compose.yml"
 services:
   app:
     image: alexprogrammerde/soulfire
@@ -95,7 +95,7 @@ volumes:
 
 You get the token from the [cloudflare dashboard](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/).
 
-```yaml
+```yaml filename="docker-compose.yml"
 services:
   app:
     image: alexprogrammerde/soulfire
