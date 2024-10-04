@@ -1,4 +1,4 @@
-import {Callout, Card, Cards} from "nextra-theme-docs";
+import {Callout, Cards} from "nextra/components";
 import Image from "next/image";
 
 # Installing SoulFire
@@ -30,7 +30,7 @@ In this section, you can read how to set up SoulFire for your PC!
 Select your operating system type below to get started.
 
 <Cards>
-    <Card
+    <Cards.Card
         icon={
             <Image
                 src="/platform/windows.png"
@@ -41,8 +41,8 @@ Select your operating system type below to get started.
         title="Windows (.msi)"
         href="/docs/installation/windows"
     >
-    </Card>
-    <Card
+    </Cards.Card>
+    <Cards.Card
         icon={
             <Image
                 src="/platform/macos.png"
@@ -53,8 +53,8 @@ Select your operating system type below to get started.
         title="macOS (.pkg)"
         href="/docs/installation/macos"
     >
-    </Card>
-    <Card
+    </Cards.Card>
+    <Cards.Card
         icon={
             <Image
                 src="/platform/debian.png"
@@ -65,8 +65,8 @@ Select your operating system type below to get started.
         title="Debian (.deb)"
         href="/docs/installation/debian"
     >
-    </Card>
-    <Card
+    </Cards.Card>
+    <Cards.Card
         icon={
             <Image
                 src="/platform/redhat.png"
@@ -77,5 +77,5 @@ Select your operating system type below to get started.
         title="Red Hat (.rpm)"
         href="/docs/installation/redhat"
     >
-    </Card>
+    </Cards.Card>
 </Cards>

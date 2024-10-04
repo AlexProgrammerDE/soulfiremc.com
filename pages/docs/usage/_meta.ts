@@ -1,4 +1,4 @@
-{
+export default {
   "accounts": "Import Accounts",
   "proxies": "Import Proxies",
   "versions": "Supported Versions",
