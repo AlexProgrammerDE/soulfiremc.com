@@ -37,10 +37,6 @@ export default withPlausibleProxy({
 })(withNextra({
     reactStrictMode: true,
     cleanDistDir: true,
-    i18n: {
-        locales: ['en-US'],
-        defaultLocale: 'en-US'
-    },
     redirects: async () => {
         return [
             {

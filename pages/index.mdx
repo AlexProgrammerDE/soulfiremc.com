@@ -11,7 +11,7 @@ import {
     RocketLaunchIcon,
     Squares2X2Icon
 } from "@heroicons/react/24/solid";
-import {useSSG} from 'nextra/ssg';
+import { useData } from 'nextra/hooks'
 import Image from "next/image";
 import TimeAgo from "react-timeago";
 
@@ -112,7 +112,7 @@ export const ReleaseCard = ({data, type, hint}) => {
 }
 
 export const LatestRelease = () => {
-    const {clientData, serverData} = useSSG()
+    const {clientData, serverData} = useData()
 
     return (
         <>

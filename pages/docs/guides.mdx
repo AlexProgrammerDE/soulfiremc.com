@@ -1,4 +1,4 @@
-import {Card, Cards} from "nextra-theme-docs";
+import {Cards} from "nextra/components";
 import {
     ComputerDesktopIcon,
     CommandLineIcon,
@@ -15,28 +15,28 @@ Whether you are a developer, a server owner, or someone new to Minecraft, SoulFi
 In this section, you will find guides on how to use the different operating modes of SoulFire.
 
 <Cards>
-    <Card
+    <Cards.Card
         icon={
             <ComputerDesktopIcon/>
         }
         title="GUI Mode"
         href="/docs/guides/gui-mode"
     >
-    </Card>
-    <Card
+    </Cards.Card>
+    <Cards.Card
         icon={
             <CommandLineIcon/>
         }
         title="CLI Mode"
         href="/docs/guides/cli-mode"
     >
-    </Card>
-    <Card
+    </Cards.Card>
+    <Cards.Card
         icon={
             <ServerStackIcon/>
         }
         title="Dedicated Mode"
         href="/docs/guides/dedicated-mode"
     >
-    </Card>
+    </Cards.Card>
 </Cards>
