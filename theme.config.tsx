@@ -33,6 +33,7 @@ const config: DocsThemeConfig = {
             <meta name="twitter:url" content="https://soulfiremc.com"/>
 
             <link rel="icon" href="/favicon.ico"/>
+            <link rel="icon" href="/logo.svg" type="image/svg+xml"/>
             <link rel="icon" href="/logo.png" type="image/png"/>
         </>
     )
