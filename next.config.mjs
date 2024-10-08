@@ -36,6 +36,15 @@ export default withPlausibleProxy({
   customDomain: process.env.PLAUSIBLE_URL
 })(withNextra({
   reactStrictMode: true,
+  images: {
+    remotePatterns: [{
+      hostname: 'avatars.githubusercontent.com',
+      protocol: 'https',
+    }, {
+      hostname: 'github.com',
+      protocol: 'https',
+    }]
+  },
   redirects: async () => {
     return [
       {
