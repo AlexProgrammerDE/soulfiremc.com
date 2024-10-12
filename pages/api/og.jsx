@@ -42,7 +42,14 @@ export default async function (req) {
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{position: 'absolute', top: 70, left: 80}} height="80"
              viewBox="0 0 120 120">
-          <rect width="100%" height="100%" fill="#3289BF" rx="10%" ry="10%"/>
+          <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#3289BF;stop-opacity:1"/>
+              <stop offset="50%" style="stop-color:#502CC4;stop-opacity:1"/>
+              <stop offset="100%" style="stop-color:#750B80;stop-opacity:1"/>
+            </linearGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grad1)" rx="10%" ry="10%"/>
           <g xmlSpace="preserve">
             <path
               stroke="white"
