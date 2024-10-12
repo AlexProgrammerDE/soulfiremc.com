@@ -44,9 +44,9 @@ export default async function (req) {
              viewBox="0 0 120 120">
           <defs>
             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#3289BF;stop-opacity:1"/>
-              <stop offset="50%" style="stop-color:#502CC4;stop-opacity:1"/>
-              <stop offset="100%" style="stop-color:#750B80;stop-opacity:1"/>
+              <stop offset="0%" stopColor="#3289BF" stopOpacity="1"/>
+              <stop offset="50%" stopColor="#502CC4" stopOpacity="1"/>
+              <stop offset="100%" stopColor="#750B80" stopOpacity="1"/>
             </linearGradient>
           </defs>
           <rect width="100%" height="100%" fill="url(#grad1)" rx="10%" ry="10%"/>
