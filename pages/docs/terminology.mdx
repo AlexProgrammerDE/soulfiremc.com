@@ -37,10 +37,20 @@ This chart visualizes the relationship between the server and the client.
 
 ```mermaid
 graph TD
-    A[Server] -->|Manages| B[Users]
-    A -->|Manages| C[Instances]
-    A -->|Manages| D[Bots]
-    A -->|Manages| E[Plugins]
-    A -->|Manages| F[Proxies/Accounts]
-    G[Client] -->|Interacts with| A
+    Y[You] --> C
+    C[Client] --- S[ ]:::empty
+    S --> S1[Server #1]
+    S --> S2[Server #2]
+    S --> SN[Server #n]
+    S1 --> I[ ]:::empty
+    I --> I1[Instance #1]
+    I --> I2[Instance #2]
+    I --> IN[Instance #n]
+    S1 --> U[Users]
+    I1 --> B[ ]:::empty
+    B --> B1[Bot #1]
+    B --> B2[Bot #2]
+    B --> BN[Bot #n]
+
+    classDef empty width:0px,height:0px;
 ```
