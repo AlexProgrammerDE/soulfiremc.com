@@ -72,3 +72,4 @@ dist
 .pnp.*
 
 public/sitemap*
+_pagefind/

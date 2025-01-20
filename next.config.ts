@@ -2,11 +2,10 @@ import nextra from 'nextra'
 import {withPlausibleProxy} from "next-plausible";
 
 const withNextra = nextra({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.tsx',
   staticImage: true,
   latex: true,
-  defaultShowCopyCode: true
+  defaultShowCopyCode: true,
+  contentDirBasePath: '/docs',
 })
 
 const securityHeaders = [

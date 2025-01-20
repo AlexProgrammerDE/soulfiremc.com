@@ -1,15 +1,13 @@
 /* eslint-env node */
 import {ImageResponse} from '@vercel/og'
 
-export const config = {
-  runtime: 'edge'
-}
+export const runtime = 'edge';
 
 const font = fetch(new URL('./Inter-SemiBold.otf', import.meta.url)).then(res =>
   res.arrayBuffer()
-)
+);
 
-export default async function (req) {
+export async function GET(req) {
   const inter = await font
 
   const {searchParams} = new URL(req.url)

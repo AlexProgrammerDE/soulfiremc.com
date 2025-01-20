@@ -1,13 +1,7 @@
----
-title: "Page not found"
----
-
-
-
 import Image from "next/image";
 import Link from "next/link";
 
-export const RootComponent = () => {
+export default function RootComponent() {
   return (
     <article
       className="w-full overflow-x-hidden break-words nextra-content flex min-h-[calc(100vh-var(--nextra-navbar-height))] min-w-0 justify-center pb-8 pr-[calc(env(safe-area-inset-right)-1.5rem)]">
@@ -34,5 +28,3 @@ export const RootComponent = () => {
     </article>
   )
 }
-
-<RootComponent/>

@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@variant dark (&:is(.dark *));
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 .nextra-card img {
     user-select: none;
@@ -69,13 +87,13 @@
 }
 
 .feature-card {
-    @apply p-4 flex flex-col justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900;
+    @apply p-4 flex flex-col justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900;
 }
 
 .front-button {
-    @apply mx-auto flex flex-row gap-1 justify-start overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-sm active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-sm dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900;
+    @apply mx-auto flex flex-row gap-1 justify-start overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900;
 }
 
 .highlight-code {
-    @apply border-black border-opacity-[0.04] bg-opacity-[0.03] bg-black break-words rounded-md border py-0.5 px-[.25em] text-[.9em] dark:border-white/10 dark:bg-white/10;
+    @apply border-black border-black/4 bg-black/3 bg-black break-words rounded-md border py-0.5 px-[.25em] text-[.9em] dark:border-white/10 dark:bg-white/10;
 }
