@@ -23,7 +23,8 @@ export const metadata = {
     'msapplication-TileColor': "#3289BF"
   },
   twitter: {
-    site: 'https://soulfiremc.com'
+    site: 'https://soulfiremc.com',
+    card: "summary_large_image"
   },
   openGraph: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
