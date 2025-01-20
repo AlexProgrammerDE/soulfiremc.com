@@ -113,7 +113,7 @@ export default async function RootLayout({children}) {
       </Footer>}
       editLink="Edit this page on GitHub →"
       docsRepositoryBase="https://github.com/AlexProgrammerDE/soulfiremc.com/blob/main"
-      sidebar={{defaultMenuCollapseLevel: 1, toggleButton: true}}
+      sidebar={{toggleButton: true}}
       pageMap={await getPageMap()}
     >
       {children}
