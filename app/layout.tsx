@@ -10,7 +10,7 @@ import {Metadata, Viewport} from "next";
 export const metadata = {
   metadataBase: new URL('https://soulfiremc.com'),
   title: {
-    default: 'SoulFire',
+    default: 'SoulFire - Advanced Minecraft Server-Stresser Tool',
     template: '%s - SoulFire'
   },
   description: 'Advanced Minecraft Server-Stresser Tool. Launch bot attacks on your servers to measure performance.',
