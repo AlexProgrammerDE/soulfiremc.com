@@ -18,8 +18,8 @@
     "next": "^15.0.0",
     "next-plausible": "^3.12.0",
     "next-sitemap": "^4.2.3",
-    "nextra": "^3.0.0",
-    "nextra-theme-docs": "^3.0.0",
+    "nextra": "^4.0.4",
+    "nextra-theme-docs": "^4.0.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-timeago": "^7.2.0"
