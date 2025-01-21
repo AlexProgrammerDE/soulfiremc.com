@@ -85,15 +85,17 @@ const ReleaseCard = ({data, type, hint}) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row mt-1">
-          <span className="flex flex-row cursor-pointer">Released by </span>
+        <div className="flex mt-1">
           <a
-            href={data.author.url}
-            className="flex items-start text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
-            <Image className="rounded-full w-6 h-6 my-auto mx-1" src={data.author.avatar}
-                   width={16} height={16} alt={data.author.name}/>
-            <span className="font-semibold">{data.author.name}</span>
-            <span className="mx-1"><CustomTimeAgo date={data.time}/></span>
+            href={data.url}
+            className="flex flex-col md:flex-row gap-1 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
+            <span className="flex flex-row cursor-pointer">Released by</span>
+            <div className="flex flex-row gap-1">
+              <Image className="rounded-full w-6 h-6 my-auto" src={data.author.avatar}
+                     width={16} height={16} alt={data.author.name}/>
+              <span className="font-semibold">{data.author.name}</span>
+            </div>
+            <span><CustomTimeAgo date={data.time}/></span>
           </a>
         </div>
       </div>
