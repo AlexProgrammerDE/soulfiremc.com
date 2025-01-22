@@ -9,8 +9,13 @@ import {
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import {CustomTimeAgo} from "~/components/time-ago";
+import {Metadata} from "next";
 
-export const metadata = {}
+export const metadata: Metadata = {
+  openGraph: {
+    images: "https://soulfiremc.com/og?title=SoulFire"
+  }
+}
 
 const getReleaseData = async () => {
   const [clientData, serverData] = await Promise.all([

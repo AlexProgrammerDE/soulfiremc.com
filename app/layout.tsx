@@ -7,7 +7,7 @@ import PlausibleProvider from "next-plausible";
 import Image from "next/image";
 import {Metadata, Viewport} from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL('https://soulfiremc.com'),
   title: {
     default: 'SoulFire - Advanced Minecraft Server-Stresser Tool',
@@ -37,11 +37,11 @@ export const metadata = {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     canonical: './'
   }
-} satisfies Metadata
+}
 
-export const viewport = {
+export const viewport: Viewport = {
   themeColor: "#3289BF"
-} satisfies Viewport
+}
 
 export default async function RootLayout({children}) {
   const navbar = (
