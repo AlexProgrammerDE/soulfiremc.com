@@ -115,6 +115,11 @@ export default withPlausibleProxy({
         destination: process.env.NEXT_PUBLIC_GITHUB_LINK,
         permanent: false,
       },
+      {
+        source: '/donate',
+        destination: process.env.NEXT_PUBLIC_DONATE_LINK,
+        permanent: false,
+      },
     ]
   },
   async rewrites() {
