@@ -8,8 +8,11 @@ It can either display information or control the bots.
 | Command                                          | Description                                                                                                               |
 |--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
 | `help{:bash}`                                    | Prints a list of all available commands                                                                                   |
-| `generate-token{:bash}`                          | Generate a JWT for other clients to connect to the server                                                                 |
+| `generate-token{:bash}`                          | Generate an auth JWT for the current user                                                                                 |
+| `set-email <email>{:bash}`                       | Set the email of the current user                                                                                         |
 | `whoami{:bash}`                                  | See who you are                                                                                                           |
+| `plugins{:bash}`                                 | Show all installed plugins                                                                                                |
+| `walk <entity>{:bash}`                           | Makes selected bots walk to a entity                                                                                      |
 | `walk radius <radius>{:bash}`                    | Makes selected bots walk to a random xz position within the radius                                                        |
 | `walk <y>{:bash}`                                | Makes selected bots walk to the y coordinates                                                                             |
 | `walk <xz>{:bash}`                               | Makes selected bots walk to the xz coordinates                                                                            |
@@ -18,7 +21,11 @@ It can either display information or control the bots.
 | `follow <entity> <maxRadius>{:bash}`             | Makes selected bots follow an entity by id                                                                                |
 | `excavate rectangle <from> <to>{:bash}`          | Makes selected bots dig a rectangle from the from to the to coordinates                                                   |
 | `excavate sphere <position> <radius>{:bash}`     | Makes selected bots dig a sphere with the given radius                                                                    |
-| `stop-path{:bash}`                               | Makes selected bots stop pathfinding                                                                                      |
+| `mimic <entity>{:bash}`                          | Makes selected bots mimic the movement of other entities                                                                  |
+| `stop-task{:bash}`                               | Makes selected bots stop their current task                                                                               |
+| `start-attack{:bash}`                            | Makes selected instances start an attack                                                                                  |
+| `pause-attack{:bash}`                            | Makes selected instances pause their                                                                                      |
+| `stop-attack{:bash}`                             | Stops the ongoing attacks                                                                                                 |
 | `lookat <xyz>{:bash}`                            | Makes selected bots look at the block at the xyz coordinates                                                              |
 | `move forward{:bash}`                            | Toggle walking forward for selected bots                                                                                  |
 | `move backward{:bash}`                           | Toggle walking backward for selected bots                                                                                 |
@@ -27,12 +34,13 @@ It can either display information or control the bots.
 | `jump{:bash}`                                    | Toggle jumping for selected bots                                                                                          |
 | `sneak{:bash}`                                   | Toggle sneaking for selected bots                                                                                         |
 | `reset{:bash}`                                   | Resets the movement of selected bots                                                                                      |
-| `stop-attack{:bash}`                             | Stops the ongoing attacks                                                                                                 |
+| `placeon <block> <face>{:bash}`                  | Makes selected bots place a block on the specified face of a block                                                        |
 | `spark{:bash}`                                   | Get spark help                                                                                                            |
 | `spark <command>{:bash}`                         | Runs a spark subcommand                                                                                                   |
 | `online{:bash}`                                  | Shows connected bots in attacks                                                                                           |
 | `say <message>{:bash}`                           | Makes selected bots send a message in chat or execute a command                                                           |
 | `stats{:bash}`                                   | Shows network stats                                                                                                       |
+| `metadata <entity>{:bash}`                       | Makes selected bots follow an entity by id                                                                                |
 | `export-map{:bash}`                              | Exports images of all map items. Can be a held item or in a item-frame.                                                   |
 | `export-map <map_id>{:bash}`                     | Exports a image of a map item by map id. Can be a held item or in a item-frame.                                           |
 | `bot <bot_names> ...{:bash}`                     | Instead of running a command for selected bots, run it for a specific list of bots. Use a comma to separate the names     |
