@@ -1,5 +1,36 @@
 import nextra from 'nextra'
 import {withPlausibleProxy} from "next-plausible";
+import * as fs from 'fs';
+import * as path from 'path';
+
+function getFoldersWithPageFiles(dir: string): string[] {
+  const foldersWithPageFiles: string[] = [];
+
+  // Read the contents of the current directory.
+  const items = fs.readdirSync(dir);
+
+  // Check if the current directory contains either 'page.mdx' or 'page.tsx'
+  const containsPageFile = items.some(item =>
+    item === 'page.mdx' || item === 'page.tsx'
+  );
+
+  if (containsPageFile) {
+    foldersWithPageFiles.push(dir);
+  }
+
+  // Loop through each item in the directory.
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+
+    // If the item is a directory, recursively search it.
+    if (stat.isDirectory()) {
+      foldersWithPageFiles.push(...getFoldersWithPageFiles(fullPath));
+    }
+  }
+
+  return foldersWithPageFiles;
+}
 
 function isExportNode(node, varName: string) {
   if (node.type !== 'mdxjsEsm') return false
@@ -94,6 +125,11 @@ export default withPlausibleProxy({
   customDomain: process.env.PLAUSIBLE_URL
 })(withNextra({
   reactStrictMode: true,
+  env: {
+    SITEMAP_PAGES: getFoldersWithPageFiles("app")
+      .map(folder => folder.substring("app".length))
+      .join("|")
+  },
   images: {
     remotePatterns: [{
       hostname: 'avatars.githubusercontent.com',
