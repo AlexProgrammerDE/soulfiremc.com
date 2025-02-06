@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     url: './',
-    siteName: 'SkinsRestorer',
+    siteName: 'SoulFire',
     locale: 'en_US',
     type: 'website'
   },
