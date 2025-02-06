@@ -9,22 +9,23 @@ Before installing, we recommend you to read the [main installation page](/docs/i
 In this section, you can read how to set up SoulFire on your Linux PC.
 
 <Steps>
-  ### Download the software
-  Download the latest Debian installer from [the front page](/).
+  ### Install flatpak
+  Install `flatpak` on your system using the [official installation guide](https://flatpak.org/setup/).
 
-  ### Run the installer
-  To run the installer, open a terminal and navigate to the directory where you downloaded the installer. Then, run the
-  following command:
+  ### Install SoulFire
+  To install SoulFire using `flatpak`, run the following command in your terminal:
   ```bash
-  sudo dpkg -i [filename].deb
+  flatpak install flathub com.soulfiremc.soulfire
   ```
 
   ### Let the installer do its work
-  The installer will now install SoulFire on your system. This should only take a few seconds.
+  The installer will now install SoulFire on your system.
+  This should only take a few seconds.
+  You may have to click accept on a few prompts.
 
   ### That's it!
-  You should now have SoulFire installed on your Debian PC. You can now start the software by searching for it in your
-  application menu.
+  You should now have SoulFire installed on your Linux PC. You can now start the software by searching for it in your
+  application menu or by running `flatpak run com.soulfiremc.soulfire` in your terminal.
 </Steps>
 
 ## Next steps
