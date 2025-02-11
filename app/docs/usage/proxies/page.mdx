@@ -116,6 +116,7 @@ Example:
 ### URI
 
 This format allows you to use multiple proxy types in one file.
+You can use the following URI formats:
 
 ```text
 socks5://ip:port <- socks5
@@ -130,6 +131,10 @@ http://ip:port <- http
 http://username@ip:port <- http & username
 http://username:password@ip:port <- http & username & password
 ```
+
+<Callout type="info" emoji="ℹ️">
+  If you use a URI scheme that is not supported (like `https://`), SoulFire will ignore the proxy.
+</Callout>
 
 Example:
 
