@@ -17,6 +17,11 @@ export async function GET(req) {
   const title = hasTitle
     ? searchParams.get('title')?.slice(0, 100)
     : 'SoulFire Documentation'
+  // &description=<description>
+  const hasDescription = searchParams.has('description')
+  const description = hasDescription
+    ? searchParams.get('description')?.slice(0, 200)
+    : 'Advanced Minecraft Server-Stresser Tool. Launch bot attacks on your servers to measure performance.'
 
   return new ImageResponse(
     (
@@ -65,7 +70,7 @@ export async function GET(req) {
             letterSpacing: -1
           }}
         >
-          Advanced Minecraft Server-Stresser Tool. Launch bot attacks on your servers to measure performance.
+          {description}
         </p>
         <h1
           style={{
