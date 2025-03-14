@@ -13,7 +13,7 @@ import {Metadata} from "next";
 import {ReactNode} from "react";
 import {paths} from "@octokit/openapi-types";
 
-type LatestRelease = paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
+type LatestReleaseResponse = paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export const revalidate = 120; // 2 minutes
 
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
   }
 }
 
-async function getRepoInfo(repo: string): Promise<LatestRelease> {
+async function getRepoInfo(repo: string): Promise<LatestReleaseResponse> {
   const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
   return await response.json();
 }
 
 async function getReleaseData(): Promise<{
-  clientData: LatestRelease,
-  serverData: LatestRelease
+  clientData: LatestReleaseResponse,
+  serverData: LatestReleaseResponse
 }> {
   const [clientData, serverData] = await Promise.all([
     getRepoInfo("AlexProgrammerDE/SoulFireClient"),
@@ -43,7 +43,7 @@ async function getReleaseData(): Promise<{
   }
 }
 
-function ReleaseCard(props: { data: LatestRelease, type: string, hint: string }) {
+function ReleaseCard(props: { data: LatestReleaseResponse, type: string, hint: string }) {
   return (
     <div
       className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800">
