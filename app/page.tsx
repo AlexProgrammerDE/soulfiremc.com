@@ -11,6 +11,11 @@ import Image from "next/image";
 import {CustomTimeAgo} from "~/components/time-ago";
 import {Metadata} from "next";
 import {ReactNode} from "react";
+import {paths} from "@octokit/openapi-types";
+
+type LatestRelease = paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export const revalidate = 120; // 2 minutes
 
 export const metadata: Metadata = {
   openGraph: {
@@ -18,61 +23,18 @@ export const metadata: Metadata = {
   }
 }
 
-type ReleaseData = {
-  url: string,
-  name: string,
-  tag: string,
-  assets: {
-    name: string,
-    url: string
-  }[],
-  time: string,
-  author: {
-    name: string,
-    url: string,
-    avatar: string
-  },
+async function getRepoInfo(repo: string): Promise<LatestRelease> {
+  const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
+  return await response.json();
 }
 
 async function getReleaseData(): Promise<{
-  clientData: ReleaseData,
-  serverData: ReleaseData
+  clientData: LatestRelease,
+  serverData: LatestRelease
 }> {
   const [clientData, serverData] = await Promise.all([
-    fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFireClient/releases/latest")
-      .then(res => res.json())
-      .then(release => ({
-        url: release.html_url,
-        name: release.name,
-        tag: release.tag_name,
-        assets: release.assets.map(asset => ({
-          name: asset.name,
-          url: asset.browser_download_url
-        })),
-        author: {
-          name: release.author.login,
-          url: release.author.html_url,
-          avatar: release.author.avatar_url
-        },
-        time: release.published_at
-      })),
-    fetch("https://api.github.com/repos/AlexProgrammerDE/SoulFire/releases/latest")
-      .then(res => res.json())
-      .then(release => ({
-        url: release.html_url,
-        name: release.name,
-        tag: release.tag_name,
-        assets: release.assets.map(asset => ({
-          name: asset.name,
-          url: asset.browser_download_url
-        })),
-        author: {
-          name: release.author.login,
-          url: release.author.html_url,
-          avatar: release.author.avatar_url
-        },
-        time: release.published_at
-      }))
+    getRepoInfo("AlexProgrammerDE/SoulFireClient"),
+    getRepoInfo("AlexProgrammerDE/SoulFire")
   ])
 
   return {
@@ -81,14 +43,14 @@ async function getReleaseData(): Promise<{
   }
 }
 
-function ReleaseCard(props: { data: ReleaseData, type: string, hint: string }) {
+function ReleaseCard(props: { data: LatestRelease, type: string, hint: string }) {
   return (
     <div
       className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800">
       <div className="flex flex-col">
         <div className="flex flex-wrap gap-1">
           <a
-            href={props.data.url}
+            href={props.data.html_url}
             className="flex font-semibold text-lg items-start text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">{props.data.name}</a>
           <div className="flex flex-row gap-1">
             <div>
@@ -100,29 +62,29 @@ function ReleaseCard(props: { data: ReleaseData, type: string, hint: string }) {
             <div>
               <span
                 className="rounded-full border w-fit px-1 text-xs border-gray-400 text-gray-400 justify-center">
-                {props.data.tag}
+                {props.data.tag_name}
               </span>
             </div>
           </div>
         </div>
         <div className="flex mt-1">
           <a
-            href={props.data.url}
+            href={props.data.html_url}
             className="flex flex-col md:flex-row gap-1 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50">
             <span className="flex flex-row cursor-pointer">Released by</span>
             <div className="flex flex-row gap-1">
-              <Image className="rounded-full w-6 h-6 my-auto" src={props.data.author.avatar}
-                     width={16} height={16} alt={props.data.author.name}/>
-              <span className="font-semibold">{props.data.author.name}</span>
+              <Image className="rounded-full w-6 h-6 my-auto" src={props.data.author.avatar_url}
+                     width={16} height={16} alt={props.data.author.login}/>
+              <span className="font-semibold">{props.data.author.login}</span>
             </div>
-            <span><CustomTimeAgo date={props.data.time}/></span>
+            <span><CustomTimeAgo date={props.data.published_at}/></span>
           </a>
         </div>
       </div>
       <div className="min-w-fit flex max-md:flex-wrap md:flex-row gap-4 justify-start">
         <div className="flex flex-col grow-0 justify-center">
           <a
-            href={props.data.url}
+            href={props.data.html_url}
             className="nextra-card front-button p-2 group w-full">
             <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400"/>
             <span>Download {props.hint}</span>
