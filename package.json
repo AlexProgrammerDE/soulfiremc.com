@@ -28,7 +28,7 @@
     "@octokit/openapi-types": "^24.0.0",
     "@tailwindcss/postcss": "4.0.14",
     "@types/node": "22.13.10",
-    "@types/react": "19.0.10",
+    "@types/react": "19.0.11",
     "pagefind": "^1.3.0",
     "postcss": "^8.4.35",
     "tailwindcss": "4.0.14",
