@@ -1,0 +1,122 @@
+---
+description: Learn how to use WebDAV with SoulFire on Windows, Linux, and macOS.
+---
+
+# WebDAV
+
+WebDAV (Web Distributed Authoring and Versioning) allows you to access your SoulFire files remotely through a network connection.
+This guide will show you how to set up and use WebDAV on different operating systems.
+
+This guide expects that you have SoulFire already installed and running on your machine.
+If you haven't done that yet, please refer to the [Installation Guide](/docs/installation)
+
+## What is WebDAV?
+
+WebDAV is a protocol that allows you to access and manage files on a remote server as if they were on your local machine.
+With SoulFire's WebDAV support, you can:
+
+- Access your SoulFire files from any device
+- Edit configuration files and scripts remotely
+- Upload and download instance data and script code
+- Manage your SoulFire installation without direct access to the server
+
+## Windows
+
+### Connecting to WebDAV on Windows
+
+1. Open File Explorer
+2. Right-click on "This PC" and select "Add a network location"
+3. Click "Next" in the wizard
+4. Select "Choose a custom network location" and click "Next"
+5. Enter the WebDAV URL (e.g., `http://your-server-ip:port/webdav`) and click "Next"
+6. Enter your username and password if prompted
+7. Give the connection a name (e.g., "SoulFire WebDAV") and click "Next"
+8. Click "Finish" to complete the setup
+
+You can now access your SoulFire files through the network location in File Explorer.
+
+### Troubleshooting on Windows
+
+If you encounter issues connecting to WebDAV on Windows:
+
+- Make sure the WebDAV service is enabled in your SoulFire configuration
+- Check that your firewall allows connections to the WebDAV port
+- Try using the full URL including the http:// prefix
+- Windows may require Basic Authentication to be enabled on the server
+
+## macOS
+
+### Connecting to WebDAV on macOS
+
+1. Open Finder
+2. Click on "Go" in the menu bar and select "Connect to Server" (or press ⌘K)
+3. Enter the WebDAV URL (e.g., `http://your-server-ip:port/webdav`) in the Server Address field
+4. Click "Connect"
+5. Enter your username and password if prompted
+6. The WebDAV share will appear as a mounted drive in Finder
+
+### Troubleshooting on macOS
+
+If you encounter issues connecting to WebDAV on macOS:
+
+- Verify the WebDAV URL is correct
+- Check network connectivity to the server
+- Ensure your username and password are correct
+- Try using https:// instead of http:// if SSL is enabled
+
+## Linux
+
+### Connecting to WebDAV on Linux
+
+There are several ways to connect to WebDAV on Linux, depending on your distribution and desktop environment.
+
+#### Using GNOME Files (Nautilus)
+
+1. Open Files (Nautilus)
+2. Click on "Other Locations" in the sidebar
+3. In the "Connect to Server" field at the bottom, enter the WebDAV URL (e.g., `dav://your-server-ip:port/webdav`)
+4. Click "Connect"
+5. Enter your username and password if prompted
+
+#### Using KDE Dolphin
+
+1. Open Dolphin file manager
+2. In the address bar, enter the WebDAV URL (e.g., `webdav://your-server-ip:port/webdav`)
+3. Enter your username and password if prompted
+
+#### Using davfs2 (Command Line)
+
+1. Install davfs2:
+   ```bash
+   sudo apt-get install davfs2   # Debian/Ubuntu
+   sudo yum install davfs2       # CentOS/RHEL
+   ```
+
+2. Create a mount point:
+   ```bash
+   sudo mkdir /mnt/webdav
+   ```
+
+3. Mount the WebDAV share:
+   ```bash
+   sudo mount -t davfs http://your-server-ip:port/webdav /mnt/webdav
+   ```
+
+4. Enter your username and password when prompted
+
+### Troubleshooting on Linux
+
+If you encounter issues connecting to WebDAV on Linux:
+
+- Check that the required packages are installed
+- Verify that the WebDAV URL is correctly formatted
+- Ensure you have the necessary permissions to mount the filesystem
+- Check system logs for more detailed error messages
+
+## Security Considerations
+
+When using WebDAV, keep the following security considerations in mind:
+
+- Use HTTPS instead of HTTP when possible to encrypt your connection
+- Do not share your WebDAV URL or credentials with unauthorized users
+- Regularly update your SoulFire installation to patch security vulnerabilities
