@@ -13,7 +13,7 @@ importers:
         version: 2.2.0(react@19.1.0)
       '@tailwindcss/typography':
         specifier: ^0.5.16
-        version: 0.5.16(tailwindcss@4.0.17)
+        version: 0.5.16(tailwindcss@4.1.4)
       '@vercel/og':
         specifier: ^0.6.3
         version: 0.6.8
@@ -2764,13 +2764,13 @@ snapshots:
       postcss: 8.5.3
       tailwindcss: 4.1.4
 
-  '@tailwindcss/typography@0.5.16(tailwindcss@4.0.17)':
+  '@tailwindcss/typography@0.5.16(tailwindcss@4.1.4)':
     dependencies:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 4.0.17
+      tailwindcss: 4.1.4
 
   '@tanstack/react-virtual@3.13.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
