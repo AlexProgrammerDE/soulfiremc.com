@@ -68,7 +68,10 @@ function ReleaseCard(props: {
             {props.data.name}
           </a>
           <div className="flex flex-row items-center gap-1">
-            <span className="rounded-full border w-fit px-1 text-xs border-green-400 text-green-400 justify-center">
+            <span
+              className="rounded-full border w-fit px-1 text-xs border-green-400 text-green-400 justify-center"
+              title={`Latest ${props.type} Release`}
+            >
               Latest Release
             </span>
             {props.extraIcons}
@@ -127,18 +130,21 @@ async function LatestRelease() {
               alt="Windows"
               width={24}
               height={24}
+              title="Windows"
             />
             <Image
               src="/platform/macos.png"
               alt="macOS"
               width={24}
               height={24}
+              title="macOS"
             />
             <Image
               src="/platform/linux.png"
               alt="Linux"
               width={24}
               height={24}
+              title="Linux"
             />
           </>
         }
@@ -149,8 +155,8 @@ async function LatestRelease() {
         hint="Server (Advanced)"
         extraIcons={
           <>
-            <ServerStackIcon />
-            <CommandLineIcon />
+            <ServerStackIcon title="Dedicated Server" />
+            <CommandLineIcon title="Command Line Interface" />
           </>
         }
       />
