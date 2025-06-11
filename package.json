@@ -26,7 +26,7 @@
     "react-timeago": "^7.2.0"
   },
   "devDependencies": {
-    "@octokit/openapi-types": "^24.0.0",
+    "@octokit/openapi-types": "^25.0.0",
     "@tailwindcss/postcss": "4.1.9",
     "@types/node": "22.15.31",
     "@types/react": "19.1.8",
