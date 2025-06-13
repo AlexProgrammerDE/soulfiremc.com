@@ -274,21 +274,17 @@ export default function Page() {
                 </a>
                 .
               </span>
-              <video
+              <iframe
                 width={1920}
                 height={1080}
+                src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
+                title="YouTube video player"
+                frameBorder="0"
                 className="w-full h-full rounded-md aspect-video"
-                autoPlay
-                controls
-                loop
-                muted
-                disablePictureInPicture
-              >
-                <source
-                  src="https://github.com/user-attachments/assets/81fbf91b-1aae-49ca-a101-bc3467e048e6"
-                  type="video/mp4"
-                />
-              </video>
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
         </div>
