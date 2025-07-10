@@ -16,7 +16,7 @@
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "@tailwindcss/typography": "^0.5.16",
-    "@vercel/og": "^0.6.3",
+    "@vercel/og": "^0.7.0",
     "next": "^15.0.0",
     "next-plausible": "^3.12.0",
     "nextra": "^4.0.4",
@@ -28,7 +28,7 @@
   "devDependencies": {
     "@octokit/openapi-types": "^25.0.0",
     "@tailwindcss/postcss": "4.1.11",
-    "@types/node": "22.16.0",
+    "@types/node": "22.16.2",
     "@types/react": "19.1.8",
     "pagefind": "^1.3.0",
     "postcss": "^8.4.35",
@@ -36,5 +36,5 @@
     "tailwindcss": "4.1.11",
     "typescript": "5.8.3"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@10.13.1"
 }
