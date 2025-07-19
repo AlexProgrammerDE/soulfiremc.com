@@ -28,7 +28,7 @@
   "devDependencies": {
     "@octokit/openapi-types": "^25.0.0",
     "@tailwindcss/postcss": "4.1.11",
-    "@types/node": "22.16.4",
+    "@types/node": "22.16.5",
     "@types/react": "19.1.8",
     "pagefind": "^1.3.0",
     "postcss": "^8.4.35",
