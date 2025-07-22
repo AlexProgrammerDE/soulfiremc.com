@@ -16,7 +16,7 @@
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "@tailwindcss/typography": "^0.5.16",
-    "@vercel/og": "^0.7.0",
+    "@vercel/og": "^0.8.0",
     "next": "^15.0.0",
     "next-plausible": "^3.12.0",
     "nextra": "^4.0.4",
