@@ -27,7 +27,12 @@ You have two options, use Cloudflared as a HTTPS tunnel or set up a reverse prox
 
 ### Cloudflared tunnel (Recommended)
 
-You get the token from the Cloudflare Zero Trust dashboard. Follow the [official guide]((https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/) to learn how to get the Cloudflared tunnel token.
+You get the token from the Cloudflare Zero Trust dashboard.
+Follow the [official guide](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/) to learn how to get the Cloudflared tunnel token.
+
+```dotenv filename=".env"
+TUNNEL_TOKEN=mytokengoeshere
+```
 
 ```yaml filename="docker-compose.yml"
 services:
@@ -46,7 +51,7 @@ services:
     image: cloudflare/cloudflared
     command: tunnel run
     environment:
-      - TUNNEL_TOKEN=mytokengoeshere
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
 
 volumes:
   app_data:
@@ -56,7 +61,11 @@ volumes:
 ### Traefik
 
 Traefik is a powerful reverse proxy that allows serving SoulFire with HTTPS.
-You will have to change the placeholders for the domain and email.
+
+```dotenv filename=".env"
+DOMAIN=your-domain.com
+EMAIL=your@email.com
+```
 
 ```yaml filename="docker-compose.yml"
 services:
@@ -70,7 +79,7 @@ services:
       retries: 5
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.soulfire.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.soulfire.rule=Host(`${DOMAIN}`)"
       - "traefik.http.services.soulfire.loadbalancer.server.port=38765"
       - "traefik.http.routers.soulfire.entrypoints=websecure"
       - "traefik.http.routers.soulfire.tls.certresolver=myresolver"
@@ -86,7 +95,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=your@email.com"
+      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
@@ -97,7 +106,7 @@ services:
 
 volumes:
   app_data:
-      driver: local
+    driver: local
   letsencrypt:
     driver: local
 ```
