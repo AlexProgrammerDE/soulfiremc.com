@@ -14,13 +14,20 @@ This guide assumes you know Docker and Docker compose well and are able to troub
 You want to use Docker without the hassle of setting up the container yourself?
 If you are a user of Pterodactyl/Pelican, you can use [the official egg](https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/soulfire_egg.json).
 
+It is recommended to set up the [Cloudflared egg](https://github.com/Ym0T/pterodactyl-nginx-egg?tab=readme-ov-file#-cloudflared-tunnel-tutorial) to setup HTTPS to forward the SoulFire egg.
+
 ## How to install Docker?
 
 Look at this [official guide](https://docs.docker.com/engine/install).
 
-## Basic setup
+## HTTPS setup
 
-Just setup SoulFire with no extra configuration or other services.
+SoulFire uses HTTP, but if you run a public domain endpoint you're going to need HTTPS set up for dedicated servers.
+You have two options, use Cloudflared as a HTTPS tunnel or set up a reverse proxy like Traefik with automatic HTTPS.
+
+### Cloudflared tunnel (Recommended)
+
+You get the token from the Cloudflare Zero Trust dashboard. Follow the [official guide]((https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/) to learn how to get the Cloudflared tunnel token.
 
 ```yaml filename="docker-compose.yml"
 services:
@@ -32,23 +39,23 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    ports:
-      - '38765:38765'
     volumes:
       - app_data:/soulfire/data
+
+  cloudflared:
+    image: cloudflare/cloudflared
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=mytokengoeshere
 
 volumes:
   app_data:
     driver: local
 ```
 
-## HTTPS setup
+### Traefik
 
-SoulFire runs on HTTP, but if you run a web endpoint you're going to need HTTPS for client-side requests from websites.
-You have two options, set up a reverse proxy with automatic HTTPS or use cloudflared as a https tunnel.
-
-### Reverse proxy
-
+Traefik is a powerful reverse proxy that allows serving SoulFire with HTTPS.
 You will have to change the placeholders for the domain and email.
 
 ```yaml filename="docker-compose.yml"
@@ -95,9 +102,13 @@ volumes:
     driver: local
 ```
 
-### Cloudflared
+## HTTP setup
 
-You get the token from the [cloudflare dashboard](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/).
+Just setup SoulFire with no extra configuration or other services.
+
+This will only serve SoulFire via HTTP. This means that traffic with SoulFire is unencrypted and insecure.
+All tokens/emails are sent in cleartext and are hijackable with Man In The Middle attacks.
+It is recommended to setup SoulFire using HTTPS.
 
 ```yaml filename="docker-compose.yml"
 services:
@@ -109,14 +120,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    ports:
+      - '38765:38765'
     volumes:
       - app_data:/soulfire/data
-
-  cloudflared:
-    image: cloudflare/cloudflared
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=mytokengoeshere
 
 volumes:
   app_data:
