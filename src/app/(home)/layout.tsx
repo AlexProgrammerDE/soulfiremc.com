@@ -10,6 +10,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       url: "/docs",
       description: "Learn how to use SoulFire",
     },
-    ...baseOptions.links,
+    ...(baseOptions.links || []),
   ]}>{children}</HomeLayout>;
 }

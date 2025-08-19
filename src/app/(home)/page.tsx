@@ -94,7 +94,7 @@ function ReleaseCard(props: {
               <span className="font-semibold">{props.data.author.login}</span>
             </div>
             <span>
-              <CustomTimeAgo date={props.data.published_at} />
+              <CustomTimeAgo date={props.data.published_at!} />
             </span>
           </a>
         </div>

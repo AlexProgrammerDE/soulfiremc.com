@@ -41,7 +41,9 @@ export const viewport: Viewport = {
   themeColor: '#3289BF',
 };
 
-export default async function RootLayout({ children }) {
+export default async function RootLayout({ children }: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>

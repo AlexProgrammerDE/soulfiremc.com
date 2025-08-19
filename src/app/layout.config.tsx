@@ -18,7 +18,7 @@ export const baseOptions: BaseLayoutProps = {
       type: "icon",
       icon: <SiDiscord/>,
       text: "Discord",
-      url: process.env.NEXT_PUBLIC_DISCORD_LINK,
+      url: process.env.NEXT_PUBLIC_DISCORD_LINK!,
       external: true,
     }
   ]
