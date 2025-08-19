@@ -1,17 +1,15 @@
 import Link from 'next/link';
 import {
-  ArrowDownTrayIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/20/solid';
-import {
-  BoltIcon,
-  CloudArrowDownIcon,
-  CommandLineIcon,
-  CubeTransparentIcon,
-  RocketLaunchIcon,
-  ServerStackIcon,
-  Squares2X2Icon,
-} from '@heroicons/react/24/solid';
+  ArrowDownToLine,
+  ChevronRight,
+  Zap,
+  CloudDownload,
+  Terminal,
+  Box,
+  Rocket,
+  Server,
+  AppWindow,
+} from 'lucide-react';
 import Image from 'next/image';
 import { CustomTimeAgo } from '~/components/time-ago';
 import { Metadata } from 'next';
@@ -100,7 +98,7 @@ function ReleaseCard(props: {
           href={props.data.html_url}
           className={cn(buttonVariants({ size: 'lg' }), 'gap-2 whitespace-nowrap')}
         >
-          <ArrowDownTrayIcon className="w-5 h-5" />
+          <ArrowDownToLine className="w-5 h-5" />
           Download {props.hint}
         </a>
       </div>
@@ -149,8 +147,8 @@ async function LatestRelease() {
         hint="Server (Advanced)"
         extraIcons={
           <div className="flex flex-row gap-1">
-            <ServerStackIcon className="w-5 h-5" title="Dedicated Server" />
-            <CommandLineIcon className="w-5 h-5" title="Command Line Interface" />
+            <Server className="w-5 h-5" />
+            <Terminal className="w-5 h-5" />
           </div>
         }
       />
@@ -207,7 +205,7 @@ export default function Page() {
                 <Link href="/docs/installation">
                   <Button size="lg" className="gap-2">
                     <span>Get Started</span>
-                    <ChevronRightIcon className="w-5 h-5" />
+                    <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
                 <a href={process.env.NEXT_PUBLIC_GITHUB_LINK} target="_blank" rel="noopener noreferrer">
@@ -253,18 +251,18 @@ export default function Page() {
                 <FeatureCard
                   title="Easy to use"
                   description="SoulFire is easy to use, just install it and you're ready to go!"
-                  icon={<RocketLaunchIcon className="w-8 h-8 text-primary" />}
+                  icon={<Rocket className="w-8 h-8 text-primary" />}
                 />
               </Link>
               <FeatureCard
                 title="High performance"
                 description="With SoulFire you can have hundreds of bots with low CPU and RAM."
-                icon={<BoltIcon className="w-8 h-8 text-primary" />}
+                icon={<Zap className="w-8 h-8 text-primary" />}
               />
               <FeatureCard
                 title="Bring your own accounts"
                 description="Add your own Offline, Java, Bedrock and The Altening accounts"
-                icon={<CloudArrowDownIcon className="w-8 h-8 text-primary" />}
+                icon={<CloudDownload className="w-8 h-8 text-primary" />}
               />
               <a href={process.env.NEXT_PUBLIC_GITHUB_LINK} target="_blank" rel="noopener noreferrer">
                 <FeatureCard
@@ -291,12 +289,12 @@ export default function Page() {
               <FeatureCard
                 title="Version support"
                 description="You can use any Release, Beta, Alpha, April Fools version and even Bedrock!"
-                icon={<CubeTransparentIcon className="w-8 h-8 text-primary" />}
+                icon={<Box className="w-8 h-8 text-primary" />}
               />
               <FeatureCard
                 title="Use plugins"
                 description="SoulFire has useful plugins built-in and you can also add your own!"
-                icon={<Squares2X2Icon className="w-8 h-8 text-primary" />}
+                icon={<AppWindow className="w-8 h-8 text-primary" />}
               />
             </div>
           </div>
@@ -356,7 +354,7 @@ export default function Page() {
                 <Link href="/docs/installation">
                   <Button size="lg" className="gap-2">
                     <span>Install SoulFire</span>
-                    <ChevronRightIcon className="w-5 h-5" />
+                    <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
               </div>

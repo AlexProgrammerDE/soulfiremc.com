@@ -15,7 +15,6 @@
   "author": "AlexProgrammerDE",
   "license": "ISC",
   "dependencies": {
-    "@heroicons/react": "^2.1.1",
     "@icons-pack/react-simple-icons": "^13.7.0",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/typography": "^0.5.16",
@@ -41,10 +40,14 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@octokit/openapi-types": "^25.0.0",
     "@tailwindcss/postcss": "4.1.12",
     "@types/node": "22.17.2",
     "@types/react": "19.1.10",
+    "eslint": "^9.33.0",
+    "eslint-config-next": "15.4.7",
+    "eslint-config-prettier": "^10.1.8",
     "postcss": "^8.4.35",
     "prettier": "^3.5.3",
     "tailwindcss": "4.1.12",
