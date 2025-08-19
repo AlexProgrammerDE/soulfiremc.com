@@ -1,0 +1,199 @@
+---
+title: Proxies
+description: Learn how to use proxies with SoulFire.
+---
+
+import { Mermaid } from '../../../src/components/mdx/mermaid';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# Import Proxies
+
+SoulFire allows you to use proxies to hide your IP address and bypass IP limits on servers.
+
+## How do proxies work?
+
+Proxies work by hiding your IP similar to how VPNs work.
+When you start an attack, SoulFire will connect through the proxies you provide instead of directly connecting to the server.
+This way, the server will see the proxy IP address instead of the IP address of your computer/server.
+
+Here is an example of how proxies work:
+
+<Mermaid chart="
+graph LR
+    subgraph Y[SoulFire IP: 20.20.20.20]
+        S[SoulFire server]
+    end
+    subgraph P1[Proxy IP: 33.33.33.33]
+      P1S[HTTP Proxy]
+    end
+    subgraph P2[Proxy IP: 44.44.44.44]
+      P2S[SOCKS4 Proxy]
+    end
+    subgraph P3[Proxy IP: 55.55.55.55]
+      P3S[SOCKS5 Proxy]
+    end
+    subgraph M[Minecraft Server]
+    end
+    S --> P1S
+    S --> P2S
+    S --> P3S
+    P1S --> M
+    P2S --> M
+    P3S --> M
+" />
+
+Your setup may use more proxies/only one type of proxy, but the concept is the same.
+
+## Looking for proxies?
+
+There are many websites that offer free proxies, but be careful as many of them are not reliable or secure.
+
+If you need a good proxy service, I recommend [Webshare](https://www.webshare.io/?referral_code=36gneippfiwt)
+(I get commissions for purchases made through this link).
+I've used Webshare for my own projects and tried other services such as [ProxyScrape](https://proxyscrape.com/),
+but they come nowhere close to the quality of Webshare.
+Webshare offers both free and premium proxies and is a reliable and secure service.
+
+## Proxy types
+
+SoulFire supports HTTP, SOCKS4 and SOCKS5 proxies.
+
+<Callout type="warning" emoji="⚠️">
+  Please note HTTPS proxies are not supported.
+  This is because HTTPS runs on an encrypted protocol that is not supported by Minecraft.
+  However HTTP works because it's effectively a raw tcp tunnel without any encryption.
+</Callout>
+
+Select the proxy type in the GUI or CLI and use one of these formats with one proxy per line:
+
+### HTTP
+
+Here's the format for HTTP proxies:
+
+```text
+ip:port <- no authentication
+ip:port:username <- username
+ip:port:username:password <- username & password
+```
+
+Example:
+
+```text
+192.168.0.1:8080
+192.168.0.2:1080:root
+192.168.0.3:1090:root:PassW0rd
+```
+
+### SOCKS4
+
+Here's the format for SOCKS4 proxies:
+
+```text
+ip:port <- no authentication
+ip:port:username <- username
+(socks4 doesn't support passwords)
+```
+
+Example:
+
+```text
+192.168.0.1:8080
+192.168.0.2:1080:root
+```
+
+### SOCKS5
+
+Here's the format for SOCKS5 proxies:
+
+```text
+ip:port <- no authentication
+ip:port:username <- username
+ip:port:username:password <- username & password
+```
+
+Example:
+
+```text
+192.168.0.1:8080
+192.168.0.2:1080:root
+192.168.0.3:1090:root:PassW0rd
+```
+
+### URI
+
+This format allows you to use multiple proxy types in one file.
+You can use the following URI formats:
+
+```text
+socks5://ip:port <- socks5
+socks5://username@ip:port <- socks5 & username
+socks5://username:password@ip:port <- socks5 & username & password
+
+socks4://ip:port <- socks4
+socks4://username@ip:port <- socks4 & username
+(socks4 doesn't support passwords)
+
+http://ip:port <- http
+http://username@ip:port <- http & username
+http://username:password@ip:port <- http & username & password
+```
+
+<Callout type="info" emoji="ℹ️">
+  If you use a URI scheme that is not supported (like `https://`), SoulFire will ignore the proxy.
+</Callout>
+
+Example:
+
+```text
+http://192.168.0.1:8080
+socks4://root@192.168.0.1:8080
+socks5://root:PassW0rd@192.168.0.1:8080
+```
+
+## Multiple bots on one proxy?
+
+Yes, you can run multiple bots on one proxy.
+This is useful if you have a limited number of proxies and want to run more bots than proxies.
+Please be aware some servers can detect this and ban the proxy, so use this feature with caution.
+Many servers work by limiting the amount of connections per IP, so if you run too many bots on one proxy, the server may not allow more connections from that proxy.
+
+SoulFire defaults to `-1` connections per proxy, which means unlimited bots can connect through one proxy.
+But it will always try to evenly distribute the bots across all proxies.
+If you set any value like `10`, SoulFire will only allow 10 bots to connect through one proxy.
+If you request more bots than the `limit per proxy * amount of proxies`, SoulFire will reduce the amount of bots to the maximum possible amount.
+
+Here is an example of how multiple bots on one proxy work:
+
+<Mermaid chart="
+graph LR
+    subgraph Y[SoulFire]
+        S[SoulFire server]
+        B1[Bot_1]
+        B2[Bot_2]
+        B3[Bot_3]
+    end
+    subgraph P1[Proxy 1]
+      P1S[HTTP Proxy]
+    end
+    subgraph P2[Proxy 2]
+      P2S[SOCKS5 Proxy]
+    end
+    subgraph M[Minecraft Server]
+    end
+    S --> B1
+    S --> B2
+    S --> B3
+    B1 --> P1S
+    B2 --> P1S
+    B3 --> P2S
+    P1S --> M
+    P2S --> M
+" />
+
+## Shuffling proxies
+
+SoulFire supports shuffling proxies, but it's disabled by default.
+When enabled, SoulFire will shuffle the proxies randomly before starting the attack.
+If disabled, SoulFire will use the proxies in the order they are in the settings.
+
+The shuffling feature is useful if you want to randomize the order of the proxies to make it harder for servers to detect which proxies are bots on subsequent attacks.

@@ -1,0 +1,77 @@
+---
+title: Plugins
+description: Learn how to extend the functionality of SoulFire with plugins.
+---
+
+# Plugins
+
+Plugins are a way to extend the functionality of SoulFire.
+SoulFire also comes with a few built-in plugins that can be enabled or disabled.
+
+## Built-in plugins
+
+We've prepared a list of built-in plugins that SoulFire ships by default with every SoulFire instance and are available by default.
+Later on this page we'll show a list of external community plugins that extend the base SoulFire functionality.
+
+| ID                   | Description                                                                                                           | Author           | License |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------|------------------|---------|
+| `ai-captcha-solver`  | Solve captcha images using AI                                                                                         | AlexProgrammerDE | GPL-3.0 |
+| `ai-chat-bot`        | Allow players to chat with an AI                                                                                      | AlexProgrammerDE | GPL-3.0 |
+| `anti-afk`           | Automatically moves x amount of blocks in a random direction to prevent being kicked for being AFK                    | AlexProgrammerDE | GPL-3.0 |
+| `auto-armor`         | Automatically puts on the best armor                                                                                  | AlexProgrammerDE | GPL-3.0 |
+| `auto-chat-message`  | Automatically sends messages in a configured delay                                                                    | AlexProgrammerDE | GPL-3.0 |
+| `auto-eat`           | Automatically eats food when hungry                                                                                   | AlexProgrammerDE | GPL-3.0 |
+| `auto-jump`          | Automatically jumps randomly                                                                                          | AlexProgrammerDE | GPL-3.0 |
+| `auto-reconnect`     | Automatically reconnects bots when they time out or are kicked                                                        | AlexProgrammerDE | GPL-3.0 |
+| `auto-register`      | Automatically registers bots AuthMe servers                                                                           | AlexProgrammerDE | GPL-3.0 |
+| `auto-respawn`       | Automatically respawns after death                                                                                    | AlexProgrammerDE | GPL-3.0 |
+| `auto-totem`         | Automatically puts totems in the offhand slot                                                                         | AlexProgrammerDE | GPL-3.0 |
+| `chat-logger`        | Logs all received chat messages to the terminal Includes deduplication to prevent spamming the same message too often | AlexProgrammerDE | GPL-3.0 |
+| `client-brand`       | Sends the client brand to the server                                                                                  | AlexProgrammerDE | GPL-3.0 |
+| `client-settings`    | Sends client settings to the server                                                                                   | AlexProgrammerDE | GPL-3.0 |
+| `fake-virtual-host`  | Fakes the virtual host                                                                                                | AlexProgrammerDE | GPL-3.0 |
+| `kill-aura`          | Automatically attacks entities                                                                                        | AlexProgrammerDE | GPL-3.0 |
+| `server-list-bypass` | Pings the server list before connecting. (Bypasses anti-bots like EpicGuard)                                          | AlexProgrammerDE | GPL-3.0 |
+| `forwarding-bypass`  | Allows bypassing proxy forwarding                                                                                     | AlexProgrammerDE | GPL-3.0 |
+
+### How to generate this list
+
+Run the command `print-docs plugins` in the console of the GUI, CLI or Dedicated server.
+
+## Community plugins
+
+Community plugins are plugins that are not built-in but are made by the community.
+Plugins can be written in Java or Kotlin and can be loaded at startup of the SoulFire server.
+Plugins are able to use Mixins, which is the same system used in Minecraft mods to modify the game.
+SoulFire does not use Minecraft code, so Minecraft mods are not compatible with SoulFire.
+Plugins normally only modify the SoulFire application server, not the GUI/CLI interface directly.
+
+Any questions regarding how SoulFire works and how to write a plugin can be asked in the [Discord](/discord).
+
+### How to write a plugin
+
+To write a plugin, you need to create a new Java or Kotlin project.
+Right now there is no full guide on how to write a plugin, but you can look at the built-in plugins for inspiration.
+There is also a [plugin template](https://github.com/AlexProgrammerDE/SoulFirePluginExample) available on GitHub.
+Official Javadocs are hosted on [CodeMC CI](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/index.html).
+
+### How to install a plugin
+
+To install a plugin, you need to place the plugin `.jar` file in the `plugins` directory of the SoulFire server.
+The SoulFire server will automatically load all `.jar` files in the `plugins` directory at startup.
+The plugins directory is in different places depending on your setup and operating system.
+If you use the client integrated server,
+you'll find the `plugins` directory in the `Help -> Data directory` folder in the `soulfire/plugins` subdirectory.
+If you use a dedicated server,
+you'll find the `plugins` directory located in the same directory as the server `.jar` file.
+
+### Plugin list
+
+Feel free to share your plugins with the community here.
+Open a pull request to add your plugin to the list.
+Plugins should be open-source and hosted on GitHub.
+If you want to share a paid plugin, please contact the developers.
+
+| Plugin name                                                                 | Description                                  | Author           |
+|-----------------------------------------------------------------------------|----------------------------------------------|------------------|
+| [Example Plugin](https://github.com/AlexProgrammerDE/SoulFirePluginExample) | An example plugin that adds jump boost hacks | AlexProgrammerDE |

@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/dusk.css';
+@import 'fumadocs-ui/css/preset.css';
+
+@variant dark (&:is(.dark *));
+
+.nextra-card img {
+    user-select: none;
+}
+
+.nextra-card:hover svg {
+    color: currentColor;
+}
+
+.nextra-card svg {
+    width: 1.5rem;
+    color: #00000033;
+    transition: color 0.3s ease;
+}
+
+.nextra-card p {
+    margin-top: 0.5rem;
+}
+
+.dark .nextra-card svg {
+    color: #ffffff66;
+}
+
+.dark .nextra-card:hover svg {
+    color: currentColor;
+}
+
+.feature-card {
+    @apply p-4 flex flex-col justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900;
+}
+
+.front-button {
+    @apply mx-auto flex flex-row gap-1 justify-start overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800 hover:bg-slate-50 hover:shadow-md dark:hover:border-neutral-700 dark:hover:bg-neutral-900;
+}

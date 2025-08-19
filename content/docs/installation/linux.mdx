@@ -1,0 +1,49 @@
+---
+title: Installation on Linux (.flatpak)
+description: Learn how to install SoulFire on your Linux PC.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+# Installation on Linux (.flatpak)
+
+Before installing, we recommend you to read the [main installation page](/docs/installation).
+
+## Basic Installation
+
+In this section, you can read how to set up SoulFire on your Linux PC.
+
+<Steps>
+  <Step>
+    ### Install flatpak
+    Install `flatpak` on your system using the [official installation guide](https://flatpak.org/setup/).
+  </Step>
+
+  <Step>
+    ### Install SoulFire
+    To install SoulFire using `flatpak`, run the following command in your terminal:
+    ```bash
+    flatpak install flathub com.soulfiremc.soulfire
+    ```
+
+    More info about the flatpak package can be found on the [Flathub
+    page](https://flathub.org/apps/com.soulfiremc.soulfire).
+  </Step>
+
+  <Step>
+    ### Let the installer do its work
+    The installer will now install SoulFire on your system.
+    This should only take a few seconds.
+    You may have to click accept on a few prompts.
+  </Step>
+
+  <Step>
+    ### That's it!
+    You should now have SoulFire installed on your Linux PC. You can now start the software by searching for it in your
+    application menu or by running `flatpak run com.soulfiremc.soulfire{:bash}` in your terminal.
+  </Step>
+</Steps>
+
+## Next steps
+
+After installing SoulFire, you can read the [GUI Mode Guide](/docs/guides/gui-mode) to learn how to use the software.

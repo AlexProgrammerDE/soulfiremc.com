@@ -1,0 +1,75 @@
+---
+title: Installation
+description: Learn how to install SoulFire on your PC.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+import Image from "next/image";
+
+# Installing SoulFire
+
+Here you can find everything you need for your first time installation of SoulFire as well as the recommended way
+of doing so.
+If you're having issues or questions while installing, feel
+free to ask questions on our [discord server](https://soulfiremc.com/discord)
+
+## Legal disclaimer
+
+<Callout type="warning" emoji="⚠️">
+  This is a very powerful tool that shall only be used to attack your own servers.
+  Ensure your own DDoS protection provider, and your host are okay with stress-tests.
+  If you use this software to attack others, you make yourself (or your legal guardians) criminally liable;
+  the developers of SoulFire are not responsible for your own actions.
+</Callout>
+
+## Requirements
+
+To be able to use SoulFire, little is needed:
+
+* An internet connection to download the software.
+* A supported operating system (`Windows`, `macOS`, `Linux`)
+
+## Platform Installation
+
+In this section, you can read how to set up SoulFire for your PC!
+Select your operating system type below to get started.
+
+<Cards>
+  <Card
+    icon={
+      <Image
+        src="/platform/windows.png"
+        alt="Windows"
+        width={32}
+        height={32}/>
+    }
+    title="Windows (.exe)"
+    href="/docs/installation/windows"
+  >
+  </Card>
+  <Card
+    icon={
+      <Image
+        src="/platform/macos.png"
+        alt="macOS"
+        width={32}
+        height={32}/>
+    }
+    title="macOS (.dmg)"
+    href="/docs/installation/macos"
+  >
+  </Card>
+  <Card
+    icon={
+      <Image
+        src="/platform/linux.png"
+        alt="Linux"
+        width={32}
+        height={32}/>
+    }
+    title="Linux (.flatpak)"
+    href="/docs/installation/linux"
+  >
+  </Card>
+</Cards>

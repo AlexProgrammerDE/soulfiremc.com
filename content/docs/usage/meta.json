@@ -1,0 +1,11 @@
+{
+  "pages": [
+    "accounts",
+    "proxies",
+    "versions",
+    "operation-modes",
+    "commands",
+    "plugins",
+    "cli-flags"
+  ]
+}
