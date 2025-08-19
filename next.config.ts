@@ -1,8 +1,39 @@
 import { withPlausibleProxy } from 'next-plausible';
 import { createMDX } from 'fumadocs-mdx/next';
 import { NextConfig } from 'next';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const withMDX = createMDX();
+
+function getFoldersWithPageFiles(dir: string): string[] {
+  const foldersWithPageFiles: string[] = [];
+
+  // Read the contents of the current directory.
+  const items = fs.readdirSync(dir);
+
+  // Check if the current directory contains either 'page.mdx' or 'page.tsx'
+  const containsPageFile = items.some(item =>
+    item === 'page.mdx' || item === 'page.tsx'
+  );
+
+  if (containsPageFile) {
+    foldersWithPageFiles.push(dir);
+  }
+
+  // Loop through each item in the directory.
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+
+    // If the item is a directory, recursively search it.
+    if (stat.isDirectory()) {
+      foldersWithPageFiles.push(...getFoldersWithPageFiles(fullPath));
+    }
+  }
+
+  return foldersWithPageFiles;
+}
 
 const securityHeaders = [
   {
@@ -28,12 +59,13 @@ const securityHeaders = [
   },
 ];
 
+const baseDir = path.join("src", "app", "(home)");
 const config: NextConfig = {
   reactStrictMode: true,
   env: {
-    // SITEMAP_PAGES: getFoldersWithPageFiles("app")
-    //   .map(folder => folder.substring("app".length))
-    //   .join("|")
+    SITEMAP_PAGES: getFoldersWithPageFiles(baseDir)
+      .map(folder => folder.substring(baseDir.length))
+      .join("|")
   },
   images: {
     remotePatterns: [

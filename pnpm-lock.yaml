@@ -68,6 +68,9 @@ importers:
       remark-mdx:
         specifier: ^3.1.0
         version: 3.1.0
+      shiki:
+        specifier: ^3.10.0
+        version: 3.10.0
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
