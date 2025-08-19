@@ -17,6 +17,7 @@
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "@icons-pack/react-simple-icons": "^13.7.0",
+    "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/typography": "^0.5.16",
     "@types/mdx": "^2.0.13",
     "@vercel/og": "^0.8.0",
