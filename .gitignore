@@ -73,3 +73,5 @@ dist
 
 public/sitemap*
 _pagefind/
+.source
+
