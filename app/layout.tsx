@@ -79,9 +79,9 @@ export default async function RootLayout({children}) {
         labels: 'feedback'
       }}
       banner={
-        <Banner storageKey="flathub">
-          <a href="https://flathub.org/apps/com.soulfiremc.soulfire" target="_blank" rel="noreferrer">
-            🎉 SoulFire is now on Linux Flathub. Download →
+        <Banner storageKey="v2">
+          <a href="https://github.com/AlexProgrammerDE/SoulFireClient/releases/latest" target="_blank" rel="noreferrer">
+            🎉 SoulFire v2 is out now! Download →
           </a>
         </Banner>
       }
