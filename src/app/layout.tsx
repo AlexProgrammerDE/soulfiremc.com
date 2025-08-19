@@ -2,6 +2,7 @@ import '~/style.css';
 import PlausibleProvider from 'next-plausible';
 import { Metadata, Viewport } from 'next';
 import { RootProvider } from 'fumadocs-ui/provider';
+import { Banner } from 'fumadocs-ui/components/banner';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://soulfiremc.com'),
@@ -44,7 +45,12 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <Banner id="v2">
+            🎉 SoulFire v2 is out now!
+          </Banner>
+          {children}
+        </RootProvider>
         <PlausibleProvider
           trackOutboundLinks
           trackFileDownloads
