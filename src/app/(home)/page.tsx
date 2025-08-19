@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {
   ArrowDownTrayIcon,
-  ChevronDoubleRightIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/20/solid';
 import {
   BoltIcon,
@@ -17,6 +17,9 @@ import { CustomTimeAgo } from '~/components/time-ago';
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
 import { paths } from '@octokit/openapi-types';
+import { Button, buttonVariants } from '~/components/ui/button';
+import { Card, CardDescription, CardTitle } from '~/components/ui/card';
+import { cn } from '~/lib/utils';
 
 type LatestReleaseResponse =
   paths['/repos/{owner}/{repo}/releases/latest']['get']['responses']['200']['content']['application/json'];
@@ -58,59 +61,50 @@ function ReleaseCard(props: {
   extraIcons: ReactNode;
 }) {
   return (
-    <div className="nextra-card mt-4 p-4 group flex max-md:flex-wrap md:flex-row gap-2 justify-between overflow-hidden rounded-lg border border-gray-200 text-current dark:shadow-none hover:shadow-gray-100 dark:hover:shadow-none shadow-gray-100 active:shadow-xs active:shadow-gray-200 transition-all duration-200 hover:border-gray-300 bg-transparent shadow-xs dark:border-neutral-800">
-      <div className="flex flex-col">
-        <div className="flex flex-wrap gap-1">
+    <Card className="flex flex-col md:flex-row gap-6 p-6 transition-all duration-300 hover:shadow-lg">
+      <div className="flex flex-col flex-1">
+        <div className="flex flex-wrap items-center gap-3 mb-3">
           <a
             href={props.data.html_url}
-            className="flex font-semibold text-lg items-start text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50"
+            className="text-2xl font-bold hover:underline"
           >
             {props.data.name}
           </a>
-          <div className="flex flex-row items-center gap-1">
-            <span
-              className="rounded-full border w-fit px-1 text-xs border-green-400 text-green-400 justify-center"
-              title={`Latest ${props.type} Release`}
-            >
+          <div className="flex flex-row items-center gap-2">
+            <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
               Latest Release
             </span>
-            {props.extraIcons}
+            <div className="flex flex-row items-center gap-1">
+              {props.extraIcons}
+            </div>
           </div>
         </div>
-        <div className="flex mt-1">
-          <a
-            href={props.data.html_url}
-            className="flex flex-col md:flex-row gap-1 text-gray-700 hover:text-gray-900 dark:text-neutral-200 dark:hover:text-neutral-50"
-          >
-            <span className="flex flex-row cursor-pointer">Released by</span>
-            <div className="flex flex-row gap-1">
-              <Image
-                className="rounded-full w-6 h-6 my-auto"
-                src={props.data.author.avatar_url}
-                width={16}
-                height={16}
-                alt={props.data.author.login}
-              />
-              <span className="font-semibold">{props.data.author.login}</span>
-            </div>
-            <span>
-              <CustomTimeAgo date={props.data.published_at!} />
-            </span>
-          </a>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span>Released by</span>
+          <Image
+            className="rounded-full w-6 h-6"
+            src={props.data.author.avatar_url}
+            width={24}
+            height={24}
+            alt={props.data.author.login}
+          />
+          <span className="font-medium">{props.data.author.login}</span>
+          <span>•</span>
+          <span>
+            <CustomTimeAgo date={props.data.published_at!} />
+          </span>
         </div>
       </div>
-      <div className="min-w-fit flex max-md:flex-wrap md:flex-row gap-4 justify-start">
-        <div className="flex flex-col grow-0 justify-center">
-          <a
-            href={props.data.html_url}
-            className="nextra-card front-button p-2 group w-full"
-          >
-            <ArrowDownTrayIcon className="w-6 h-6 fill-gray-500 dark:fill-neutral-400" />
-            <span>Download {props.hint}</span>
-          </a>
-        </div>
+      <div className="flex flex-col justify-center">
+        <a
+          href={props.data.html_url}
+          className={cn(buttonVariants({ size: 'lg' }), 'gap-2 whitespace-nowrap')}
+        >
+          <ArrowDownTrayIcon className="w-5 h-5" />
+          Download {props.hint}
+        </a>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -118,35 +112,35 @@ async function LatestRelease() {
   const { clientData, serverData } = await getReleaseData();
 
   return (
-    <>
+    <div className="space-y-6">
       <ReleaseCard
         data={clientData}
         type="Client"
         hint="Client (Recommended)"
         extraIcons={
-          <>
+          <div className="flex flex-row gap-1">
             <Image
               src="/platform/windows.png"
               alt="Windows"
-              width={24}
-              height={24}
+              width={20}
+              height={20}
               title="Windows"
             />
             <Image
               src="/platform/macos.png"
               alt="macOS"
-              width={24}
-              height={24}
+              width={20}
+              height={20}
               title="macOS"
             />
             <Image
               src="/platform/linux.png"
               alt="Linux"
-              width={24}
-              height={24}
+              width={20}
+              height={20}
               title="Linux"
             />
-          </>
+          </div>
         }
       />
       <ReleaseCard
@@ -154,13 +148,13 @@ async function LatestRelease() {
         type="Server"
         hint="Server (Advanced)"
         extraIcons={
-          <>
-            <ServerStackIcon title="Dedicated Server" />
-            <CommandLineIcon title="Command Line Interface" />
-          </>
+          <div className="flex flex-row gap-1">
+            <ServerStackIcon className="w-5 h-5" title="Dedicated Server" />
+            <CommandLineIcon className="w-5 h-5" title="Command Line Interface" />
+          </div>
         }
       />
-    </>
+    </div>
   );
 }
 
@@ -170,76 +164,119 @@ function FeatureCard(props: {
   icon: ReactNode;
 }) {
   return (
-    <div className="nextra-card feature-card group">
-      <div className="flex flex-col">
+    <Card className="flex flex-col items-center text-center p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      <div className="bg-primary/10 p-3 rounded-full mb-4">
         {props.icon}
-        <h2 className="text-center text-xl font-semibold">{props.title}</h2>
-        <p className="text-center">{props.description}</p>
       </div>
-    </div>
+      <CardTitle className="text-xl mb-2">{props.title}</CardTitle>
+      <CardDescription className="text-base">
+        {props.description}
+      </CardDescription>
+    </Card>
   );
 }
 
 export default function Page() {
   return (
-    <article className="w-full overflow-x-hidden break-words nextra-content flex min-h-[calc(100vh-var(--nextra-navbar-height))] min-w-0 justify-center pb-8 pr-[calc(env(safe-area-inset-right)-1.5rem)]">
-      <main className="w-full min-w-0 max-w-6xl px-6 pt-4 md:px-12">
-        <div className="mx-auto container">
-          <LatestRelease />
-          <div className="p-4 flex flex-col">
-            <div className="mt-8 md:mt-16 flex flex-col md:flex-row mx-auto gap-2">
-              <Image
-                src="/logo.png"
-                width={128}
-                height={128}
-                className="w-24 md:w-16 h-24 md:h-16 mx-auto"
-                alt="SoulFire Logo"
-              />
-              <h1 className="my-auto text-center text-5xl font-bold">
-                SoulFire
-              </h1>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="py-20 md:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center space-y-8 text-center">
+              <div className="space-y-4">
+                <div className="relative mx-auto w-32 h-32 md:w-40 md:h-40">
+                  <Image
+                    src="/logo.png"
+                    alt="SoulFire Logo"
+                    fill
+                    className="rounded-2xl"
+                    priority
+                  />
+                </div>
+                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                  SoulFire
+                </h1>
+                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+                  Advanced Minecraft Server-Stresser Tool.
+                  <br />
+                  Launch bot attacks on your servers to measure performance.
+                </p>
+              </div>
+              <div className="space-x-4">
+                <Link href="/docs/installation">
+                  <Button size="lg" className="gap-2">
+                    <span>Get Started</span>
+                    <ChevronRightIcon className="w-5 h-5" />
+                  </Button>
+                </Link>
+                <a href={process.env.NEXT_PUBLIC_GITHUB_LINK} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="lg">
+                    View on GitHub
+                  </Button>
+                </a>
+              </div>
             </div>
-            <p className="text-center mt-2 text-lg">
-              Advanced Minecraft Server-Stresser Tool.
-              <br />
-              Launch bot attacks on your servers to measure performance.
-            </p>
-            <Link
-              href="/docs/installation"
-              className="nextra-card front-button mt-6 p-2 group"
-            >
-              <span>Get Started</span>
-              <ChevronDoubleRightIcon className="w-6 h-6 m-auto fill-gray-500 dark:fill-neutral-400" />
-            </Link>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 md:mt-16">
+          </div>
+        </section>
+
+        {/* Latest Releases */}
+        <section className="py-16 bg-muted/50">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                Latest Releases
+              </h2>
+              <p className="max-w-[700px] text-muted-foreground md:text-lg">
+                Download the latest version of SoulFire for your platform
+              </p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <LatestRelease />
+            </div>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section className="py-16">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                Powerful Features
+              </h2>
+              <p className="max-w-[700px] text-muted-foreground md:text-lg">
+                Everything you need to stress-test your Minecraft servers
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Link href="/docs/installation">
                 <FeatureCard
                   title="Easy to use"
                   description="SoulFire is easy to use, just install it and you're ready to go!"
-                  icon={<RocketLaunchIcon className="w-6 h-6 mx-auto my-2" />}
+                  icon={<RocketLaunchIcon className="w-8 h-8 text-primary" />}
                 />
               </Link>
               <FeatureCard
                 title="High performance"
                 description="With SoulFire you can have hundreds of bots with low CPU and RAM."
-                icon={<BoltIcon className="w-6 h-6 mx-auto my-2" />}
+                icon={<BoltIcon className="w-8 h-8 text-primary" />}
               />
               <FeatureCard
                 title="Bring your own accounts"
-                description="Add your own Offline, Java, Bedrock and The Altening accounts "
-                icon={<CloudArrowDownIcon className="w-6 h-6 mx-auto my-2" />}
+                description="Add your own Offline, Java, Bedrock and The Altening accounts"
+                icon={<CloudArrowDownIcon className="w-8 h-8 text-primary" />}
               />
-              <a href={process.env.NEXT_PUBLIC_GITHUB_LINK}>
+              <a href={process.env.NEXT_PUBLIC_GITHUB_LINK} target="_blank" rel="noopener noreferrer">
                 <FeatureCard
                   title="Open Source"
                   description="SoulFire is open source, you can contribute to it on GitHub!"
                   icon={
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      height="32.666666666666664"
+                      height="32"
                       width="32"
                       viewBox="0 0 98 96"
-                      className="w-6 h-6 mx-auto my-2"
+                      className="w-8 h-8 text-primary"
                     >
                       <path
                         fillRule="evenodd"
@@ -254,41 +291,79 @@ export default function Page() {
               <FeatureCard
                 title="Version support"
                 description="You can use any Release, Beta, Alpha, April Fools version and even Bedrock!"
-                icon={<CubeTransparentIcon className="w-6 h-6 mx-auto my-2" />}
+                icon={<CubeTransparentIcon className="w-8 h-8 text-primary" />}
               />
               <FeatureCard
                 title="Use plugins"
                 description="SoulFire has useful plugins built-in and you can also add your own!"
-                icon={<Squares2X2Icon className="w-6 h-6 mx-auto my-2" />}
+                icon={<Squares2X2Icon className="w-8 h-8 text-primary" />}
               />
             </div>
-            <div className="mt-8 md:mt-16 flex flex-col mx-auto gap-2">
-              <h2 className="text-center text-xl font-semibold">
+          </div>
+        </section>
+
+        {/* Video Showcase */}
+        <section className="py-16 bg-muted/50">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
                 GUI Showcase
               </h2>
-              <span className="text-center">
-                Do you want to check out a live demo of SoulFire in your
-                browser? Try out the{' '}
-                <a className="underline" href="https://demo.soulfiremc.com">
+              <p className="max-w-[700px] text-muted-foreground md:text-lg">
+                See SoulFire in action with our interactive demo
+              </p>
+              <p className="text-muted-foreground">
+                Do you want to check out a live demo of SoulFire in your browser? Try out the{' '}
+                <a
+                  className="text-primary hover:underline font-medium"
+                  href="https://demo.soulfiremc.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   demo page
-                </a>
-                .
-              </span>
-              <iframe
-                width={1920}
-                height={1080}
-                src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
-                title="YouTube video player"
-                frameBorder="0"
-                className="w-full h-full rounded-md aspect-video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
+                </a>.
+              </p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  className="w-full h-full"
+                ></iframe>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="py-16">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                Ready to Get Started?
+              </h2>
+              <p className="max-w-[700px] text-muted-foreground md:text-lg">
+                Join thousands of users who are already stress-testing their Minecraft servers with SoulFire
+              </p>
+              <div className="mt-6">
+                <Link href="/docs/installation">
+                  <Button size="lg" className="gap-2">
+                    <span>Install SoulFire</span>
+                    <ChevronRightIcon className="w-5 h-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-    </article>
+    </div>
   );
 }
