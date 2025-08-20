@@ -9,6 +9,8 @@ import { notFound } from 'next/navigation';
 import { getMDXComponents } from '~/mdx-components';
 import { Metadata } from 'next';
 import { LLMCopyButton, ViewOptions } from '~/components/page-actions';
+import { Rate } from '~/components/rate';
+import { onRateAction } from '~/app/actions';
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -46,6 +48,7 @@ export default async function Page(props: {
       <DocsBody>
         <MDX components={getMDXComponents()} />
       </DocsBody>
+      <Rate onRateAction={onRateAction} />
     </DocsPage>
   );
 }

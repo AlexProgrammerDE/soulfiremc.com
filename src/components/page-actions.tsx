@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { cn } from '~/lib/utils';
 import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
-import { buttonVariants } from './ui/fd-button';
+import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import {
   Popover,
   PopoverContent,
