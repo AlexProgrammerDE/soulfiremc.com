@@ -208,7 +208,7 @@ function Input(props: ComponentProps<'textarea'>) {
 
 const roleName: Record<string, string> = {
   user: 'you',
-  assistant: 'fumadocs',
+  assistant: 'soulfire',
 };
 
 function Message({
@@ -286,7 +286,7 @@ export default function AISearch(props: DialogProps) {
           <ChatContext value={chat}>
             <div className="px-3 py-2">
               <DialogTitle className="text-sm font-medium">
-                Inkeep AI
+                AI Assistant
               </DialogTitle>
               <DialogDescription className="text-xs text-fd-muted-foreground">
                 AI can be inaccurate, please verify the information.
