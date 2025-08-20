@@ -1,20 +1,16 @@
 import { ProvideLinksToolSchema } from '~/lib/inkeep-qa-schema';
-import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { convertToModelMessages, streamText } from 'ai';
+import { createGroq } from '@ai-sdk/groq';
 
 export const runtime = 'edge';
 
-const openai = createOpenAICompatible({
-  name: 'inkeep',
-  apiKey: process.env.INKEEP_API_KEY,
-  baseURL: 'https://api.inkeep.com/v1',
-});
+const groq = createGroq();
 
 export async function POST(req: Request) {
   const reqJson = await req.json();
 
   const result = streamText({
-    model: openai('inkeep-qa-sonnet-4'),
+    model: groq('llama-3.3-70b-versatile'),
     tools: {
       provideLinks: {
         inputSchema: ProvideLinksToolSchema,
