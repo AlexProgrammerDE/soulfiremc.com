@@ -24,3 +24,10 @@ ${page.data.description}
 
 ${processed.value}`;
 }
+
+export async function getFullLLMText() {
+  const scan = source.getPages().map(getLLMText);
+  const scanned = await Promise.all(scan);
+
+  return scanned.join('\n\n');
+}
