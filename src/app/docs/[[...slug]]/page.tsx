@@ -11,6 +11,13 @@ import { Metadata } from 'next';
 import { LLMCopyButton, ViewOptions } from '~/components/page-actions';
 import { Rate } from '~/components/rate';
 import { onRateAction } from '~/app/actions';
+import path from 'node:path';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '~/components/ui/hover-card';
+import Link from 'next/link';
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -46,7 +53,36 @@ export default async function Page(props: {
         </div>
       </div>
       <DocsBody>
-        <MDX components={getMDXComponents()} />
+        <MDX components={getMDXComponents({
+          a: ({ href, ...props }) => {
+            const found = source.getPageByHref(href ?? "", {
+              dir: path.dirname(page.path),
+            });
+
+            if (!found) return <Link href={href} {...props} />;
+
+            return (
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Link
+                    href={
+                      found.hash
+                        ? `${found.page.url}#${found.hash}`
+                        : found.page.url
+                    }
+                    {...props}
+                  />
+                </HoverCardTrigger>
+                <HoverCardContent className="text-sm">
+                  <p className="font-medium">{found.page.data.title}</p>
+                  <p className="text-fd-muted-foreground">
+                    {found.page.data.description}
+                  </p>
+                </HoverCardContent>
+              </HoverCard>
+            );
+          },
+        })} />
       </DocsBody>
       <Rate onRateAction={onRateAction} />
     </DocsPage>
