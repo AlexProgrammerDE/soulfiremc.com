@@ -10,13 +10,13 @@ importers:
     dependencies:
       '@ai-sdk/groq':
         specifier: ^2.0.11
-        version: 2.0.14(zod@4.0.17)
+        version: 2.0.14(zod@4.1.0)
       '@ai-sdk/openai-compatible':
         specifier: ^1.0.10
-        version: 1.0.11(zod@4.0.17)
+        version: 1.0.11(zod@4.1.0)
       '@ai-sdk/react':
         specifier: ^2.0.18
-        version: 2.0.22(react@19.1.1)(zod@4.0.17)
+        version: 2.0.22(react@19.1.1)(zod@4.1.0)
       '@icons-pack/react-simple-icons':
         specifier: ^13.7.0
         version: 13.7.0(react@19.1.1)
@@ -40,7 +40,7 @@ importers:
         version: 0.8.5
       ai:
         specifier: ^5.0.18
-        version: 5.0.22(zod@4.0.17)
+        version: 5.0.22(zod@4.1.0)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -106,7 +106,7 @@ importers:
         version: 3.3.1
       zod:
         specifier: ^4.0.17
-        version: 4.0.17
+        version: 4.1.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
@@ -3881,53 +3881,53 @@ packages:
     peerDependencies:
       zod: ^3.24.1
 
-  zod@4.0.17:
-    resolution: {integrity: sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==}
+  zod@4.1.0:
+    resolution: {integrity: sha512-UWxluYj2IDX9MHRXTMbB/2eeWrAMmmMSESM+MfT9MQw8U1qo9q5ASW08anoJh6AJ7pkt099fLdNFmfI+4aChHg==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
 
-  '@ai-sdk/gateway@1.0.11(zod@4.0.17)':
+  '@ai-sdk/gateway@1.0.11(zod@4.1.0)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
-      '@ai-sdk/provider-utils': 3.0.5(zod@4.0.17)
-      zod: 4.0.17
+      '@ai-sdk/provider-utils': 3.0.5(zod@4.1.0)
+      zod: 4.1.0
 
-  '@ai-sdk/groq@2.0.14(zod@4.0.17)':
+  '@ai-sdk/groq@2.0.14(zod@4.1.0)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
-      '@ai-sdk/provider-utils': 3.0.5(zod@4.0.17)
-      zod: 4.0.17
+      '@ai-sdk/provider-utils': 3.0.5(zod@4.1.0)
+      zod: 4.1.0
 
-  '@ai-sdk/openai-compatible@1.0.11(zod@4.0.17)':
+  '@ai-sdk/openai-compatible@1.0.11(zod@4.1.0)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
-      '@ai-sdk/provider-utils': 3.0.5(zod@4.0.17)
-      zod: 4.0.17
+      '@ai-sdk/provider-utils': 3.0.5(zod@4.1.0)
+      zod: 4.1.0
 
-  '@ai-sdk/provider-utils@3.0.5(zod@4.0.17)':
+  '@ai-sdk/provider-utils@3.0.5(zod@4.1.0)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
       '@standard-schema/spec': 1.0.0
       eventsource-parser: 3.0.5
-      zod: 4.0.17
-      zod-to-json-schema: 3.24.6(zod@4.0.17)
+      zod: 4.1.0
+      zod-to-json-schema: 3.24.6(zod@4.1.0)
 
   '@ai-sdk/provider@2.0.0':
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@2.0.22(react@19.1.1)(zod@4.0.17)':
+  '@ai-sdk/react@2.0.22(react@19.1.1)(zod@4.1.0)':
     dependencies:
-      '@ai-sdk/provider-utils': 3.0.5(zod@4.0.17)
-      ai: 5.0.22(zod@4.0.17)
+      '@ai-sdk/provider-utils': 3.0.5(zod@4.1.0)
+      ai: 5.0.22(zod@4.1.0)
       react: 19.1.1
       swr: 2.3.6(react@19.1.1)
       throttleit: 2.1.0
     optionalDependencies:
-      zod: 4.0.17
+      zod: 4.1.0
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -5320,13 +5320,13 @@ snapshots:
 
   acorn@8.15.0: {}
 
-  ai@5.0.22(zod@4.0.17):
+  ai@5.0.22(zod@4.1.0):
     dependencies:
-      '@ai-sdk/gateway': 1.0.11(zod@4.0.17)
+      '@ai-sdk/gateway': 1.0.11(zod@4.1.0)
       '@ai-sdk/provider': 2.0.0
-      '@ai-sdk/provider-utils': 3.0.5(zod@4.0.17)
+      '@ai-sdk/provider-utils': 3.0.5(zod@4.1.0)
       '@opentelemetry/api': 1.9.0
-      zod: 4.0.17
+      zod: 4.1.0
 
   ajv@6.12.6:
     dependencies:
@@ -6345,7 +6345,7 @@ snapshots:
       tinyexec: 1.0.1
       tinyglobby: 0.2.14
       unist-util-visit: 5.0.0
-      zod: 4.0.17
+      zod: 4.1.0
     optionalDependencies:
       next: 15.5.0(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
@@ -8314,10 +8314,10 @@ snapshots:
 
   yoga-layout@3.2.1: {}
 
-  zod-to-json-schema@3.24.6(zod@4.0.17):
+  zod-to-json-schema@3.24.6(zod@4.1.0):
     dependencies:
-      zod: 4.0.17
+      zod: 4.1.0
 
-  zod@4.0.17: {}
+  zod@4.1.0: {}
 
   zwitch@2.0.4: {}
