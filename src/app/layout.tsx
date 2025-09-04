@@ -3,6 +3,9 @@ import PlausibleProvider from 'next-plausible';
 import { Metadata, Viewport } from 'next';
 import { RootProvider } from 'fumadocs-ui/provider';
 import { Banner } from 'fumadocs-ui/components/banner';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
+import { cn } from '~/lib/utils';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://soulfiremc.com'),
@@ -45,8 +48,15 @@ export default async function RootLayout({ children }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
+    <body
+      className={cn(
+        GeistSans.variable,
+        GeistMono.variable,
+        "flex size-full min-h-svh flex-col antialiased",
+      )}
+      suppressHydrationWarning
+    >
         <RootProvider>
           <Banner id="v2">
             🎉 SoulFire v2 is out now!
