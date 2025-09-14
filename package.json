@@ -33,7 +33,7 @@
     "fumadocs-ui": "^15.6.12",
     "geist": "^1.5.1",
     "hast-util-to-jsx-runtime": "^2.3.6",
-    "lucide-react": "^0.543.0",
+    "lucide-react": "^0.544.0",
     "mermaid": "^11.10.0",
     "next": "^15.0.0",
     "next-plausible": "^3.12.0",
@@ -54,8 +54,8 @@
     "@eslint/eslintrc": "^3.3.1",
     "@octokit/openapi-types": "^25.0.0",
     "@tailwindcss/postcss": "4.1.13",
-    "@types/node": "22.18.1",
-    "@types/react": "19.1.12",
+    "@types/node": "22.18.3",
+    "@types/react": "19.1.13",
     "eslint": "^9.33.0",
     "eslint-config-next": "15.5.3",
     "eslint-config-prettier": "^10.1.8",
@@ -65,5 +65,5 @@
     "tw-animate-css": "^1.3.7",
     "typescript": "5.9.2"
   },
-  "packageManager": "pnpm@10.15.1"
+  "packageManager": "pnpm@10.16.1"
 }
