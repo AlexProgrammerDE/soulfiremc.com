@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@octokit/openapi-types": "^25.0.0",
+    "@octokit/openapi-types": "^26.0.0",
     "@tailwindcss/postcss": "4.1.13",
     "@types/node": "22.18.3",
     "@types/react": "19.1.13",
