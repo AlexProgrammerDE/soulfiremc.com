@@ -115,8 +115,8 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       '@octokit/openapi-types':
-        specifier: ^25.0.0
-        version: 25.1.0
+        specifier: ^26.0.0
+        version: 26.0.0
       '@tailwindcss/postcss':
         specifier: 4.1.13
         version: 4.1.13
@@ -753,6 +753,9 @@ packages:
 
   '@octokit/openapi-types@25.1.0':
     resolution: {integrity: sha512-idsIggNXUKkk0+BExUn1dQ92sfysJrje03Q0bv0e+KPLrvyqZF8MnBpFz8UNfYDwB3Ie7Z0TByjWfzxt7vseaA==}
+
+  '@octokit/openapi-types@26.0.0':
+    resolution: {integrity: sha512-7AtcfKtpo77j7Ts73b4OWhOZHTKo/gGY8bB3bNBQz4H+GRSWqx2yvj8TXRsbdTE0eRmYmXOEY66jM7mJ7LzfsA==}
 
   '@octokit/openapi-webhooks-types@12.0.3':
     resolution: {integrity: sha512-90MF5LVHjBedwoHyJsgmaFhEN1uzXyBDRLEBe7jlTYx/fEhPAk3P3DAJsfZwC54m8hAIryosJOL+UuZHB3K3yA==}
@@ -4453,6 +4456,8 @@ snapshots:
       '@octokit/types': 14.1.0
 
   '@octokit/openapi-types@25.1.0': {}
+
+  '@octokit/openapi-types@26.0.0': {}
 
   '@octokit/openapi-webhooks-types@12.0.3': {}
 
