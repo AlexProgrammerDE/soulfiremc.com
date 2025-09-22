@@ -65,5 +65,5 @@
     "tw-animate-css": "^1.3.7",
     "typescript": "5.9.2"
   },
-  "packageManager": "pnpm@10.17.0"
+  "packageManager": "pnpm@10.17.1"
 }
