@@ -55,7 +55,7 @@
     "@octokit/openapi-types": "^26.0.0",
     "@tailwindcss/postcss": "4.1.13",
     "@types/node": "22.18.7",
-    "@types/react": "19.1.15",
+    "@types/react": "19.1.16",
     "eslint": "^9.33.0",
     "eslint-config-next": "15.5.4",
     "eslint-config-prettier": "^10.1.8",
