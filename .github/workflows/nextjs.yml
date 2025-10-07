@@ -34,4 +34,4 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build with Next.js
-        run: pnpm next build
+        run: pnpm build
