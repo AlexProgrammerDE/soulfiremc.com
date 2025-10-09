@@ -54,7 +54,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@octokit/openapi-types": "^26.0.0",
     "@tailwindcss/postcss": "4.1.14",
-    "@types/node": "22.18.8",
+    "@types/node": "22.18.9",
     "@types/react": "19.2.2",
     "biome": "^0.3.3",
     "postcss": "^8.4.35",
@@ -62,5 +62,5 @@
     "tw-animate-css": "^1.3.7",
     "typescript": "5.9.3"
   },
-  "packageManager": "pnpm@10.18.1"
+  "packageManager": "pnpm@10.18.2"
 }
