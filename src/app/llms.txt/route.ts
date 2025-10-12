@@ -1,10 +1,10 @@
-import { source } from '~/lib/source';
+import { source } from "~/lib/source";
 
 export const revalidate = false;
 
 export async function GET() {
   const scanned: string[] = [];
-  scanned.push('# Docs');
+  scanned.push("# Docs");
   const map = new Map<string, string[]>();
 
   for (const page of source.getPages()) {
@@ -16,8 +16,8 @@ export async function GET() {
 
   for (const [key, value] of map) {
     scanned.push(`## ${key}`);
-    scanned.push(value.join('\n'));
+    scanned.push(value.join("\n"));
   }
 
-  return new Response(scanned.join('\n\n'));
+  return new Response(scanned.join("\n\n"));
 }

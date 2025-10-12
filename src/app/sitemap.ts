@@ -1,14 +1,14 @@
-import type { MetadataRoute } from 'next';
-import { source } from '~/lib/source';
+import type { MetadataRoute } from "next";
+import { source } from "~/lib/source";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    ...process.env.SITEMAP_PAGES!.split('|').map(
+    ...process.env.SITEMAP_PAGES?.split("|").map(
       (page) =>
         ({
           url: `https://soulfiremc.com${page}`,
           lastModified: new Date(),
-          changeFrequency: 'daily',
+          changeFrequency: "daily",
           priority: 0.7,
         }) satisfies MetadataRoute.Sitemap[number],
     ),
@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       return {
         url: `https://soulfiremc.com${page.url}`,
         lastModified: lastModified ? new Date(lastModified) : undefined,
-        changeFrequency: 'weekly',
+        changeFrequency: "weekly",
         priority: 0.5,
       } satisfies MetadataRoute.Sitemap[number];
     }),

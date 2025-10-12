@@ -1,9 +1,3 @@
 {
-  "pages": [
-    "index",
-    "terminology",
-    "installation",
-    "guides",
-    "usage"
-  ]
+  "pages": ["index", "terminology", "installation", "guides", "usage"]
 }

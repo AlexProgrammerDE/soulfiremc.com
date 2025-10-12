@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import TimeAgo, {Props} from "react-timeago";
+import TimeAgo, { type Props } from "react-timeago";
 
 export function CustomTimeAgo(props: Props) {
-  return <TimeAgo {...props}/>
+  return <TimeAgo {...props} />;
 }

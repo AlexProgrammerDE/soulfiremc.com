@@ -1,9 +1,9 @@
-import { App, Octokit } from 'octokit';
-import type { ActionResponse, Feedback } from '~/components/rate';
+import { App, type Octokit } from "octokit";
+import type { ActionResponse, Feedback } from "~/components/rate";
 
-export const repo = 'SoulFire';
-export const owner = 'AlexProgrammerDE';
-export const DocsCategory = 'Docs Feedback';
+export const repo = "SoulFire";
+export const owner = "AlexProgrammerDE";
+export const DocsCategory = "Docs Feedback";
 
 let instance: Octokit | undefined;
 
@@ -14,7 +14,7 @@ async function getOctokit(): Promise<Octokit> {
 
   if (!appId || !privateKey) {
     throw new Error(
-      'No GitHub keys provided for Github app, docs feedback feature will not work.',
+      "No GitHub keys provided for Github app, docs feedback feature will not work.",
     );
   }
 
@@ -24,12 +24,12 @@ async function getOctokit(): Promise<Octokit> {
   });
 
   const { data } = await app.octokit.request(
-    'GET /repos/{owner}/{repo}/installation',
+    "GET /repos/{owner}/{repo}/installation",
     {
       owner,
       repo,
       headers: {
-        'X-GitHub-Api-Version': '2022-11-28',
+        "X-GitHub-Api-Version": "2022-11-28",
       },
     },
   );
@@ -75,11 +75,11 @@ export async function onRateAction(
   url: string,
   feedback: Feedback,
 ): Promise<ActionResponse> {
-  'use server';
+  "use server";
   const octokit = await getOctokit();
   const destination = await getFeedbackDestination();
   if (!octokit || !destination)
-    throw new Error('GitHub comment integration is not configured.');
+    throw new Error("GitHub comment integration is not configured.");
 
   const category = destination.discussionCategories.nodes.find(
     (category) => category.name === DocsCategory,
@@ -122,7 +122,7 @@ export async function onRateAction(
       discussion: { id: string; url: string };
     } = await octokit.graphql(`
             mutation {
-              createDiscussion(input: { repositoryId: "${destination.id}", categoryId: "${category!.id}", body: ${JSON.stringify(body)}, title: ${JSON.stringify(title)} }) {
+              createDiscussion(input: { repositoryId: "${destination.id}", categoryId: "${category?.id}", body: ${JSON.stringify(body)}, title: ${JSON.stringify(title)} }) {
                 discussion { id, url }
               }
             }`);

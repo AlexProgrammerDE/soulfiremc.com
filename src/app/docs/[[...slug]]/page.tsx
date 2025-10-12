@@ -1,23 +1,23 @@
-import { source } from '~/lib/source';
+import path from "node:path";
 import {
   DocsBody,
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import { getMDXComponents } from '~/mdx-components';
-import { Metadata } from 'next';
-import { LLMCopyButton, ViewOptions } from '~/components/page-actions';
-import { Rate } from '~/components/rate';
-import { onRateAction } from '~/app/actions';
-import path from 'node:path';
+} from "fumadocs-ui/page";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { onRateAction } from "~/app/actions";
+import { LLMCopyButton, ViewOptions } from "~/components/page-actions";
+import { Rate } from "~/components/rate";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '~/components/ui/hover-card';
-import Link from 'next/link';
+} from "~/components/ui/hover-card";
+import { source } from "~/lib/source";
+import { getMDXComponents } from "~/mdx-components";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -36,7 +36,7 @@ export default async function Page(props: {
         page.data.lastModified ? new Date(page.data.lastModified) : undefined
       }
       tableOfContent={{
-        style: 'clerk',
+        style: "clerk",
       }}
     >
       <div className="flex flex-col gap-2">
@@ -53,36 +53,38 @@ export default async function Page(props: {
         </div>
       </div>
       <DocsBody>
-        <MDX components={getMDXComponents({
-          a: ({ href, ...props }) => {
-            const found = source.getPageByHref(href ?? "", {
-              dir: path.dirname(page.path),
-            });
+        <MDX
+          components={getMDXComponents({
+            a: ({ href, ...props }) => {
+              const found = source.getPageByHref(href ?? "", {
+                dir: path.dirname(page.path),
+              });
 
-            if (!found) return <Link href={href} {...props} />;
+              if (!found) return <Link href={href} {...props} />;
 
-            return (
-              <HoverCard>
-                <HoverCardTrigger asChild>
-                  <Link
-                    href={
-                      found.hash
-                        ? `${found.page.url}#${found.hash}`
-                        : found.page.url
-                    }
-                    {...props}
-                  />
-                </HoverCardTrigger>
-                <HoverCardContent className="text-sm">
-                  <p className="font-medium">{found.page.data.title}</p>
-                  <p className="text-fd-muted-foreground">
-                    {found.page.data.description}
-                  </p>
-                </HoverCardContent>
-              </HoverCard>
-            );
-          },
-        })} />
+              return (
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Link
+                      href={
+                        found.hash
+                          ? `${found.page.url}#${found.hash}`
+                          : found.page.url
+                      }
+                      {...props}
+                    />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="text-sm">
+                    <p className="font-medium">{found.page.data.title}</p>
+                    <p className="text-fd-muted-foreground">
+                      {found.page.data.description}
+                    </p>
+                  </HoverCardContent>
+                </HoverCard>
+              );
+            },
+          })}
+        />
       </DocsBody>
       <Rate onRateAction={onRateAction} />
     </DocsPage>
@@ -100,7 +102,7 @@ export async function generateMetadata(props: {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
-  const image = ['/docs-og', ...(params.slug || []), 'image.png'].join('/');
+  const image = ["/docs-og", ...(params.slug || []), "image.png"].join("/");
   return {
     title: page.data.title,
     description: page.data.description,
@@ -108,7 +110,7 @@ export async function generateMetadata(props: {
       images: image,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       images: image,
     },
   };

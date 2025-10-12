@@ -1,8 +1,8 @@
-import { withPlausibleProxy } from 'next-plausible';
-import { createMDX } from 'fumadocs-mdx/next';
-import { NextConfig } from 'next';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { createMDX } from "fumadocs-mdx/next";
+import type { NextConfig } from "next";
+import { withPlausibleProxy } from "next-plausible";
 
 const withMDX = createMDX();
 
@@ -13,8 +13,8 @@ function getFoldersWithPageFiles(dir: string): string[] {
   const items = fs.readdirSync(dir);
 
   // Check if the current directory contains either 'page.mdx' or 'page.tsx'
-  const containsPageFile = items.some(item =>
-    item === 'page.mdx' || item === 'page.tsx'
+  const containsPageFile = items.some(
+    (item) => item === "page.mdx" || item === "page.tsx",
   );
 
   if (containsPageFile) {
@@ -37,23 +37,23 @@ function getFoldersWithPageFiles(dir: string): string[] {
 
 const securityHeaders = [
   {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on',
+    key: "X-DNS-Prefetch-Control",
+    value: "on",
   },
   {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block',
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
   },
   {
-    key: 'X-Frame-Options',
-    value: 'SAMEORIGIN',
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN",
   },
   {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
+    key: "X-Content-Type-Options",
+    value: "nosniff",
   },
   {
-    key: 'Content-Security-Policy',
+    key: "Content-Security-Policy",
     value:
       "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; connect-src 'self' https://discord.com; font-src 'self'; frame-src 'self' https://www.youtube.com; img-src 'self' data: https://avatars.githubusercontent.com https://img.shields.io; manifest-src 'self'; media-src 'self' https://github.com https://github-production-user-asset-6210df.s3.amazonaws.com; worker-src 'self';",
   },
@@ -64,35 +64,35 @@ const config: NextConfig = {
   reactStrictMode: true,
   env: {
     SITEMAP_PAGES: getFoldersWithPageFiles(baseDir)
-      .map(folder => folder.substring(baseDir.length))
-      .join("|")
+      .map((folder) => folder.substring(baseDir.length))
+      .join("|"),
   },
   images: {
     remotePatterns: [
       {
-        hostname: 'avatars.githubusercontent.com',
-        protocol: 'https',
+        hostname: "avatars.githubusercontent.com",
+        protocol: "https",
       },
       {
-        hostname: 'github.com',
-        protocol: 'https',
+        hostname: "github.com",
+        protocol: "https",
       },
     ],
   },
   redirects: async () => {
     return [
       {
-        source: '/discord',
+        source: "/discord",
         destination: process.env.NEXT_PUBLIC_DISCORD_LINK!,
         permanent: false,
       },
       {
-        source: '/github',
+        source: "/github",
         destination: process.env.NEXT_PUBLIC_GITHUB_LINK!,
         permanent: false,
       },
       {
-        source: '/donate',
+        source: "/donate",
         destination: process.env.NEXT_PUBLIC_DONATE_LINK!,
         permanent: false,
       },
@@ -101,19 +101,19 @@ const config: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/va/:match*',
-        destination: '/_vercel/insights/:match*',
+        source: "/va/:match*",
+        destination: "/_vercel/insights/:match*",
       },
       {
-        source: '/docs/:path*.mdx',
-        destination: '/llms.mdx/:path*',
+        source: "/docs/:path*.mdx",
+        destination: "/llms.mdx/:path*",
       },
     ];
   },
   async headers() {
     return [
       {
-        source: '/:path*{/}?',
+        source: "/:path*{/}?",
         headers: securityHeaders,
       },
     ];

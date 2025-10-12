@@ -1,32 +1,32 @@
-import Link from 'next/link';
+import type { paths } from "@octokit/openapi-types";
 import {
+  AppWindow,
   ArrowDownToLine,
-  ChevronRight,
-  Zap,
-  CloudDownload,
-  Terminal,
   Box,
+  ChevronRight,
+  CloudDownload,
   Rocket,
   Server,
-  AppWindow,
-} from 'lucide-react';
-import Image from 'next/image';
-import { CustomTimeAgo } from '~/components/time-ago';
-import { Metadata } from 'next';
-import { ReactNode } from 'react';
-import { paths } from '@octokit/openapi-types';
-import { Button, buttonVariants } from '~/components/ui/button';
-import { Card, CardDescription, CardTitle } from '~/components/ui/card';
-import { cn } from '~/lib/utils';
+  Terminal,
+  Zap,
+} from "lucide-react";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import { CustomTimeAgo } from "~/components/time-ago";
+import { Button, buttonVariants } from "~/components/ui/button";
+import { Card, CardDescription, CardTitle } from "~/components/ui/card";
+import { cn } from "~/lib/utils";
 
 type LatestReleaseResponse =
-  paths['/repos/{owner}/{repo}/releases/latest']['get']['responses']['200']['content']['application/json'];
+  paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export const revalidate = 120; // 2 minutes
 
 export const metadata: Metadata = {
   openGraph: {
-    images: 'https://soulfiremc.com/og?title=SoulFire',
+    images: "https://soulfiremc.com/og?title=SoulFire",
   },
 };
 
@@ -42,8 +42,8 @@ async function getReleaseData(): Promise<{
   serverData: LatestReleaseResponse;
 }> {
   const [clientData, serverData] = await Promise.all([
-    getRepoInfo('AlexProgrammerDE/SoulFireClient'),
-    getRepoInfo('AlexProgrammerDE/SoulFire'),
+    getRepoInfo("AlexProgrammerDE/SoulFireClient"),
+    getRepoInfo("AlexProgrammerDE/SoulFire"),
   ]);
 
   return {
@@ -96,7 +96,10 @@ function ReleaseCard(props: {
       <div className="flex flex-col justify-center">
         <a
           href={props.data.html_url}
-          className={cn(buttonVariants({ size: 'lg' }), 'gap-2 whitespace-nowrap')}
+          className={cn(
+            buttonVariants({ size: "lg" }),
+            "gap-2 whitespace-nowrap",
+          )}
         >
           <ArrowDownToLine className="w-5 h-5" />
           Download {props.hint}
@@ -163,9 +166,7 @@ function FeatureCard(props: {
 }) {
   return (
     <Card className="flex flex-col items-center text-center p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-      <div className="bg-primary/10 p-3 rounded-full mb-4">
-        {props.icon}
-      </div>
+      <div className="bg-primary/10 p-3 rounded-full mb-4">{props.icon}</div>
       <CardTitle className="text-xl mb-2">{props.title}</CardTitle>
       <CardDescription className="text-base">
         {props.description}
@@ -208,7 +209,11 @@ export default function Page() {
                     <ChevronRight className="w-5 h-5" />
                   </Button>
                 </Link>
-                <a href={process.env.NEXT_PUBLIC_GITHUB_LINK} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={process.env.NEXT_PUBLIC_GITHUB_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button variant="outline" size="lg">
                     View on GitHub
                   </Button>
@@ -264,7 +269,11 @@ export default function Page() {
                 description="Add your own Offline, Java, Bedrock and The Altening accounts"
                 icon={<CloudDownload className="w-8 h-8 text-primary" />}
               />
-              <a href={process.env.NEXT_PUBLIC_GITHUB_LINK} target="_blank" rel="noopener noreferrer">
+              <a
+                href={process.env.NEXT_PUBLIC_GITHUB_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FeatureCard
                   title="Open Source"
                   description="SoulFire is open source, you can contribute to it on GitHub!"
@@ -311,7 +320,8 @@ export default function Page() {
                 See SoulFire in action with our interactive demo
               </p>
               <p className="text-muted-foreground">
-                Do you want to check out a live demo of SoulFire in your browser? Try out the{' '}
+                Do you want to check out a live demo of SoulFire in your
+                browser? Try out the{" "}
                 <a
                   className="text-primary hover:underline font-medium"
                   href="https://demo.soulfiremc.com"
@@ -319,7 +329,8 @@ export default function Page() {
                   rel="noopener noreferrer"
                 >
                   demo page
-                </a>.
+                </a>
+                .
               </p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -348,7 +359,8 @@ export default function Page() {
                 Ready to Get Started?
               </h2>
               <p className="max-w-[700px] text-muted-foreground md:text-lg">
-                Join thousands of users who are already stress-testing their Minecraft servers with SoulFire
+                Join thousands of users who are already stress-testing their
+                Minecraft servers with SoulFire
               </p>
               <div className="mt-6">
                 <Link href="/docs/installation">
