@@ -1,35 +1,43 @@
-name: Build Next.js site
+name: 'Build and Test'
 
-on: [ push, pull_request ]
+on:
+  - push
+  - pull_request
 
 jobs:
-  # Build job
-  build:
-    # Only run on PRs if the source branch is on someone else's repo
-    if: "${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}"
+  test:
+    name: Build and Test
 
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
+      - name: 'Checkout repository'
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
       - uses: pnpm/action-setup@v4
-      - name: Setup Node
-        uses: actions/setup-node@v5
+        name: Install pnpm
         with:
-          node-version: "22"
-          cache: pnpm
-      - name: Restore cache
-        uses: actions/cache@v4
+          version: latest
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
-          path: |
-            .next/cache
-          # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          # If source files changed but packages didn't, rebuild from a prior cache.
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+          node-version: lts/*
+          cache: 'pnpm'
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Build with Next.js
-        run: pnpm build
+        run: pnpm install
+
+      - name: Run typecheck
+        run: |
+          pnpm typecheck
+
+      - name: Run check
+        run: |
+          pnpm check
+
+      - name: Run build
+        run: |
+          pnpm build
