@@ -52,7 +52,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.6",
+    "@biomejs/biome": "2.2.7",
     "@octokit/openapi-types": "^26.0.0",
     "@tailwindcss/postcss": "4.1.15",
     "@types/node": "22.18.12",
