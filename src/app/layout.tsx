@@ -1,6 +1,6 @@
 import "~/style.css";
 import { Banner } from "fumadocs-ui/components/banner";
-import { RootProvider } from "fumadocs-ui/provider";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
