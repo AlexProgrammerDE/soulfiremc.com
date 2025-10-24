@@ -14,10 +14,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { CustomTimeAgo } from "~/components/time-ago";
-import { Button, buttonVariants } from "~/components/ui/button";
-import { Card, CardDescription, CardTitle } from "~/components/ui/card";
-import { cn } from "~/lib/utils";
+import { CustomTimeAgo } from "@/components/time-ago";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 type LatestReleaseResponse =
   paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];

@@ -1,6 +1,6 @@
 import { generateOGImage } from "fumadocs-ui/og";
 import { notFound } from "next/navigation";
-import { source } from "~/lib/source";
+import { source } from "@/lib/source";
 
 export async function GET(
   _req: Request,

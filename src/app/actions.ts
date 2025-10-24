@@ -1,5 +1,5 @@
 import { App, type Octokit } from "octokit";
-import type { ActionResponse, Feedback } from "~/components/rate";
+import type { ActionResponse, Feedback } from "@/components/rate";
 
 export const repo = "SoulFire";
 export const owner = "AlexProgrammerDE";

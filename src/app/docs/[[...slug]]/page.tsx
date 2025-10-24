@@ -8,16 +8,16 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { onRateAction } from "~/app/actions";
-import { LLMCopyButton, ViewOptions } from "~/components/page-actions";
-import { Rate } from "~/components/rate";
+import { onRateAction } from "@/app/actions";
+import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
+import { Rate } from "@/components/rate";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "~/components/ui/hover-card";
-import { source } from "~/lib/source";
-import { getMDXComponents } from "~/mdx-components";
+} from "@/components/ui/hover-card";
+import { source } from "@/lib/source";
+import { getMDXComponents } from "@/mdx-components";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
