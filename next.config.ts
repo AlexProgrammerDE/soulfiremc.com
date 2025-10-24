@@ -62,6 +62,7 @@ const securityHeaders = [
 const baseDir = path.join("src", "app", "(home)");
 const config: NextConfig = {
   reactStrictMode: true,
+  reactCompiler: true,
   env: {
     SITEMAP_PAGES: getFoldersWithPageFiles(baseDir)
       .map((folder) => folder.substring(baseDir.length))

@@ -57,6 +57,7 @@
     "@tailwindcss/postcss": "4.1.16",
     "@types/node": "22.18.12",
     "@types/react": "19.2.2",
+    "babel-plugin-react-compiler": "^1.0.0",
     "postcss": "^8.4.35",
     "tailwindcss": "4.1.16",
     "tw-animate-css": "^1.3.7",
