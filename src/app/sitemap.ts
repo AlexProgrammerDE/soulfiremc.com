@@ -3,7 +3,7 @@ import { source } from "@/lib/source";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    ...process.env.SITEMAP_PAGES?.split("|").map(
+    ...(process.env.SITEMAP_PAGES as string).split("|").map(
       (page) =>
         ({
           url: `https://soulfiremc.com${page}`,
