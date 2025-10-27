@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   openGraph: {
@@ -25,12 +26,11 @@ export default function RootComponent() {
               className="rounded-xl"
             />
           </div>
-          <Link
-            href="/"
-            className="nextra-card front-button text-lg p-2 group w-fit"
-          >
-            <span>Go back</span>
-          </Link>
+          <Button asChild>
+            <Link href="/" className="w-fit m-auto">
+              <span>Go back</span>
+            </Link>
+          </Button>
         </div>
       </main>
     </article>
