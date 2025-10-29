@@ -3,6 +3,7 @@ import * as path from "node:path";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 import { withPlausibleProxy } from "next-plausible";
+import { getRequiredEnv } from "./src/lib/env";
 
 const withMDX = createMDX();
 
@@ -84,17 +85,17 @@ const config: NextConfig = {
     return [
       {
         source: "/discord",
-        destination: process.env.NEXT_PUBLIC_DISCORD_LINK!,
+        destination: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
         permanent: false,
       },
       {
         source: "/github",
-        destination: process.env.NEXT_PUBLIC_GITHUB_LINK!,
+        destination: getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK"),
         permanent: false,
       },
       {
         source: "/donate",
-        destination: process.env.NEXT_PUBLIC_DONATE_LINK!,
+        destination: getRequiredEnv("NEXT_PUBLIC_DONATE_LINK"),
         permanent: false,
       },
     ];

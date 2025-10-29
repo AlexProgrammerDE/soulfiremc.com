@@ -105,6 +105,7 @@ export function Rate({
           onClick={() => {
             setOpinion("good");
           }}
+          type="button"
         >
           <ThumbsUp />
           Good
@@ -119,6 +120,7 @@ export function Rate({
           onClick={() => {
             setOpinion("bad");
           }}
+          type="button"
         >
           <ThumbsDown />
           Bad
@@ -154,6 +156,7 @@ export function Rate({
                   setOpinion(previous.opinion);
                   setPrevious(null);
                 }}
+                type="button"
               >
                 Submit Again
               </button>

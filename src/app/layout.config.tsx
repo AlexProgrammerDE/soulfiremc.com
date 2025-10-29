@@ -1,6 +1,7 @@
 import { SiDiscord } from "@icons-pack/react-simple-icons";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import Image from "next/image";
+import { getRequiredEnv } from "@/lib/env";
 
 export const baseOptions: BaseLayoutProps = {
   nav: {
@@ -18,7 +19,7 @@ export const baseOptions: BaseLayoutProps = {
       type: "icon",
       icon: <SiDiscord />,
       text: "Discord",
-      url: process.env.NEXT_PUBLIC_DISCORD_LINK!,
+      url: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
       external: true,
     },
   ],
