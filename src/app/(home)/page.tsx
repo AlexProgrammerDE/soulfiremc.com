@@ -17,6 +17,7 @@ import type { ReactNode } from "react";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { getRequiredEnv } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
 type LatestReleaseResponse =
@@ -58,6 +59,8 @@ function ReleaseCard(props: {
   hint: string;
   extraIcons: ReactNode;
 }) {
+  const releaseDate = props.data.published_at ?? props.data.created_at;
+
   return (
     <Card className="flex flex-col md:flex-row gap-6 p-6 transition-all duration-300 hover:shadow-lg">
       <div className="flex flex-col flex-1">
@@ -89,7 +92,11 @@ function ReleaseCard(props: {
           <span className="font-medium">{props.data.author.login}</span>
           <span>•</span>
           <span>
-            <CustomTimeAgo date={props.data.published_at!} />
+            {releaseDate ? (
+              <CustomTimeAgo date={releaseDate} />
+            ) : (
+              "Unknown release date"
+            )}
           </span>
         </div>
       </div>
@@ -210,7 +217,7 @@ export default function Page() {
                   </Button>
                 </Link>
                 <a
-                  href={process.env.NEXT_PUBLIC_GITHUB_LINK}
+                  href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -270,7 +277,7 @@ export default function Page() {
                 icon={<CloudDownload className="w-8 h-8 text-primary" />}
               />
               <a
-                href={process.env.NEXT_PUBLIC_GITHUB_LINK}
+                href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -285,6 +292,7 @@ export default function Page() {
                       viewBox="0 0 98 96"
                       className="w-8 h-8 text-primary"
                     >
+                      <title>GitHub</title>
                       <path
                         fillRule="evenodd"
                         clipRule="evenodd"

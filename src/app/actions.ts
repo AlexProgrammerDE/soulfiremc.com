@@ -68,7 +68,8 @@ async function getFeedbackDestination() {
   }
 `);
 
-  return (cachedDestination = repository);
+  cachedDestination = repository;
+  return cachedDestination;
 }
 
 export async function onRateAction(
