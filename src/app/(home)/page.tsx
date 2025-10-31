@@ -273,7 +273,7 @@ export default function Page() {
               />
               <FeatureCard
                 title="Bring your own accounts"
-                description="Add your own Offline, Java, Bedrock and The Altening accounts"
+                description="Add your own Offline, Microsoft Java, and Microsoft Bedrock accounts"
                 icon={<CloudDownload className="w-8 h-8 text-primary" />}
               />
               <a
