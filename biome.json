@@ -32,9 +32,9 @@
       "recommended": true
     },
     "domains": {
-      "next": "recommended",
-      "react": "recommended",
-      "project": "recommended"
+      "next": "all",
+      "react": "all",
+      "project": "all"
     }
   },
   "css": {
