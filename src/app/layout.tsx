@@ -60,7 +60,7 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <RootProvider>
-          <Banner id="v2">🎉 SoulFire v2 is out now!</Banner>
+          <Banner id={"v2"}>SoulFire v2 is out now!</Banner>
           {children}
         </RootProvider>
         <PlausibleProvider
