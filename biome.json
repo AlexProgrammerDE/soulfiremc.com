@@ -27,8 +27,8 @@
   "linter": {
     "includes": [
       "**",
-      "!src/components/ui",
-      "!src/components/data-table"
+      "!src/components/ui/**",
+      "!src/components/data-table/**"
     ],
     "enabled": true,
     "rules": {
