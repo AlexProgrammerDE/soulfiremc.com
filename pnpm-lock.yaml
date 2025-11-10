@@ -16,7 +16,7 @@ importers:
         version: 1.0.26(zod@4.1.12)
       '@ai-sdk/react':
         specifier: ^2.0.18
-        version: 2.0.89(react@19.2.0)(zod@4.1.12)
+        version: 2.0.90(react@19.2.0)(zod@4.1.12)
       '@icons-pack/react-simple-icons':
         specifier: ^13.7.0
         version: 13.8.0(react@19.2.0)
@@ -40,7 +40,7 @@ importers:
         version: 0.8.5
       ai:
         specifier: ^5.0.18
-        version: 5.0.89(zod@4.1.12)
+        version: 5.0.90(zod@4.1.12)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -172,8 +172,8 @@ packages:
     resolution: {integrity: sha512-6o7Y2SeO9vFKB8lArHXehNuusnpddKPk7xqL7T2/b+OvXMRIXUO1rR4wcv1hAFUAT9avGZshty3Wlua/XA7TvA==}
     engines: {node: '>=18'}
 
-  '@ai-sdk/react@2.0.89':
-    resolution: {integrity: sha512-r2uCqx042JOjNrSlDrjh7ufSIfU2BM6Lo4qe47KHkYuJjPfssxhLpJUCFLB01iV7Foyn/xpbq06Zr6WI4qUDgw==}
+  '@ai-sdk/react@2.0.90':
+    resolution: {integrity: sha512-t++0a+N7VpbS/HTUD83Ji4aAye+jjOQisEKpVgwdcaY1Z2JRBcQFGXX+aS1HWMSkNMu5HQFG7lPbmQYRyNWcpA==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
@@ -1451,8 +1451,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  ai@5.0.89:
-    resolution: {integrity: sha512-8Nq+ZojGacQrupoJEQLrTDzT5VtR3gyp5AaqFSV3tzsAXlYQ9Igb7QE3yeoEdzOk5IRfDwWL7mDCUD+oBg1hDA==}
+  ai@5.0.90:
+    resolution: {integrity: sha512-bawNN10N2cXzFedbDdNUZo8KkcGp12VX1b+mCL5dfllh6WmLsIYYME7GVxsRJvHvPP7xRhuds5fn0jtLyxGnZw==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -2799,10 +2799,10 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@2.0.89(react@19.2.0)(zod@4.1.12)':
+  '@ai-sdk/react@2.0.90(react@19.2.0)(zod@4.1.12)':
     dependencies:
       '@ai-sdk/provider-utils': 3.0.16(zod@4.1.12)
-      ai: 5.0.89(zod@4.1.12)
+      ai: 5.0.90(zod@4.1.12)
       react: 19.2.0
       swr: 2.3.6(react@19.2.0)
       throttleit: 2.1.0
@@ -3988,7 +3988,7 @@ snapshots:
 
   acorn@8.15.0: {}
 
-  ai@5.0.89(zod@4.1.12):
+  ai@5.0.90(zod@4.1.12):
     dependencies:
       '@ai-sdk/gateway': 2.0.7(zod@4.1.12)
       '@ai-sdk/provider': 2.0.0
