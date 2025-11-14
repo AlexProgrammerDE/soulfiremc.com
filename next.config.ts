@@ -2,7 +2,6 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
-import { withPlausibleProxy } from "next-plausible";
 import { getRequiredEnv } from "./src/lib/env";
 
 const withMDX = createMDX();
@@ -132,8 +131,4 @@ const config: NextConfig = {
   },
 };
 
-export default withMDX(
-  withPlausibleProxy({
-    customDomain: process.env.PLAUSIBLE_URL,
-  })(config),
-);
+export default withMDX(config);
