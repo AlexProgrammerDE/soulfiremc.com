@@ -9,5 +9,6 @@ if (posthogKey) {
     defaults: "2025-05-24",
     capture_exceptions: true, // capture exceptions using Error Tracking
     debug: process.env.NODE_ENV === "development",
+    cookieless_mode: "always",
   });
 }
