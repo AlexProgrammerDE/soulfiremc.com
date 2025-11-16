@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,11 +23,17 @@ import {
 } from "@/lib/releases";
 import { DownloadConfigurator } from "./download-configurator";
 import { createClientDownloads, createServerDownloads } from "./download-data";
+import { CPU_OPTIONS, DEFAULT_CPU, DEFAULT_OS, OS_OPTIONS } from "./options";
+import {
+  type DownloadPageSearchParams,
+  type DownloadSelection,
+  loadDownloadSearchParams,
+} from "./search-params";
 
-const SERVER_ICONS: Record<string, ReactNode> = {
+const SERVER_ICONS = {
   "SoulFire CLI": <Terminal className="h-5 w-5" />,
   "SoulFire Dedicated": <Server className="h-5 w-5" />,
-};
+} as const;
 
 export const metadata: Metadata = {
   title: "Download SoulFire",
@@ -37,11 +42,18 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 
-export default async function DownloadPage() {
+type DownloadPageProps = {
+  searchParams: DownloadPageSearchParams;
+};
+
+export default async function DownloadPage({
+  searchParams,
+}: DownloadPageProps) {
   const [clientRelease, serverRelease] = await Promise.all([
     getClientRelease(),
     getServerRelease(),
   ]);
+  const selection = await loadDownloadSearchParams(searchParams);
   const fallbackVersion = "latest";
   const clientVersion = getReleaseVersion(clientRelease) ?? fallbackVersion;
   const serverVersion =
@@ -87,14 +99,11 @@ export default async function DownloadPage() {
             </p>
           </div>
         </div>
-        <DownloadConfigurator links={clientDownloads} />
-        <div className="rounded-xl border bg-muted/30 p-4 text-sm">
-          <p className="font-semibold text-primary">Tip</p>
-          <p className="text-muted-foreground">
-            x86_64 means Intel and AMD CPUs. AArch64 refers to ARM processors
-            like Apple Silicon or Snapdragon laptops.
-          </p>
-        </div>
+        <DownloadConfigurator
+          links={clientDownloads}
+          initialSelection={selection}
+        />
+        <DownloadTip selection={selection} />
         <div className="grid gap-6 lg:grid-cols-2">
           <Card>
             <CardHeader>
@@ -160,7 +169,7 @@ export default async function DownloadPage() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                      {SERVER_ICONS[item.name] ?? (
+                      {SERVER_ICONS[item.name as keyof typeof SERVER_ICONS] ?? (
                         <Server className="h-5 w-5" />
                       )}
                     </div>
@@ -190,6 +199,29 @@ export default async function DownloadPage() {
           </Card>
         </div>
       </div>
+    </div>
+  );
+}
+
+function DownloadTip(props: { selection: DownloadSelection }) {
+  const selectedOs =
+    OS_OPTIONS.find((option) => option.id === props.selection.os) ?? DEFAULT_OS;
+  const selectedCpu =
+    CPU_OPTIONS.find((option) => option.id === props.selection.cpu) ??
+    DEFAULT_CPU;
+
+  return (
+    <div className="rounded-xl border bg-muted/30 p-4 text-sm">
+      <p className="font-semibold text-primary">Tip</p>
+      <p className="text-muted-foreground">
+        x86_64 means Intel and AMD CPUs. AArch64 refers to ARM processors like
+        Apple Silicon or Snapdragon laptops.
+      </p>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Currently set to{" "}
+        <span className="font-medium text-foreground">{selectedOs.label}</span>{" "}
+        • {selectedCpu.label}
+      </p>
     </div>
   );
 }

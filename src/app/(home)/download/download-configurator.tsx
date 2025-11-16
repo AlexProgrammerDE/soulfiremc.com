@@ -2,7 +2,8 @@
 
 import { CircuitBoard, Cpu, Download } from "lucide-react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useQueryStates } from "nuqs";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,85 +14,45 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { DownloadLinkMap } from "./download-data";
+import { CPU_OPTIONS, DEFAULT_CPU, DEFAULT_OS, OS_OPTIONS } from "./options";
+import { type DownloadSelection, downloadSearchParams } from "./search-params";
 
-const OS_OPTIONS = [
-  {
-    id: "windows",
-    label: "Windows",
-    detail: "Windows 10 or newer",
-    icon: (
-      <Image
-        src="/platform/windows.png"
-        alt="Windows"
-        width={28}
-        height={28}
-        className="size-7"
-      />
-    ),
-  },
-  {
-    id: "macos",
-    label: "macOS",
-    detail: "Apple Silicon & Intel",
-    icon: (
-      <Image
-        src="/platform/macos.png"
-        alt="macOS"
-        width={28}
-        height={28}
-        className="size-7"
-      />
-    ),
-  },
-  {
-    id: "linux",
-    label: "Linux",
-    detail: "Most distros supported",
-    icon: (
-      <Image
-        src="/platform/linux.png"
-        alt="Linux"
-        width={28}
-        height={28}
-        className="size-7"
-      />
-    ),
-  },
-];
+export function DownloadConfigurator(props: {
+  links: DownloadLinkMap;
+  initialSelection: DownloadSelection;
+}) {
+  const [{ os, cpu }, setSelection] = useQueryStates(downloadSearchParams, {
+    history: "replace",
+    shallow: false,
+  });
+  const [isHydrated, setIsHydrated] = useState(false);
 
-const CPU_OPTIONS = [
-  {
-    id: "x64",
-    label: "x86_64 / AMD64",
-    detail: "Intel or AMD processors",
-    icon: <Cpu className="h-5 w-5 text-primary" />,
-  },
-  {
-    id: "arm64",
-    label: "AArch64 / ARM64",
-    detail: "Apple Silicon or ARM servers",
-    icon: <CircuitBoard className="h-5 w-5 text-primary" />,
-  },
-];
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
-export function DownloadConfigurator(props: { links: DownloadLinkMap }) {
-  const [selectedOs, setSelectedOs] = useState(
-    () => OS_OPTIONS[0]?.id ?? "windows",
-  );
-  const [selectedCpu, setSelectedCpu] = useState(
-    () => CPU_OPTIONS[0]?.id ?? "x64",
-  );
+  const selection = isHydrated ? { os, cpu } : props.initialSelection;
 
-  const osLabel = useMemo(
-    () => OS_OPTIONS.find((option) => option.id === selectedOs)?.label ?? "",
-    [selectedOs],
-  );
-  const cpuLabel = useMemo(
-    () => CPU_OPTIONS.find((option) => option.id === selectedCpu)?.label ?? "",
-    [selectedCpu],
-  );
+  const selectedOs =
+    OS_OPTIONS.find((option) => option.id === selection.os) ?? DEFAULT_OS;
+  const selectedCpu =
+    CPU_OPTIONS.find((option) => option.id === selection.cpu) ?? DEFAULT_CPU;
 
-  const downloadHref = props.links[selectedOs]?.[selectedCpu];
+  const downloadHref = props.links[selection.os]?.[selection.cpu];
+
+  const handleOsChange = (value: typeof selection.os) => {
+    setSelection((prev) => ({
+      ...prev,
+      os: value,
+    }));
+  };
+
+  const handleCpuChange = (value: typeof selection.cpu) => {
+    setSelection((prev) => ({
+      ...prev,
+      cpu: value,
+    }));
+  };
 
   return (
     <Card className="max-w-4xl mx-auto">
@@ -112,17 +73,23 @@ export function DownloadConfigurator(props: { links: DownloadLinkMap }) {
               <button
                 key={option.id}
                 type="button"
-                onClick={() => setSelectedOs(option.id)}
+                onClick={() => handleOsChange(option.id)}
                 className={cn(
                   "rounded-xl border p-4 text-left transition hover:border-primary/60",
-                  selectedOs === option.id
+                  selection.os === option.id
                     ? "border-primary bg-primary/10"
                     : "bg-background",
                 )}
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    {option.icon}
+                    <Image
+                      src={option.iconSrc}
+                      alt={option.iconAlt}
+                      width={28}
+                      height={28}
+                      className="size-7"
+                    />
                   </div>
                   <div>
                     <div className="text-base font-semibold">
@@ -146,17 +113,21 @@ export function DownloadConfigurator(props: { links: DownloadLinkMap }) {
               <button
                 key={option.id}
                 type="button"
-                onClick={() => setSelectedCpu(option.id)}
+                onClick={() => handleCpuChange(option.id)}
                 className={cn(
                   "rounded-xl border p-4 text-left transition hover:border-primary/60",
-                  selectedCpu === option.id
+                  selection.cpu === option.id
                     ? "border-primary bg-primary/10"
                     : "bg-background",
                 )}
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    {option.icon}
+                    {option.icon === "cpu" ? (
+                      <Cpu className="h-5 w-5 text-primary" />
+                    ) : (
+                      <CircuitBoard className="h-5 w-5 text-primary" />
+                    )}
                   </div>
                   <div>
                     <div className="text-base font-semibold">
@@ -180,12 +151,12 @@ export function DownloadConfigurator(props: { links: DownloadLinkMap }) {
           {downloadHref ? (
             <a href={downloadHref} target="_blank" rel="noopener noreferrer">
               <Download className="h-5 w-5" />
-              Download for {osLabel} · {cpuLabel}
+              Download for {selectedOs.label} · {selectedCpu.label}
             </a>
           ) : (
             <>
               <Download className="h-5 w-5" />
-              Coming soon for {osLabel} · {cpuLabel}
+              Coming soon for {selectedOs.label} · {selectedCpu.label}
             </>
           )}
         </Button>
