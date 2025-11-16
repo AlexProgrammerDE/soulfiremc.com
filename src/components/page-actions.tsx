@@ -64,7 +64,7 @@ export function LLMCopyButton({
       type="button"
     >
       {checked ? <Check /> : <Copy />}
-      Copy Markdown
+      Copy Page
     </button>
   );
 }
@@ -225,7 +225,7 @@ export function ViewOptions({
           }),
         )}
       >
-        Open
+        Open Page In
         <ChevronDown className="size-3.5 text-fd-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col overflow-auto">

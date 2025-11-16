@@ -231,7 +231,8 @@ export default function Page() {
         </section>
 
         {/* Latest Releases */}
-        <section className="py-16 bg-muted/50">
+        {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
+        <section className="py-16 bg-muted/50" id="downloads">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
@@ -248,7 +249,8 @@ export default function Page() {
         </section>
 
         {/* Features */}
-        <section className="py-16">
+        {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
+        <section className="py-16" id="features">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
@@ -318,7 +320,8 @@ export default function Page() {
         </section>
 
         {/* Video Showcase */}
-        <section className="py-16 bg-muted/50">
+        {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
+        <section className="py-16 bg-muted/50" id="video-showcase">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
@@ -360,7 +363,8 @@ export default function Page() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-16">
+        {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
+        <section className="py-16" id="final-cta">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
