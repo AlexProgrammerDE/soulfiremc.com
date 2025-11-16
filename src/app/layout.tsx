@@ -25,7 +25,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     site: "https://soulfiremc.com",
-    card: "summary_large_image",
+    card: "summary",
+    images: "/logo.png",
   },
   openGraph: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
     siteName: "SoulFire",
     locale: "en_US",
     type: "website",
+    images: "/logo.png",
   },
   alternates: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632

@@ -8,7 +8,6 @@ import {
   Rocket,
   Zap,
 } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -16,12 +15,6 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getRequiredEnv } from "@/lib/env";
 
 export const revalidate = 120; // 2 minutes
-
-export const metadata: Metadata = {
-  openGraph: {
-    images: "https://soulfiremc.com/og?title=SoulFire",
-  },
-};
 
 function FeatureCard(props: {
   title: string;
