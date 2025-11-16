@@ -39,6 +39,7 @@ export function DownloadConfigurator(props: {
     CPU_OPTIONS.find((option) => option.id === selection.cpu) ?? DEFAULT_CPU;
 
   const downloadHref = props.links[selection.os]?.[selection.cpu];
+  const isDirectGithubDownload = downloadHref?.includes("github.com") ?? false;
 
   const handleOsChange = (value: typeof selection.os) => {
     setSelection((prev) => ({
@@ -144,19 +145,24 @@ export function DownloadConfigurator(props: {
         </div>
         <Button
           size="lg"
-          className="w-full gap-2"
+          className="w-full gap-2 text-xs sm:text-sm"
           asChild
           disabled={!downloadHref}
         >
           {downloadHref ? (
-            <a href={downloadHref} target="_blank" rel="noopener noreferrer">
+            <a
+              href={downloadHref}
+              {...(isDirectGithubDownload
+                ? { download: "" }
+                : { target: "_blank", rel: "noopener noreferrer" })}
+            >
               <Download className="h-5 w-5" />
-              Download for {selectedOs.label} · {selectedCpu.label}
+              Download
             </a>
           ) : (
             <>
               <Download className="h-5 w-5" />
-              Coming soon for {selectedOs.label} · {selectedCpu.label}
+              Coming soon
             </>
           )}
         </Button>

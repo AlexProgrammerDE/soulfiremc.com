@@ -185,11 +185,7 @@ export default async function DownloadPage({
                     size="sm"
                     className="mt-2 w-full sm:mt-0 sm:w-auto"
                   >
-                    <a
-                      href={item.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={item.url} download>
                       Download
                     </a>
                   </Button>
