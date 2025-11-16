@@ -4,6 +4,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -58,10 +59,12 @@ export default async function RootLayout({
         )}
         suppressHydrationWarning
       >
-        <RootProvider>
-          <Banner id={"v2"}>SoulFire v2 is out now!</Banner>
-          {children}
-        </RootProvider>
+        <NuqsAdapter>
+          <RootProvider>
+            <Banner id={"v2"}>SoulFire v2 is out now!</Banner>
+            {children}
+          </RootProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

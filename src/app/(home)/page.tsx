@@ -1,27 +1,19 @@
-import type { paths } from "@octokit/openapi-types";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 import {
   AppWindow,
   ArrowDownToLine,
   Box,
-  ChevronRight,
   CloudDownload,
+  Download,
   Rocket,
-  Server,
-  Terminal,
   Zap,
 } from "lucide-react";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { CustomTimeAgo } from "@/components/time-ago";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getRequiredEnv } from "@/lib/env";
-import { cn } from "@/lib/utils";
-
-type LatestReleaseResponse =
-  paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export const revalidate = 120; // 2 minutes
 
@@ -30,141 +22,6 @@ export const metadata: Metadata = {
     images: "https://soulfiremc.com/og?title=SoulFire",
   },
 };
-
-async function getRepoInfo(repo: string): Promise<LatestReleaseResponse> {
-  const response = await fetch(
-    `https://api.github.com/repos/${repo}/releases/latest`,
-  );
-  return await response.json();
-}
-
-async function getReleaseData(): Promise<{
-  clientData: LatestReleaseResponse;
-  serverData: LatestReleaseResponse;
-}> {
-  const [clientData, serverData] = await Promise.all([
-    getRepoInfo("AlexProgrammerDE/SoulFireClient"),
-    getRepoInfo("AlexProgrammerDE/SoulFire"),
-  ]);
-
-  return {
-    clientData,
-    serverData,
-  };
-}
-
-function ReleaseCard(props: {
-  data: LatestReleaseResponse;
-  type: string;
-  hint: string;
-  extraIcons: ReactNode;
-}) {
-  const releaseDate = props.data.published_at ?? props.data.created_at;
-
-  return (
-    <Card className="flex flex-col md:flex-row gap-6 p-6 transition-all duration-300 hover:shadow-lg">
-      <div className="flex flex-col flex-1">
-        <div className="flex flex-wrap items-center gap-3 mb-3">
-          <a
-            href={props.data.html_url}
-            className="text-2xl font-bold hover:underline"
-          >
-            {props.data.name}
-          </a>
-          <div className="flex flex-row items-center gap-2">
-            <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-              Latest Release
-            </span>
-            <div className="flex flex-row items-center gap-1">
-              {props.extraIcons}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Released by</span>
-          <Image
-            className="rounded-full w-6 h-6"
-            src={props.data.author.avatar_url}
-            width={24}
-            height={24}
-            alt={props.data.author.login}
-          />
-          <span className="font-medium">{props.data.author.login}</span>
-          <span>•</span>
-          <span>
-            {releaseDate ? (
-              <CustomTimeAgo date={releaseDate} />
-            ) : (
-              "Unknown release date"
-            )}
-          </span>
-        </div>
-      </div>
-      <div className="flex flex-col justify-center">
-        <a
-          href={props.data.html_url}
-          className={cn(
-            buttonVariants({ size: "lg" }),
-            "gap-2 whitespace-nowrap",
-          )}
-        >
-          <ArrowDownToLine className="w-5 h-5" />
-          Download {props.hint}
-        </a>
-      </div>
-    </Card>
-  );
-}
-
-async function LatestRelease() {
-  const { clientData, serverData } = await getReleaseData();
-
-  return (
-    <div className="space-y-6">
-      <ReleaseCard
-        data={clientData}
-        type="Client"
-        hint="Client (Recommended)"
-        extraIcons={
-          <div className="flex flex-row gap-1">
-            <Image
-              src="/platform/windows.png"
-              alt="Windows"
-              width={20}
-              height={20}
-              title="Windows"
-            />
-            <Image
-              src="/platform/macos.png"
-              alt="macOS"
-              width={20}
-              height={20}
-              title="macOS"
-            />
-            <Image
-              src="/platform/linux.png"
-              alt="Linux"
-              width={20}
-              height={20}
-              title="Linux"
-            />
-          </div>
-        }
-      />
-      <ReleaseCard
-        data={serverData}
-        type="Server"
-        hint="Server (Advanced)"
-        extraIcons={
-          <div className="flex flex-row gap-1">
-            <Server className="w-5 h-5" />
-            <Terminal className="w-5 h-5" />
-          </div>
-        }
-      />
-    </div>
-  );
-}
 
 function FeatureCard(props: {
   title: string;
@@ -187,63 +44,55 @@ export default function Page() {
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32">
+        <section className="py-16 md:py-24">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-8 text-center">
-              <div className="space-y-4">
-                <div className="relative mx-auto w-32 h-32 md:w-40 md:h-40">
-                  <Image
-                    src="/logo.png"
-                    alt="SoulFire Logo"
-                    fill
-                    className="rounded-2xl"
-                    priority
-                  />
-                </div>
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+            <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="space-y-6 text-left">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
                   SoulFire
-                </h1>
-                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                  Advanced Minecraft Server-Stresser Tool.
-                  <br />
-                  Launch bot attacks on your servers to measure performance.
                 </p>
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                  The most powerful bot tool, undetectable and fast.
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl">
+                  Spin up realistic Minecraft traffic in seconds, audit your
+                  infrastructure, and learn how SoulFire works by watching the
+                  live demo right away.
+                </p>
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <Link href="/download">
+                    <Button size="lg" className="gap-2">
+                      <Download className="h-5 w-5" />
+                      Get SoulFire
+                    </Button>
+                  </Link>
+                  <a
+                    href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="lg" className="gap-2">
+                      <SiGithub className="h-5 w-5" />
+                      GitHub
+                    </Button>
+                  </a>
+                </div>
               </div>
-              <div className="space-x-4">
-                <Link href="/docs/installation">
-                  <Button size="lg" className="gap-2">
-                    <span>Get Started</span>
-                    <ChevronRight className="w-5 h-5" />
-                  </Button>
-                </Link>
-                <a
-                  href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" size="lg">
-                    View on GitHub
-                  </Button>
-                </a>
+              <div className="rounded-2xl border bg-background p-2 shadow-xl">
+                <div className="aspect-video overflow-hidden rounded-xl">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
+                    title="SoulFire demo video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                    className="h-full w-full"
+                  ></iframe>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Latest Releases */}
-        {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
-        <section className="py-16 bg-muted/50" id="downloads">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                Latest Releases
-              </h2>
-              <p className="max-w-[700px] text-muted-foreground md:text-lg">
-                Download the latest version of SoulFire for your platform
-              </p>
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <LatestRelease />
             </div>
           </div>
         </section>
@@ -319,49 +168,6 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Video Showcase */}
-        {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
-        <section className="py-16 bg-muted/50" id="video-showcase">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                GUI Showcase
-              </h2>
-              <p className="max-w-[700px] text-muted-foreground md:text-lg">
-                See SoulFire in action with our interactive demo
-              </p>
-              <p className="text-muted-foreground">
-                Do you want to check out a live demo of SoulFire in your
-                browser? Try out the{" "}
-                <a
-                  className="text-primary hover:underline font-medium"
-                  href="https://demo.soulfiremc.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  demo page
-                </a>
-                .
-              </p>
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <div className="aspect-video rounded-xl overflow-hidden shadow-lg">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  className="w-full h-full"
-                ></iframe>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Final CTA */}
         {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
         <section className="py-16" id="final-cta">
@@ -375,10 +181,10 @@ export default function Page() {
                 Minecraft servers with SoulFire
               </p>
               <div className="mt-6">
-                <Link href="/docs/installation">
+                <Link href="/download">
                   <Button size="lg" className="gap-2">
-                    <span>Install SoulFire</span>
-                    <ChevronRight className="w-5 h-5" />
+                    <span>Get SoulFire</span>
+                    <ArrowDownToLine className="w-5 h-5" />
                   </Button>
                 </Link>
               </div>
