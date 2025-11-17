@@ -97,6 +97,11 @@ const config: NextConfig = {
         destination: getRequiredEnv("NEXT_PUBLIC_DONATE_LINK"),
         permanent: false,
       },
+      {
+        source: "/demo-video",
+        destination: "https://www.youtube.com/watch?v=BD-xE8vbHtQ",
+        permanent: false,
+      },
     ];
   },
   // This is required to support PostHog trailing slash API requests
