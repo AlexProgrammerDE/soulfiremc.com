@@ -3,8 +3,14 @@
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 
-const buttonBaseClasses =
-  "inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type ConsentState = ReturnType<typeof posthog.get_explicit_consent_status>;
 
@@ -33,28 +39,29 @@ export function CookieConsentBanner() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex justify-center p-4 sm:p-6">
-      <div className="pointer-events-auto flex w-full max-w-3xl flex-col gap-4 rounded-2xl border bg-background/95 p-4 text-sm shadow-2xl backdrop-blur supports-[backdrop-filter]:bg-background/70 sm:flex-row sm:items-center sm:gap-6 sm:px-6 sm:py-5">
-        <p className="text-muted-foreground">
-          We use cookies to understand how people use SoulFire so we can improve
-          it. You can accept or reject tracking at any time.
-        </p>
-        <div className="flex flex-1 flex-row flex-wrap gap-3 sm:justify-end">
-          <button
-            type="button"
+      <Card className="pointer-events-auto w-full max-w-3xl border-border/80 bg-background/95 shadow-2xl backdrop-blur supports-[backdrop-filter]:bg-background/70">
+        <CardHeader className="gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <div className="space-y-1">
+            <CardTitle>Help us improve SoulFire</CardTitle>
+            <CardDescription>
+              We use analytics cookies to understand how people use SoulFire.
+              You can accept or reject tracking at any time.
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardFooter className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto"
             onClick={decline}
-            className={`${buttonBaseClasses} border border-input bg-transparent text-foreground hover:bg-muted focus-visible:outline-ring`}
           >
             Decline
-          </button>
-          <button
-            type="button"
-            onClick={accept}
-            className={`${buttonBaseClasses} bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:outline-primary`}
-          >
+          </Button>
+          <Button className="w-full sm:w-auto" onClick={accept}>
             Accept cookies
-          </button>
-        </div>
-      </div>
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
