@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { DownloadLinkMap } from "./download-data";
-import { CPU_OPTIONS, DEFAULT_CPU, DEFAULT_OS, OS_OPTIONS } from "./options";
+import { CPU_OPTIONS, OS_OPTIONS } from "./options";
 import { type DownloadSelection, downloadSearchParams } from "./search-params";
 
 export function DownloadConfigurator(props: {
@@ -32,11 +32,6 @@ export function DownloadConfigurator(props: {
   }, []);
 
   const selection = isHydrated ? { os, cpu } : props.initialSelection;
-
-  const selectedOs =
-    OS_OPTIONS.find((option) => option.id === selection.os) ?? DEFAULT_OS;
-  const selectedCpu =
-    CPU_OPTIONS.find((option) => option.id === selection.cpu) ?? DEFAULT_CPU;
 
   const downloadHref = props.links[selection.os]?.[selection.cpu];
   const isDirectGithubDownload = downloadHref?.includes("github.com") ?? false;
