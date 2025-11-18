@@ -1,10 +1,12 @@
 import { generateOGImage } from "fumadocs-ui/og";
 import { notFound } from "next/navigation";
-import { source } from "@/lib/source";
+import { getPageImage, source } from "@/lib/source";
+
+export const revalidate = false;
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ slug: string[] }> },
+  { params }: RouteContext<"/docs-og/[...slug]">,
 ) {
   const { slug } = await params;
   const page = source.getPage(slug.slice(0, -1));
@@ -18,8 +20,8 @@ export async function GET(
 }
 
 export function generateStaticParams() {
-  return source.generateParams().map((page) => ({
-    ...page,
-    slug: [...page.slug, "image.png"],
+  return source.getPages().map((page) => ({
+    lang: page.locale,
+    slug: getPageImage(page).segments,
   }));
 }

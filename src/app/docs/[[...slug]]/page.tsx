@@ -16,7 +16,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { source } from "@/lib/source";
+import { getPageImage, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
 export default async function Page(props: {
@@ -102,7 +102,7 @@ export async function generateMetadata(props: {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
-  const image = ["/docs-og", ...(params.slug || []), "image.png"].join("/");
+  const image = getPageImage(page).url;
   return {
     title: page.data.title,
     description: page.data.description,
