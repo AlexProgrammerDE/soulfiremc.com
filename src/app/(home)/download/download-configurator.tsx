@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { DownloadLinkMap } from "./download-data";
-import { CPU_OPTIONS, OS_OPTIONS } from "./options";
+import { CPU_OPTIONS, OS_OPTIONS, PREFERRED_CPU_BY_OS } from "./options";
 import { type DownloadSelection, downloadSearchParams } from "./search-params";
 
 export function DownloadConfigurator(props: {
@@ -40,6 +40,7 @@ export function DownloadConfigurator(props: {
     setSelection((prev) => ({
       ...prev,
       os: value,
+      cpu: PREFERRED_CPU_BY_OS[value],
     }));
   };
 
