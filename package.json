@@ -35,7 +35,7 @@
     "fumadocs-ui": "^16.0.0",
     "geist": "^1.5.1",
     "hast-util-to-jsx-runtime": "^2.3.6",
-    "lucide-react": "^0.553.0",
+    "lucide-react": "^0.554.0",
     "mermaid": "^11.10.0",
     "next": "^16.0.0",
     "next-themes": "^0.4.6",
@@ -55,11 +55,11 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.5",
+    "@biomejs/biome": "2.3.6",
     "@octokit/openapi-types": "^27.0.0",
     "@tailwindcss/postcss": "4.1.17",
     "@types/node": "24.10.1",
-    "@types/react": "19.2.5",
+    "@types/react": "19.2.6",
     "babel-plugin-react-compiler": "^1.0.0",
     "postcss": "^8.4.35",
     "tailwindcss": "4.1.17",
