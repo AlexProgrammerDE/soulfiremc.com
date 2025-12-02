@@ -1,23 +1,37 @@
-import { ArrowLeft, BookOpen, PlayCircle, Server, Terminal } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { CustomTimeAgo } from '@/components/time-ago';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { getClientRelease, getReleaseVersion, getServerRelease } from '@/lib/releases';
-import { DownloadConfigurator } from './download-configurator';
-import { createClientDownloads, createServerDownloads } from './download-data';
-import { CPU_OPTIONS, DEFAULT_CPU, DEFAULT_OS, OS_OPTIONS } from './options';
-import { type DownloadPageSearchParams, type DownloadSelection, loadDownloadSearchParams } from './search-params';
+import { BookOpen, PlayCircle, Server, Terminal } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { CustomTimeAgo } from "@/components/time-ago";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  getClientRelease,
+  getReleaseVersion,
+  getServerRelease,
+} from "@/lib/releases";
+import { DownloadConfigurator } from "./download-configurator";
+import { createClientDownloads, createServerDownloads } from "./download-data";
+import { CPU_OPTIONS, DEFAULT_CPU, DEFAULT_OS, OS_OPTIONS } from "./options";
+import {
+  type DownloadPageSearchParams,
+  type DownloadSelection,
+  loadDownloadSearchParams,
+} from "./search-params";
 
 const SERVER_ICONS = {
-  'SoulFire CLI': <Terminal className="h-5 w-5" />,
-  'SoulFire Dedicated': <Server className="h-5 w-5" />,
+  "SoulFire CLI": <Terminal className="h-5 w-5" />,
+  "SoulFire Dedicated": <Server className="h-5 w-5" />,
 } as const;
 
 export const metadata: Metadata = {
-  title: 'Download SoulFire',
-  description: 'Pick your OS and CPU to grab the right SoulFire build.',
+  title: "Download SoulFire",
+  description: "Pick your OS and CPU to grab the right SoulFire build.",
 };
 
 export const revalidate = 300;
@@ -27,14 +41,14 @@ type DownloadPageProps = {
 };
 
 export default async function DownloadPage({
-                                             searchParams,
-                                           }: DownloadPageProps) {
+  searchParams,
+}: DownloadPageProps) {
   const [clientRelease, serverRelease] = await Promise.all([
     getClientRelease(),
     getServerRelease(),
   ]);
   const selection = await loadDownloadSearchParams(searchParams);
-  const fallbackVersion = 'latest';
+  const fallbackVersion = "latest";
   const clientVersion = getReleaseVersion(clientRelease) ?? fallbackVersion;
   const serverVersion =
     getReleaseVersion(serverRelease) ?? clientVersion ?? fallbackVersion;
@@ -56,16 +70,16 @@ export default async function DownloadPage({
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl">
               Pick your operating system and CPU architecture. We&apos;ll give
-              you the right download plus links to help you learn how
-              everything works.
+              you the right download plus links to help you learn how everything
+              works.
             </p>
           </div>
           <p className="text-sm text-muted-foreground">
-            Latest release:{' '}
+            Latest release:{" "}
             <span className="font-medium text-foreground">{releaseName}</span>
             {releaseDate ? (
               <>
-                {' '}
+                {" "}
                 · Updated <CustomTimeAgo date={releaseDate} />
               </>
             ) : null}
@@ -85,8 +99,7 @@ export default async function DownloadPage({
               Learn the workflow
             </CardTitle>
             <CardDescription>
-              Understand how SoulFire operates before launching your first
-              test.
+              Understand how SoulFire operates before launching your first test.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -112,8 +125,8 @@ export default async function DownloadPage({
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              Explore every screen, test presets, and share the experience
-              with your team by opening the fully interactive SoulFire demo.
+              Explore every screen, test presets, and share the experience with
+              your team by opening the fully interactive SoulFire demo.
             </p>
             <Button asChild>
               <a
@@ -186,8 +199,8 @@ function DownloadTip(props: { selection: DownloadSelection }) {
         Apple Silicon or Snapdragon laptops.
       </p>
       <p className="mt-2 text-xs text-muted-foreground">
-        Currently set to{' '}
-        <span className="font-medium text-foreground">{selectedOs.label}</span>{' '}
+        Currently set to{" "}
+        <span className="font-medium text-foreground">{selectedOs.label}</span>{" "}
         • {selectedCpu.label}
       </p>
     </div>
