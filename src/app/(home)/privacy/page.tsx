@@ -1,8 +1,6 @@
 export default function Privacy() {
   return (
-    <article className="w-full overflow-x-hidden break-words nextra-content flex min-h-[calc(100vh-var(--nextra-navbar-height))] min-w-0 justify-center pb-8 pr-[calc(env(safe-area-inset-right)-1.5rem)]">
-      <main className="w-full min-w-0 max-w-6xl px-6 pt-4 md:px-12">
-        <div className="prose mx-auto container">
+      <main className="px-4 py-12 w-full max-w-[1400px] mx-auto prose">
           <h1>Privacy Policy</h1>
           <p>Last updated: April 26, 2025</p>
 
@@ -116,8 +114,6 @@ export default function Privacy() {
             data is collected apart from what is necessary to fetch and render
             the corresponding image.
           </p>
-        </div>
       </main>
-    </article>
   );
 }

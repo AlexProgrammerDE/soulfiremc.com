@@ -34,8 +34,7 @@ function FeatureCard(props: {
 
 export default function Page() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-1">
+      <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex-1">
         {/* Hero Section */}
         <section className="py-16 md:py-24">
           <div className="container px-4 md:px-6">
@@ -185,6 +184,5 @@ export default function Page() {
           </div>
         </section>
       </main>
-    </div>
   );
 }
