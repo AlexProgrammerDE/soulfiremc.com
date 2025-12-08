@@ -2,8 +2,6 @@ import { generateOGImage } from "fumadocs-ui/og";
 import { notFound } from "next/navigation";
 import { getPageImage, source } from "@/lib/source";
 
-export const revalidate = false;
-
 export async function GET(
   _req: Request,
   { params }: RouteContext<"/docs-og/[...slug]">,

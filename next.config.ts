@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
-import { getRequiredEnv } from "./src/lib/env";
+import { getRequiredEnv } from '@/lib/env';
 
 const withMDX = createMDX();
 
@@ -63,6 +63,10 @@ const baseDir = path.join("src", "app", "(home)");
 const config: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
+  cacheComponents: true,
+  experimental: {
+    viewTransition: true,
+  },
   env: {
     SITEMAP_PAGES: getFoldersWithPageFiles(baseDir)
       .map((folder) => folder.substring(baseDir.length))

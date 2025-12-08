@@ -1,6 +1,7 @@
 import { BookOpen, PlayCircle, Server, Terminal } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,14 +16,8 @@ import {
   getReleaseVersion,
   getServerRelease,
 } from "@/lib/releases";
-import { DownloadConfigurator } from "./download-configurator";
-import { createClientDownloads, createServerDownloads } from "./download-data";
-import { CPU_OPTIONS, DEFAULT_CPU, DEFAULT_OS, OS_OPTIONS } from "./options";
-import {
-  type DownloadPageSearchParams,
-  type DownloadSelection,
-  loadDownloadSearchParams,
-} from "./search-params";
+import { DownloadSelectionComponent } from "./download-configurator";
+import { createServerDownloads } from "./download-data";
 
 const SERVER_ICONS = {
   "SoulFire CLI": <Terminal className="h-5 w-5" />,
@@ -34,25 +29,15 @@ export const metadata: Metadata = {
   description: "Pick your OS and CPU to grab the right SoulFire build.",
 };
 
-export const revalidate = 300;
-
-type DownloadPageProps = {
-  searchParams: DownloadPageSearchParams;
-};
-
-export default async function DownloadPage({
-  searchParams,
-}: DownloadPageProps) {
+export default async function DownloadPage() {
   const [clientRelease, serverRelease] = await Promise.all([
     getClientRelease(),
     getServerRelease(),
   ]);
-  const selection = await loadDownloadSearchParams(searchParams);
   const fallbackVersion = "latest";
   const clientVersion = getReleaseVersion(clientRelease) ?? fallbackVersion;
   const serverVersion =
     getReleaseVersion(serverRelease) ?? clientVersion ?? fallbackVersion;
-  const clientDownloads = createClientDownloads(clientVersion);
   const serverDownloads = createServerDownloads(serverVersion);
   const releaseName =
     clientRelease?.name ??
@@ -80,17 +65,18 @@ export default async function DownloadPage({
             {releaseDate ? (
               <>
                 {" "}
-                · Updated <CustomTimeAgo date={releaseDate} />
+                · Updated{" "}
+                <Suspense>
+                  <CustomTimeAgo date={releaseDate} />
+                </Suspense>
               </>
             ) : null}
           </p>
         </div>
       </div>
-      <DownloadConfigurator
-        links={clientDownloads}
-        initialSelection={selection}
-      />
-      <DownloadTip selection={selection} />
+      <Suspense>
+        <DownloadSelectionComponent clientVersion={clientVersion} />
+      </Suspense>
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
@@ -181,28 +167,5 @@ export default async function DownloadPage({
         </Card>
       </div>
     </main>
-  );
-}
-
-function DownloadTip(props: { selection: DownloadSelection }) {
-  const selectedOs =
-    OS_OPTIONS.find((option) => option.id === props.selection.os) ?? DEFAULT_OS;
-  const selectedCpu =
-    CPU_OPTIONS.find((option) => option.id === props.selection.cpu) ??
-    DEFAULT_CPU;
-
-  return (
-    <div className="rounded-xl border bg-muted/30 p-4 text-sm">
-      <p className="font-semibold text-primary">Tip</p>
-      <p className="text-muted-foreground">
-        x86_64 means Intel and AMD CPUs. AArch64 refers to ARM processors like
-        Apple Silicon or Snapdragon laptops.
-      </p>
-      <p className="mt-2 text-xs text-muted-foreground">
-        Currently set to{" "}
-        <span className="font-medium text-foreground">{selectedOs.label}</span>{" "}
-        • {selectedCpu.label}
-      </p>
-    </div>
   );
 }

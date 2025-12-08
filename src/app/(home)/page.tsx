@@ -14,8 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getRequiredEnv } from "@/lib/env";
 
-export const revalidate = 120; // 2 minutes
-
 function FeatureCard(props: {
   title: string;
   description: string;

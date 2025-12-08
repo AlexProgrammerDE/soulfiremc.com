@@ -11,6 +11,11 @@ export async function getRepoInfo(
 ): Promise<LatestReleaseResponse> {
   const response = await fetch(
     `https://api.github.com/repos/${repo}/releases/latest`,
+    {
+      next: {
+        revalidate: 300,
+      },
+    },
   );
   return await response.json();
 }
