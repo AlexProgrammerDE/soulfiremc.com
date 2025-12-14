@@ -186,10 +186,30 @@ graph LR
     P2S --> M
 " />
 
-## Shuffling proxies
+## Proxy Settings
+
+When you navigate to the Proxy Settings page in SoulFire, you'll find several configuration options:
+
+### Bots per proxy
+
+This setting (default: `-1`) controls how many bots can connect through a single proxy.
+A value of `-1` means unlimited bots can use the same proxy.
+SoulFire will always try to evenly distribute bots across all available proxies.
+
+### Shuffle proxies
 
 SoulFire supports shuffling proxies, but it's disabled by default.
 When enabled, SoulFire will shuffle the proxies randomly before starting the attack.
 If disabled, SoulFire will use the proxies in the order they are in the settings.
 
 The shuffling feature is useful if you want to randomize the order of the proxies to make it harder for servers to detect which proxies are bots on subsequent attacks.
+
+### Proxy check address
+
+This setting (default: `mc.hypixel.net`) specifies the server address used to verify that proxies are working.
+When you import proxies, SoulFire can check if they are functional by attempting to connect to this address.
+
+### Proxy check concurrency
+
+This setting (default: `10`) controls how many proxies can be checked simultaneously.
+Higher values will check proxies faster but may cause issues if you have limited bandwidth or resources.

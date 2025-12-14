@@ -82,10 +82,30 @@ Username2
 Username3
 ```
 
-## Shuffling accounts
+## Account Settings
+
+When you navigate to the Account Settings page in SoulFire, you'll find several configuration options:
+
+### Name format
+
+The name format setting (default: `Bot_%d`) determines how offline accounts are named when generated automatically.
+The `%d` placeholder is replaced with a number for each bot.
+For example, with the default format, bots will be named `Bot_1`, `Bot_2`, `Bot_3`, etc.
+
+### Shuffle accounts
 
 SoulFire supports shuffling accounts, but it's disabled by default.
 When enabled, SoulFire will shuffle the accounts randomly before starting the attack.
 If disabled, SoulFire will use the accounts in the order they are in the settings.
 
 The shuffling feature is useful if you want to randomize the order of the accounts to make it harder for servers to detect which accounts are bots on subsequent attacks.
+
+### Use proxies for account auth
+
+When enabled, SoulFire will use your configured proxies when authenticating Microsoft accounts.
+This is useful if you want to hide your IP address during the authentication process or if your IP is rate-limited by Microsoft.
+
+### Account import concurrency
+
+This setting (default: `3`) controls how many accounts can be imported simultaneously.
+Higher values will import accounts faster but may cause rate limiting issues with Microsoft authentication servers.

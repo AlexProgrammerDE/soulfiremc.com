@@ -12,87 +12,151 @@ If you haven't done that yet, please refer to the [Installation Guide](/docs/ins
 
 ## Starting the GUI
 
-The first thing you see is a question is whether you want an Integrated server
-or connect to a remove server by address and token.
+When you first launch SoulFire, you'll see a connection screen with three options:
 
-For beginners, it is recommended to Click on `Use integrated server`.
-This means that SoulFire will run on your machine instead of controlling a remote server to do attacks on your behalf.
+- **Integrated server (local)**: Runs SoulFire on your machine. Recommended for beginners.
+- **Dedicated server (remote)**: Connect to a remote SoulFire server using an address and token.
+- **Demo server**: Try out the SoulFire interface without installing anything.
 
-If you are a power-user wanting to learn more about why and how to set up a remote server. Follow the [Dedicated Mode guide](/docs/guides/dedicated-mode)
+For beginners, it is recommended to select `Integrated server (local)`.
+This means that SoulFire will run on your machine instead of controlling a remote server.
 
-## Main Screen
+If you are a power-user wanting to learn more about why and how to set up a remote server, follow the [Dedicated Mode guide](/docs/guides/dedicated-mode).
 
-You will first be greeted by a message asking whether it is your first time using SoulFire,
-if yes then click yes, if not then click no.
-The hints will give you info about what actions you can do.
+## Dashboard
 
-## Logs
+After connecting, you'll see the main dashboard. The interface is organized into several sections accessible from the left sidebar:
 
-The panel on the right side of the screen is the logs panel.
-It shows you the logs of the actions you have done.
-If you are having issues (or errors), you can copy the logs and send the logs to the developers for help.
-You can right-click inside the logs panel and click on upload to create a link with your logs inside.
+### User Section
 
-## Commands
+- **Instances**: View and manage your bot instances. Each instance is an independent attack configuration.
+- **Access**: Manage access permissions and tokens.
+- **Settings**: Configure user-specific settings.
 
-Below the logs panel is a thin bar with a text input.
-This is the command panel.
-You can type commands here to interact with SoulFire.
-Unlike with Minecraft, commands do not start with `/`.
-So unlike in Minecraft where you type `/help`, here you just type `help`.
-All commands work like that in SoulFire.
-Commands can sometimes be scoped to a single attack or a single bot.
+### Admin Section
 
-Not all commands control what a bot does, some just control the software itself or print metrics.
-For commands that control bots like the command `walk 0 0 0` it by default runs for all bots in all attacks.
-If you want to scope it to a single bot or a single attack, you can do so by prefixing the command with the attack syntax.
-So if you only want to run a command on bots in attack 0, you put in `attack 0 walk 0 0 0`.
-This will run the command for al bots of attack 0.
-You can also scope it to a bot by name. For basically `bot Bot_1 walk 0 0 0` will
-run the command for all bots in all attacks that have the name `Bot_1`.
-If you want to scope it even more, you can combine the two: `attack 0 bot Bot_1 walk 0 0 0`.
+If you have admin privileges, you'll also see:
 
-## Starting your first attack
+- **Overview**: Server overview and status.
+- **Logs**: View server logs.
+- **Terminal**: Execute commands directly on the server.
+- **Users**: Manage user accounts.
+- **Scripts**: Manage server-side scripts.
+- **Server Settings**: Configure server behavior.
+- **Dev Settings**: Advanced developer settings.
 
-SoulFire, like any other software, needs to be told what to do.
-You can control basic features under the `Bot Settings` panel, which you can access by clicking
-on the `Bot Settings` button on the left side of the screen.
-There you can, along with many other options, set the address of the server you want to attack, the amount of bots to send and the delay between each bot.
-You can also set what version of Minecraft the server has, if it is not the default version, you have to change it or else there will be issues.
+## Creating an Instance
 
-To leave the menu, click on the `Back` button on the top left of the screen.
-Now you can also tweak settings of installer or built-in plugins under the `Plugins` panel.
+To start your first attack, you need to create an instance:
 
-To start an attack, you can click on the `Start` button on the left side of the screen.
-Then you can see in the logs panel the status of the attack.
-If you want to stop the attack, you can click on the `Stop` button.
-If you want to toggle the attack, you can click on the `Pause`/`Resume` button.
+1. Click on **Instances** in the sidebar
+2. Click the **Create Instance** button (+ icon)
+3. Give your instance a name
 
-## Importing proxies
+Once created, click on your instance to access its settings and controls.
 
-If you have a list of proxies you want to use, you can import them by clicking on the `Proxies` button on the left side of the screen.
-There click on the `+` button to add a new proxy.
+## Instance Overview
+
+When you select an instance, you'll see several sections:
+
+### Controls
+
+- **Overview**: See the instance status and control buttons (Start, Pause, Stop)
+- **Terminal**: Execute commands for this specific instance
+- **Audit Log**: View a history of actions performed on this instance
+
+### Settings
+
+- **Bot Settings**: Configure the target server address, bot amount, join delays, protocol version, timeouts, and more
+- **Account Settings**: Import and manage accounts for your bots
+- **Proxy Settings**: Import and manage proxies
+- **AI Settings**: Configure AI-related features
+- **Instance Settings**: Configure instance-specific metadata
+
+### Plugins
+
+- **Plugins**: Enable/disable built-in plugins with a simple toggle switch
+- **Plugin Settings**: Configure individual plugin settings
+- **Scripts**: Manage instance-specific scripts
+
+## Bot Settings
+
+The Bot Settings panel is where you configure the core attack parameters:
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| Address | Target server address (e.g., `127.0.0.1:25565`) | `127.0.0.1:25565` |
+| Amount | Number of bots to connect | `1` |
+| Min Join Delay (ms) | Minimum delay between bot joins | `1000` |
+| Max Join Delay (ms) | Maximum delay between bot joins | `3000` |
+| Protocol Version | Minecraft version to use | Latest version |
+| Read Timeout | Connection read timeout in seconds | `30` |
+| Write Timeout | Connection write timeout in seconds | `0` |
+| Connect Timeout | Connection timeout in seconds | `30` |
+| Resolve SRV | Whether to resolve SRV records | Enabled |
+| Concurrent Connects | Number of simultaneous connections | `1` |
+| Restore on Reboot | Restore instance state after server restart | Enabled |
+
+## Starting an Attack
+
+Once you've configured your instance:
+
+1. Navigate to the **Overview** page of your instance
+2. Click the **Start** button to begin the attack
+3. Monitor progress in the **Terminal** tab
+4. Use **Pause** to temporarily halt the attack
+5. Use **Stop** to completely stop all bots
+
+## Importing Proxies
+
+To use proxies with your bots:
+
+1. Select your instance and go to **Proxy Settings**
+2. Use the import options to add proxies
+3. Configure proxy settings like "Bots per proxy" (`-1` means unlimited)
 
 To learn what format the proxies should be in, read the [Proxies Page](/docs/usage/proxies).
-There you can also set how many bots can use a single proxy, `-1` means unlimited.
 
-## Importing accounts
+## Importing Accounts
 
-If you have a list of accounts you want to use, you can import them by clicking on the `Accounts` button on the left side of the screen.
-There click on the `+` button to add a new account.
+To use specific accounts instead of auto-generated offline accounts:
+
+1. Select your instance and go to **Account Settings**
+2. Use the import options to add accounts
+3. Configure account settings like "Name format" for offline accounts
 
 To learn what format the accounts should be in, read the [Accounts Page](/docs/usage/accounts).
 
-## Exporting and importing profiles
+## Managing Plugins
 
-If you have a configuration you want to save, you can export it by clicking on the `File` -> `Save Profile` button.
-We recommend saving it inside the default profiles folder. You can also save it anywhere else on your computer.
+SoulFire comes with many built-in plugins that can be enabled or disabled:
 
-To import a profile, click on the `File` -> `Load Profile` button.
-It shows profiles found inside the default profiles folder and allows you to also import profiles from a file.
+1. Select your instance and go to **Plugins**
+2. Toggle plugins on/off using the switch next to each plugin
+3. Click on a plugin name to configure its specific settings
 
-Profiles contain all your settings, plugin settings, accounts and proxies.
+Popular plugins include:
+- **Auto Reconnect**: Automatically reconnects bots when disconnected
+- **Auto Respawn**: Automatically respawns bots after death
+- **Anti AFK**: Prevents bots from being kicked for inactivity
+- **Chat Logger**: Logs chat messages to the terminal
+
+## Commands
+
+The Terminal tab provides a command input where you can interact with SoulFire.
+Unlike Minecraft, commands do not start with `/`.
+So instead of typing `/help`, you just type `help`.
+
+Commands can be scoped to specific bots or instances:
+- `bot Bot_1 say hello` - Run command for a specific bot
+- `instance myinstance say hello` - Run command for all bots in an instance
+
+For a full list of commands, see the [Commands Page](/docs/usage/commands).
 
 ## Themes
 
-You can change the theme of SoulFire by clicking on the `View` -> `Theme` or `View` -> `Terminal` buttons.
+You can switch between light and dark themes using the theme toggle button in the bottom left corner of the interface.
+
+## Language
+
+SoulFire supports multiple languages. You can change the interface language using the language selector button in the bottom left corner.
