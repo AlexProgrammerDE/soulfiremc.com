@@ -13,6 +13,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           url: "/docs",
           description: "Learn how to use SoulFire",
         },
+        {
+          type: "main",
+          text: "Downloads",
+          url: "/download",
+          on: "nav",
+        },
         ...(baseOptions.links || []),
       ]}
     >
