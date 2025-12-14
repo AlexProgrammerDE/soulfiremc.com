@@ -5,6 +5,11 @@ description: SoulFire is a tool that sends bots to your Minecraft server to allo
 
 import { DownloadIcon } from 'lucide-react';
 import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="info">
+  **SoulFire 2.0** is built on **Fabric**, using official Minecraft client code. Bots are now virtually indistinguishable from real players.
+</Callout>
 
 ## Why should I use SoulFire?
 
@@ -13,17 +18,25 @@ It is designed to be straightforward to use, and to be as efficient as possible.
 It is also designed to be as user-friendly as possible,
 with a simple and easy-to-use interface that also allows you to do advanced things.
 
-The bot is also designed to be as hard to detect as possible,
-so you can also use it to test your server's anti-bot measures.
+SoulFire 2.0 was a complete rewrite that transformed SoulFire into a special Fabric mod running the official Minecraft client code.
+This makes bots virtually impossible to distinguish from real players on the server side.
 
-### Special features
+### Why Fabric-based?
 
-So, what is it in for you?
+SoulFire 2.0 uses the actual Minecraft client code through Fabric, which provides:
 
-* Properly implemented systems (like physics) to prevent bot detection.
-* Pathfinding system to measure chunk loading and entity processing.
-* Many plugins to make your bots do useful things, such as kill aura, auto totem/armor/eat/jump and more.
-* Tools for doing advanced attacks such as connecting to backend servers with proxy forwarding mode enabled. (BungeeCord, Velocity, BungeeGuard)
+* **Perfect vanilla parity**: Bots use the exact same code as real Minecraft clients
+* **100% accurate physics**: Movement, collisions, and action prediction match the real client exactly
+* **Protocol parity**: Network communication is identical to real clients, making bots undetectable by most anticheats
+* **Faster updates**: New Minecraft versions can be supported much more quickly
+* **Fabric mod support**: SoulFire plugins are Fabric mods, and some third-party Fabric mods work out of the box
+* **Multi-version support**: Through [ViaFabricPlus](https://github.com/ViaVersion/ViaFabricPlus), SoulFire supports Bedrock Edition, and every Minecraft Classic, Alpha, Beta, Release version, and April Fools snapshots—all while running on the latest Minecraft version
+
+### Features
+
+* Pathfinding system to measure chunk loading and entity processing
+* Many [plugins](/docs/usage/plugins) to make your bots do useful things, such as kill aura, auto totem/armor/eat/jump and more
+* Tools for doing advanced attacks such as connecting to backend servers with proxy forwarding mode enabled (BungeeCord, Velocity, BungeeGuard)
 
 ## Getting started
 

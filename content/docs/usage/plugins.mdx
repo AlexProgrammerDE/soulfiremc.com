@@ -1,12 +1,46 @@
 ---
 title: Plugins
-description: Plugins are a way to extend the functionality of SoulFire. SoulFire also comes with a few built-in plugins that can be enabled or disabled.
+description: SoulFire plugins are Fabric mods that extend the functionality of SoulFire. SoulFire also comes with built-in plugins that can be enabled or disabled.
 ---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## SoulFire 2.0: Built on Fabric
+
+<Callout type="info">
+  SoulFire 2.0 was a complete rewrite that transformed SoulFire into a special **Fabric mod** running the official Minecraft client code.
+  **SoulFire plugins are Fabric mods** and are loaded using the standard Fabric mod loader.
+</Callout>
+
+This architectural change brings massive benefits:
+
+### Why Fabric?
+
+- **Perfect vanilla parity**: SoulFire bots use the exact same code as the official Minecraft client, making them virtually indistinguishable from real players on the server side
+- **Accurate physics and movement**: Bot movement, action prediction, and collision detection are 100% accurate since they use Minecraft's actual physics code
+- **Protocol parity**: Network communication matches the real client exactly, making bots effectively undetectable by anticheats
+- **Faster version updates**: Supporting new Minecraft versions is significantly easier and faster since the Minecraft code is already present
+- **Rapid feature development**: New features can be implemented quickly by building on top of existing Minecraft code
+- **Third-party mod support**: Some existing Fabric mods can work with SoulFire out of the box
+
+### Plugins = Fabric Mods
+
+<Callout type="warn">
+  **Important**: SoulFire plugins are now standard Fabric mods. They are loaded by the Fabric mod loader just like any other Fabric mod.
+</Callout>
+
+Since SoulFire plugins are Fabric mods:
+
+- Plugins follow the standard Fabric mod structure (`fabric.mod.json`, entrypoints, etc.)
+- Plugins are loaded from the `minecraft/mods` directory by the Fabric mod loader
+- Plugins can use **Mixins** to modify both Minecraft and SoulFire code
+- Plugins have full access to the Minecraft codebase and Fabric APIs
+- Some existing Fabric mods may be compatible with SoulFire without modification
 
 ## Built-in plugins
 
-We've prepared a list of built-in plugins that SoulFire ships by default with every SoulFire instance and are available by default.
-Later on this page we'll show a list of external community plugins that extend the base SoulFire functionality.
+SoulFire ships with several built-in plugins that are available by default.
+These can be enabled or disabled per-instance in the Plugins section.
 
 | ID                   | Description                                                                                                           | Author           | License |
 |----------------------|-----------------------------------------------------------------------------------------------------------------------|------------------|---------|
@@ -18,10 +52,10 @@ Later on this page we'll show a list of external community plugins that extend t
 | `auto-eat`           | Automatically eats food when hungry                                                                                   | AlexProgrammerDE | GPL-3.0 |
 | `auto-jump`          | Automatically jumps randomly                                                                                          | AlexProgrammerDE | GPL-3.0 |
 | `auto-reconnect`     | Automatically reconnects bots when they time out or are kicked                                                        | AlexProgrammerDE | GPL-3.0 |
-| `auto-register`      | Automatically registers bots AuthMe servers                                                                           | AlexProgrammerDE | GPL-3.0 |
+| `auto-register`      | Automatically registers bots on AuthMe servers                                                                        | AlexProgrammerDE | GPL-3.0 |
 | `auto-respawn`       | Automatically respawns after death                                                                                    | AlexProgrammerDE | GPL-3.0 |
 | `auto-totem`         | Automatically puts totems in the offhand slot                                                                         | AlexProgrammerDE | GPL-3.0 |
-| `chat-logger`        | Logs all received chat messages to the terminal Includes deduplication to prevent spamming the same message too often | AlexProgrammerDE | GPL-3.0 |
+| `chat-logger`        | Logs all received chat messages to the terminal. Includes deduplication to prevent spamming the same message too often | AlexProgrammerDE | GPL-3.0 |
 | `client-brand`       | Sends the client brand to the server                                                                                  | AlexProgrammerDE | GPL-3.0 |
 | `client-settings`    | Sends client settings to the server                                                                                   | AlexProgrammerDE | GPL-3.0 |
 | `fake-virtual-host`  | Fakes the virtual host                                                                                                | AlexProgrammerDE | GPL-3.0 |
@@ -33,32 +67,41 @@ Later on this page we'll show a list of external community plugins that extend t
 
 Run the command `print-docs plugins` in the console of the GUI, CLI or Dedicated server.
 
-## Community plugins
+## Community plugins (Fabric mods)
 
-Community plugins are plugins that are not built-in but are made by the community.
-Plugins can be written in Java or Kotlin and can be loaded at startup of the SoulFire server.
-Plugins are able to use Mixins, which is the same system used in Minecraft mods to modify the game.
-SoulFire does not use Minecraft code, so Minecraft mods are not compatible with SoulFire.
-Plugins normally only modify the SoulFire application server, not the GUI/CLI interface directly.
+Community plugins are Fabric mods that extend SoulFire's functionality.
+Since SoulFire 2.0, plugins are standard Fabric mods that take full advantage of the Fabric ecosystem.
 
 Any questions regarding how SoulFire works and how to write a plugin can be asked in the [Discord](/discord).
 
 ### How to write a plugin
 
-To write a plugin, you need to create a new Java or Kotlin project.
-Right now there is no full guide on how to write a plugin, but you can look at the built-in plugins for inspiration.
-There is also a [plugin template](https://github.com/AlexProgrammerDE/SoulFirePluginExample) available on GitHub.
+Since SoulFire plugins are Fabric mods, you create them the same way you would create any Fabric mod:
+
+1. Create a new Java or Kotlin project using the [Fabric mod template](https://fabricmc.net/develop/template/)
+2. Add SoulFire as a dependency in your `build.gradle`
+3. Create your `fabric.mod.json` with proper metadata and entrypoints
+4. Use Mixins to hook into Minecraft or SoulFire code as needed
+5. Build your mod as a standard Fabric mod `.jar` file
+
+There is a [plugin template](https://github.com/AlexProgrammerDE/SoulFirePluginExample) available on GitHub to help you get started.
 Official Javadocs are hosted on [CodeMC CI](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/index.html).
+
+You can also look at the built-in plugins for inspiration on how to structure your plugin.
 
 ### How to install a plugin
 
-To install a plugin, you need to place the plugin `.jar` file in the `minecraft/mods` directory of the SoulFire server.
-The SoulFire server will automatically load all `.jar` files in the `minecraft/mods` directory at startup.
-The plugins directory is in different places depending on your setup and operating system.
-If you use the client integrated server,
-you'll find the `minecraft/mods` directory in the `Help -> Data directory` folder in the `soulfire/minecraft/mods` subdirectory.
-If you use a dedicated server,
-you'll find the `minecraft/mods` directory located in the same directory as the server `.jar` file.
+To install a plugin, place the Fabric mod `.jar` file in the `minecraft/mods` directory:
+
+- **Integrated server (GUI/CLI)**: Find the directory at `Help -> Data directory`, then navigate to `soulfire/minecraft/mods`
+- **Dedicated server**: The `minecraft/mods` directory is located in the same directory as the server `.jar` file
+
+SoulFire's Fabric mod loader will automatically load all mods from this directory at startup.
+
+<Callout type="warn">
+  Not all Fabric mods are compatible with SoulFire. Mods that require rendering, audio, or other client-only features will not work.
+  Mods that modify game logic, networking, or add new functionality are more likely to be compatible.
+</Callout>
 
 ### Plugin list
 
