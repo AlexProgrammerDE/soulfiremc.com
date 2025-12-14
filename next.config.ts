@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
-import { getRequiredEnv } from '@/lib/env';
+import { getRequiredEnv } from "@/lib/env";
 
 const withMDX = createMDX();
 
