@@ -11,12 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   getClientRelease,
   getReleaseVersion,
   getServerRelease,
 } from "@/lib/releases";
-import { DownloadSelectionComponent } from "./download-configurator";
+import {
+  DownloadSelectionComponent,
+  DownloadSelectionSkeleton,
+} from "./download-configurator";
 import { createServerDownloads } from "./download-data";
 
 const SERVER_ICONS = {
@@ -66,7 +70,11 @@ export default async function DownloadPage() {
               <>
                 {" "}
                 · Updated{" "}
-                <Suspense>
+                <Suspense
+                  fallback={
+                    <Skeleton className="inline-block h-4 w-20 align-middle" />
+                  }
+                >
                   <CustomTimeAgo date={releaseDate} />
                 </Suspense>
               </>
@@ -74,7 +82,7 @@ export default async function DownloadPage() {
           </p>
         </div>
       </div>
-      <Suspense>
+      <Suspense fallback={<DownloadSelectionSkeleton />}>
         <DownloadSelectionComponent clientVersion={clientVersion} />
       </Suspense>
       <div className="grid gap-6 lg:grid-cols-2">

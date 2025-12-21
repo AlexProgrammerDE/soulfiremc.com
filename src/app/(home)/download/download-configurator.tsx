@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { createClientDownloads, type DownloadLinkMap } from "./download-data";
 import {
@@ -339,5 +340,72 @@ function DownloadTip(props: { selection: DownloadSelection }) {
         • {selectedCpu.label}
       </p>
     </div>
+  );
+}
+
+export function DownloadSelectionSkeleton() {
+  return (
+    <>
+      <Card className="max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl">Choose your build</CardTitle>
+          <CardDescription>
+            SoulFire is multi-platform. Tell us what you are running and we will
+            point you to the best download.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          <div className="space-y-3">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Operating system
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="rounded-xl border bg-background p-4">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="size-11 rounded-lg" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-3 w-24" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-3">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              CPU architecture
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[1, 2].map((i) => (
+                <div key={i} className="rounded-xl border bg-background p-4">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="size-9 rounded-lg" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-28" />
+                      <Skeleton className="h-3 w-36" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <Skeleton className="h-10 w-full" />
+        </CardContent>
+      </Card>
+      <div className="rounded-xl border bg-muted/30 p-4 text-sm">
+        <p className="font-semibold text-primary">Tip</p>
+        <p className="text-muted-foreground">
+          x86_64 means Intel and AMD CPUs. AArch64 refers to ARM processors like
+          Apple Silicon or Snapdragon laptops.
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Currently set to{" "}
+          <Skeleton className="inline-block h-3 w-16 align-middle" /> •{" "}
+          <Skeleton className="inline-block h-3 w-24 align-middle" />
+        </p>
+      </div>
+    </>
   );
 }
