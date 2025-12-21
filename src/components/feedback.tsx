@@ -28,15 +28,13 @@ export interface Feedback {
   message: string;
 }
 
-export interface ActionResponse {
-  githubUrl: string;
-}
+export type ActionResponse = object;
 
 interface Result extends Feedback {
   response?: ActionResponse;
 }
 
-export function Rate({
+export function Feedback({
   onRateAction,
 }: {
   onRateAction: (url: string, feedback: Feedback) => Promise<ActionResponse>;
@@ -96,6 +94,7 @@ export function Rate({
       <div className="flex flex-row items-center gap-2">
         <p className="text-sm font-medium pe-2">How is this guide?</p>
         <button
+          type="button"
           disabled={previous !== null}
           className={cn(
             rateButtonVariants({
@@ -105,12 +104,12 @@ export function Rate({
           onClick={() => {
             setOpinion("good");
           }}
-          type="button"
         >
           <ThumbsUp />
           Good
         </button>
         <button
+          type="button"
           disabled={previous !== null}
           className={cn(
             rateButtonVariants({
@@ -120,7 +119,6 @@ export function Rate({
           onClick={() => {
             setOpinion("bad");
           }}
-          type="button"
         >
           <ThumbsDown />
           Bad
@@ -131,21 +129,8 @@ export function Rate({
           <div className="px-3 py-6 flex flex-col items-center gap-3 bg-fd-card text-fd-muted-foreground text-sm text-center rounded-xl">
             <p>Thank you for your feedback!</p>
             <div className="flex flex-row items-center gap-2">
-              <a
-                href={previous.response?.githubUrl}
-                rel="noreferrer noopener"
-                target="_blank"
-                className={cn(
-                  buttonVariants({
-                    color: "primary",
-                  }),
-                  "text-xs",
-                )}
-              >
-                View on GitHub
-              </a>
-
               <button
+                type="button"
                 className={cn(
                   buttonVariants({
                     color: "secondary",
@@ -156,7 +141,6 @@ export function Rate({
                   setOpinion(previous.opinion);
                   setPrevious(null);
                 }}
-                type="button"
               >
                 Submit Again
               </button>
@@ -165,6 +149,8 @@ export function Rate({
         ) : (
           <form className="flex flex-col gap-3" onSubmit={submit}>
             <textarea
+              // biome-ignore lint/a11y/noAutofocus: We want to autofocus the textarea when it appears
+              autoFocus
               required
               value={message}
               onChange={(e) => setMessage(e.target.value)}

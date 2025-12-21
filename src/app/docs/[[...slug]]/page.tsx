@@ -8,9 +8,9 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { onRateAction } from "@/app/actions";
+import posthog from "posthog-js";
+import { Feedback } from "@/components/feedback";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
-import { Rate } from "@/components/rate";
 import {
   HoverCard,
   HoverCardContent,
@@ -86,7 +86,14 @@ export default async function Page(props: {
           })}
         />
       </DocsBody>
-      <Rate onRateAction={onRateAction} />
+      <Feedback
+        onRateAction={async (_url, feedback) => {
+          "use server";
+
+          posthog.capture("on_rate_docs", feedback);
+          return {};
+        }}
+      />
     </DocsPage>
   );
 }
