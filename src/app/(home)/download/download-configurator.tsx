@@ -17,9 +17,11 @@ import { cn } from "@/lib/utils";
 import { createClientDownloads, type DownloadLinkMap } from "./download-data";
 import {
   CPU_OPTIONS,
+  type CpuOption,
   DEFAULT_CPU,
   DEFAULT_OS,
   OS_OPTIONS,
+  type OsOption,
   PREFERRED_CPU_BY_OS,
 } from "./options";
 import {
@@ -27,6 +29,99 @@ import {
   downloadSearchParams,
   loadDownloadSearchParams,
 } from "./search-params";
+
+function detectBrowserOS(): OsOption["id"] | null {
+  if (typeof window === "undefined") return null;
+
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  const platform = window.navigator.platform?.toLowerCase() ?? "";
+
+  // Check for Windows
+  if (userAgent.includes("win") || platform.includes("win")) {
+    return "windows";
+  }
+
+  // Check for macOS
+  if (
+    userAgent.includes("mac") ||
+    platform.includes("mac") ||
+    platform.includes("iphone") ||
+    platform.includes("ipad")
+  ) {
+    return "macos";
+  }
+
+  // Check for Linux (including Android which is Linux-based, but we'll treat as Linux)
+  if (
+    userAgent.includes("linux") ||
+    userAgent.includes("x11") ||
+    platform.includes("linux")
+  ) {
+    return "linux";
+  }
+
+  return null;
+}
+
+function detectBrowserCPU(): CpuOption["id"] | null {
+  if (typeof window === "undefined") return null;
+
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  const platform = window.navigator.platform?.toLowerCase() ?? "";
+
+  // Check for ARM architecture
+  // Common indicators: aarch64, arm64, arm in platform/userAgent
+  if (
+    platform.includes("aarch64") ||
+    platform.includes("arm64") ||
+    platform.includes("arm") ||
+    userAgent.includes("aarch64") ||
+    userAgent.includes("arm64")
+  ) {
+    return "arm64";
+  }
+
+  // Check for x86_64/AMD64 architecture
+  // Common indicators: x86_64, x64, amd64, win64, wow64 (Windows 64-bit), x86_64 in platform
+  if (
+    platform.includes("x86_64") ||
+    platform.includes("x64") ||
+    platform.includes("amd64") ||
+    platform.includes("win64") ||
+    userAgent.includes("x86_64") ||
+    userAgent.includes("x64") ||
+    userAgent.includes("amd64") ||
+    userAgent.includes("win64") ||
+    userAgent.includes("wow64")
+  ) {
+    return "x64";
+  }
+
+  // For macOS, we can use navigator.userAgentData if available (Chromium browsers)
+  // to detect Apple Silicon vs Intel
+  const userAgentData = (navigator as NavigatorWithUAData).userAgentData;
+  if (userAgentData?.getHighEntropyValues) {
+    // This is async, so we can't use it directly here
+    // But we can check platform hints synchronously if available
+    if (userAgentData.platform === "macOS") {
+      // On macOS, if we can't detect ARM, assume Apple Silicon for newer browsers
+      // since most new Macs are ARM-based
+      // However, this is a heuristic and may not be accurate
+    }
+  }
+
+  // Default: return null to use OS-based preference
+  return null;
+}
+
+interface NavigatorWithUAData extends Navigator {
+  userAgentData?: {
+    platform?: string;
+    getHighEntropyValues?: (
+      hints: string[],
+    ) => Promise<{ architecture?: string }>;
+  };
+}
 
 export function DownloadSelectionComponent({
   clientVersion,
@@ -37,11 +132,15 @@ export function DownloadSelectionComponent({
   const selection = loadDownloadSearchParams(searchParams);
   const clientDownloads = createClientDownloads(clientVersion);
 
+  // Check if the user explicitly set search params
+  const hasExplicitParams = searchParams.has("os") || searchParams.has("cpu");
+
   return (
     <>
       <DownloadConfigurator
         links={clientDownloads}
         initialSelection={selection}
+        hasExplicitParams={hasExplicitParams}
       />
       <DownloadTip selection={selection} />
     </>
@@ -51,16 +150,38 @@ export function DownloadSelectionComponent({
 function DownloadConfigurator(props: {
   links: DownloadLinkMap;
   initialSelection: DownloadSelection;
+  hasExplicitParams: boolean;
 }) {
   const [{ os, cpu }, setSelection] = useQueryStates(downloadSearchParams, {
     history: "replace",
     shallow: false,
   });
   const [isHydrated, setIsHydrated] = useState(false);
+  const [hasAppliedOsDetection, setHasAppliedOsDetection] = useState(false);
 
+  // Apply OS and CPU detection on initial hydration if no explicit params were provided
   useEffect(() => {
+    if (!hasAppliedOsDetection && !props.hasExplicitParams) {
+      const detectedOs = detectBrowserOS();
+      const detectedCpu = detectBrowserCPU();
+
+      if (detectedOs) {
+        setSelection({
+          os: detectedOs,
+          // Use detected CPU if available, otherwise fall back to OS preference
+          cpu: detectedCpu ?? PREFERRED_CPU_BY_OS[detectedOs],
+        });
+      } else if (detectedCpu) {
+        // If we only detected CPU but not OS, just update CPU
+        setSelection((prev) => ({
+          ...prev,
+          cpu: detectedCpu,
+        }));
+      }
+      setHasAppliedOsDetection(true);
+    }
     setIsHydrated(true);
-  }, []);
+  }, [hasAppliedOsDetection, props.hasExplicitParams, setSelection]);
 
   const selection = isHydrated ? { os, cpu } : props.initialSelection;
 
