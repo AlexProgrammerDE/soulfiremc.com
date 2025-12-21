@@ -40,7 +40,7 @@ Next you can download the latest dedicated server `.jar` binary from the [downlo
 and run it with the following command:
 
 ```bash
-java -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysActAsServerClassMachine -XX:+UseNUMA -XX:+UseFastUnorderedTimeStamps -XX:+UseVectorCmov -XX:+UseCriticalJavaThreadPriority -Dsf.flags.v1=true -jar SoulFireDedicated.jar
+java -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+UseCompactObjectHeaders -XX:+AlwaysActAsServerClassMachine -XX:+UseNUMA -XX:+UseFastUnorderedTimeStamps -XX:+UseVectorCmov -XX:+UseCriticalJavaThreadPriority -Dsf.flags.v2=true -jar SoulFireDedicated.jar
 ```
 
 Make sure to replace `$RAM` with the amount of ram you want to allocate to the server.
@@ -61,7 +61,7 @@ You can specify these options by passing them as system properties to the JVM.
 For example, run the server via:
 
 ```bash
-java -Dsf.grpc.port=12345 -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+ZGenerational -XX:+AlwaysActAsServerClassMachine -XX:+UseNUMA -XX:+UseFastUnorderedTimeStamps -XX:+UseVectorCmov -XX:+UseCriticalJavaThreadPriority -Dsf.flags.v1=true -jar SoulFireDedicated.jar
+java -Dsf.grpc.port=12345 -Xmx$RAM -XX:+EnableDynamicAgentLoading -XX:+UnlockExperimentalVMOptions -XX:+UseZGC -XX:+UseCompactObjectHeaders -XX:+AlwaysActAsServerClassMachine -XX:+UseNUMA -XX:+UseFastUnorderedTimeStamps -XX:+UseVectorCmov -XX:+UseCriticalJavaThreadPriority -Dsf.flags.v2=true -jar SoulFireDedicated.jar
 ```
 
 ## Terminal flags
