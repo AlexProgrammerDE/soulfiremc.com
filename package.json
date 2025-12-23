@@ -16,7 +16,7 @@
   "author": "AlexProgrammerDE",
   "license": "ISC",
   "dependencies": {
-    "@ai-sdk/groq": "^2.0.11",
+    "@ai-sdk/groq": "^3.0.0",
     "@ai-sdk/openai-compatible": "^1.0.10",
     "@ai-sdk/react": "^2.0.18",
     "@icons-pack/react-simple-icons": "^13.7.0",
