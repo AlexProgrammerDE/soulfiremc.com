@@ -200,7 +200,7 @@ const PROVIDERS: Provider[] = [
     name: "NetNut",
     testimonial:
       "85M+ residential IPs with ISP-based network for fast speeds. Direct ISP connectivity reduces latency.",
-    url: "https://netnut.io",
+    url: "https://netnut.io?ref=odblmzc",
     badges: ["high-quality", "residential", "isp"],
   },
   {
