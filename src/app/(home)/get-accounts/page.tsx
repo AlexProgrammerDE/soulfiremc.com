@@ -1,7 +1,9 @@
-import { BookOpen, ExternalLink, Info } from "lucide-react";
-import type { Metadata } from "next";
+"use client";
+
+import { BookOpen, ExternalLink, Filter, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -16,13 +18,15 @@ type Badge =
   | "lifetime-warranty"
   | "bulk-discount";
 
+type Category = "high-quality-alts" | "mfa-accounts";
+
 type Provider = {
   name: string;
   logo?: string;
   testimonial: string;
   url: string;
   badges: Badge[];
-  category: "high-quality-alts" | "mfa-accounts";
+  category: Category;
   price: string;
 };
 
@@ -53,6 +57,17 @@ const BADGE_CONFIG: Record<
     className: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
     description:
       "Significant discounts available when purchasing accounts in bulk quantities.",
+  },
+};
+
+const CATEGORY_CONFIG: Record<Category, { label: string; description: string }> = {
+  "high-quality-alts": {
+    label: "High Quality Alts",
+    description: "Cookie and token accounts - temporary but affordable",
+  },
+  "mfa-accounts": {
+    label: "MFA Accounts",
+    description: "Full access permanent accounts you own forever",
   },
 };
 
@@ -133,11 +148,14 @@ const PROVIDERS: Provider[] = [
   },
 ];
 
-export const metadata: Metadata = {
-  title: "Get Minecraft Accounts",
-  description:
-    "Find reliable Minecraft account providers for stress testing with SoulFire.",
-};
+const FILTER_BADGES: Badge[] = [
+  "high-quality",
+  "instant-delivery",
+  "lifetime-warranty",
+  "bulk-discount",
+];
+
+const FILTER_CATEGORIES: Category[] = ["high-quality-alts", "mfa-accounts"];
 
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -214,10 +232,44 @@ function ProviderCard({ provider }: { provider: Provider }) {
 }
 
 export default function GetAccountsPage() {
-  const highQualityProviders = PROVIDERS.filter(
+  const [activeFilters, setActiveFilters] = useState<Badge[]>([]);
+  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+
+  const toggleFilter = (badge: Badge) => {
+    setActiveFilters((prev) =>
+      prev.includes(badge)
+        ? prev.filter((b) => b !== badge)
+        : [...prev, badge]
+    );
+  };
+
+  const toggleCategory = (category: Category) => {
+    setActiveCategory((prev) => (prev === category ? null : category));
+  };
+
+  const clearFilters = () => {
+    setActiveFilters([]);
+    setActiveCategory(null);
+  };
+
+  const filteredProviders = useMemo(() => {
+    return PROVIDERS.filter((provider) => {
+      const matchesCategory = activeCategory
+        ? provider.category === activeCategory
+        : true;
+      const matchesBadges =
+        activeFilters.length === 0 ||
+        activeFilters.every((filter) => provider.badges.includes(filter));
+      return matchesCategory && matchesBadges;
+    });
+  }, [activeFilters, activeCategory]);
+
+  const highQualityProviders = filteredProviders.filter(
     (p) => p.category === "high-quality-alts"
   );
-  const mfaProviders = PROVIDERS.filter((p) => p.category === "mfa-accounts");
+  const mfaProviders = filteredProviders.filter((p) => p.category === "mfa-accounts");
+
+  const hasActiveFilters = activeFilters.length > 0 || activeCategory !== null;
 
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
@@ -242,35 +294,115 @@ export default function GetAccountsPage() {
         </p>
       </div>
 
-      {/* High Quality Alts Section */}
+      {/* Filter Section */}
       <div className="max-w-3xl mx-auto w-full space-y-4">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold">High Quality Alts</h2>
-          <p className="text-sm text-muted-foreground">
-            Cookie and token accounts - temporary but affordable. Prices shown are per account.
-          </p>
+        <div className="flex items-center gap-2 mb-3">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">Filters:</span>
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
-        <div className="flex flex-col gap-4">
-          {highQualityProviders.map((provider) => (
-            <ProviderCard key={provider.name} provider={provider} />
-          ))}
+
+        {/* Category Filter */}
+        <div className="space-y-2">
+          <span className="text-xs text-muted-foreground">Category:</span>
+          <div className="flex flex-wrap gap-2">
+            {FILTER_CATEGORIES.map((category) => {
+              const config = CATEGORY_CONFIG[category];
+              const isActive = activeCategory === category;
+              return (
+                <button
+                  key={category}
+                  onClick={() => toggleCategory(category)}
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                    isActive
+                      ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {config.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Badge Filter */}
+        <div className="space-y-2">
+          <span className="text-xs text-muted-foreground">Features:</span>
+          <div className="flex flex-wrap gap-2">
+            {FILTER_BADGES.map((badge) => {
+              const config = BADGE_CONFIG[badge];
+              const isActive = activeFilters.includes(badge);
+              return (
+                <button
+                  key={badge}
+                  onClick={() => toggleFilter(badge)}
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                    isActive
+                      ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {config.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* MFA Accounts Section */}
-      <div className="max-w-3xl mx-auto w-full space-y-4">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold">MFA Accounts (Permanent)</h2>
-          <p className="text-sm text-muted-foreground">
-            Full access accounts you own forever. Change email, password, and username as you want.
-          </p>
+      {filteredProviders.length === 0 ? (
+        <div className="max-w-3xl mx-auto w-full">
+          <Card className="p-8 text-center">
+            <p className="text-muted-foreground">
+              No providers match the selected filters. Try removing some filters.
+            </p>
+          </Card>
         </div>
-        <div className="flex flex-col gap-4">
-          {mfaProviders.map((provider) => (
-            <ProviderCard key={provider.name} provider={provider} />
-          ))}
-        </div>
-      </div>
+      ) : (
+        <>
+          {/* High Quality Alts Section */}
+          {highQualityProviders.length > 0 && (
+            <div className="max-w-3xl mx-auto w-full space-y-4">
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold">High Quality Alts</h2>
+                <p className="text-sm text-muted-foreground">
+                  Cookie and token accounts - temporary but affordable. Prices shown are per account.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
+                {highQualityProviders.map((provider) => (
+                  <ProviderCard key={provider.name} provider={provider} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* MFA Accounts Section */}
+          {mfaProviders.length > 0 && (
+            <div className="max-w-3xl mx-auto w-full space-y-4">
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold">MFA Accounts (Permanent)</h2>
+                <p className="text-sm text-muted-foreground">
+                  Full access accounts you own forever. Change email, password, and username as you want.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
+                {mfaProviders.map((provider) => (
+                  <ProviderCard key={provider.name} provider={provider} />
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
       <div className="border-t pt-6 max-w-3xl mx-auto text-center space-y-2">
         <p className="text-sm text-muted-foreground">
