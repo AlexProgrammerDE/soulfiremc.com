@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Check } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 
 export function CouponCode({
@@ -29,6 +29,7 @@ export function CouponCode({
         </p>
       </div>
       <button
+        type="button"
         onClick={handleCopy}
         className="rounded-md p-2 hover:bg-pink-500/10 transition-colors"
         aria-label="Copy coupon code"
