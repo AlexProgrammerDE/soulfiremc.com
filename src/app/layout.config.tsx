@@ -16,6 +16,14 @@ export const baseOptions: BaseLayoutProps = {
   githubUrl: "https://github.com/AlexProgrammerDE/SoulFire",
   links: [
     {
+      text: "Get Accounts",
+      url: "/get-accounts",
+    },
+    {
+      text: "Get Proxies",
+      url: "/get-proxies",
+    },
+    {
       type: "icon",
       icon: <SiDiscord />,
       text: "Discord",
