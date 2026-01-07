@@ -1,4 +1,4 @@
-import { ExternalLink, BookOpen, Info } from "lucide-react";
+import { BookOpen, ExternalLink, Info } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-type Badge = "high-quality" | "instant-delivery" | "lifetime-warranty" | "bulk-discount";
+type Badge =
+  | "high-quality"
+  | "instant-delivery"
+  | "lifetime-warranty"
+  | "bulk-discount";
 
 type Provider = {
   name: string;
@@ -108,7 +112,10 @@ export default function GetAccountsPage() {
         <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
           <BookOpen className="h-4 w-4" />
           For more information on how to use accounts with SoulFire, read the{" "}
-          <Link href="/docs/usage/accounts" className="underline hover:text-foreground">
+          <Link
+            href="/docs/usage/accounts"
+            className="underline hover:text-foreground"
+          >
             Account Guide
           </Link>
           .
