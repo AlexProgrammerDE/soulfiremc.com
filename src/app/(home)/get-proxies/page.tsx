@@ -172,7 +172,7 @@ const PROVIDERS: Provider[] = [
     name: "PlainProxies",
     testimonial:
       "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
-    url: "https://plainproxies.com",
+    url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
     badges: ["unlimited-bandwidth", "residential", "datacenter", "isp"],
   },
   {
