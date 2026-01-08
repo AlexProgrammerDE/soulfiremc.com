@@ -121,8 +121,14 @@ const PROVIDERS: Provider[] = [
     logo: "/providers/brightdata.png",
     testimonial:
       "Market leader with 770K+ datacenter IPs and massive residential network. ISO 27001 & SOC 2 certified with 99.99% uptime.",
-    url: "https://brightdata.com",
-    badges: ["enterprise", "high-quality", "residential", "datacenter", "mobile"],
+    url: "https://get.brightdata.com/soulfire",
+    badges: [
+      "enterprise",
+      "high-quality",
+      "residential",
+      "datacenter",
+      "mobile",
+    ],
   },
   {
     name: "Oxylabs",
