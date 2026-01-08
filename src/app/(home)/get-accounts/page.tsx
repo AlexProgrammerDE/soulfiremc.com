@@ -165,7 +165,7 @@ const FILTER_BADGES: Badge[] = [
   "bulk-discount",
 ];
 
-const FILTER_CATEGORIES: Category[] = ["high-quality-alts", "mfa-accounts"];
+const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "high-quality-alts"];
 
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -378,24 +378,6 @@ export default function GetAccountsPage() {
         </div>
       ) : (
         <>
-          {/* High Quality Alts Section */}
-          {highQualityProviders.length > 0 && (
-            <div className="max-w-3xl mx-auto w-full space-y-4">
-              <div className="space-y-1">
-                <h2 className="text-2xl font-semibold">High Quality Alts</h2>
-                <p className="text-sm text-muted-foreground">
-                  Cookie and token accounts - temporary but affordable. Prices
-                  shown are per account.
-                </p>
-              </div>
-              <div className="flex flex-col gap-4">
-                {highQualityProviders.map((provider) => (
-                  <ProviderCard key={provider.name} provider={provider} />
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* MFA Accounts Section */}
           {mfaProviders.length > 0 && (
             <div className="max-w-3xl mx-auto w-full space-y-4">
@@ -410,6 +392,30 @@ export default function GetAccountsPage() {
               </div>
               <div className="flex flex-col gap-4">
                 {mfaProviders.map((provider) => (
+                  <ProviderCard key={provider.name} provider={provider} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* High Quality Alts Section */}
+          {highQualityProviders.length > 0 && (
+            <div className="max-w-3xl mx-auto w-full space-y-4">
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold">
+                  Token/Cookie Accounts (Temporary)
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Temporary accounts - affordable but limited lifespan. Prices
+                  shown are per account.
+                </p>
+                <p className="text-sm text-yellow-600 dark:text-yellow-500">
+                  <strong>Note:</strong> SoulFire does not currently support
+                  token/cookie accounts. Only MFA accounts are supported.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
+                {highQualityProviders.map((provider) => (
                   <ProviderCard key={provider.name} provider={provider} />
                 ))}
               </div>
