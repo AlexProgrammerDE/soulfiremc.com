@@ -144,7 +144,7 @@ const PROVIDERS: Provider[] = [
     logo: "/providers/decodo.svg",
     testimonial:
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
-    url: "https://smartproxy.com",
+    url: "https://visit.decodo.com/K0rr7e",
     badges: ["high-quality", "residential", "datacenter"],
   },
   {
