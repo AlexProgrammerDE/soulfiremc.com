@@ -118,6 +118,7 @@ const PROVIDERS: Provider[] = [
   // Enterprise tier
   {
     name: "Bright Data",
+    logo: "/providers/brightdata.png",
     testimonial:
       "Market leader with 770K+ datacenter IPs and massive residential network. ISO 27001 & SOC 2 certified with 99.99% uptime.",
     url: "https://brightdata.com",
@@ -125,6 +126,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Oxylabs",
+    logo: "/providers/oxylabs.png",
     testimonial:
       "175M+ residential IPs across 195+ countries. Largest proxy network globally with 99.95% success rate and 0.6s avg response time.",
     url: "https://oxylabs.io",
@@ -133,6 +135,7 @@ const PROVIDERS: Provider[] = [
   // Mid tier
   {
     name: "Decodo (Smartproxy)",
+    logo: "/providers/decodo.svg",
     testimonial:
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
     url: "https://smartproxy.com",
@@ -140,6 +143,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "SOAX",
+    logo: "/providers/soax.svg",
     testimonial:
       "155M+ IPs in 195 countries with 99.95% success rate and 0.55s response time. Strong geo-targeting capabilities.",
     url: "https://soax.com",
@@ -163,6 +167,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "IPRoyal",
+    logo: "/providers/iproyal.svg",
     testimonial:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
     url: "https://iproyal.com",
@@ -170,6 +175,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "PlainProxies",
+    logo: "/providers/plainproxies.png",
     testimonial:
       "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
     url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
@@ -177,6 +183,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Rayobyte",
+    logo: "/providers/rayobyte.svg",
     testimonial:
       "300K+ dedicated datacenter IPs with unlimited threads, traffic, and domains. Reliable option for high-volume scraping.",
     url: "https://rayobyte.com",
@@ -184,6 +191,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Nimble",
+    logo: "/providers/nimble.svg",
     testimonial:
       "AI-optimized residential proxies with built-in scraping API. Intelligent IP selection minimizes detection and blocks.",
     url: "https://nimbleway.com",
@@ -191,6 +199,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Storm Proxies",
+    logo: "/providers/stormproxies.png",
     testimonial:
       "Affordable rotating residential and datacenter proxies with unlimited bandwidth. Simple pricing for small-scale projects.",
     url: "https://stormproxies.com",
@@ -198,6 +207,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "NetNut",
+    logo: "/providers/netnut.svg",
     testimonial:
       "85M+ residential IPs with ISP-based network for fast speeds. Direct ISP connectivity reduces latency.",
     url: "https://netnut.io?ref=odblmzc",
@@ -205,6 +215,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Proxy-Seller",
+    logo: "/providers/proxyseller.svg",
     testimonial:
       "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
     url: "https://proxy-seller.com",
