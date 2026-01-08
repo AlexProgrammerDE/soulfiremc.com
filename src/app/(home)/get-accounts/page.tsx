@@ -75,6 +75,7 @@ const PROVIDERS: Provider[] = [
   // High Quality Account Shops (ranked by value)
   {
     name: "Nicealts",
+    logo: "/accounts/nicealts.png",
     testimonial:
       "Best value for high quality accounts. Offers both temporary tokens/cookies and permanent MFA accounts with responsive support.",
     url: "https://discord.gg/nicealts",
@@ -84,6 +85,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "ZZXGP",
+    logo: "/accounts/zzxgp.png",
     testimonial:
       "Versatile shop offering multiple tiers from budget to premium. Known for reliable cookie/token accounts and competitive MFA pricing.",
     url: "https://discord.gg/gycmTvrfnj",
@@ -93,6 +95,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "YYY",
+    logo: "/accounts/yyy.png",
     testimonial:
       "High quality cookie and token accounts at competitive prices. Reliable delivery through their dedicated platform.",
     url: "https://yyy.watchdog.gay",
@@ -111,6 +114,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Localts",
+    logo: "/accounts/luma.png",
     testimonial:
       "Premium tier accounts with emphasis on quality over quantity. Higher price point but accounts known to last longer.",
     url: "https://discord.gg/B4xkxHwmd4",
@@ -121,6 +125,7 @@ const PROVIDERS: Provider[] = [
   // MFA (Permanent Full Access) Accounts
   {
     name: "Aqua MFA",
+    logo: "/accounts/aquamfa.png",
     testimonial:
       "Best value for permanent full access accounts. Change all account info as you want - it's truly yours.",
     url: "https://discord.gg/87XFhsS35V",
@@ -130,6 +135,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Luma MFA",
+    logo: "/accounts/luma.png",
     testimonial:
       "Permanent Minecraft accounts with full access. Reliable option for mains or long-term alts.",
     url: "https://discord.gg/B4xkxHwmd4",
@@ -139,6 +145,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Yolk",
+    logo: "/accounts/yolk.png",
     testimonial:
       "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
     url: "https://discord.gg/Ceheh2VNdh",
