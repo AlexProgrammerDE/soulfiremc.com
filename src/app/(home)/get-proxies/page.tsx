@@ -176,7 +176,7 @@ const PROVIDERS: Provider[] = [
     logo: "/providers/iproyal.svg",
     testimonial:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
-    url: "https://iproyal.com",
+    url: "https://iproyal.com/?r=soulfire",
     badges: ["budget-friendly", "residential", "datacenter", "isp"],
   },
   {
@@ -229,7 +229,7 @@ const PROVIDERS: Provider[] = [
     logo: "/providers/proxyseller.svg",
     testimonial:
       "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
-    url: "https://proxy-seller.com",
+    url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
     badges: ["budget-friendly", "datacenter"],
   },
 ];
