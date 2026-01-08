@@ -135,12 +135,12 @@ const PROVIDERS: Provider[] = [
     logo: "/providers/oxylabs.png",
     testimonial:
       "175M+ residential IPs across 195+ countries. Largest proxy network globally with 99.95% success rate and 0.6s avg response time.",
-    url: "https://oxylabs.io",
+    url: "https://oxylabs.go2cloud.org/aff_c?offer_id=7&aff_id=1896&url_id=144",
     badges: ["enterprise", "high-quality", "residential", "datacenter"],
   },
   // Mid tier
   {
-    name: "Decodo (Smartproxy)",
+    name: "Decodo (formerly Smartproxy)",
     logo: "/providers/decodo.svg",
     testimonial:
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
@@ -194,14 +194,6 @@ const PROVIDERS: Provider[] = [
       "300K+ dedicated datacenter IPs with unlimited threads, traffic, and domains. Reliable option for high-volume scraping.",
     url: "https://rayobyte.com",
     badges: ["datacenter", "unlimited-bandwidth"],
-  },
-  {
-    name: "Nimble",
-    logo: "/providers/nimble.svg",
-    testimonial:
-      "AI-optimized residential proxies with built-in scraping API. Intelligent IP selection minimizes detection and blocks.",
-    url: "https://nimbleway.com",
-    badges: ["high-quality", "residential", "enterprise"],
   },
   {
     name: "Storm Proxies",
