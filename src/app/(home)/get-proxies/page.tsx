@@ -3,7 +3,7 @@
 import { BookOpen, ExternalLink, Filter, Heart, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -209,7 +209,12 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Affordable rotating residential and datacenter proxies with unlimited bandwidth. Simple pricing for small-scale projects.",
     url: "https://stormproxies.com",
-    badges: ["budget-friendly", "unlimited-bandwidth", "residential", "datacenter"],
+    badges: [
+      "budget-friendly",
+      "unlimited-bandwidth",
+      "residential",
+      "datacenter",
+    ],
   },
   {
     name: "NetNut",
@@ -285,9 +290,7 @@ export default function GetProxiesPage() {
 
   const toggleFilter = (badge: Badge) => {
     setActiveFilters((prev) =>
-      prev.includes(badge)
-        ? prev.filter((b) => b !== badge)
-        : [...prev, badge]
+      prev.includes(badge) ? prev.filter((b) => b !== badge) : [...prev, badge],
     );
   };
 
@@ -300,7 +303,7 @@ export default function GetProxiesPage() {
       activeFilters.length === 0
         ? nonSponsors
         : nonSponsors.filter((provider) =>
-            activeFilters.every((filter) => provider.badges.includes(filter))
+            activeFilters.every((filter) => provider.badges.includes(filter)),
           );
 
     return sponsor ? [sponsor, ...filtered] : filtered;
@@ -336,6 +339,7 @@ export default function GetProxiesPage() {
           <span className="text-sm font-medium">Filter by type:</span>
           {activeFilters.length > 0 && (
             <button
+              type="button"
               onClick={() => setActiveFilters([])}
               className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
             >
@@ -349,6 +353,7 @@ export default function GetProxiesPage() {
             const isActive = activeFilters.includes(badge);
             return (
               <button
+                type="button"
                 key={badge}
                 onClick={() => toggleFilter(badge)}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
@@ -368,7 +373,8 @@ export default function GetProxiesPage() {
         {filteredProviders.length === 0 ? (
           <Card className="p-8 text-center">
             <p className="text-muted-foreground">
-              No providers match the selected filters. Try removing some filters.
+              No providers match the selected filters. Try removing some
+              filters.
             </p>
           </Card>
         ) : (
@@ -394,7 +400,9 @@ export default function GetProxiesPage() {
                       ))}
                     </div>
                   </div>
-                  <p className="text-muted-foreground">{provider.testimonial}</p>
+                  <p className="text-muted-foreground">
+                    {provider.testimonial}
+                  </p>
                   {provider.couponCode && (
                     <CouponCode
                       code={provider.couponCode}

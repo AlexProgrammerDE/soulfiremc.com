@@ -3,7 +3,7 @@
 import { BookOpen, ExternalLink, Filter, Info } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -60,7 +60,10 @@ const BADGE_CONFIG: Record<
   },
 };
 
-const CATEGORY_CONFIG: Record<Category, { label: string; description: string }> = {
+const CATEGORY_CONFIG: Record<
+  Category,
+  { label: string; description: string }
+> = {
   "high-quality-alts": {
     label: "High Quality Alts",
     description: "Cookie and token accounts - temporary but affordable",
@@ -223,11 +226,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
           </div>
           <p className="text-muted-foreground">{provider.testimonial}</p>
           <Button asChild>
-            <a
-              href={provider.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={provider.url} target="_blank" rel="noopener noreferrer">
               Get Accounts
               <ExternalLink className="ml-2 h-4 w-4" />
             </a>
@@ -244,9 +243,7 @@ export default function GetAccountsPage() {
 
   const toggleFilter = (badge: Badge) => {
     setActiveFilters((prev) =>
-      prev.includes(badge)
-        ? prev.filter((b) => b !== badge)
-        : [...prev, badge]
+      prev.includes(badge) ? prev.filter((b) => b !== badge) : [...prev, badge],
     );
   };
 
@@ -272,9 +269,11 @@ export default function GetAccountsPage() {
   }, [activeFilters, activeCategory]);
 
   const highQualityProviders = filteredProviders.filter(
-    (p) => p.category === "high-quality-alts"
+    (p) => p.category === "high-quality-alts",
   );
-  const mfaProviders = filteredProviders.filter((p) => p.category === "mfa-accounts");
+  const mfaProviders = filteredProviders.filter(
+    (p) => p.category === "mfa-accounts",
+  );
 
   const hasActiveFilters = activeFilters.length > 0 || activeCategory !== null;
 
@@ -308,6 +307,7 @@ export default function GetAccountsPage() {
           <span className="text-sm font-medium">Filters:</span>
           {hasActiveFilters && (
             <button
+              type="button"
               onClick={clearFilters}
               className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
             >
@@ -325,6 +325,7 @@ export default function GetAccountsPage() {
               const isActive = activeCategory === category;
               return (
                 <button
+                  type="button"
                   key={category}
                   onClick={() => toggleCategory(category)}
                   className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
@@ -349,6 +350,7 @@ export default function GetAccountsPage() {
               const isActive = activeFilters.includes(badge);
               return (
                 <button
+                  type="button"
                   key={badge}
                   onClick={() => toggleFilter(badge)}
                   className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
@@ -369,7 +371,8 @@ export default function GetAccountsPage() {
         <div className="max-w-3xl mx-auto w-full">
           <Card className="p-8 text-center">
             <p className="text-muted-foreground">
-              No providers match the selected filters. Try removing some filters.
+              No providers match the selected filters. Try removing some
+              filters.
             </p>
           </Card>
         </div>
@@ -381,7 +384,8 @@ export default function GetAccountsPage() {
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold">High Quality Alts</h2>
                 <p className="text-sm text-muted-foreground">
-                  Cookie and token accounts - temporary but affordable. Prices shown are per account.
+                  Cookie and token accounts - temporary but affordable. Prices
+                  shown are per account.
                 </p>
               </div>
               <div className="flex flex-col gap-4">
@@ -396,9 +400,12 @@ export default function GetAccountsPage() {
           {mfaProviders.length > 0 && (
             <div className="max-w-3xl mx-auto w-full space-y-4">
               <div className="space-y-1">
-                <h2 className="text-2xl font-semibold">MFA Accounts (Permanent)</h2>
+                <h2 className="text-2xl font-semibold">
+                  MFA Accounts (Permanent)
+                </h2>
                 <p className="text-sm text-muted-foreground">
-                  Full access accounts you own forever. Change email, password, and username as you want.
+                  Full access accounts you own forever. Change email, password,
+                  and username as you want.
                 </p>
               </div>
               <div className="flex flex-col gap-4">
@@ -425,8 +432,8 @@ export default function GetAccountsPage() {
           . Rankings based on community feedback and value.
         </p>
         <p className="text-sm text-muted-foreground">
-          <strong>Disclaimer:</strong> We are not affiliated with any of these providers.
-          Always do your own research before making purchases.
+          <strong>Disclaimer:</strong> We are not affiliated with any of these
+          providers. Always do your own research before making purchases.
         </p>
       </div>
     </main>
