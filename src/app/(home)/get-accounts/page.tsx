@@ -134,7 +134,7 @@ const PROVIDERS: Provider[] = [
     url: "https://discord.gg/87XFhsS35V",
     badges: ["high-quality", "lifetime-warranty"],
     category: "mfa-accounts",
-    price: "$4",
+    price: "$4-$5.5",
   },
   {
     name: "Luma MFA",
