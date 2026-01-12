@@ -115,6 +115,32 @@ const PROVIDERS: Provider[] = [
     couponCode: "THORDATA",
     couponDiscount: "20% off",
   },
+  // Higher recommends
+  {
+    name: "Webshare",
+    logo: "/providers/webshare.svg",
+    testimonial:
+      "80M+ rotating residential IPs from 195 countries, plus fast datacenter proxies. Offers 10 free proxies to get started.",
+    url: "https://www.webshare.io/?referral_code=36gneippfiwt",
+    badges: ["free-tier", "residential", "datacenter", "budget-friendly"],
+  },
+  {
+    name: "ProxyScrape",
+    logo: "/providers/proxyscrape.svg",
+    testimonial:
+      "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume stress testing.",
+    url: "https://proxyscrape.com/?ref=mge4mtc",
+    badges: ["unlimited-bandwidth", "residential"],
+  },
+  // User recommendation
+  {
+    name: "PlainProxies",
+    logo: "/providers/plainproxies.png",
+    testimonial:
+      "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
+    url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
+    badges: ["unlimited-bandwidth", "residential", "datacenter", "isp"],
+  },
   // Enterprise tier
   {
     name: "Bright Data",
@@ -156,36 +182,12 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "residential", "mobile"],
   },
   {
-    name: "Webshare",
-    logo: "/providers/webshare.svg",
-    testimonial:
-      "80M+ rotating residential IPs from 195 countries, plus fast datacenter proxies. Offers 10 free proxies to get started.",
-    url: "https://www.webshare.io/?referral_code=36gneippfiwt",
-    badges: ["free-tier", "residential", "datacenter", "budget-friendly"],
-  },
-  {
-    name: "ProxyScrape",
-    logo: "/providers/proxyscrape.svg",
-    testimonial:
-      "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume stress testing.",
-    url: "https://proxyscrape.com/?ref=mge4mtc",
-    badges: ["unlimited-bandwidth", "residential"],
-  },
-  {
     name: "IPRoyal",
     logo: "/providers/iproyal.svg",
     testimonial:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
     url: "https://iproyal.com/?r=soulfire",
     badges: ["budget-friendly", "residential", "datacenter", "isp"],
-  },
-  {
-    name: "PlainProxies",
-    logo: "/providers/plainproxies.png",
-    testimonial:
-      "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
-    url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
-    badges: ["unlimited-bandwidth", "residential", "datacenter", "isp"],
   },
   {
     name: "Rayobyte",
