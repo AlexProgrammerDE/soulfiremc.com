@@ -19,6 +19,14 @@ export default function Layout({ children }: { children: ReactNode }) {
           url: "/download",
           on: "nav",
         },
+        {
+          text: "Get Accounts",
+          url: "/get-accounts",
+        },
+        {
+          text: "Get Proxies",
+          url: "/get-proxies",
+        },
         ...(baseOptions.links || []),
       ]}
     >
