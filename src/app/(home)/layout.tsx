@@ -14,18 +14,19 @@ export default function Layout({ children }: { children: ReactNode }) {
           description: "Learn how to use SoulFire",
         },
         {
-          type: "main",
           text: "Downloads",
           url: "/download",
-          on: "nav",
+          description: "Download SoulFire",
         },
         {
           text: "Get Accounts",
           url: "/get-accounts",
+          description: "Get Accounts for SoulFire",
         },
         {
           text: "Get Proxies",
           url: "/get-proxies",
+          description: "Get Proxies for SoulFire",
         },
         ...(baseOptions.links || []),
       ]}
