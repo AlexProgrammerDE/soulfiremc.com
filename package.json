@@ -58,7 +58,7 @@
     "@biomejs/biome": "2.3.11",
     "@octokit/openapi-types": "^27.0.0",
     "@tailwindcss/postcss": "4.1.18",
-    "@types/node": "24.10.8",
+    "@types/node": "24.10.9",
     "@types/react": "19.2.8",
     "babel-plugin-react-compiler": "^1.0.0",
     "postcss": "^8.4.35",
