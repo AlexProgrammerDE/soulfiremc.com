@@ -255,7 +255,11 @@ const FILTER_BADGES: Badge[] = [
   "bulk-discount",
 ];
 
-const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "high-quality-alts", "low-quality-alts"];
+const FILTER_CATEGORIES: Category[] = [
+  "mfa-accounts",
+  "high-quality-alts",
+  "low-quality-alts",
+];
 
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -499,8 +503,8 @@ export default function GetAccountsPage() {
                   High Quality Token/Cookie Accounts (Temporary)
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Exclusive temporary accounts - only you get them, lasting longer with fewer issues.
-                  Prices shown are per account.
+                  Exclusive temporary accounts - only you get them, lasting
+                  longer with fewer issues. Prices shown are per account.
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-500">
                   <strong>Note:</strong> SoulFire does not currently support
@@ -524,7 +528,8 @@ export default function GetAccountsPage() {
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   Budget token accounts - often sold by multiple shops at once.
-                  May get logged from another location or banned by someone else. Cheaper but with drawbacks.
+                  May get logged from another location or banned by someone
+                  else. Cheaper but with drawbacks.
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-500">
                   <strong>Note:</strong> SoulFire does not currently support
