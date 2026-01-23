@@ -116,26 +116,21 @@ export function TerminalAnimation() {
   const commands = [
     {
       type: "command",
-      text: "java -jar SoulFireCLI.jar --address mc.server.com --amount 100",
+      text: "java -jar SoulFireCLI.jar --address mc.server.com --amount 100 --start",
     },
     { type: "output", text: "◇ Connecting to mc.server.com:25565" },
     { type: "output", text: "│ Connected!" },
-    { type: "output", text: "│" },
     { type: "output", text: "◇ Starting 100 bots..." },
-    { type: "output", text: "│ Bot_001 joined the server" },
-    { type: "output", text: "│ Bot_002 joined the server" },
+    { type: "output", text: "│ Bot_1 joined the server" },
+    { type: "output", text: "│ Bot_2 joined the server" },
     { type: "output", text: "│ ..." },
     { type: "output", text: "│ Bot_100 joined the server" },
     { type: "prompt", text: "" },
     { type: "command", text: "online" },
     { type: "output", text: "│ 100 bots connected" },
-    { type: "output", text: "│ └ mc.server.com:25565" },
     { type: "prompt", text: "" },
     { type: "command", text: "move 578 65 100" },
     { type: "output", text: "◆ Moving all bots to coordinates..." },
-    { type: "prompt", text: "" },
-    { type: "command", text: "session start" },
-    { type: "output", text: "◆ Session started!" },
   ];
 
   // Calculate timing for each step
@@ -229,7 +224,7 @@ export function TerminalAnimation() {
             <div className="size-3 rounded-full bg-green-500/80" />
           </div>
         </div>
-        <div className="min-h-[280px] p-4 font-mono text-xs sm:text-sm">
+        <div className="h-[320px] p-4 font-mono text-xs sm:text-sm">
           <code className="grid gap-1">{lines}</code>
         </div>
       </pre>
