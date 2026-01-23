@@ -323,9 +323,9 @@ export default function GetProxiesPage() {
           High-quality proxies help distribute your load tests and avoid rate
           limits. Here are trusted providers we recommend.
         </p>
-        <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-          <BookOpen className="h-4 w-4" />
-          For more information on how to use proxies with SoulFire, read the{" "}
+        <p className="text-sm text-muted-foreground">
+          <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more
+          information on how to use proxies with SoulFire, read the{" "}
           <Link
             href="/docs/usage/proxies"
             className="underline hover:text-foreground"

@@ -384,9 +384,9 @@ export default function GetAccountsPage() {
           SoulFire works best with quality Minecraft accounts. Here are trusted
           providers we recommend for stress testing.
         </p>
-        <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-          <BookOpen className="h-4 w-4" />
-          For more information on how to use accounts with SoulFire, read the{" "}
+        <p className="text-sm text-muted-foreground">
+          <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more
+          information on how to use accounts with SoulFire, read the{" "}
           <Link
             href="/docs/usage/accounts"
             className="underline hover:text-foreground"
