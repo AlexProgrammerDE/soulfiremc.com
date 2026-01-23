@@ -563,6 +563,22 @@ export default function GetAccountsPage() {
           <strong>Disclaimer:</strong> We are not affiliated with any of these
           providers. Always do your own research before making purchases.
         </p>
+        <p className="text-sm text-muted-foreground">
+          Inaccurate information or broken links? Submit a pull request on{" "}
+          <a
+            href="https://github.com/AlexProgrammerDE/soulfiremc.com/edit/main/src/app/(home)/get-accounts/page.tsx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground"
+          >
+            GitHub
+          </a>{" "}
+          or contact us in our{" "}
+          <Link href="/discord" className="underline hover:text-foreground">
+            Discord
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );

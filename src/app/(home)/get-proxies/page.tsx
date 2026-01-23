@@ -430,11 +430,27 @@ export default function GetProxiesPage() {
         )}
       </div>
 
-      <div className="border-t pt-6 max-w-3xl mx-auto text-center">
+      <div className="border-t pt-6 max-w-3xl mx-auto text-center space-y-2">
         <p className="text-sm text-muted-foreground">
           <strong>Disclosure:</strong> This page contains affiliate links. When
           you purchase through these links, we may earn a commission at no extra
           cost to you. These commissions help fund the development of SoulFire.
+        </p>
+        <p className="text-sm text-muted-foreground">
+          Inaccurate information or broken links? Submit a pull request on{" "}
+          <a
+            href="https://github.com/AlexProgrammerDE/soulfiremc.com/edit/main/src/app/(home)/get-proxies/page.tsx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground"
+          >
+            GitHub
+          </a>{" "}
+          or contact us in our{" "}
+          <Link href="/discord" className="underline hover:text-foreground">
+            Discord
+          </Link>
+          .
         </p>
       </div>
     </main>
