@@ -11,11 +11,11 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   metadataBase: new URL("https://soulfiremc.com"),
   title: {
-    default: "SoulFire - Advanced Minecraft Server-Stresser Tool",
+    default: "SoulFire - Advanced Minecraft Bot Tool",
     template: "%s - SoulFire",
   },
   description:
-    "Advanced Minecraft Server-Stresser Tool. Launch bot attacks on your servers to measure performance.",
+    "Advanced Minecraft bot tool for testing, automation, and development. Run bot sessions on your servers.",
   applicationName: "SoulFire",
   generator: "Next.js",
   appleWebApp: {
