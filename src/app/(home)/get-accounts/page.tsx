@@ -212,7 +212,7 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/luma.png",
     testimonial:
       "Permanent Minecraft accounts with full access. Reliable option for mains or long-term alts.",
-    url: "https://discord.gg/B4xkxHwmd4",
+    url: "https://discord.gg/5Wc4tA2ypY",
     badges: ["high-quality", "lifetime-warranty"],
     category: "mfa-accounts",
     price: "$4.50",
