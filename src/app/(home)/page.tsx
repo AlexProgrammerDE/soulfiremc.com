@@ -11,9 +11,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { MagicCard } from "@/components/ui/magic-card";
 import { getRequiredEnv } from "@/lib/env";
 import { HeroBackground, TerminalAnimation } from "./page.client";
@@ -214,8 +214,8 @@ export default function Page() {
               Ready to Get Started?
             </h2>
             <p className="max-w-[700px] text-muted-foreground md:text-lg">
-              Join thousands of users who are already testing and automating their
-              Minecraft servers with SoulFire
+              Join thousands of users who are already testing and automating
+              their Minecraft servers with SoulFire
             </p>
             <div className="mt-6">
               <Link href="/download">

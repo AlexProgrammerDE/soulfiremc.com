@@ -4,7 +4,6 @@ import { TerminalIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import {
-  Fragment,
   type ReactElement,
   type RefObject,
   useEffect,
@@ -158,7 +157,6 @@ export function TerminalAnimation() {
   const totalTicks = getTicksForStep(commands.length - 1) + 30; // Add pause at end
 
   const [tick, setTick] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -171,7 +169,6 @@ export function TerminalAnimation() {
   // Build visible lines based on current tick
   const lines: ReactElement[] = [];
   let currentTick = 0;
-  let commandIndex = 0;
 
   for (let i = 0; i < commands.length; i++) {
     const item = commands[i];
@@ -198,7 +195,6 @@ export function TerminalAnimation() {
       }
 
       currentTick = typingEndTick + 3;
-      commandIndex++;
     } else if (item.type === "output") {
       if (tick >= currentTick) {
         lines.push(
@@ -221,11 +217,7 @@ export function TerminalAnimation() {
   }
 
   return (
-    <div
-      className="relative w-full max-w-4xl mx-auto"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="relative w-full max-w-4xl mx-auto">
       <pre className="overflow-hidden rounded-xl border text-sm shadow-lg bg-card">
         <div className="flex flex-row items-center gap-2 border-b px-4 py-2 bg-muted/50">
           <TerminalIcon className="size-4" />
