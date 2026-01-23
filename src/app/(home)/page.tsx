@@ -2,6 +2,7 @@ import { SiGithub } from "@icons-pack/react-simple-icons";
 import {
   AppWindow,
   ArrowDownToLine,
+  ArrowRight,
   Box,
   CloudDownload,
   Download,
@@ -11,8 +12,11 @@ import {
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { MagicCard } from "@/components/ui/magic-card";
 import { getRequiredEnv } from "@/lib/env";
+import { HeroBackground, TerminalAnimation } from "./page.client";
 
 function FeatureCard(props: {
   title: string;
@@ -20,13 +24,21 @@ function FeatureCard(props: {
   icon: ReactNode;
 }) {
   return (
-    <Card className="flex flex-col items-center text-center p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-      <div className="bg-primary/10 p-3 rounded-full mb-4">{props.icon}</div>
-      <CardTitle className="text-xl mb-2">{props.title}</CardTitle>
-      <CardDescription className="text-base">
-        {props.description}
-      </CardDescription>
-    </Card>
+    <MagicCard
+      className="h-full rounded-xl"
+      gradientColor="#0c4a6e"
+      gradientFrom="#0ea5e9"
+      gradientTo="#3b82f6"
+      gradientOpacity={0.15}
+    >
+      <div className="flex flex-col items-center text-center p-6 h-full">
+        <div className="bg-primary/10 p-3 rounded-full mb-4">{props.icon}</div>
+        <CardTitle className="text-xl mb-2">{props.title}</CardTitle>
+        <CardDescription className="text-base">
+          {props.description}
+        </CardDescription>
+      </div>
+    </MagicCard>
   );
 }
 
@@ -34,53 +46,63 @@ export default function Page() {
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex-1">
       {/* Hero Section */}
-      <section className="py-16 md:py-24">
-        <div className="container px-4 md:px-6">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="space-y-6 text-left">
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
-                SoulFire
-              </p>
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                The most powerful bot tool, undetectable and fast.
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl">
-                Spin up realistic Minecraft traffic in seconds, audit your
-                infrastructure, and learn how SoulFire works by watching the
-                live demo right away.
-              </p>
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <Link href="/download">
-                  <Button size="lg" className="gap-2">
-                    <Download className="h-5 w-5" />
-                    Get SoulFire
-                  </Button>
-                </Link>
-                <a
-                  href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="outline" size="lg" className="gap-2">
-                    <SiGithub className="h-5 w-5" />
-                    GitHub
-                  </Button>
-                </a>
+      <section className="py-4 md:py-8">
+        <div className="relative flex min-h-[600px] border rounded-2xl overflow-hidden bg-background">
+          <HeroBackground />
+          <div className="relative z-10 container px-4 md:px-6 py-12 md:py-16">
+            <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="space-y-6 text-left">
+                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
+                  SoulFire
+                </p>
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                  The most powerful bot tool, undetectable and fast.
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl">
+                  Spin up realistic Minecraft traffic in seconds, audit your
+                  infrastructure, and learn how SoulFire works by watching the
+                  live demo right away.
+                </p>
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <Link href="/download">
+                    <Button size="lg" className="gap-2">
+                      <Download className="h-5 w-5" />
+                      Get SoulFire
+                    </Button>
+                  </Link>
+                  <a
+                    href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" size="lg" className="gap-2">
+                      <SiGithub className="h-5 w-5" />
+                      GitHub
+                    </Button>
+                  </a>
+                </div>
               </div>
-            </div>
-            <div className="rounded-2xl border bg-background p-2 shadow-xl">
-              <div className="aspect-video overflow-hidden rounded-xl">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
-                  title="SoulFire demo video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  className="h-full w-full"
-                ></iframe>
+              <div className="relative rounded-2xl border bg-background/80 backdrop-blur p-2 shadow-xl overflow-hidden">
+                <BorderBeam
+                  size={200}
+                  duration={8}
+                  colorFrom="#0ea5e9"
+                  colorTo="#3b82f6"
+                  borderWidth={2}
+                />
+                <div className="aspect-video overflow-hidden rounded-xl">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src="https://www.youtube.com/embed/BD-xE8vbHtQ?si=h16uIIHV8A3Q2Zgb"
+                    title="SoulFire demo video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                    className="h-full w-full"
+                  ></iframe>
+                </div>
               </div>
             </div>
           </div>
@@ -100,7 +122,7 @@ export default function Page() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link href="/docs/installation">
+            <Link href="/docs/installation" className="h-full">
               <FeatureCard
                 title="Easy to use"
                 description="SoulFire is easy to use, just install it and you're ready to go!"
@@ -121,6 +143,7 @@ export default function Page() {
               href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
               target="_blank"
               rel="noopener noreferrer"
+              className="h-full"
             >
               <FeatureCard
                 title="Open Source"
@@ -154,6 +177,30 @@ export default function Page() {
               description="SoulFire has useful plugins built-in and you can also add your own!"
               icon={<AppWindow className="w-8 h-8 text-primary" />}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Terminal Demo Section */}
+      <section className="py-16">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+              See it in Action
+            </h2>
+            <p className="max-w-[700px] text-muted-foreground md:text-lg">
+              Watch how easy it is to control hundreds of bots with simple
+              commands
+            </p>
+          </div>
+          <TerminalAnimation />
+          <div className="flex justify-center mt-8">
+            <Link href="/docs/usage/commands">
+              <Button variant="outline" className="gap-2">
+                View all commands
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
