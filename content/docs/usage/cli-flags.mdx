@@ -5,14 +5,14 @@ description: Learn how to configure the SoulFire client with command line flags.
 
 ## What are command line flags?
 
-Command line flags in the CLI are used to configure the client before starting an attack.
+Command line flags in the CLI are used to configure the client before starting a session.
 These options change the behavior of the bots and how the CLI interacts with the server.
 
 ## List of flags
 
 | Flag                                        | Default                                                | Description                                                                                                                                                                   |
 |---------------------------------------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `-s`, `--start`                             | `false`                                                | Whether to start the attack automatically                                                                                                                                     |
+| `-s`, `--start`                             | `false`                                                | Whether to start the session automatically                                                                                                                                    |
 | `--account-file`                            | `null`                                                 | File to load accounts from                                                                                                                                                    |
 | `--account-type`                            | `null`                                                 | Type of accounts in the account file                                                                                                                                          |
 | `--proxy-file`                              | `null`                                                 | File to load proxies from                                                                                                                                                     |
@@ -29,7 +29,7 @@ These options change the behavior of the bots and how the CLI interacts with the
 | `--bot-connect-timeout`                     | `30`                                                   | Connect timeout in seconds                                                                                                                                                    |
 | `--bot-resolve-srv`                         | `true`                                                 | Try to resolve SRV records from the address                                                                                                                                   |
 | `--bot-concurrent-connects`                 | `1`                                                    | Max amount of bots attempting to connect at once                                                                                                                              |
-| `--bot-restore-on-reboot`                   | `true`                                                 | Whether the attack should be restored after a reboot of the SoulFire machine. If turned off, the attack will not be restored after a reboot.                                  |
+| `--bot-restore-on-reboot`                   | `true`                                                 | Whether the session should be restored after a reboot of the SoulFire machine. If turned off, the session will not be restored after a reboot.                                |
 | `--account-name-format`                     | `Bot_%d`                                               | The format of the bot names. %d will be replaced with the bot number.                                                                                                         |
 | `--account-shuffle-accounts`                | `false`                                                | Should the accounts order be random when connecting bots?                                                                                                                     |
 | `--account-use-proxies-for-account-auth`    | `false`                                                | Should the imported proxies be used to authenticate accounts? (Contact Microsoft login, input credentials, etc.) Otherwise the SF server will authenticate accounts directly. |

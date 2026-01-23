@@ -68,7 +68,7 @@ const BADGE_CONFIG: Record<
     label: "Unlimited Bandwidth",
     className: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
     description:
-      "No data caps or bandwidth limits. Perfect for extensive stress testing without worrying about usage.",
+      "No data caps or bandwidth limits. Perfect for extensive bot testing without worrying about usage.",
   },
   sponsor: {
     label: "Sponsor",
@@ -128,7 +128,7 @@ const PROVIDERS: Provider[] = [
     name: "ProxyScrape",
     logo: "/providers/proxyscrape.svg",
     testimonial:
-      "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume stress testing.",
+      "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume bot testing.",
     url: "https://proxyscrape.com/?ref=mge4mtc",
     badges: ["unlimited-bandwidth", "residential"],
   },

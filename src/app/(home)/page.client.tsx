@@ -132,8 +132,8 @@ export function TerminalAnimation() {
     { type: "command", text: "move 578 65 100" },
     { type: "output", text: "◆ Moving all bots to coordinates..." },
     { type: "prompt", text: "" },
-    { type: "command", text: "attack start" },
-    { type: "output", text: "◆ Attack started!" },
+    { type: "command", text: "session start" },
+    { type: "output", text: "◆ Session started!" },
   ];
 
   // Calculate timing for each step

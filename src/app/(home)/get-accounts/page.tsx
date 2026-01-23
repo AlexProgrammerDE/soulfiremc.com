@@ -382,7 +382,7 @@ export default function GetAccountsPage() {
         </h1>
         <p className="text-lg text-muted-foreground">
           SoulFire works best with quality Minecraft accounts. Here are trusted
-          providers we recommend for stress testing.
+          providers we recommend for bot testing.
         </p>
         <p className="text-sm text-muted-foreground">
           <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more

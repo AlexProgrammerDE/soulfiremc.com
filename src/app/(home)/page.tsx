@@ -118,7 +118,7 @@ export default function Page() {
               Powerful Features
             </h2>
             <p className="max-w-[700px] text-muted-foreground md:text-lg">
-              Everything you need to stress-test your Minecraft servers
+              Everything you need to test and automate your Minecraft servers
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -214,7 +214,7 @@ export default function Page() {
               Ready to Get Started?
             </h2>
             <p className="max-w-[700px] text-muted-foreground md:text-lg">
-              Join thousands of users who are already stress-testing their
+              Join thousands of users who are already testing and automating their
               Minecraft servers with SoulFire
             </p>
             <div className="mt-6">

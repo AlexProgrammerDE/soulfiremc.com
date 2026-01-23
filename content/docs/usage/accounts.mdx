@@ -7,7 +7,7 @@ import { Mermaid } from '../../../src/components/mdx/mermaid';
 
 ## How does this look in practice?
 
-When you start an attack, SoulFire will use the accounts you provide to log in to the server.
+When you start a session, SoulFire will use the accounts you provide to log in to the server.
 
 Here is an example of how accounts work:
 
@@ -33,7 +33,7 @@ Your setup may use more accounts/only one type of account, but the concept is th
 
 ## Looking for Minecraft accounts?
 
-If you need Minecraft accounts for stress testing, check out our [Get Accounts](/get-accounts) page for a list of recommended providers.
+If you need Minecraft accounts for bot testing, check out our [Get Accounts](/get-accounts) page for a list of recommended providers.
 
 ## Account types
 
@@ -59,7 +59,7 @@ This is a special login type where SoulFire will generate a device code for you 
 
 ### Microsoft Bedrock Credentials
 
-This is the only way to attack Bedrock Edition servers.
+This is the only way to connect to Bedrock Edition servers.
 On Bedrock there is no game ownership check, so any Microsoft account can play on any Bedrock Edition server.
 You need to have Xbox Live enabled on the account and have a gamer tag.
 
@@ -75,7 +75,7 @@ This is a special login type where SoulFire will generate a device code for you 
 
 ### Offline
 
-Offline accounts are generally case-sensitive and can be used to attack servers that have explicitly set online-mode to false in their server.properties file.
+Offline accounts are generally case-sensitive and can be used to connect to servers that have explicitly set online-mode to false in their server.properties file.
 So both `username` and `UserName` are valid offline accounts and can play at the same time.
 Minecraft generates a case-sensitive UUID for each username, so the server can differentiate between them.
 Most auth plugins like AuthMe however will block offline accounts that are spelled the same but have different cases.
@@ -99,10 +99,10 @@ For example, with the default format, bots will be named `Bot_1`, `Bot_2`, `Bot_
 ### Shuffle accounts
 
 SoulFire supports shuffling accounts, but it's disabled by default.
-When enabled, SoulFire will shuffle the accounts randomly before starting the attack.
+When enabled, SoulFire will shuffle the accounts randomly before starting the session.
 If disabled, SoulFire will use the accounts in the order they are in the settings.
 
-The shuffling feature is useful if you want to randomize the order of the accounts to make it harder for servers to detect which accounts are bots on subsequent attacks.
+The shuffling feature is useful if you want to randomize the order of the accounts to make it harder for servers to detect which accounts are bots on subsequent sessions.
 
 ### Use proxies for account auth
 

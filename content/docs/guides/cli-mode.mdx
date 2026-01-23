@@ -12,7 +12,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
   Guide](/docs/guides/gui-mode) instead.
 </Callout>
 
-CLIs are for power-users that either like to only use their keyboard or want to automate attacks.
+CLIs are for power-users that either like to only use their keyboard or want to automate bot sessions.
 SoulFire has those types of advanced users covered with its powerful CLI.
 While the CLI does support many common uses, the GUI has more features.
 To get to know what you can and can't do, read this page.
@@ -40,7 +40,7 @@ If you omit the entire `-Xmx$RAM` part, the CLI will use 25% of your total ram.
 If your machine has 128GB of RAM and you want SF to use 120GB, you can use `-Xmx120G`.
 If you connect to a remote server, the RAM on your machine does not matter, and you can use `-Xmx1G` if you want.
 
-Now you need to decide, are we running the attack locally on your machine, or are we using a remote dedicated server for the attack?
+Now you need to decide, are we running the session locally on your machine, or are we using a remote dedicated server for the session?
 
 If locally, skip to the next section, if not, you need to configure how the CLI connects to the remote server.
 For that, configure the JVM properties:
