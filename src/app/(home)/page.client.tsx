@@ -1,26 +1,26 @@
 "use client";
 
+import { TerminalIcon } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useTheme } from "next-themes";
 import {
+  Fragment,
+  type ReactElement,
   type RefObject,
   useEffect,
   useRef,
   useState,
-  Fragment,
-  type ReactElement,
 } from "react";
-import { useTheme } from "next-themes";
-import dynamic from "next/dynamic";
-import { TerminalIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const GrainGradient = dynamic(
   () => import("@paper-design/shaders-react").then((mod) => mod.GrainGradient),
-  { ssr: false }
+  { ssr: false },
 );
 
 const Dithering = dynamic(
   () => import("@paper-design/shaders-react").then((mod) => mod.Dithering),
-  { ssr: false }
+  { ssr: false },
 );
 
 // Intersection observer for visibility detection
@@ -115,7 +115,10 @@ export function TerminalAnimation() {
 
   // Animation timeline
   const commands = [
-    { type: "command", text: "java -jar SoulFireClient.jar --address mc.server.com --amount 100" },
+    {
+      type: "command",
+      text: "java -jar SoulFireCLI.jar --address mc.server.com --amount 100",
+    },
     { type: "output", text: "◇ Connecting to mc.server.com:25565" },
     { type: "output", text: "│ Connected!" },
     { type: "output", text: "│" },
@@ -190,7 +193,7 @@ export function TerminalAnimation() {
                 <span className="inline-block w-2 h-4 bg-white animate-pulse ml-0.5" />
               )}
             </span>
-          </span>
+          </span>,
         );
       }
 
@@ -204,11 +207,11 @@ export function TerminalAnimation() {
             className={cn(
               "text-muted-foreground",
               item.text.startsWith("◆") && "text-cyan-400 font-medium",
-              item.text.startsWith("◇") && "text-blue-400"
+              item.text.startsWith("◇") && "text-blue-400",
             )}
           >
             {item.text}
-          </span>
+          </span>,
         );
       }
       currentTick += 2;
