@@ -1,7 +1,6 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import {
   AppWindow,
-  ArrowDownToLine,
   ArrowRight,
   Box,
   CloudDownload,
@@ -17,6 +16,7 @@ import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { Marquee } from "@/components/ui/marquee";
+import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
@@ -279,22 +279,33 @@ export default function Page() {
       {/* Final CTA */}
       {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
       <section className="py-16" id="final-cta">
-        <div className="w-full max-w-4xl mx-auto">
-          <div className="flex flex-col space-y-4">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+        <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border bg-background px-8 py-16 md:py-24">
+          <Meteors number={30} />
+          <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Ready to Get Started?
             </h2>
-            <p className="max-w-[700px] text-muted-foreground md:text-lg">
+            <p className="max-w-[600px] text-muted-foreground md:text-lg">
               Join thousands of users who are already testing and automating
               their Minecraft servers with SoulFire
             </p>
-            <div className="mt-6">
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
               <Link href="/download">
-                <Button size="lg" className="gap-2">
+                <Button size="lg" className="gap-2 h-12 px-8">
+                  <Download className="w-5 h-5" />
                   <span>Get SoulFire</span>
-                  <ArrowDownToLine className="w-5 h-5" />
                 </Button>
               </Link>
+              <a
+                href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" size="lg" className="gap-2 h-12 px-8">
+                  <SiGithub className="w-5 h-5" />
+                  <span>View on GitHub</span>
+                </Button>
+              </a>
             </div>
           </div>
         </div>
