@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
@@ -52,21 +53,22 @@ export default function Page() {
           <div className="relative z-10 container px-4 md:px-6 py-12 md:py-16">
             <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="space-y-6 text-left">
-                <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
-                  SoulFire
-                </p>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 border border-primary/30 backdrop-blur-sm shadow-sm">
+                  <Zap className="h-4 w-4 text-primary" />
+                  <AnimatedShinyText className="text-sm font-semibold">
+                    the last bot tool you'll ever need.
+                  </AnimatedShinyText>
+                </div>
                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                   The most powerful bot tool, undetectable and fast.
                 </h1>
-                <p className="text-lg text-muted-foreground max-w-2xl">
-                  Spin up realistic Minecraft traffic in seconds, audit your
-                  infrastructure, and learn how SoulFire works by watching the
-                  live demo right away.
-                </p>
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <Link href="/download">
-                    <Button size="lg" className="gap-2">
-                      <Download className="h-5 w-5" />
+                    <Button
+                      size="lg"
+                      className="gap-2 h-14 px-8 text-lg font-semibold"
+                    >
+                      <Download className="h-6 w-6" />
                       Get SoulFire
                     </Button>
                   </Link>
@@ -75,8 +77,12 @@ export default function Page() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="outline" size="lg" className="gap-2">
-                      <SiGithub className="h-5 w-5" />
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="gap-2 h-14 px-8 text-lg font-semibold bg-background/80 backdrop-blur-sm border-2"
+                    >
+                      <SiGithub className="h-6 w-6" />
                       GitHub
                     </Button>
                   </a>
@@ -107,13 +113,22 @@ export default function Page() {
             </div>
           </div>
         </div>
+        <p className="text-2xl md:text-3xl text-muted-foreground mt-8">
+          <span className="text-primary font-semibold">High performance</span>,{" "}
+          <span className="text-primary font-semibold">multi-version</span>{" "}
+          support,{" "}
+          <span className="text-primary font-semibold">plugin system</span>, and{" "}
+          <span className="text-primary font-semibold">open source</span>.
+          SoulFire is the most advanced Minecraft bot framework, built for speed
+          and scale.
+        </p>
       </section>
 
       {/* Features */}
       {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
       <section className="py-16" id="features">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+          <div className="flex flex-col space-y-4 mb-12">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Powerful Features
             </h2>
@@ -184,7 +199,7 @@ export default function Page() {
       {/* Terminal Demo Section */}
       <section className="py-16">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+          <div className="flex flex-col space-y-4 mb-12">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               See it in Action
             </h2>
@@ -194,7 +209,7 @@ export default function Page() {
             </p>
           </div>
           <TerminalAnimation />
-          <div className="flex justify-center mt-8">
+          <div className="flex mt-8">
             <Link href="/docs/usage/commands">
               <Button variant="outline" className="gap-2">
                 View all commands
@@ -209,7 +224,7 @@ export default function Page() {
       {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
       <section className="py-16" id="final-cta">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="flex flex-col space-y-4">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Ready to Get Started?
             </h2>
