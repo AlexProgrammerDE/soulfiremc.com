@@ -32,7 +32,7 @@
     "fumadocs-ui": "^16.0.0",
     "geist": "^1.5.1",
     "hast-util-to-jsx-runtime": "^2.3.6",
-    "lucide-react": "^0.562.0",
+    "lucide-react": "^0.563.0",
     "mermaid": "^11.10.0",
     "motion": "^12.29.0",
     "next": "^16.0.0",
@@ -53,7 +53,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.11",
+    "@biomejs/biome": "2.3.12",
     "@octokit/openapi-types": "^27.0.0",
     "@tailwindcss/postcss": "4.1.18",
     "@types/node": "24.10.9",
