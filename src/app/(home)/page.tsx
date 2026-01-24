@@ -33,7 +33,15 @@ const plugins = [
   "Auto Register",
 ];
 
-const versions = ["1.21", "1.8", "Bedrock", "Beta", "Alpha", "Classic"];
+const versions = [
+  "Release (1.0.0 - latest)",
+  "Beta (b1.0 - b1.8.1)",
+  "Alpha (a1.0.15 - a1.2.6)",
+  "Classic (c0.0.15 - c0.30 including CPE)",
+  "April Fools (3D Shareware, 20w14infinite, 25w14craftmine)",
+  "Combat Snapshots (Combat Test 8c)",
+  "Bedrock Edition 1.21.130 (Some features are missing)",
+];
 
 const features = [
   {
@@ -101,22 +109,16 @@ const features = [
     Icon: Box,
     name: "Every version supported",
     description:
-      "Connect to any Minecraft version ever released—from Classic c0.0.15a to the latest release, including Bedrock Edition and April Fools snapshots.",
+      "Connect to any Minecraft version ever released—Classic, Alpha, Beta und up to latest release, including Bedrock Edition and April Fools snapshots.",
     href: "/docs/usage/versions",
     cta: "See all versions",
     className: "col-span-3 lg:col-span-1",
     background: (
-      <Marquee
-        vertical
-        pauseOnHover
-        duration={12}
-        gap={12}
-        className="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,white_20%,white_80%,transparent)]"
-      >
+      <Marquee pauseOnHover duration={20} gap={12} className="absolute top-8">
         {versions.map((version) => (
           <div
             key={version}
-            className="mx-auto rounded-lg border bg-muted/50 px-3 py-1.5 text-xs font-medium"
+            className="rounded-lg border bg-muted/50 px-3 py-2 text-xs font-medium"
           >
             {version}
           </div>
@@ -133,12 +135,7 @@ const features = [
     cta: "Browse plugins",
     className: "col-span-3 lg:col-span-2",
     background: (
-      <Marquee
-        pauseOnHover
-        duration={20}
-        gap={12}
-        className="absolute top-8 [mask-image:linear-gradient(to_top,transparent_30%,white_100%)]"
-      >
+      <Marquee pauseOnHover duration={20} gap={12} className="absolute top-8">
         {plugins.map((plugin) => (
           <div
             key={plugin}
