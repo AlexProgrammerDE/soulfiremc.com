@@ -63,7 +63,7 @@ export default async function DownloadPage() {
               works.
             </p>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground">
             Latest release:{" "}
             <span className="font-medium text-foreground">{releaseName}</span>
             {releaseDate ? (
@@ -79,7 +79,7 @@ export default async function DownloadPage() {
                 </Suspense>
               </>
             ) : null}
-          </p>
+          </div>
         </div>
       </div>
       <Suspense fallback={<DownloadSelectionSkeleton />}>
