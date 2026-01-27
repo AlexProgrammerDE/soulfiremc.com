@@ -11,6 +11,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { CouponCode } from "../get-proxies/coupon-code";
 
 type Badge =
   | "high-quality"
@@ -28,6 +29,8 @@ type Provider = {
   badges: Badge[];
   category: Category;
   price: string;
+  couponCode?: string;
+  couponDiscount?: string;
 };
 
 const BADGE_CONFIG: Record<
@@ -126,6 +129,8 @@ const PROVIDERS: Provider[] = [
     badges: ["instant-delivery", "bulk-discount"],
     category: "low-quality-alts",
     price: "10-15¢",
+    couponCode: "SOULFIRE",
+    couponDiscount: "10% off",
   },
   {
     name: "Less | Unbanned",
@@ -319,6 +324,12 @@ function ProviderCard({ provider }: { provider: Provider }) {
             </div>
           </div>
           <p className="text-muted-foreground">{provider.testimonial}</p>
+          {provider.couponCode && (
+            <CouponCode
+              code={provider.couponCode}
+              discount={provider.couponDiscount}
+            />
+          )}
           <Button asChild>
             <a href={provider.url} target="_blank" rel="noopener noreferrer">
               Get Accounts
