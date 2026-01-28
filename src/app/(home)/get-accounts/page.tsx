@@ -50,6 +50,7 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Token accounts at a slightly higher price point than the cheapest options. Balance of cost and reliability.",
     url: "https://discord.gg/ravealts",
+    websiteUrl: "https://ravealts.com/",
     badges: ["instant-delivery", "bulk-discount"],
     category: "low-quality-alts",
     price: "10-15¢",
@@ -162,6 +163,7 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
     url: "https://discord.gg/ravealts",
+    websiteUrl: "https://ravealts.com/",
     badges: ["high-quality", "lifetime-warranty"],
     category: "mfa-accounts",
     price: "$5.67",

@@ -26,6 +26,7 @@ export type Provider = {
   logo?: string;
   testimonial: string;
   url: string;
+  websiteUrl?: string;
   badges: Badge[];
   category: Category;
   price: string;
@@ -169,12 +170,26 @@ function ProviderCard({
               discount={provider.couponDiscount}
             />
           )}
-          <Button asChild>
-            <a href={provider.url} target="_blank" rel="noopener noreferrer">
-              Get Accounts
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild>
+              <a href={provider.url} target="_blank" rel="noopener noreferrer">
+                Get Accounts
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            {provider.websiteUrl && (
+              <Button asChild variant="secondary">
+                <a
+                  href={provider.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Website
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </Card>
