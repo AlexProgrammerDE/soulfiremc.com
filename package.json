@@ -59,9 +59,11 @@
     "@types/node": "24.10.9",
     "@types/react": "19.2.10",
     "babel-plugin-react-compiler": "^1.0.0",
+    "discord.js": "^14.25.1",
     "postcss": "^8.4.35",
     "shadcn": "^3.7.0",
     "tailwindcss": "4.1.18",
+    "tsx": "^4.21.0",
     "tw-animate-css": "^1.3.7",
     "typescript": "5.9.3"
   },
