@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import { GetAccountsClient, type Provider } from "./page.client";
 import {
   DiscordMemberBadge,
   DiscordMemberBadgeSkeleton,
 } from "./discord-badge";
+import { GetAccountsClient, type Provider } from "./page.client";
 
 const PROVIDERS: Provider[] = [
   // Low Quality Account Shops (budget options)
@@ -91,7 +91,7 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/yyy.png",
     testimonial:
       "High quality cookie and token accounts at competitive prices. Reliable delivery through their dedicated platform.",
-    url: "https://yyy.watchdog.gay",
+    url: "https://discord.gg/rmxayvwc5K",
     badges: ["high-quality", "instant-delivery"],
     category: "high-quality-alts",
     price: "12¢",
