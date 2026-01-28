@@ -157,14 +157,16 @@ const PROVIDERS: Provider[] = [
     price: "$5",
   },
   {
-    name: "Yolk",
-    logo: "/accounts/yolk.png",
+    name: "Ravealts",
+    logo: "/accounts/nicealts.png",
     testimonial:
       "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
-    url: "https://discord.gg/Ceheh2VNdh",
+    url: "https://discord.gg/ravealts",
     badges: ["high-quality", "lifetime-warranty"],
     category: "mfa-accounts",
     price: "$5.67",
+    couponCode: "SOULFIRE",
+    couponDiscount: "10% off",
   },
   {
     name: "Brano",

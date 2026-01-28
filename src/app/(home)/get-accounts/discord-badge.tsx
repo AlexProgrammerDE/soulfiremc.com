@@ -4,7 +4,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { getDiscordInvite, extractInviteCode } from "@/lib/discord";
+import { extractInviteCode, getDiscordInvite } from "@/lib/discord";
 
 function formatNumber(num: number): string {
   if (num >= 1000) {

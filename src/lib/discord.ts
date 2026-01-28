@@ -22,7 +22,7 @@ async function fetchDiscordInvite(
   };
 
   if (token) {
-    headers["Authorization"] = `Bot ${token}`;
+    headers.Authorization = `Bot ${token}`;
   }
 
   const response = await fetch(
@@ -60,7 +60,9 @@ export async function getDiscordInvite(
  * Supports formats: discord.gg/CODE, discord.com/invite/CODE
  */
 export function extractInviteCode(url: string): string {
-  const match = url.match(/(?:discord\.gg|discord\.com\/invite)\/([a-zA-Z0-9]+)/);
+  const match = url.match(
+    /(?:discord\.gg|discord\.com\/invite)\/([a-zA-Z0-9]+)/,
+  );
   return match?.[1] ?? url;
 }
 
