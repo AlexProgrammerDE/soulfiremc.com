@@ -38,19 +38,6 @@ const PROVIDERS: Provider[] = [
     price: "5¢",
   },
   {
-    name: "Ravealts",
-    logo: "/accounts/ravealts.gif",
-    testimonial:
-      "Token accounts at a slightly higher price point than the cheapest options. Balance of cost and reliability.",
-    url: "https://discord.gg/ravealts",
-    websiteUrl: "https://ravealts.com",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "low-quality-alts",
-    price: "10-15¢",
-    couponCode: "SOULFIRE",
-    couponDiscount: "10% off",
-  },
-  {
     name: "Less | Unbanned",
     logo: "/accounts/lessunbanned.png",
     testimonial:
@@ -92,6 +79,19 @@ const PROVIDERS: Provider[] = [
     price: "12¢",
   },
   {
+    name: "Ravealts",
+    logo: "/accounts/ravealts.gif",
+    testimonial:
+      "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
+    url: "https://discord.gg/ravealts",
+    websiteUrl: "https://ravealts.com",
+    badges: ["high-quality", "instant-delivery", "bulk-discount"],
+    category: "high-quality-alts",
+    price: "10-15¢",
+    couponCode: "SOULFIRE",
+    couponDiscount: "10% off",
+  },
+  {
     name: "Localts",
     logo: "/accounts/luma.png",
     testimonial:
@@ -103,24 +103,17 @@ const PROVIDERS: Provider[] = [
   },
   // MFA (Permanent Full Access) Accounts
   {
-    name: "Aqua MFA",
-    logo: "/accounts/aquamfa.png",
+    name: "Ravealts",
+    logo: "/accounts/ravealts.gif",
     testimonial:
-      "Best value for permanent full access accounts. Change all account info as you want - it's truly yours.",
-    url: "https://discord.gg/87XFhsS35V",
+      "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
+    url: "https://discord.gg/ravealts",
+    websiteUrl: "https://ravealts.com",
     badges: ["high-quality", "lifetime-warranty"],
     category: "mfa-accounts",
-    price: "$4-$5.5",
-  },
-  {
-    name: "ZZXGP",
-    logo: "/accounts/zzxgp.png",
-    testimonial:
-      "Also offers permanent MFA accounts alongside their token/cookie selection. Competitive pricing for full access accounts.",
-    url: "https://discord.gg/gycmTvrfnj",
-    badges: ["high-quality", "lifetime-warranty"],
-    category: "mfa-accounts",
-    price: "$4.50",
+    price: "$5.67",
+    couponCode: "SOULFIRE",
+    couponDiscount: "10% off",
   },
   {
     name: "Luma MFA",
@@ -143,17 +136,24 @@ const PROVIDERS: Provider[] = [
     price: "$5",
   },
   {
-    name: "Ravealts",
-    logo: "/accounts/ravealts.gif",
+    name: "Aqua MFA",
+    logo: "/accounts/aquamfa.png",
     testimonial:
-      "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
-    url: "https://discord.gg/ravealts",
-    websiteUrl: "https://ravealts.com",
-    badges: ["high-quality", "lifetime-warranty"],
+      "Budget MFA accounts at low prices. Note: accounts may be sourced from public breaches with higher pullback rates.",
+    url: "https://discord.gg/87XFhsS35V",
+    badges: ["instant-delivery"],
     category: "mfa-accounts",
-    price: "$5.67",
-    couponCode: "SOULFIRE",
-    couponDiscount: "10% off",
+    price: "$4-$5.5",
+  },
+  {
+    name: "ZZXGP",
+    logo: "/accounts/zzxgp.png",
+    testimonial:
+      "Budget MFA accounts at competitive prices. Note: accounts are likely Hypixel banned and may have higher pullback rates.",
+    url: "https://discord.gg/gycmTvrfnj",
+    badges: ["instant-delivery"],
+    category: "mfa-accounts",
+    price: "$4.50",
   },
   {
     name: "Brano",
