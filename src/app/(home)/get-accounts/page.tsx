@@ -18,16 +18,8 @@ const PROVIDERS: Provider[] = [
     price: "5¢",
   },
   {
-    name: "Vox Alts",
-    testimonial:
-      "Affordable token accounts sold by multiple shops. Budget-friendly option for high volume needs.",
-    url: "https://discord.gg/voxalts",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "low-quality-alts",
-    price: "5¢",
-  },
-  {
     name: "Mog Alts",
+    logo: "/accounts/mogalts.png",
     testimonial:
       "Low-cost token accounts for budget-conscious users. Basic accounts at competitive prices.",
     url: "https://discord.gg/PeThFREW4y",
@@ -47,10 +39,11 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Ravealts",
+    logo: "/accounts/ravealts.gif",
     testimonial:
       "Token accounts at a slightly higher price point than the cheapest options. Balance of cost and reliability.",
     url: "https://discord.gg/ravealts",
-    websiteUrl: "https://ravealts.com/",
+    websiteUrl: "https://ravealts.com",
     badges: ["instant-delivery", "bulk-discount"],
     category: "low-quality-alts",
     price: "10-15¢",
@@ -59,6 +52,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Less | Unbanned",
+    logo: "/accounts/lessunbanned.png",
     testimonial:
       "Specializes in unbanned accounts. Good option if you need accounts without existing bans.",
     url: "https://discord.gg/teMqsB3PYG",
@@ -96,15 +90,6 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "instant-delivery"],
     category: "high-quality-alts",
     price: "12¢",
-  },
-  {
-    name: "Fernan",
-    testimonial:
-      "Quality-focused provider with slightly higher prices reflecting account reliability and longevity.",
-    url: "https://discord.gg/x3JvgAbNG9",
-    badges: ["high-quality"],
-    category: "high-quality-alts",
-    price: "15¢",
   },
   {
     name: "Localts",
@@ -159,11 +144,11 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Ravealts",
-    logo: "/accounts/nicealts.png",
+    logo: "/accounts/ravealts.gif",
     testimonial:
       "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
     url: "https://discord.gg/ravealts",
-    websiteUrl: "https://ravealts.com/",
+    websiteUrl: "https://ravealts.com",
     badges: ["high-quality", "lifetime-warranty"],
     category: "mfa-accounts",
     price: "$5.67",
@@ -172,6 +157,7 @@ const PROVIDERS: Provider[] = [
   },
   {
     name: "Brano",
+    logo: "/accounts/brano.png",
     testimonial:
       "Specializes in premium OG usernames, Minecon capes, and rare collectible accounts. Higher price point for exclusive items.",
     url: "https://discord.gg/EsbhHkm9e4",
