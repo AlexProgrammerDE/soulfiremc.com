@@ -49,6 +49,19 @@ const PROVIDERS: Provider[] = [
   },
   // High Quality Account Shops (ranked by value)
   {
+    name: "Ravealts",
+    logo: "/accounts/ravealts.gif",
+    testimonial:
+      "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
+    url: "https://discord.gg/ravealts",
+    websiteUrl: "https://ravealts.com",
+    badges: ["high-quality", "instant-delivery", "bulk-discount"],
+    category: "high-quality-alts",
+    price: "10-15¢",
+    couponCode: "SOULFIRE",
+    couponDiscount: "10% off",
+  },
+  {
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
     testimonial:
@@ -77,19 +90,6 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "instant-delivery"],
     category: "high-quality-alts",
     price: "12¢",
-  },
-  {
-    name: "Ravealts",
-    logo: "/accounts/ravealts.gif",
-    testimonial:
-      "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
-    url: "https://discord.gg/ravealts",
-    websiteUrl: "https://ravealts.com",
-    badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "high-quality-alts",
-    price: "10-15¢",
-    couponCode: "SOULFIRE",
-    couponDiscount: "10% off",
   },
   {
     name: "Localts",
