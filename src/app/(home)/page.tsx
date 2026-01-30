@@ -85,12 +85,7 @@ const features = [
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
     background: (
-      <DotPattern
-        width={24}
-        height={24}
-        cr={1.5}
-        className="[mask-image:radial-gradient(500px_circle_at_0%_0%,white,transparent)]"
-      />
+      <Meteors number={80} />
     ),
   },
   {
@@ -102,7 +97,12 @@ const features = [
     cta: "View on GitHub",
     className: "col-span-3 lg:col-span-1",
     background: (
-      <RetroGrid className="opacity-30 [mask-image:linear-gradient(to_bottom,white_20%,transparent_80%)]" />
+      <DotPattern
+        width={24}
+        height={24}
+        cr={1.5}
+        className="[mask-image:radial-gradient(500px_circle_at_0%_0%,white,transparent)]"
+      />
     ),
   },
   {
@@ -277,7 +277,7 @@ export default function Page() {
       {/** biome-ignore lint/correctness/useUniqueElementIds: Need this for static links */}
       <section className="py-16" id="final-cta">
         <div className="relative flex flex-col items-center justify-center overflow-hidden rounded-2xl border bg-background px-8 py-16 md:py-24">
-          <Meteors number={30} />
+          <RetroGrid lineWidth={2} fade={false} className="opacity-30" />
           <div className="relative z-10 flex flex-col items-center text-center space-y-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Ready to Get Started?
