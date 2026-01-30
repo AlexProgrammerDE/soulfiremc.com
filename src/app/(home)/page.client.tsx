@@ -59,20 +59,10 @@ export function HeroBackground() {
   const { resolvedTheme } = useTheme();
   const ref = useRef<HTMLDivElement | null>(null);
   const visible = useIsVisible(ref);
-  const [showShaders, setShowShaders] = useState(false);
-
-  useEffect(() => {
-    // Delay shader loading for smoother initial render
-    const timer = setTimeout(() => {
-      setShowShaders(true);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div ref={ref} className="absolute inset-0 overflow-hidden rounded-2xl">
-      {showShaders && (
-        <GrainGradient
+      <GrainGradient
           className="absolute inset-0 animate-in fade-in duration-800"
           colors={
             resolvedTheme === "dark"
@@ -88,9 +78,7 @@ export function HeroBackground() {
           minPixelRatio={1}
           maxPixelCount={1920 * 1080}
         />
-      )}
-      {showShaders && (
-        <Dithering
+      <Dithering
           width={720}
           height={720}
           colorBack="#00000000"
@@ -104,7 +92,6 @@ export function HeroBackground() {
           className="absolute animate-in fade-in duration-400 max-lg:bottom-[-50%] max-lg:left-[-200px] lg:top-[-5%] lg:right-0"
           minPixelRatio={1}
         />
-      )}
     </div>
   );
 }
