@@ -1,7 +1,7 @@
-import { Client, GatewayIntentBits } from "discord.js";
-import { writeFile, mkdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { Client, GatewayIntentBits } from "discord.js";
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
@@ -12,8 +12,12 @@ if (!DISCORD_TOKEN) {
 
 const args = process.argv.slice(2);
 if (args.length < 2) {
-  console.error("Usage: tsx scripts/fetch-discord-icons.ts <invite_code> <output_name>");
-  console.error("Example: tsx scripts/fetch-discord-icons.ts ravealts ravealts");
+  console.error(
+    "Usage: tsx scripts/fetch-discord-icons.ts <invite_code> <output_name>",
+  );
+  console.error(
+    "Example: tsx scripts/fetch-discord-icons.ts ravealts ravealts",
+  );
   process.exit(1);
 }
 
