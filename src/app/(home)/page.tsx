@@ -84,9 +84,7 @@ const features = [
     href: "/docs/usage/accounts",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
-    background: (
-      <Meteors number={80} />
-    ),
+    background: <Meteors number={80} />,
   },
   {
     Icon: SiGithub,

@@ -63,35 +63,35 @@ export function HeroBackground() {
   return (
     <div ref={ref} className="absolute inset-0 overflow-hidden rounded-2xl">
       <GrainGradient
-          className="absolute inset-0 animate-in fade-in duration-800"
-          colors={
-            resolvedTheme === "dark"
-              ? ["#0ea5e9", "#0066cc", "#1a0a3e00"] // Cyan to deep blue (dark mode)
-              : ["#38bdf8", "#60a5fa", "#1e40af20"] // Light blues (light mode)
-          }
-          colorBack="#00000000"
-          softness={1}
-          intensity={0.9}
-          noise={0.5}
-          speed={visible ? 0.8 : 0}
-          shape="corners"
-          minPixelRatio={1}
-          maxPixelCount={1920 * 1080}
-        />
+        className="absolute inset-0 animate-in fade-in duration-800"
+        colors={
+          resolvedTheme === "dark"
+            ? ["#0ea5e9", "#0066cc", "#1a0a3e00"] // Cyan to deep blue (dark mode)
+            : ["#38bdf8", "#60a5fa", "#1e40af20"] // Light blues (light mode)
+        }
+        colorBack="#00000000"
+        softness={1}
+        intensity={0.9}
+        noise={0.5}
+        speed={visible ? 0.8 : 0}
+        shape="corners"
+        minPixelRatio={1}
+        maxPixelCount={1920 * 1080}
+      />
       <Dithering
-          width={720}
-          height={720}
-          colorBack="#00000000"
-          colorFront={resolvedTheme === "dark" ? "#0ea5e9" : "#3b82f6"}
-          shape="sphere"
-          type="4x4"
-          scale={0.5}
-          size={3}
-          speed={0}
-          frame={5000 * 120}
-          className="absolute animate-in fade-in duration-400 max-lg:bottom-[-50%] max-lg:left-[-200px] lg:top-[-5%] lg:right-0"
-          minPixelRatio={1}
-        />
+        width={720}
+        height={720}
+        colorBack="#00000000"
+        colorFront={resolvedTheme === "dark" ? "#0ea5e9" : "#3b82f6"}
+        shape="sphere"
+        type="4x4"
+        scale={0.5}
+        size={3}
+        speed={0}
+        frame={5000 * 120}
+        className="absolute animate-in fade-in duration-400 max-lg:bottom-[-50%] max-lg:left-[-200px] lg:top-[-5%] lg:right-0"
+        minPixelRatio={1}
+      />
     </div>
   );
 }
