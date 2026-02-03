@@ -319,7 +319,7 @@ fi
 
 **Run with cron:**
 
-```cron
+```bash
 # Check every 5 minutes
 */5 * * * * /path/to/monitor-server.sh
 ```
@@ -409,7 +409,7 @@ echo "Backup created: backup_$DATE.tar.gz"
 
 **Schedule with cron:**
 
-```cron
+```bash
 # Daily backup at 4 AM
 0 4 * * * /path/to/backup-server.sh
 
@@ -464,7 +464,7 @@ cd /path/to/server
 
 **Schedule restarts:**
 
-```cron
+```bash
 # Restart daily at 5 AM (low traffic time)
 0 5 * * * /path/to/restart-server.sh
 

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type { SoftwareApplication, VideoObject, WithContext } from "schema-dts";
+import { JsonLd } from "@/components/json-ld";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
@@ -20,7 +21,6 @@ import { Marquee } from "@/components/ui/marquee";
 import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
-import { JsonLd } from "@/components/json-ld";
 import { getRequiredEnv } from "@/lib/env";
 import { HeroBackground, TerminalAnimation } from "./page.client";
 

@@ -751,7 +751,7 @@ fi
 
 **Run with cron:**
 
-```cron
+```bash
 # Check every 5 minutes
 */5 * * * * /usr/local/bin/check-bot-attack.sh
 ```
@@ -875,7 +875,7 @@ After running tests, check your anti-bot plugin's stats:
 
 | Blocked % | Assessment | Action |
 |-----------|------------|--------|
-| <50% | Ineffective | Increase sensitivity, enable more checks |
+| &lt;50% | Ineffective | Increase sensitivity, enable more checks |
 | 50-80% | Moderate | Fine-tune settings, review which checks failed |
 | 80-95% | Good | Adequate protection, minor tuning |
 | >95% | Excellent | Strong protection, monitor false positives |

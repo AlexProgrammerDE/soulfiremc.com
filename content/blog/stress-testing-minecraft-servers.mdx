@@ -32,9 +32,9 @@ Minecraft runs on a tick-based system, targeting 20 ticks per second (one tick e
 | TPS Value | Server State | Player Experience |
 |-----------|--------------|-------------------|
 | 20.0 | Healthy | Smooth gameplay, no lag |
-| 18-19 | Minor lag | Occasional stutters |
-| 15-17 | Moderate lag | Noticeable delays |
-| <15 | Severe lag | Nearly unplayable |
+| 18.0-19.0 | Minor lag | Occasional stutters |
+| 15.0-17.0 | Moderate lag | Noticeable delays |
+| &lt;15.0 | Severe lag | Nearly unplayable |
 
 **How to check TPS:**
 
@@ -52,10 +52,10 @@ MSPT measures how long the server takes to process each tick. This is often more
 
 | MSPT Value | Status | What It Means |
 |------------|--------|---------------|
-| <40ms | Excellent | Server has headroom |
+| &lt;40ms | Excellent | Server has headroom |
 | 40-50ms | Good | Running at target |
-| >50ms | Dropping ticks | Can't maintain 20 TPS |
-| >100ms | Critical | Severe performance issues |
+| &gt;50ms | Dropping ticks | Can't maintain 20 TPS |
+| &gt;100ms | Critical | Severe performance issues |
 
 **Check MSPT:**
 
@@ -311,7 +311,7 @@ Start with an empty server and record idle performance:
 
 **Record:**
 - Idle TPS (should be 20.0)
-- Idle MSPT (should be <10ms)
+- Idle MSPT (should be &lt;10ms)
 - Base memory usage
 - CPU usage
 
