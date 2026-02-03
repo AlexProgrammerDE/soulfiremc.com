@@ -1,6 +1,6 @@
 ---
 title: Optimizing Mineflayer Bots - A Comprehensive Guide
-description: Learn how to optimize your Mineflayer bots with Node.js workers, Bun runtime, special configuration options, and hardening plugins
+description: Learn how to optimize your Mineflayer bots with Node.js workers, special configuration options, and essential plugins
 author: Pistonmaster
 date: 2026-02-03
 tags: [mineflayer, optimization, nodejs, bun, performance]
@@ -8,189 +8,310 @@ tags: [mineflayer, optimization, nodejs, bun, performance]
 
 ## Optimizing Mineflayer Bots - A Comprehensive Guide
 
-Creating efficient and performant Minecraft bots with Mineflayer requires understanding various optimization strategies. This guide covers everything from runtime selection to configuration options and security hardening.
+Creating efficient and performant Minecraft bots with Mineflayer requires understanding various optimization strategies. This guide covers scaling multiple bots, configuration options, and performance best practices.
 
-### Performance Optimization with Node.js Workers
+### Scaling with Node.js Worker Threads
 
 When running multiple Mineflayer bots, memory management becomes critical. Each bot must independently track the world state, which can quickly consume significant resources. Users have reported that running around 50 bots can consume approximately 5GB of RAM.
 
-**Recommended Approaches:**
+#### Implementation with Worker Threads
 
-- **Worker Threads**: Using Node.js `worker_threads` is the recommended approach for managing multiple bot instances. This provides process isolation while maintaining efficient memory usage.
-- **Child Processes**: Alternative approach using `child_process` for complete process isolation, though with slightly higher overhead.
+The recommended approach is using Node.js `worker_threads` for managing multiple bot instances:
 
-### Bun vs Node.js for Mineflayer
+**Main Thread (main.js):**
 
-While Bun offers impressive performance benchmarks, the choice between Bun and Node.js for Mineflayer requires careful consideration:
+```javascript
+const { Worker } = require('worker_threads');
+const path = require('path');
 
-**Bun's Advantages:**
-- Microsecond cold starts perfect for serverless functions
-- In HTTP benchmarks, Bun sustained ~52,000 requests/second vs Node.js's 13,000
-- Built with Zig (61%) and C++ (23%) for native performance
-- 2.5x faster execution time for certain workloads (46s vs 116s)
+const bots = [];
+const BOT_COUNT = 10;
 
-**Node.js's Advantages:**
-- Superior V8 optimization for long-running processes
-- Better performance for CPU-bound JavaScript with complex business logic
-- Mature ecosystem with extensive Mineflayer community support
-- LTS schedules and production-ready stability
-- Can outperform Bun by up to 20x in complex logic operations
+for (let i = 0; i < BOT_COUNT; i++) {
+  const worker = new Worker(path.join(__dirname, 'bot-worker.js'), {
+    workerData: {
+      username: `Bot_${i}`,
+      host: 'localhost',
+      port: 25565,
+    }
+  });
 
-**Recommendation for Mineflayer:**
+  worker.on('message', (msg) => {
+    console.log(`Bot ${i}: ${msg}`);
+  });
 
-Node.js is the recommended choice for Mineflayer bots because:
-1. Bots typically run for extended periods where Node.js's V8 optimizations excel
-2. Better compatibility and community support
-3. More stable for production deployments
+  worker.on('error', (err) => {
+    console.error(`Bot ${i} error:`, err);
+  });
 
-However, Bun can be beneficial for:
-- Development environments with faster startup times
-- Simple I/O-bound operations
-- Quick testing and iteration
+  worker.on('exit', (code) => {
+    if (code !== 0) {
+      console.error(`Bot ${i} stopped with code ${code}`);
+    }
+  });
 
-### Special Configuration Options
+  bots.push(worker);
+}
+```
+
+**Worker Thread (bot-worker.js):**
+
+```javascript
+const { parentPort, workerData } = require('worker_threads');
+const mineflayer = require('mineflayer');
+
+const bot = mineflayer.createBot({
+  host: workerData.host,
+  port: workerData.port,
+  username: workerData.username,
+  physicsEnabled: false, // Disable if not needed
+  checkTimeoutInterval: 60 * 1000,
+});
+
+bot.once('spawn', () => {
+  parentPort.postMessage(`Spawned as ${bot.username}`);
+});
+
+bot.on('error', (err) => {
+  parentPort.postMessage(`Error: ${err.message}`);
+});
+
+// Bot logic here
+```
+
+This approach provides:
+- **Process isolation**: Each bot runs in its own V8 isolate
+- **Shared memory efficiency**: Better than child processes
+- **Error isolation**: One bot crashing doesn't affect others
+- **Resource monitoring**: Track CPU/memory per worker
+
+### Performance Configuration Options
 
 Mineflayer offers several configuration options to optimize performance:
-
-#### Performance Options
 
 ```javascript
 const bot = mineflayer.createBot({
   host: 'localhost',
   username: 'bot',
 
-  // Performance optimizations
-  hideErrors: false,
+  // Disable physics if bot doesn't need collision detection
+  physicsEnabled: false,
 
-  // Disable block sight updates for better performance
-  // Warning: May affect gameplay if bot needs to interact with distant blocks
-  viewDistance: 'tiny', // or 'short', 'normal', 'far'
+  // Adjust view distance (lower = less data to process)
+  viewDistance: 'tiny', // Options: tiny, short, normal, far
 
-  // Physics can be disabled when not needed
-  physicsEnabled: true, // Set to false if bot doesn't need physics
+  // Connection management
+  checkTimeoutInterval: 60 * 1000, // Keepalive check (default: 30s)
 
-  // Client management for proxy support
-  client: customClient, // Use for running through proxies
+  // Custom client for proxy support
+  client: null, // Use custom minecraft-protocol client instance
 
   // Brand customization for servers requiring specific clients
   brand: 'vanilla',
 
-  // Respawn control
-  respawn: true, // Set to false for manual respawn handling
+  // Disable auto-respawn for manual control
+  respawn: false,
 
-  // Keepalive settings
-  checkTimeoutInterval: 30 * 1000, // 30 seconds default
+  // Token storage location
+  profilesFolder: './profiles',
 })
 ```
 
-#### Key Optimization Tips
+#### Key Optimization Techniques
 
-1. **Disable `sendBlockInSight`**: This field defaults to true. Setting it to false improves performance since looking at distant blocks is time-consuming.
+**1. Disable Physics When Not Needed**
 
-2. **Adjust View Distance**: Lower view distances reduce the amount of world data the bot needs to process.
-
-3. **Disable Physics When Unnecessary**: If your bot doesn't need collision detection or gravity, disable physics with `bot.physicsEnabled = false`.
-
-4. **Custom Client Configuration**: Use a custom minecraft-protocol client instance for advanced networking control and proxy support.
-
-5. **Profile Folder Management**: Specify `profilesFolder` to control where cached tokens are stored.
-
-### Hardening and Security Plugins
-
-Several plugins can enhance your bot's functionality and security:
-
-#### Anti-AFK Plugins
-
-**mineflayer-antiafk** by etiaro
-- Performs randomized actions to bypass anti-AFK detection
-- Randomizes walking direction, looking direction, and action timing
-- Natural behavior patterns
+If your bot doesn't need to walk or interact with the physical world:
 
 ```javascript
-const antiafk = require('mineflayer-antiafk')
-bot.loadPlugin(antiafk)
+bot.physicsEnabled = false;
 ```
 
-**mineflayer-anti-afk** by NoNameLmao
-- Multiple anti-AFK features including:
-  - Auto messages with random intervals
-  - View rotation
-  - Circle walking patterns
-  - Sneaking toggle
-  - Entity hitting
+**2. Limit Entity Tracking**
+
+Reduce processing overhead by ignoring entities you don't care about:
 
 ```javascript
-bot.loadPlugin(require('mineflayer-anti-afk'))
-bot.antiafk.start()
+bot.on('entitySpawn', (entity) => {
+  // Only track specific entity types
+  if (entity.type !== 'player') {
+    return; // Ignore other entities
+  }
+});
 ```
 
-#### Authentication Security
+**3. Optimize Chunk Loading**
 
-For servers using AuthMe plugin:
-- Use bots with AuthMe compatibility for secure authentication
-- Support for BungeeCord/Multiplex networks
-- Automatic login and session management
+Control which chunks the bot processes:
+
+```javascript
+// Reduce view distance
+bot.settings.viewDistance = 2; // Minimum viable distance
+
+// Unload distant chunks manually if needed
+bot.on('chunkColumnLoad', (pos) => {
+  const distance = Math.hypot(pos.x - bot.entity.position.x, pos.z - bot.entity.position.z);
+  if (distance > 96) {
+    bot.world.unloadColumn(pos.x, pos.z);
+  }
+});
+```
+
+**4. Efficient Pathfinding**
+
+Use pathfinding wisely to avoid excessive CPU usage:
+
+```javascript
+const { goals, Movements } = require('mineflayer-pathfinder');
+
+const defaultMove = new Movements(bot);
+// Reduce computational complexity
+defaultMove.canDig = false; // Don't dig blocks
+defaultMove.allowSprinting = false; // Simpler movement
+defaultMove.allowParkour = false; // No parkour moves
+
+bot.pathfinder.setMovements(defaultMove);
+```
+
+### Runtime Comparison: Node.js vs Bun
+
+While Bun offers impressive startup times and I/O performance, **Node.js is recommended for Mineflayer** because:
+
+1. **Long-running optimization**: Bots run for extended periods where Node.js V8 excels
+2. **Ecosystem maturity**: Better library compatibility and community support
+3. **Production stability**: LTS releases and battle-tested in production
+
+**When to consider Bun:**
+- Development/testing with faster iteration cycles
+- Scripts that start and stop frequently
+- Simple I/O-bound automation tasks
+
+For most Mineflayer use cases, stick with Node.js LTS versions.
+
+### Essential Plugins
+
+#### Anti-AFK Detection
+
+For servers with AFK detection, use plugins like `mineflayer-antiafk`:
+
+```javascript
+const antiafk = require('mineflayer-antiafk');
+bot.loadPlugin(antiafk);
+
+// Performs randomized actions: walking, looking, etc.
+```
+
+#### Authentication
+
+For servers using AuthMe or requiring Microsoft accounts:
 
 ```javascript
 const bot = mineflayer.createBot({
-  host: 'localhost',
-  username: 'bot',
-  auth: 'microsoft', // For Microsoft accounts
-  // profilesFolder: './profiles' // Custom token storage
-})
+  host: 'server.example.com',
+  username: 'email@example.com',
+  auth: 'microsoft', // or 'mojang'
+});
 ```
 
-#### Advanced Security Features
+### Memory Management
 
-**Auto-Reconnection**: Implement robust error handling and auto-reconnect logic:
-
-```javascript
-bot.on('end', () => {
-  setTimeout(() => {
-    // Reconnect logic
-  }, 5000)
-})
-
-bot.on('error', (err) => {
-  console.error('Bot error:', err)
-  // Handle specific errors
-})
-```
-
-**Error Handling**: Wrap bot operations in try-catch blocks and implement proper error recovery.
-
-### Memory Management Best Practices
-
-1. **Monitor Memory Usage**: Track memory consumption per bot instance
-2. **Implement Cleanup**: Properly dispose of bot instances when no longer needed
-3. **Limit World Storage**: Use selective chunk loading if available
-4. **Event Listener Management**: Remove unused event listeners to prevent memory leaks
+**Monitor and Clean Up:**
 
 ```javascript
+// Track memory per bot
+function getMemoryUsage() {
+  const usage = process.memoryUsage();
+  return {
+    rss: `${Math.round(usage.rss / 1024 / 1024)}MB`,
+    heapUsed: `${Math.round(usage.heapUsed / 1024 / 1024)}MB`,
+  };
+}
+
 // Clean shutdown
 function shutdownBot(bot) {
-  bot.removeAllListeners()
-  bot.quit()
+  bot.removeAllListeners(); // Prevent memory leaks
+  bot.quit();
+  bot._client.end(); // Close socket
+}
+
+// Periodic cleanup
+setInterval(() => {
+  if (global.gc) {
+    global.gc(); // Run with --expose-gc flag
+  }
+}, 5 * 60 * 1000); // Every 5 minutes
+```
+
+**Run with memory limits:**
+
+```bash
+node --max-old-space-size=4096 --expose-gc bot.js
+```
+
+### Error Handling and Reconnection
+
+Robust error handling is essential:
+
+```javascript
+function createBot(config) {
+  const bot = mineflayer.createBot(config);
+
+  bot.on('error', (err) => {
+    console.error('Bot error:', err);
+  });
+
+  bot.on('kicked', (reason) => {
+    console.log('Kicked:', reason);
+    setTimeout(() => createBot(config), 5000);
+  });
+
+  bot.on('end', () => {
+    console.log('Connection lost, reconnecting...');
+    setTimeout(() => createBot(config), 5000);
+  });
+
+  return bot;
 }
 ```
 
-### Production Deployment Tips
+### Production Best Practices
 
-1. **Use Process Managers**: PM2 or similar for automatic restarts and monitoring
-2. **Logging**: Implement comprehensive logging for debugging
-3. **Resource Limits**: Set Node.js memory limits with `--max-old-space-size`
-4. **Monitoring**: Track CPU, memory, and network usage
-5. **Gradual Scaling**: Test with small bot counts before scaling up
+1. **Gradual Scaling**: Start with 5-10 bots, monitor resource usage, then scale
+2. **Resource Monitoring**: Track CPU, memory, and network per bot
+3. **Logging**: Use structured logging (winston, pino) for debugging
+4. **Process Management**: Use PM2 for automatic restarts and monitoring
+5. **Rate Limiting**: Stagger bot logins to avoid overwhelming servers
+
+**Example PM2 config:**
+
+```javascript
+// ecosystem.config.js
+module.exports = {
+  apps: [{
+    name: 'bot-fleet',
+    script: './main.js',
+    instances: 1,
+    max_memory_restart: '2G',
+    env: {
+      NODE_ENV: 'production'
+    }
+  }]
+}
+```
 
 ### Conclusion
 
-Optimizing Mineflayer bots requires a holistic approach combining the right runtime choice, proper configuration, security hardening, and monitoring. While Bun offers attractive performance benefits, Node.js remains the recommended choice for production Mineflayer deployments due to its stability and ecosystem maturity.
+Optimizing Mineflayer bots requires:
+- **Worker threads** for scaling multiple instances
+- **Configuration tuning** based on your bot's needs (physics, view distance)
+- **Memory management** with proper cleanup and monitoring
+- **Robust error handling** for production reliability
 
 Key takeaways:
 - Use Node.js worker threads for multiple bot instances
-- Configure performance options based on your bot's needs
-- Implement security and anti-AFK plugins as required
-- Monitor and manage resources carefully
-- Consider Bun for development, Node.js for production
+- Disable physics and reduce view distance when possible
+- Implement proper error handling and reconnection logic
+- Monitor resources and scale gradually
+- Start with Node.js LTS for production deployments
 
-By following these optimization strategies, you can create efficient, reliable, and performant Minecraft bots that scale to your needs.
+By following these strategies, you can create efficient, reliable Minecraft bots that scale to your needs.
