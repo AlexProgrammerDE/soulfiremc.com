@@ -21,6 +21,12 @@ export default function Layout({ children }: { children: ReactNode }) {
         },
         {
           type: "main",
+          text: "Blog",
+          url: "/blog",
+          description: "SoulFire Blog",
+        },
+        {
+          type: "main",
           text: "Get Accounts",
           url: "/get-accounts",
           description: "Get Accounts for SoulFire",
