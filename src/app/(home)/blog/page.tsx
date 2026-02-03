@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import { blogSource } from "@/lib/source";
-import Image from "next/image";
 
 export default function BlogIndex() {
   const posts = blogSource.getPages().sort((a, b) => {

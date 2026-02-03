@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +68,7 @@ export default async function RootLayout({
             <Banner id={"v2"}>SoulFire v2 is out now!</Banner>
             {children}
             <CookieConsentBanner />
+            <Toaster richColors />
           </RootProvider>
         </NuqsAdapter>
       </body>

@@ -1,8 +1,8 @@
 import { blog, docs } from "fumadocs-mdx:collections/server";
 import { type InferPageType, loader } from "fumadocs-core/source";
+import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import { icons } from "lucide-react";
 import { createElement } from "react";
-import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 
 export const source = loader({
   baseUrl: "/docs",

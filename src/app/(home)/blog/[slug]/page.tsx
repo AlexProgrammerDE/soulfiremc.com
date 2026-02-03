@@ -1,12 +1,12 @@
+import { InlineTOC } from "fumadocs-ui/components/inline-toc";
+import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ShareButton } from "@/components/blog/share-button";
 import { blogSource } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
-import { InlineTOC } from "fumadocs-ui/components/inline-toc";
-import { ShareButton } from "@/components/blog/share-button";
 
 export default async function BlogPost(props: {
   params: Promise<{ slug: string }>;
@@ -116,7 +116,9 @@ export async function generateMetadata(props: {
       description: page.data.description,
       images: ogImage,
       type: "article",
-      publishedTime: page.data.date ? new Date(page.data.date).toISOString() : undefined,
+      publishedTime: page.data.date
+        ? new Date(page.data.date).toISOString()
+        : undefined,
       authors: page.data.author ? [page.data.author] : undefined,
       tags: page.data.tags,
     },
