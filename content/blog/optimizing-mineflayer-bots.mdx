@@ -6,6 +6,9 @@ date: 2026-02-03
 tags: [mineflayer, optimization, nodejs, bun, performance]
 ---
 
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import { Callout } from 'fumadocs-ui/components/callout'
+
 ## Optimizing Mineflayer Bots - A Comprehensive Guide
 
 Creating efficient and performant Minecraft bots with [Mineflayer](https://github.com/PrismarineJS/mineflayer) requires understanding various optimization strategies. This guide covers scaling multiple bots, configuration options, and performance best practices.
@@ -195,7 +198,7 @@ For optimal bot performance:
   { label: "Bun", value: "bun" }
 ]}>
 
-<TabItem value="nodejs">
+<Tab value="nodejs">
 
 [Node.js](https://nodejs.org/) is the **recommended runtime** for Mineflayer bots:
 
@@ -214,9 +217,9 @@ For optimal bot performance:
 
 For most Mineflayer use cases, stick with Node.js LTS versions.
 
-</TabItem>
+</Tab>
 
-<TabItem value="bun">
+<Tab value="bun">
 
 [Bun](https://bun.sh/) offers impressive startup times and I/O performance:
 
@@ -237,7 +240,7 @@ For most Mineflayer use cases, stick with Node.js LTS versions.
 - Fewer production use cases
 - May have edge cases with some Node.js-specific libraries
 
-</TabItem>
+</Tab>
 
 </Tabs>
 
@@ -342,7 +345,6 @@ function createBot(config) {
 **Example PM2 config:**
 
 ```javascript title="ecosystem.config.js"
-// ecosystem.config.js
 module.exports = {
   apps: [{
     name: 'bot-fleet',

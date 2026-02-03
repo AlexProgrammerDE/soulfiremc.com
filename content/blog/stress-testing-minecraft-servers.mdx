@@ -6,6 +6,9 @@ date: 2026-02-04
 tags: [minecraft, stress-testing, performance, optimization, tps, mspt]
 ---
 
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import { Callout } from 'fumadocs-ui/components/callout'
+
 ## Understanding Server Stress Testing
 
 Stress testing is the practice of simulating high player loads on your Minecraft server to evaluate how it performs under pressure. Whether you're launching a new server, deploying a major update, or scaling your infrastructure, stress testing helps you identify performance bottlenecks before they impact real players.
@@ -98,7 +101,7 @@ Before stress testing, optimize your baseline configuration. Testing an unoptimi
 **[Paper](https://papermc.io/)** is the gold standard for performance. It includes hundreds of optimizations over Spigot while maintaining plugin compatibility.
 
 <Tabs>
-<TabItem value="paper" label="Paper (Recommended)" default>
+<Tab value="paper" label="Paper (Recommended)" default>
 
 Best all-around choice for most servers. Excellent plugin compatibility with significant performance improvements over Spigot.
 
@@ -113,8 +116,8 @@ wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/latest/downlo
 - Active development and updates
 - Excellent community support
 
-</TabItem>
-<TabItem value="purpur" label="Purpur">
+</Tab>
+<Tab value="purpur" label="Purpur">
 
 Paper fork with additional gameplay features and further optimizations. Ideal if you want extra configuration options.
 
@@ -129,8 +132,8 @@ wget https://api.purpurmc.org/v2/purpur/1.21/latest/download
 - Extra gameplay features
 - Performance tweaks for specific scenarios
 
-</TabItem>
-<TabItem value="pufferfish" label="Pufferfish">
+</Tab>
+<Tab value="pufferfish" label="Pufferfish">
 
 Paper fork specifically optimized for large player counts. Best for servers expecting 100+ concurrent players.
 
@@ -140,8 +143,8 @@ Paper fork specifically optimized for large player counts. Best for servers expe
 - Entity activation range improvements
 - Better mob spawning algorithms
 
-</TabItem>
-<TabItem value="folia" label="Folia (Experimental)">
+</Tab>
+<Tab value="folia" label="Folia (Experimental)">
 
 Experimental multi-threaded Paper fork. Only for specific use cases with multiple isolated worlds.
 
@@ -154,7 +157,7 @@ Experimental multi-threaded Paper fork. Only for specific use cases with multipl
 - Experimental and unstable
 - Not suitable for most servers
 
-</TabItem>
+</Tab>
 </Tabs>
 
 <Callout type="warning" title="Avoid Legacy Software">
@@ -421,7 +424,7 @@ Don't immediately test with 500 bots—you'll learn nothing except "it crashes."
 Idle bots don't represent real players. Add realistic behaviors:
 
 <Tabs>
-<TabItem value="movement" label="Movement Stress" default>
+<Tab value="movement" label="Movement Stress" default>
 
 **What it tests**: Entity tracking, pathfinding, collision detection, chunk loading from player movement
 
@@ -434,8 +437,8 @@ Idle bots don't represent real players. Add realistic behaviors:
 - Chunk loading frequency
 - Network packet rates
 
-</TabItem>
-<TabItem value="exploration" label="Chunk Loading Stress">
+</Tab>
+<Tab value="exploration" label="Chunk Loading Stress">
 
 **What it tests**: World I/O, chunk generation (if not pregenerated), async chunk loading
 
@@ -448,8 +451,8 @@ Idle bots don't represent real players. Add realistic behaviors:
 - Disk I/O metrics
 - TPS during exploration
 
-</TabItem>
-<TabItem value="combat" label="Combat Stress">
+</Tab>
+<Tab value="combat" label="Combat Stress">
 
 **What it tests**: Mob AI, damage calculations, entity death/spawn cycles
 
@@ -462,8 +465,8 @@ Idle bots don't represent real players. Add realistic behaviors:
 - Mob spawn/despawn rates
 - Server tick time during combat
 
-</TabItem>
-<TabItem value="redstone" label="Redstone Stress">
+</Tab>
+<Tab value="redstone" label="Redstone Stress">
 
 **What it tests**: Block updates, redstone ticking, chunk ticking
 
@@ -476,7 +479,7 @@ Idle bots don't represent real players. Add realistic behaviors:
 - Block update frequency
 - Chunk tick time
 
-</TabItem>
+</Tab>
 </Tabs>
 
 Most bot tools support basic movement patterns. Even simple random walking provides valuable data.

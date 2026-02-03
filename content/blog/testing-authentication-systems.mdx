@@ -6,6 +6,9 @@ date: 2026-02-08
 tags: [minecraft, authentication, authme, security, offline-mode, login]
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout'
+import { Step, Steps } from 'fumadocs-ui/components/steps'
+
 ## Understanding Minecraft Authentication
 
 Authentication determines who can join your server and how their identity is verified. The authentication system is your server's first line of defense against unauthorized access.
@@ -15,7 +18,6 @@ Authentication determines who can join your server and how their identity is ver
 **Online Mode (Default)**
 
 ```properties title="server.properties"
-# server.properties
 online-mode=true
 ```
 
@@ -38,7 +40,6 @@ online-mode=true
 **Offline Mode**
 
 ```properties title="server.properties"
-# server.properties
 online-mode=false
 ```
 
@@ -663,7 +664,6 @@ For online-mode servers or premium account verification, you'll interact with [M
 **Configuration:**
 
 ```yaml title="FastLogin config.yml"
-# FastLogin config.yml
 autoLogin:
   enabled: true
 

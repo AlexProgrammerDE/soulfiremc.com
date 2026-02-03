@@ -6,6 +6,9 @@ date: 2026-02-12
 tags: [minecraft, server-launch, testing, optimization, checklist, preparation]
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout'
+import { Step, Steps } from 'fumadocs-ui/components/steps'
+
 ## The High Stakes of Launch Day
 
 You've spent months building your server—custom plugins, detailed spawn, balanced economy, curated world. Launch day approaches. Are you ready?
@@ -157,7 +160,6 @@ grep "PasswordAuthentication no" /etc/ssh/sshd_config
 **Configuration review:**
 
 ```properties title="server.properties"
-# server.properties
 view-distance=8
 simulation-distance=4
 spawn-protection=16
@@ -166,7 +168,6 @@ online-mode=true
 ```
 
 ```yaml title="paper-world-defaults.yml"
-# paper-world-defaults.yml
 spawn-limits:
   monster: 20
   creature: 5

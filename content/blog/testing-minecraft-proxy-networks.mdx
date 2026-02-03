@@ -6,6 +6,10 @@ date: 2026-02-07
 tags: [minecraft, bungeecord, velocity, proxy, networking, server-network]
 ---
 
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import { Callout } from 'fumadocs-ui/components/callout'
+import { Step, Steps } from 'fumadocs-ui/components/steps'
+
 ## Understanding Minecraft Proxy Networks
 
 A Minecraft proxy network sits between players and your game servers, routing connections and enabling features impossible with a single server.
@@ -63,7 +67,7 @@ Players connect once, then seamlessly switch between servers with `/server` comm
 ## Velocity vs. BungeeCord
 
 <Tabs>
-<TabItem value="velocity" label="Velocity" default>
+<Tab value="velocity" label="Velocity" default>
 
 ### Velocity
 
@@ -81,8 +85,8 @@ Players connect once, then seamlessly switch between servers with `/server` comm
 
 **Use case**: New networks, security-focused, performance-critical
 
-</TabItem>
-<TabItem value="bungeecord" label="BungeeCord">
+</Tab>
+<Tab value="bungeecord" label="BungeeCord">
 
 ### BungeeCord
 
@@ -100,8 +104,8 @@ Players connect once, then seamlessly switch between servers with `/server` comm
 
 **Use case:** Existing networks, extensive plugin requirements
 
-</TabItem>
-<TabItem value="waterfall" label="Waterfall">
+</Tab>
+<Tab value="waterfall" label="Waterfall">
 
 ### Waterfall
 
@@ -114,7 +118,7 @@ BungeeCord fork with patches:
 
 **Use case:** BungeeCord replacement with compatibility
 
-</TabItem>
+</Tab>
 </Tabs>
 
 <Callout type="success" title="Recommendation">
