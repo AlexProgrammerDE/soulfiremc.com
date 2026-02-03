@@ -1,0 +1,844 @@
+---
+title: Minecraft Server Automation - AFK Prevention and Bot Utilities
+description: Learn how to automate server tasks, implement AFK prevention, auto-reconnect systems, and use bots for automated server maintenance
+author: Pistonmaster
+date: 2026-02-09
+tags: [minecraft, automation, afk-prevention, server-management, bots]
+---
+
+## Understanding Server Automation
+
+Server automation handles repetitive tasks without human intervention. From keeping players active to maintaining server uptime, automation frees staff to focus on community building rather than mundane maintenance.
+
+### Why Automate?
+
+**Common pain points:**
+- Players kicked for AFK, lose progress
+- Server restarts disconnect everyone
+- Manual world backups at 3 AM
+- Repetitive admin commands
+- Server monitoring requires constant attention
+
+**Automation benefits:**
+- **Reduced workload**: Scripts handle routine tasks
+- **Consistency**: No forgetting to backup or restart
+- **Availability**: Automated actions work 24/7
+- **Faster response**: Instant reaction to events
+- **Better player experience**: Seamless AFK handling, auto-reconnect
+
+## AFK Prevention Systems
+
+AFK (Away From Keyboard) detection kicks inactive players to free slots. While necessary for active servers, it frustrates players who need to step away briefly.
+
+### Server-Side AFK Detection
+
+Most servers use plugins to detect and handle AFK players.
+
+#### Popular AFK Plugins
+
+**AntiAFK**
+
+```yaml
+# config.yml
+detection:
+  # Time in seconds before player marked AFK
+  timeout: 300  # 5 minutes
+
+  # What counts as activity?
+  movement: true  # Moving
+  looking: true   # Looking around (mouse movement)
+  interact: true  # Clicking blocks/entities
+  chat: true      # Sending chat messages
+
+actions:
+  # What happens when AFK detected?
+  - type: MESSAGE
+    message: "&eYou are now AFK"
+
+  - type: KICK
+    delay: 600  # Additional 10 minutes before kick
+    message: "&cKicked for being AFK too long"
+
+  # Optional: move to spectator mode instead of kick
+  - type: SPECTATOR
+    delay: 300
+```
+
+**AFK+**
+
+```yaml
+# config.yml
+afk:
+  # Detection time
+  auto-afk-time: 300
+
+  # Kick time (after being marked AFK)
+  auto-afk-kick-time: 900
+
+  # Exempt players with permission
+  bypass-permission: "afk.bypass"
+
+# Freeze player when AFK
+freeze-afk-player: true
+
+# Commands to run when player goes AFK
+commands-on-afk:
+  - "broadcast %player% is now AFK!"
+
+# Commands when player returns
+commands-on-return:
+  - "broadcast %player% is back!"
+```
+
+### Client-Side AFK Prevention
+
+Players can use client-side methods to avoid AFK kicks.
+
+#### Minecraft Client Options
+
+**Simple methods:**
+1. **Place object on jump key**: Constant jumping (easily detected)
+2. **Circular mouse movement**: Mouse tracing circle (obvious pattern)
+3. **Auto-clicker**: Clicking repeatedly (detectable)
+
+**Issues:** Most are detectable by sophisticated AFK detection using pattern analysis.
+
+#### Fabric/Forge Mods
+
+**Anti-Anti-AFK Mods**
+
+These mods add randomized behavior to avoid detection:
+
+```java
+// Randomized movement pattern
+void avoidAFK() {
+    // Random interval: 30-90 seconds
+    int interval = 30000 + random.nextInt(60000);
+
+    // Random action
+    int action = random.nextInt(4);
+    switch(action) {
+        case 0: jump();
+        case 1: lookAround(random.nextFloat() * 360);
+        case 2: sneakBriefly();
+        case 3: swingArm();
+    }
+}
+```
+
+**Features:**
+- Randomized timing (not every 30 seconds exactly)
+- Varied actions (jump, look, sneak, swing)
+- Human-like delays
+- Pauses occasionally (humans don't act constantly)
+
+### Bot-Based AFK Prevention
+
+Bots can keep accounts active for specific purposes.
+
+**Legitimate use cases:**
+- Chunk loading for farms
+- Keeping free servers online (Aternos-style hosts)
+- Testing server uptime
+- Maintaining party/guild slots
+
+**Basic AFK bot behavior:**
+
+```python
+# Pseudocode for AFK bot
+import time
+import random
+
+def afk_bot():
+    while True:
+        # Wait random interval (2-5 minutes)
+        delay = random.randint(120, 300)
+        time.sleep(delay)
+
+        # Perform random action
+        action = random.choice([
+            jump,
+            look_around,
+            walk_forward_5_blocks,
+            sneak_briefly
+        ])
+
+        action()
+```
+
+**Advanced behaviors:**
+- Pathfinding (walk to random locations)
+- Chat responses (appear semi-active)
+- Inventory management (organize items)
+- Entity interaction (attack nearby mobs)
+
+## Auto-Reconnect Systems
+
+Connection drops happen—network issues, server restarts, crashes. Auto-reconnect ensures minimal downtime.
+
+### Server-Side Auto-Reconnect
+
+Plugins can reconnect players automatically after kicks/disconnects.
+
+**Auto Reconnect Plugin**
+
+```yaml
+# config.yml
+reconnect:
+  # Enable auto-reconnect
+  enabled: true
+
+  # Reasons to trigger reconnect
+  reasons:
+    - "Server closed"
+    - "Server is restarting"
+    - "Internal server error"
+    - "Timed out"
+
+  # Don't reconnect on ban/kick
+  ignore-reasons:
+    - "Banned"
+    - "Kicked by administrator"
+
+  # Reconnect delay (seconds)
+  delay: 5
+
+  # Max reconnect attempts
+  max-attempts: 3
+
+  # Show reconnect UI to player
+  show-message: true
+  message: "&eReconnecting in %seconds% seconds..."
+```
+
+### Client-Side Auto-Reconnect
+
+Clients can automatically reconnect after disconnect.
+
+**Fabric/Forge Mods:**
+
+- **ReconnectMod**: Auto-reconnects after disconnect
+- **Auto Reconnect**: Configurable reconnect delay and attempts
+
+**Configuration example:**
+
+```json
+{
+  "enabled": true,
+  "delay": 5,
+  "maxAttempts": 10,
+  "reconnectOnKick": true,
+  "reconnectOnCrash": true,
+  "blacklistedReasons": [
+    "Banned from this server",
+    "Kicked by an operator"
+  ]
+}
+```
+
+### Bot-Based Auto-Reconnect
+
+Bots can handle reconnection with customizable logic.
+
+**Reconnect strategies:**
+
+```python
+# Simple exponential backoff
+def reconnect_with_backoff():
+    attempt = 0
+    max_attempts = 10
+
+    while attempt < max_attempts:
+        try:
+            connect_to_server()
+            return  # Success
+        except ConnectionError:
+            attempt += 1
+            # Exponential backoff: 1s, 2s, 4s, 8s, ...
+            delay = 2 ** attempt
+            print(f"Reconnect attempt {attempt} failed. Retry in {delay}s")
+            time.sleep(delay)
+
+    print("Max reconnect attempts reached")
+```
+
+**Smart reconnection:**
+
+```python
+def smart_reconnect():
+    while True:
+        try:
+            connect()
+            break  # Connected successfully
+        except ServerOfflineError:
+            # Server offline, wait longer
+            time.sleep(60)
+        except AuthenticationError:
+            # Auth issue, stop trying
+            print("Authentication failed")
+            break
+        except ConnectionTimeout:
+            # Network issue, retry quickly
+            time.sleep(5)
+```
+
+## Automated Monitoring and Alerting
+
+Automation detects issues before players complain.
+
+### Server Health Monitoring
+
+**Shell script monitoring:**
+
+```bash
+#!/bin/bash
+# monitor-server.sh
+
+# Check if server process running
+if ! pgrep -f "paper.jar" > /dev/null; then
+    echo "ERROR: Server not running!"
+    # Send alert
+    curl -X POST "https://discord.com/api/webhooks/YOUR_WEBHOOK" \
+      -H "Content-Type: application/json" \
+      -d '{"content": "🚨 Minecraft server is DOWN!"}'
+
+    # Auto-restart (optional)
+    cd /path/to/server
+    ./start.sh
+fi
+
+# Check TPS via RCON
+TPS=$(rcon-cli "spark tps" | grep -oP "TPS: \K[0-9.]+")
+if (( $(echo "$TPS < 18" | bc -l) )); then
+    echo "WARNING: Low TPS ($TPS)"
+    curl -X POST "https://discord.com/api/webhooks/YOUR_WEBHOOK" \
+      -H "Content-Type: application/json" \
+      -d "{\"content\": \"⚠️ Server TPS low: $TPS\"}"
+fi
+```
+
+**Run with cron:**
+
+```cron
+# Check every 5 minutes
+*/5 * * * * /path/to/monitor-server.sh
+```
+
+### Player Count Monitoring
+
+Track player counts over time:
+
+```python
+# player-monitor.py
+import requests
+from mcstatus import JavaServer
+import time
+
+SERVER_ADDRESS = "play.yourserver.com"
+
+def check_player_count():
+    try:
+        server = JavaServer.lookup(SERVER_ADDRESS)
+        status = server.status()
+
+        players_online = status.players.online
+        max_players = status.players.max
+
+        print(f"Players: {players_online}/{max_players}")
+
+        # Alert if server full
+        if players_online >= max_players:
+            send_discord_alert("Server is full!")
+
+        # Alert if server empty for 6+ hours
+        if players_online == 0:
+            check_empty_duration()
+
+        # Log to database for analytics
+        log_player_count(players_online)
+
+    except Exception as e:
+        print(f"Error checking server: {e}")
+        send_discord_alert(f"Server check failed: {e}")
+
+# Run every 5 minutes
+while True:
+    check_player_count()
+    time.sleep(300)
+```
+
+### Automated Backups
+
+Regular backups prevent data loss:
+
+```bash
+#!/bin/bash
+# backup-server.sh
+
+DATE=$(date +%Y-%m-%d_%H-%M-%S)
+SERVER_DIR="/path/to/server"
+BACKUP_DIR="/path/to/backups"
+
+# Create backup directory
+mkdir -p "$BACKUP_DIR"
+
+# Warn players
+rcon-cli "say Server backup starting in 30 seconds..."
+sleep 30
+
+# Disable world saving
+rcon-cli "save-off"
+rcon-cli "save-all flush"
+
+# Wait for save to complete
+sleep 10
+
+# Create backup
+tar -czf "$BACKUP_DIR/backup_$DATE.tar.gz" \
+  -C "$SERVER_DIR" world world_nether world_the_end
+
+# Re-enable saving
+rcon-cli "save-on"
+rcon-cli "say Backup complete!"
+
+# Delete backups older than 7 days
+find "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +7 -delete
+
+echo "Backup created: backup_$DATE.tar.gz"
+```
+
+**Schedule with cron:**
+
+```cron
+# Daily backup at 4 AM
+0 4 * * * /path/to/backup-server.sh
+
+# Hourly backups during peak times
+0 14-22 * * * /path/to/backup-server.sh
+```
+
+## Automated Server Restarts
+
+Regular restarts clear memory leaks and apply updates.
+
+### Graceful Restart Script
+
+```bash
+#!/bin/bash
+# restart-server.sh
+
+# Warn players
+rcon-cli "say Server restarting in 5 minutes!"
+sleep 240  # 4 minutes
+
+rcon-cli "say Server restarting in 1 minute!"
+sleep 30
+
+rcon-cli "say Server restarting in 30 seconds!"
+sleep 20
+
+rcon-cli "say Server restarting in 10 seconds!"
+sleep 5
+
+rcon-cli "say Server restarting in 5..."
+sleep 1
+rcon-cli "say 4..."
+sleep 1
+rcon-cli "say 3..."
+sleep 1
+rcon-cli "say 2..."
+sleep 1
+rcon-cli "say 1..."
+sleep 1
+
+# Stop server gracefully
+rcon-cli "stop"
+
+# Wait for server to stop
+sleep 30
+
+# Start server
+cd /path/to/server
+./start.sh
+```
+
+**Schedule restarts:**
+
+```cron
+# Restart daily at 5 AM (low traffic time)
+0 5 * * * /path/to/restart-server.sh
+
+# Restart every 6 hours
+0 */6 * * * /path/to/restart-server.sh
+```
+
+### Update and Restart Automation
+
+```bash
+#!/bin/bash
+# update-and-restart.sh
+
+SERVER_DIR="/path/to/server"
+PAPER_API="https://api.papermc.io/v2/projects/paper"
+
+# Get latest Paper build
+LATEST_VERSION="1.21"
+BUILDS=$(curl -s "$PAPER_API/versions/$LATEST_VERSION/builds")
+LATEST_BUILD=$(echo "$BUILDS" | jq -r '.builds[-1].build')
+
+CURRENT_BUILD=$(cat "$SERVER_DIR/paper-version.txt" 2>/dev/null || echo "0")
+
+if [ "$LATEST_BUILD" != "$CURRENT_BUILD" ]; then
+    echo "New Paper build available: $LATEST_BUILD (current: $CURRENT_BUILD)"
+
+    # Download new build
+    wget "$PAPER_API/versions/$LATEST_VERSION/builds/$LATEST_BUILD/downloads/paper-$LATEST_VERSION-$LATEST_BUILD.jar" \
+      -O "$SERVER_DIR/paper-new.jar"
+
+    # Warn players
+    rcon-cli "say Server update available. Restarting in 10 minutes!"
+    sleep 600
+
+    # Stop server
+    rcon-cli "stop"
+    sleep 30
+
+    # Backup old jar
+    mv "$SERVER_DIR/paper.jar" "$SERVER_DIR/paper-old.jar"
+
+    # Use new jar
+    mv "$SERVER_DIR/paper-new.jar" "$SERVER_DIR/paper.jar"
+
+    # Save version
+    echo "$LATEST_BUILD" > "$SERVER_DIR/paper-version.txt"
+
+    # Start server
+    cd "$SERVER_DIR"
+    ./start.sh
+else
+    echo "Paper is up to date (build $CURRENT_BUILD)"
+fi
+```
+
+## Bot Automation Use Cases
+
+Bots excel at repetitive, long-duration tasks.
+
+### Use Case 1: Chunk Loading
+
+**Scenario:** Mob farm needs chunks loaded 24/7
+
+**Bot solution:**
+- Bot stays logged in near farm
+- Keeps chunks loaded
+- Minimal movement (just AFK prevention)
+
+**Configuration:**
+```
+Bot Name: ChunkLoader_Farm1
+Location: X: 1000, Y: 64, Z: 2000 (near farm)
+Behavior: Anti-AFK (jump every 3-5 minutes)
+Reconnect: Yes (on disconnect)
+```
+
+### Use Case 2: Free Server Uptime
+
+**Scenario:** Aternos/Minehut-style hosts shut down when empty
+
+**Bot solution:**
+- Bot stays connected 24/7
+- Keeps server online
+- Responds to /list (appears active)
+
+**Ethical note:** Check host ToS—some prohibit this.
+
+### Use Case 3: Economy Automation
+
+**Scenario:** Automated shop restocking
+
+**Bot workflow:**
+```
+1. Bot joins server
+2. Walks to storage area
+3. Collects items from chests
+4. Walks to shop
+5. Restocks shop chests
+6. Returns to storage
+7. Repeat every hour
+```
+
+**Implementation requires:**
+- Pathfinding
+- Inventory management
+- Chest interaction
+- Error handling (path blocked, items missing)
+
+### Use Case 4: Resource Gathering
+
+**Scenario:** Automated mining or farming
+
+**Bot workflow:**
+```
+Mining:
+1. Walk to mine
+2. Break blocks in pattern
+3. Collect drops
+4. Return to storage when inventory full
+5. Deposit items
+6. Repeat
+
+Farming:
+1. Walk to farm
+2. Break mature crops
+3. Replant
+4. Collect drops
+5. Deposit in storage
+6. Repeat
+```
+
+**Ethical consideration:** This may be considered cheating on many servers. Always check rules.
+
+### Use Case 5: Server Testing
+
+**Scenario:** Test server stability over 24 hours
+
+**Bot workflow:**
+```
+1. 10 bots connect
+2. Bots perform varied actions:
+   - Walking around
+   - Breaking/placing blocks
+   - Opening chests
+   - Sending chat messages
+3. Monitor server TPS, errors
+4. Bots reconnect if disconnected
+5. Run for 24 hours
+6. Generate report
+```
+
+**Metrics tracked:**
+- Total uptime
+- Disconnect count
+- Average TPS
+- Errors encountered
+- Memory usage over time
+
+## Automation with SoulFire
+
+For advanced automation scenarios, dedicated bot tools provide more control than simple scripts.
+
+### Why Use Bots for Automation?
+
+**Script limitations:**
+- Can't join Minecraft servers directly
+- No access to game mechanics
+- Limited to external monitoring
+
+**Bot capabilities:**
+- Full Minecraft client functionality
+- In-game actions (movement, interaction)
+- Real-time response to events
+- Realistic player behavior
+
+### Automation Scenarios
+
+**Scenario 1: AFK Prevention for Testing**
+
+```
+Purpose: Keep test accounts logged in during development
+
+Configuration:
+- Bots: 5
+- Plugins: Anti-AFK, Auto-Respawn, Auto-Reconnect
+- Join Delay: 5000-10000ms (stagger logins)
+
+Benefits:
+- Simulates players being online
+- Tests AFK detection systems
+- Validates session persistence
+- Tests auto-reconnect flows
+```
+
+**Scenario 2: 24/7 Server Population**
+
+```
+Purpose: Maintain minimum player count
+
+Configuration:
+- Bots: 10
+- Plugins: Anti-AFK, Auto-Chat (occasional messages), Auto-Reconnect
+- Behavior: Random movement every 2-5 minutes
+
+Use case:
+- Make server appear active
+- Keep free hosting services online
+- Test long-term stability
+```
+
+**Scenario 3: Automated Event Participation**
+
+```
+Purpose: Fill minigame lobbies during low-traffic periods
+
+Configuration:
+- Bots: 8 (enough to start minigame)
+- Plugins: Auto-Respawn, Anti-AFK
+- Behavior: Follow commands, basic gameplay
+
+Workflow:
+1. Bots join minigame lobby
+2. Minigame starts when enough players present
+3. Bots participate (basic movement, actions)
+4. Real players can join anytime
+5. Bots leave when enough real players join
+```
+
+**Scenario 4: Stress Test Automation**
+
+```
+Purpose: Automated nightly stress tests
+
+Script:
+#!/bin/bash
+# nightly-test.sh
+
+# Start 50 bots at 2 AM
+start_bots 50
+
+# Run for 2 hours
+sleep 7200
+
+# Stop bots
+stop_bots
+
+# Collect metrics
+generate_report
+
+# Email results
+mail -s "Nightly Stress Test Results" admin@server.com < report.txt
+```
+
+**Scenario 5: Chunk Pre-Loading**
+
+```
+Purpose: Pre-explore world before launch
+
+Configuration:
+- Bots: 10
+- Behavior: Fly in expanding spiral pattern
+- Duration: 12 hours (pre-load 10k radius)
+
+Benefits:
+- Generates chunks without player load
+- Catches generation errors early
+- Improves launch day performance
+```
+
+### Monitoring Bot Automation
+
+**Metrics to track:**
+
+```bash
+# Bot status dashboard
+Bot Name         | Status    | Uptime    | Location
+----------------|-----------|-----------|-------------------
+ChunkLoader1    | Connected | 24h 15m   | X: 1000, Z: 2000
+ChunkLoader2    | Connected | 23h 45m   | X: -500, Z: 3000
+TestBot1        | Offline   | 0h 0m     | N/A
+PopulationBot1  | Connected | 12h 30m   | Lobby
+```
+
+**Automated alerts:**
+
+```python
+# bot-monitor.py
+def check_bot_status():
+    expected_bots = ["ChunkLoader1", "ChunkLoader2", "PopulationBot1"]
+
+    for bot in expected_bots:
+        if not is_bot_online(bot):
+            send_alert(f"Bot {bot} is offline!")
+            restart_bot(bot)
+
+# Run every 5 minutes
+schedule.every(5).minutes.do(check_bot_status)
+```
+
+## Security and Ethical Considerations
+
+Automation is powerful but comes with responsibilities.
+
+### Server Rules
+
+**Always check:**
+- Server terms of service
+- Automation rules
+- AFK policies
+- Bot policies
+
+Many servers explicitly prohibit:
+- AFK bots
+- Automated resource gathering
+- Automated trading/economy manipulation
+- Fake player count inflation
+
+**Violating rules can result in:**
+- Ban
+- IP blacklist
+- Community backlash
+
+### Resource Considerations
+
+**Bot impact:**
+- Consumes server resources (CPU, RAM, bandwidth)
+- Takes player slots
+- Can distort economy/statistics
+
+**Responsible use:**
+- Use minimal bots necessary
+- Don't bog down servers
+- Consider off-peak hours for testing
+- Communicate with server admins
+
+### Ethical Guidelines
+
+**✅ Acceptable uses:**
+- Testing your own server
+- Authorized chunk loading
+- Development/debugging
+- Approved automation with admin permission
+
+**❌ Unacceptable uses:**
+- Cheating in gameplay
+- Bypassing anti-cheat
+- Disrupting other players
+- Exploiting game mechanics
+
+## Best Practices Summary
+
+1. **Start simple**: Begin with basic AFK prevention before complex automation
+2. **Test thoroughly**: Automate slowly, validate each step
+3. **Monitor continuously**: Automated systems need monitoring
+4. **Handle failures gracefully**: Always include error handling and reconnect logic
+5. **Document everything**: Future you will thank present you
+6. **Respect server rules**: Automation must comply with server policies
+7. **Use proper tools**: Dedicated bot tools for Minecraft, scripts for external tasks
+8. **Secure credentials**: Never hardcode passwords, use environment variables
+9. **Log actions**: Track what automation does for debugging
+10. **Have kill switches**: Ability to stop automation quickly if issues arise
+
+## Conclusion
+
+Server automation transforms Minecraft server management from constant babysitting to strategic oversight. From AFK prevention to automated backups, smart automation handles routine tasks while you focus on building community.
+
+Key takeaways:
+
+1. **AFK prevention** keeps players active without manual intervention
+2. **Auto-reconnect** minimizes downtime from network issues
+3. **Monitoring and alerting** catch problems early
+4. **Automated backups and restarts** ensure reliability
+5. **Bot automation** enables advanced use cases at scale
+
+Whether you're running a small community server or a large network, automation provides consistency, reliability, and peace of mind. Start with simple scripts, expand to sophisticated bot automation as needs grow.
+
+**Remember: Good automation is invisible—players don't notice it working, only notice when it's not.**

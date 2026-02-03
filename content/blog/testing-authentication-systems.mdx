@@ -1,0 +1,897 @@
+---
+title: Testing Minecraft Authentication Systems - Security and Login Flow
+description: Learn how to test authentication plugins like AuthMe, validate Microsoft/Mojang auth, and ensure secure login flows on your Minecraft server
+author: Pistonmaster
+date: 2026-02-08
+tags: [minecraft, authentication, authme, security, offline-mode, login]
+---
+
+## Understanding Minecraft Authentication
+
+Authentication determines who can join your server and how their identity is verified. The authentication system is your server's first line of defense against unauthorized access.
+
+### Authentication Types
+
+**Online Mode (Default)**
+
+```properties
+# server.properties
+online-mode=true
+```
+
+**How it works:**
+1. Player connects to server
+2. Server contacts Mojang/Microsoft authentication servers
+3. Authentication servers verify player owns the account
+4. Server accepts or rejects connection based on verification
+
+**Pros:**
+- Secure - players must own valid Minecraft accounts
+- No impersonation - UUIDs tied to real accounts
+- Automatic - no additional plugins needed
+
+**Cons:**
+- Requires internet connection
+- Mojang/Microsoft servers must be reachable
+- Can't play if authentication servers are down
+
+**Offline Mode**
+
+```properties
+# server.properties
+online-mode=false
+```
+
+**How it works:**
+1. Player connects with any username
+2. Server accepts connection without verification
+3. No authentication check performed
+
+**Pros:**
+- Works offline
+- No external dependencies
+- Useful for testing/development
+
+**Cons:**
+- **CRITICAL SECURITY RISK**: Anyone can impersonate any player
+- No protection against fake accounts
+- Vulnerable to exploitation
+
+**When to use offline mode:**
+- Local testing/development
+- Behind a proxy (proxy handles authentication)
+- **NEVER** on a public server without additional authentication
+
+### Plugin-Based Authentication
+
+For offline mode servers, authentication plugins provide login security:
+
+| Plugin | Type | Security Level | Use Case |
+|--------|------|----------------|----------|
+| AuthMe | Password-based | Good | Public offline servers |
+| FastLogin | Hybrid online/offline | Excellent | Mixed authentication |
+| JPremium | Account validation | Good | Cracked + premium support |
+| nLogin | Simple password | Moderate | Small servers |
+
+## AuthMe: Deep Dive
+
+AuthMe is the most popular authentication plugin for offline mode servers.
+
+### Installation
+
+```bash
+# Download AuthMe
+wget https://github.com/AuthMe/AuthMeReloaded/releases/download/5.6.0/AuthMe-5.6.0.jar
+
+# Place in plugins folder
+mv AuthMe-5.6.0.jar plugins/
+
+# Start server (config auto-generates)
+java -jar paper.jar
+```
+
+### Core Configuration
+
+**config.yml:**
+
+```yaml
+settings:
+  # Session system - players stay logged in between rejoins
+  sessions:
+    enabled: true
+    timeout: 10  # Minutes before requiring re-login
+
+# Registration settings
+registration:
+  # Require registration
+  enabled: true
+  # Force players to register before playing
+  force: true
+  # Message interval (seconds) for unregistered players
+  messageInterval: 5
+  # Allow only 1 account per IP (prevent spam accounts)
+  maxRegPerIp: 1
+
+# Password security
+security:
+  # Minimum password length
+  minPasswordLength: 5
+  # Maximum password length
+  maxPasswordLength: 30
+  # Unsafe passwords (dictionary check)
+  unsafePasswords:
+    - '123456'
+    - 'password'
+    - 'qwerty'
+    - 'username'  # Prevents using username as password
+
+# Timeout before kick if not logged in
+timeout:
+  kick: 30  # Seconds
+
+# Restrict unlogged players
+restrictions:
+  # Commands unlogged players can use
+  allowCommands:
+    - '/login'
+    - '/register'
+    - '/l'
+    - '/reg'
+
+  # Prevent movement before login
+  allowMovement: false
+
+  # Prevent block interactions
+  allowChat: false
+```
+
+### Database Configuration
+
+AuthMe supports multiple database backends:
+
+**SQLite (Default - File-based):**
+
+```yaml
+DataSource:
+  backend: 'SQLITE'
+  mySQLDatabase: 'authme'
+  mySQLTablename: 'authme'
+```
+
+**MySQL (Recommended for production):**
+
+```yaml
+DataSource:
+  backend: 'MYSQL'
+  mySQLHost: 'localhost'
+  mySQLPort: '3306'
+  mySQLDatabase: 'minecraft_authme'
+  mySQLUsername: 'authme_user'
+  mySQLPassword: 'secure_password_here'
+  mySQLTablename: 'authme'
+  mySQLPoolSize: 10
+```
+
+**Setup MySQL:**
+
+```sql
+-- Create database
+CREATE DATABASE minecraft_authme;
+
+-- Create user
+CREATE USER 'authme_user'@'localhost' IDENTIFIED BY 'secure_password_here';
+
+-- Grant permissions
+GRANT ALL PRIVILEGES ON minecraft_authme.* TO 'authme_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+### Password Hashing
+
+AuthMe hashes passwords for security:
+
+```yaml
+security:
+  # Hashing algorithm
+  # Options: SHA256, BCRYPT, BCRYPT2Y (recommended)
+  passwordHash: 'BCRYPT2Y'
+
+  # BCrypt cost factor (higher = more secure, slower)
+  # 10 = good balance, 12+ for high security
+  bCryptLog2Rounds: 10
+```
+
+**Hashing comparison:**
+
+| Algorithm | Security | Speed | Recommended |
+|-----------|----------|-------|-------------|
+| SHA256 | Moderate | Fast | No - vulnerable to rainbow tables |
+| BCRYPT | Good | Slower | Yes |
+| BCRYPT2Y | Best | Slower | Yes - most secure |
+
+## Testing Authentication Systems
+
+Proper testing ensures your authentication actually protects players.
+
+### Test 1: Registration Flow
+
+**Objective:** Verify new players can register
+
+**Steps:**
+1. Join server with new account
+2. Attempt to move/interact
+3. Execute `/register <password> <password>`
+4. Verify login successful
+
+**Expected behavior:**
+
+```
+[Initial join]
+> Player frozen in place
+> Chat restricted
+> Repeated message: "Please register with /register <password> <password>"
+
+[After /register password123 password123]
+> Registration successful message
+> Player can move and interact
+> Player entry created in database
+```
+
+**Common issues:**
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Can move before registering | `allowMovement: true` | Set to `false` |
+| Command doesn't work | Permission issue | Grant `authme.register` |
+| "Too many accounts" | IP limit exceeded | Increase `maxRegPerIp` or change IP |
+
+### Test 2: Login Flow
+
+**Objective:** Verify returning players must login
+
+**Steps:**
+1. Register account (see Test 1)
+2. Disconnect
+3. Reconnect
+4. Verify frozen until `/login <password>`
+
+**Expected behavior:**
+
+```
+[Upon rejoin]
+> Player spawned but frozen
+> Message: "Please login with /login <password>"
+
+[After /login password123]
+> Login successful
+> Player can interact normally
+```
+
+### Test 3: Session Persistence
+
+**Objective:** Test session timeout
+
+**Steps:**
+1. Login successfully
+2. Disconnect
+3. Reconnect within session timeout (default: 10 minutes)
+4. Verify auto-login
+
+**Expected behavior:**
+
+```
+[Rejoin within 10 minutes]
+> Automatic login
+> No /login required
+> Message: "Session login successful"
+
+[Rejoin after 10+ minutes]
+> Requires /login again
+```
+
+**Configuration:**
+
+```yaml
+settings:
+  sessions:
+    enabled: true
+    timeout: 10  # Minutes
+```
+
+### Test 4: Password Security
+
+**Objective:** Unsafe passwords are rejected
+
+**Steps:**
+1. Attempt `/register 123456 123456`
+2. Verify rejection
+
+**Expected behavior:**
+
+```
+> Error: "This password is not secure!"
+> Registration fails
+```
+
+**Test with username-as-password:**
+
+```
+Username: TestPlayer
+Command: /register TestPlayer TestPlayer
+
+Expected: Rejected (matches username)
+```
+
+### Test 5: Brute Force Protection
+
+**Objective:** Prevent password guessing attacks
+
+**Configuration:**
+
+```yaml
+security:
+  # Limit login attempts
+  maxLoginTries: 3
+  # Timeout after max attempts (minutes)
+  tempBanLength: 5
+```
+
+**Test:**
+1. Login with wrong password 3 times
+2. Verify temporary ban
+
+**Expected behavior:**
+
+```
+[Attempt 1] /login wrongpass
+> Error: "Wrong password!"
+
+[Attempt 2] /login wrongpass2
+> Error: "Wrong password! (2/3 attempts remaining)"
+
+[Attempt 3] /login wrongpass3
+> Kicked: "Too many failed login attempts. Try again in 5 minutes."
+```
+
+### Test 6: Database Persistence
+
+**Objective:** Verify accounts persist across restarts
+
+**Steps:**
+1. Register account
+2. Stop server
+3. Start server
+4. Login with registered account
+
+**Expected:** Login succeeds (data persisted to database)
+
+**Verify database:**
+
+```sql
+-- Check user exists
+SELECT * FROM authme WHERE username = 'TestPlayer';
+
+-- Should return row with:
+-- - username
+-- - hashed password
+-- - registration IP
+-- - registration date
+```
+
+### Test 7: Multi-Account Limits
+
+**Objective:** Prevent spam accounts from same IP
+
+**Configuration:**
+
+```yaml
+registration:
+  maxRegPerIp: 1
+```
+
+**Test:**
+1. Register account "Player1" from IP 1.2.3.4
+2. Attempt to register "Player2" from same IP
+
+**Expected:**
+
+```
+> Error: "You have registered too many accounts from this IP address!"
+```
+
+**Override for testing:**
+
+```bash
+# Temporarily allow more accounts
+/authme setmaxreg 1.2.3.4 3
+
+# Set to 0 for unlimited
+/authme setmaxreg 1.2.3.4 0
+```
+
+### Test 8: Command Restrictions
+
+**Objective:** Unlogged players can't execute commands
+
+**Configuration:**
+
+```yaml
+restrictions:
+  allowCommands:
+    - '/login'
+    - '/register'
+```
+
+**Test:**
+1. Join without logging in
+2. Attempt `/help`, `/spawn`, `/warp`
+
+**Expected:** All commands blocked except `/login` and `/register`
+
+### Test 9: Chat Restrictions
+
+**Objective:** Unlogged players can't chat
+
+**Configuration:**
+
+```yaml
+restrictions:
+  allowChat: false
+```
+
+**Test:**
+1. Join without logging in
+2. Send chat message
+
+**Expected:** Message blocked, reminder to login
+
+### Test 10: Kick Timeout
+
+**Objective:** Idle players are kicked
+
+**Configuration:**
+
+```yaml
+timeout:
+  kick: 30  # Seconds
+```
+
+**Test:**
+1. Join server
+2. Don't login
+3. Wait 30 seconds
+
+**Expected:** Kicked with message "Login timeout"
+
+## Testing with Multiple Accounts
+
+Authentication systems must handle concurrent logins, account switching, and edge cases.
+
+### Test Case: Simultaneous Registrations
+
+**Setup:**
+- 10 players join simultaneously
+- All attempt to register
+
+**Expected:**
+- All registrations processed
+- No race conditions or database conflicts
+- Each gets unique entry
+
+**How to test:** Use bot clients to connect concurrently
+
+### Test Case: Account Impersonation Prevention
+
+**Scenario:** Player "Notch" is registered. Can someone else join as "notch" (lowercase)?
+
+**Test:**
+1. Register account "Notch"
+2. Disconnect
+3. Join as "notch" (lowercase)
+
+**Expected behavior:**
+
+Depends on configuration:
+
+```yaml
+settings:
+  # Case-sensitive usernames
+  forceSingleSession: true
+  preventOtherCase: true  # Recommended
+```
+
+With `preventOtherCase: true`:
+- "notch" sees: "This username is already registered with a different case!"
+
+Without protection:
+- "notch" and "Notch" treated as separate accounts (bad!)
+
+### Test Case: Password Change Flow
+
+**Test:**
+1. Register with password "oldpass"
+2. Execute `/changepassword oldpass newpass`
+3. Disconnect and reconnect
+4. Login with "newpass"
+
+**Expected:** New password works, old password fails
+
+### Test Case: Account Recovery
+
+**Configuration:**
+
+```yaml
+settings:
+  # Email recovery
+  emailRecovery: true
+```
+
+**Test:**
+1. Register with email: `/register password123 password123 player@example.com`
+2. Execute `/forgot`
+3. Check email for recovery code
+
+**Note:** Requires SMTP configuration and email server access
+
+## Microsoft/Mojang Authentication Testing
+
+For online-mode servers or premium account verification:
+
+### Test 1: Valid Premium Account
+
+**Test:**
+1. Join with legitimate Minecraft account
+2. Verify immediate connection (no additional login)
+
+**Expected:** Seamless join, no authentication prompts
+
+### Test 2: Cracked Client Rejection
+
+**Test:**
+1. Attempt to join with cracked/offline client
+2. Verify rejection
+
+**Expected:**
+
+```
+> "Failed to verify username!"
+> or
+> "Invalid session"
+```
+
+### Test 3: Account Switching
+
+**Test:**
+1. Join with Account A
+2. Disconnect
+3. Join with Account B (same PC)
+
+**Expected:** Both accounts work independently, separate UUIDs
+
+## Hybrid Authentication: FastLogin
+
+FastLogin allows both premium (online) and cracked (offline) players.
+
+**How it works:**
+1. Player connects
+2. FastLogin checks if account is premium (Mojang database)
+3. Premium players auto-login (no password)
+4. Cracked players must use `/login` (requires AuthMe)
+
+**Configuration:**
+
+```yaml
+# FastLogin config.yml
+autoLogin:
+  enabled: true
+
+# If premium account exists, auto-login
+# If not, require password via AuthMe
+autoRegister: false
+```
+
+**Testing:**
+
+**Test 1: Premium Player**
+```
+Account: RealMinecraftPlayer (premium)
+Expected: Auto-login, no password required
+```
+
+**Test 2: Cracked Player**
+```
+Account: CrackedPlayer (not premium)
+Expected: Must /register and /login via AuthMe
+```
+
+**Test 3: Premium Player on Cracked Client**
+```
+Scenario: Premium account name, but using cracked client
+Expected: Rejected (can't impersonate premium player)
+```
+
+## Security Testing
+
+Authentication security is critical. Test for vulnerabilities.
+
+### SQL Injection Testing
+
+**WARNING:** Only test on your own server with permission.
+
+**Test:**
+```
+/register ' OR '1'='1 password
+/login ' OR '1'='1
+```
+
+**Expected:** Commands fail, special characters escaped
+
+**If successful (BAD!):** SQL injection vulnerability exists. Update AuthMe immediately.
+
+### Timing Attack Testing
+
+**Attack concept:** Measure response time differences to determine if username exists.
+
+**Test:**
+```
+/login ExistingUser wrongpass  # Time response
+/login NonExistentUser wrongpass  # Time response
+```
+
+**Good:** Both take similar time (constant-time comparison)
+**Bad:** Existing user takes longer (reveals user exists)
+
+Modern AuthMe versions prevent this with constant-time operations.
+
+### Session Hijacking Testing
+
+**Test:**
+1. Login as Player1
+2. Note session token (if visible in logs - shouldn't be!)
+3. Attempt to use token from different IP
+
+**Expected:** Session invalidated, requires re-login
+
+**Configuration:**
+
+```yaml
+settings:
+  sessions:
+    enabled: true
+    # Validate IP matches session IP
+    ipCheck: true
+```
+
+## Automated Testing with Bots
+
+Manual authentication testing is tedious. Bots enable comprehensive, repeatable tests.
+
+### Why Bots for Auth Testing?
+
+**Manual testing limitations:**
+- Can't test 100 concurrent registrations
+- Difficult to test timing attacks
+- Hard to reproduce edge cases consistently
+
+**Bots provide:**
+- Concurrent registration testing (10, 50, 100+ accounts)
+- Automated login/logout cycles
+- Consistent, repeatable test scenarios
+- Load testing on authentication system
+
+### Test Scenarios
+
+**Scenario 1: Mass Registration**
+
+```
+Objective: Verify system handles many registrations
+
+Setup:
+- Configure 50 bots with unique accounts
+- All attempt to register simultaneously
+
+Test:
+1. All bots connect
+2. Each sends /register <unique_password> <unique_password>
+3. Monitor success rate and database entries
+
+Expected:
+- 100% registration success
+- All accounts in database
+- No race conditions or conflicts
+```
+
+**Scenario 2: Login Attempt Load**
+
+```
+Objective: Test authentication system under load
+
+Setup:
+- 100 registered bot accounts
+- All disconnected
+
+Test:
+1. All bots reconnect simultaneously
+2. All execute /login <password>
+3. Monitor login success rate
+
+Expected:
+- All logins succeed
+- No timeouts or failures
+- Database handles concurrent auth checks
+```
+
+**Scenario 3: Brute Force Simulation**
+
+```
+Objective: Verify brute force protection works
+
+Setup:
+- 1 registered account
+- Bot attempts multiple wrong passwords
+
+Test:
+1. Bot connects
+2. Bot tries wrong password 10 times rapidly
+3. Monitor if temporary ban triggers
+
+Expected:
+- After 3 attempts (or configured limit), bot is kicked/banned
+- Further attempts blocked during ban period
+```
+
+**Scenario 4: Session Timeout Testing**
+
+```
+Objective: Verify session expiration works correctly
+
+Setup:
+- Bot logs in successfully
+- Session timeout set to 2 minutes
+
+Test:
+1. Bot disconnects
+2. Bot reconnects after 1 minute
+3. Verify auto-login
+4. Bot disconnects
+5. Bot reconnects after 3 minutes
+6. Verify /login required
+
+Expected:
+- < 2 minutes: Auto-login
+- > 2 minutes: Manual login required
+```
+
+**Scenario 5: Account Limit Bypass Attempt**
+
+```
+Objective: Ensure IP-based account limits work
+
+Setup:
+- maxRegPerIp = 1
+- Bots use same IP (proxy)
+
+Test:
+1. Bot 1 registers successfully
+2. Bot 2 (same IP) attempts to register
+3. Verify rejection
+
+Expected:
+- Bot 1 succeeds
+- Bot 2 gets "too many accounts" error
+```
+
+### Using Bots for Authentication Testing
+
+Bot tools can simulate realistic authentication flows:
+
+**Basic Configuration:**
+```
+Target: your-server.com:25565
+Bot Count: 10
+Account Type: Offline (custom usernames)
+
+Test Flow:
+1. Connect bots sequentially
+2. Each bot attempts registration
+3. Monitor success/failure rates
+4. Verify all accounts in database
+```
+
+**Advanced: Login Cycle Test**
+```
+Setup: 50 pre-registered bot accounts
+
+Test Flow:
+1. All bots connect (staggered, 1 second apart)
+2. All bots execute /login <password>
+3. Bots remain connected for 2 minutes
+4. All bots disconnect
+5. Wait 30 seconds
+6. Repeat cycle 10 times
+
+Monitor:
+- Login success rate per cycle
+- Any authentication errors
+- Database connection pool exhaustion
+- Memory leaks in auth plugin
+```
+
+**What to Monitor:**
+
+```bash
+# Server-side
+tail -f logs/latest.log | grep -i "authme\|login\|register"
+
+# Database connections
+# For MySQL
+mysql> SHOW PROCESSLIST;
+
+# Check AuthMe database
+mysql> SELECT COUNT(*) FROM authme;
+
+# Server performance
+/spark tps
+```
+
+**Interpreting Results:**
+
+```
+Good Results:
+✅ All bot registrations succeeded
+✅ All bot logins succeeded
+✅ No authentication errors in logs
+✅ Database entries match bot count
+✅ TPS remained 19-20 during auth load
+
+Problems:
+❌ Some registrations failed (database issue?)
+❌ Login timeouts (slow database queries?)
+❌ Errors: "Too many connections" (connection pool too small)
+❌ TPS dropped to 15 during auth (performance issue)
+```
+
+**Performance Benchmarking:**
+
+```
+Test: 100 bots register simultaneously
+
+Good: All complete within 10 seconds
+Acceptable: All complete within 30 seconds
+Poor: Timeouts or failures
+
+If poor:
+- Increase database connection pool
+- Optimize database indexes
+- Use MySQL instead of SQLite
+- Upgrade server CPU
+```
+
+## Best Practices Summary
+
+1. **Use online mode** when possible (most secure)
+2. **If offline mode necessary**, always use authentication plugin (AuthMe)
+3. **Use BCRYPT2Y hashing** for passwords
+4. **Enable session timeout** for security (10-15 minutes)
+5. **Limit registrations per IP** to prevent spam accounts
+6. **Set strong minimum password requirements** (8+ characters, complexity)
+7. **Use MySQL** for production (better performance than SQLite)
+8. **Enable brute force protection** (max 3-5 login attempts)
+9. **Test with concurrent logins** to ensure no race conditions
+10. **Monitor authentication logs** for suspicious activity
+
+## Conclusion
+
+Authentication is your server's front door—if it's weak, nothing else matters. Whether using online mode, offline mode with AuthMe, or hybrid systems like FastLogin, thorough testing ensures your authentication actually protects your players.
+
+Key takeaways:
+
+1. **Never use offline mode without authentication plugin** on public servers
+2. **Test all flows**: registration, login, password change, recovery
+3. **Load test authentication** to ensure it handles peak player counts
+4. **Security test for vulnerabilities** like SQL injection and timing attacks
+5. **Use bots for comprehensive, repeatable testing** at scale
+
+With proper configuration and testing, your authentication system will protect player accounts while providing a smooth login experience. Players trust you with their progress, inventories, and permissions—don't let them down with weak authentication.
+
+**Remember: An untested authentication system is an insecure authentication system.**
