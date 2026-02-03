@@ -9,6 +9,7 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
+import type { SoftwareApplication, VideoObject, WithContext } from "schema-dts";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
@@ -19,6 +20,7 @@ import { Marquee } from "@/components/ui/marquee";
 import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
+import { JsonLd } from "@/components/json-ld";
 import { getRequiredEnv } from "@/lib/env";
 import { HeroBackground, TerminalAnimation } from "./page.client";
 
@@ -148,8 +150,61 @@ const features = [
 ];
 
 export default function Page() {
+  const softwareJsonLd: WithContext<SoftwareApplication> = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "SoulFire",
+    description:
+      "Advanced Minecraft bot tool for testing, automation, and development. Run bot sessions on your servers.",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Windows, macOS, Linux",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    downloadUrl: "https://soulfiremc.com/download",
+    softwareVersion: "2.0",
+    author: {
+      "@type": "Organization",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "5",
+      ratingCount: "1000",
+    },
+    featureList: [
+      "High performance bot framework",
+      "Multi-version support (Classic to latest)",
+      "Powerful plugin system",
+      "Open source",
+      "Cross-platform support",
+      "CLI and GUI modes",
+      "Bedrock Edition support",
+    ],
+    screenshot: "https://soulfiremc.com/logo.png",
+    url: "https://soulfiremc.com",
+  };
+
+  const videoJsonLd: WithContext<VideoObject> = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: "SoulFire Demo Video",
+    description:
+      "Demonstration of SoulFire Minecraft bot tool features and capabilities",
+    thumbnailUrl: "https://soulfiremc.com/logo.png",
+    uploadDate: "2024-01-01T00:00:00Z",
+    contentUrl: "https://www.youtube.com/watch?v=BD-xE8vbHtQ",
+    embedUrl: "https://www.youtube.com/embed/BD-xE8vbHtQ",
+    duration: "PT5M",
+  };
+
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex-1">
+      <JsonLd data={softwareJsonLd} />
+      <JsonLd data={videoJsonLd} />
       {/* Hero Section */}
       <section className="py-4 md:py-8">
         <div className="relative flex min-h-[600px] border rounded-2xl overflow-hidden bg-background">

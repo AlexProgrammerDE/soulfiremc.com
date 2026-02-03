@@ -9,7 +9,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import posthog from "posthog-js";
+import type { BreadcrumbList, WithContext } from "schema-dts";
 import { Feedback } from "@/components/feedback";
+import { JsonLd } from "@/components/json-ld";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
 import {
   HoverCard,
@@ -28,6 +30,37 @@ export default async function Page(props: {
 
   const MDX = page.data.body;
 
+  // Build breadcrumb trail
+  const breadcrumbItems: Array<{ name: string; url: string }> = [
+    { name: "Home", url: "https://soulfiremc.com" },
+    { name: "Docs", url: "https://soulfiremc.com/docs" },
+  ];
+
+  if (params.slug) {
+    let currentPath = "/docs";
+    for (let i = 0; i < params.slug.length; i++) {
+      currentPath += `/${params.slug[i]}`;
+      const currentPage = source.getPage(params.slug.slice(0, i + 1));
+      if (currentPage) {
+        breadcrumbItems.push({
+          name: currentPage.data.title,
+          url: `https://soulfiremc.com${currentPath}`,
+        });
+      }
+    }
+  }
+
+  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+
   return (
     <DocsPage
       toc={page.data.toc}
@@ -39,6 +72,7 @@ export default async function Page(props: {
         style: "clerk",
       }}
     >
+      <JsonLd data={breadcrumbJsonLd} />
       <div className="flex flex-col gap-2">
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription className="mb-2.5">

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Blog, WithContext } from "schema-dts";
+import { JsonLd } from "@/components/json-ld";
 import { blogSource } from "@/lib/source";
 
 export default function BlogIndex() {
@@ -9,8 +11,44 @@ export default function BlogIndex() {
     return dateB - dateA;
   });
 
+  const jsonLd: WithContext<Blog> = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "SoulFire Blog",
+    description:
+      "Latest updates, tutorials, and insights from the SoulFire team",
+    url: "https://soulfiremc.com/blog",
+    publisher: {
+      "@type": "Organization",
+      name: "SoulFire",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://soulfiremc.com/logo.png",
+      },
+    },
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.data.title,
+      description: post.data.description,
+      url: `https://soulfiremc.com${post.url}`,
+      datePublished: post.data.date
+        ? new Date(post.data.date).toISOString()
+        : undefined,
+      author: post.data.author
+        ? {
+            "@type": "Person",
+            name: post.data.author,
+          }
+        : undefined,
+      image: post.data.cover
+        ? `https://soulfiremc.com${post.data.cover}`
+        : "https://soulfiremc.com/logo.png",
+    })),
+  };
+
   return (
     <div className="container mx-auto py-12 px-4 max-w-7xl">
+      <JsonLd data={jsonLd} />
       <div className="mb-12">
         <h1 className="text-5xl font-bold mb-4">Blog</h1>
         <p className="text-xl text-muted-foreground">

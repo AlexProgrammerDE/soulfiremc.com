@@ -4,7 +4,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { BlogPosting, WithContext } from "schema-dts";
 import { ShareButton } from "@/components/blog/share-button";
+import { JsonLd } from "@/components/json-ld";
 import { blogSource } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -17,8 +19,44 @@ export default async function BlogPost(props: {
 
   const MDX = page.data.body;
 
+  const jsonLd: WithContext<BlogPosting> = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: page.data.title,
+    description: page.data.description,
+    image: page.data.cover
+      ? `https://soulfiremc.com${page.data.cover}`
+      : "https://soulfiremc.com/logo.png",
+    datePublished: page.data.date
+      ? new Date(page.data.date).toISOString()
+      : undefined,
+    dateModified: page.data.date
+      ? new Date(page.data.date).toISOString()
+      : undefined,
+    author: page.data.author
+      ? {
+          "@type": "Person",
+          name: page.data.author,
+        }
+      : undefined,
+    publisher: {
+      "@type": "Organization",
+      name: "SoulFire",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://soulfiremc.com/logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://soulfiremc.com${page.url}`,
+    },
+    keywords: page.data.tags?.join(", "),
+  };
+
   return (
     <article className="container mx-auto py-12 px-4 max-w-4xl">
+      <JsonLd data={jsonLd} />
       <Link
         href="/blog"
         className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"

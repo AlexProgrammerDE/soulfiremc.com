@@ -5,8 +5,10 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import type { Organization, WithContext } from "schema-dts";
 import { Toaster } from "sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
+import { JsonLd } from "@/components/json-ld";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -56,6 +58,25 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const organizationJsonLd: WithContext<Organization> = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "SoulFire",
+    url: "https://soulfiremc.com",
+    logo: "https://soulfiremc.com/logo.png",
+    description:
+      "Advanced Minecraft bot tool for testing, automation, and development.",
+    sameAs: [
+      "https://github.com/AlexProgrammerDE/SoulFire",
+      "https://discord.gg/soulfiremc",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "Technical Support",
+      url: "https://discord.gg/soulfiremc",
+    },
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -66,6 +87,7 @@ export default async function RootLayout({
         )}
         suppressHydrationWarning
       >
+        <JsonLd data={organizationJsonLd} />
         <NuqsAdapter>
           <RootProvider>
             <Banner id={"v2"}>SoulFire v2 is out now!</Banner>
