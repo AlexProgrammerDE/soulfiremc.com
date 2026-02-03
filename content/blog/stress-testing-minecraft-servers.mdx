@@ -41,7 +41,7 @@ Minecraft runs on a tick-based system, targeting 20 ticks per second (one tick e
 
 **How to check TPS:**
 
-```bash title="Check TPS commands"
+```bash
 # Paper/Spigot servers
 /tps
 
@@ -62,7 +62,7 @@ MSPT measures how long the server takes to process each tick. This is often more
 
 **Check MSPT:**
 
-```bash title="Check MSPT commands"
+```bash
 /mspt  # Paper servers
 
 /spark tps  # Shows TPS, MSPT, and CPU usage
@@ -74,7 +74,7 @@ The spark output shows three values: current MSPT, median MSPT (over 10 seconds)
 
 Monitor both heap memory and GC (garbage collection) activity. Frequent GC pauses can cause lag spikes even when average TPS looks healthy.
 
-```bash title="Check memory and GC"
+```bash
 # Check memory usage
 /spark heapsummary
 
@@ -86,7 +86,7 @@ Monitor both heap memory and GC (garbage collection) activity. Frequent GC pause
 
 High CPU usage indicates computational bottlenecks—too many entities, complex redstone, or inefficient plugins.
 
-```bash title="Check CPU usage"
+```bash
 /spark tps  # Shows CPU percentage
 ```
 
@@ -105,7 +105,7 @@ Before stress testing, optimize your baseline configuration. Testing an unoptimi
 
 Best all-around choice for most servers. Excellent plugin compatibility with significant performance improvements over Spigot.
 
-```bash title="Download Paper server"
+```bash title="download-paper.sh"
 # Download Paper (example for 1.21)
 wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/latest/downloads/paper-1.21-latest.jar
 ```
@@ -121,7 +121,7 @@ wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/latest/downlo
 
 Paper fork with additional gameplay features and further optimizations. Ideal if you want extra configuration options.
 
-```bash title="Download Purpur server"
+```bash title="download-purpur.sh"
 # Download Purpur (example for 1.21)
 wget https://api.purpurmc.org/v2/purpur/1.21/latest/download
 ```
@@ -230,8 +230,9 @@ Chunk generation is extremely expensive. Generate your world before players expl
 
 **Using Chunky (recommended):**
 
-```bash title="Pregenerate chunks with Chunky"
-# Install Chunky plugin, then in-game:
+Install Chunky plugin, then run these commands in-game:
+
+```bash
 /chunky world world
 /chunky radius 5000
 /chunky start
@@ -276,7 +277,9 @@ async-chunks:
 
 **paper-world-defaults.yml:**
 
-```yaml title="paper-world-defaults.yml - Additional settings"
+Additional settings for paper-world-defaults.yml:
+
+```yaml title="paper-world-defaults.yml"
 # Use per-player mob spawning (like singleplayer)
 spawn-limits:
   spawn-mechanism: per-player  # Much better than "bukkit"
@@ -289,9 +292,9 @@ entities:
 
 ### 6. Optimize Java Flags
 
-Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) (recommended by most hosting providers):
+Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) (recommended by most hosting providers). Replace `-Xms10G -Xmx10G` with your available RAM (Xms and Xmx values should match):
 
-```bash title="Aikar's Java flags for optimal performance"
+```bash title="start-server.sh"
 java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
   -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions \
   -XX:+DisableExplicitGC -XX:+AlwaysPreTouch \
@@ -305,8 +308,6 @@ java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
   -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs \
   -Daikars.new.flags=true -jar paper.jar --nogui
 ```
-
-Replace `-Xms10G -Xmx10G` with your available RAM. The Xms and Xmx values should match.
 
 <Callout type="info" title="Additional Resources">
 For more optimization guides, check out:
@@ -331,7 +332,7 @@ Before stress testing, set up monitoring tools so you can analyze what happens u
 
 **Essential commands:**
 
-```bash title="Essential Spark commands"
+```bash
 # Quick health check
 /spark tps
 
@@ -372,7 +373,7 @@ Now you're ready to stress test. Here's a methodical approach.
 
 Start with an empty server and record idle performance:
 
-```bash title="Establish baseline performance"
+```bash
 /spark tps
 /spark heapsummary
 ```
@@ -401,7 +402,7 @@ Don't immediately test with 500 bots—you'll learn nothing except "it crashes."
 
 **During each test:**
 
-```bash title="Monitor during load testing"
+```bash
 # Monitor every 60 seconds
 /spark tps
 /spark heapsummary
@@ -544,7 +545,7 @@ After testing, analyze your data to find bottlenecks.
 
 Generate a profile during degraded performance:
 
-```bash title="Generate performance profile during degradation"
+```bash
 /spark profiler start --timeout 300
 # Wait for performance issues to occur
 /spark profiler stop
@@ -569,7 +570,7 @@ NetworkManager: 10% (normal)
 
 ### Memory Analysis
 
-```bash title="Analyze memory usage"
+```bash
 /spark heapsummary
 ```
 
@@ -586,8 +587,9 @@ Look for:
 
 **Solutions:**
 
-```yaml title="paper-world-defaults.yml - Reduce entity load"
-# paper-world-defaults.yml
+Reduce entity load in paper-world-defaults.yml:
+
+```yaml title="paper-world-defaults.yml"
 entities:
   spawning:
     spawn-limits:
@@ -609,10 +611,9 @@ entities:
 
 1. Pregenerate more world
 2. Reduce view distance
-3. Increase chunk loading thread count:
+3. Reduce chunk loading rate in paper-global.yml:
 
-```yaml title="paper-global.yml - Reduce chunk loading rate"
-# paper-global.yml
+```yaml title="paper-global.yml"
 chunk-loading-advanced:
   player-max-chunk-load-rate: 50.0  # Reduce from 100
 ```
@@ -625,10 +626,9 @@ chunk-loading-advanced:
 
 1. Use redstone limiters (plugins like RedstoneControl)
 2. Educate players on efficient designs
-3. Set chunk tick limits:
+3. Limit chunk ticking in paper-world-defaults.yml:
 
-```yaml title="paper-world-defaults.yml - Limit chunk ticking"
-# paper-world-defaults.yml
+```yaml title="paper-world-defaults.yml"
 max-auto-save-chunks-per-tick: 6
 ```
 
@@ -716,7 +716,7 @@ SoulFire's Fabric architecture means:
 
 **Example test configuration:**
 
-```yaml title="Example SoulFire test configuration"
+```yaml title="soulfire-config.yml"
 Address: your-server.com:25565
 Bot Amount: 100
 Min Join Delay: 1000ms
