@@ -41,6 +41,9 @@ export const metadata: Metadata = {
   alternates: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     canonical: "./",
+    types: {
+      "application/rss+xml": "/blog/feed.xml",
+    },
   },
 };
 
