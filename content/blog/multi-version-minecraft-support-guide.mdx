@@ -13,7 +13,7 @@ Every Minecraft version speaks a different "language" (protocol). Clients and se
 ### The Version Problem
 
 **Traditional approach:**
-```
+```txt title="Traditional Approach"
 Server Version: 1.21
 Compatible Clients: Only 1.21
 
@@ -22,7 +22,7 @@ Player with 1.21.1 client: ❌ Cannot connect
 ```
 
 **With ViaVersion:**
-```
+```txt title="With ViaVersion Installed"
 Server Version: 1.21
 ViaVersion Installed: ✅
 
@@ -50,13 +50,13 @@ Player with 1.21.1 client: ✅ Can connect
 
 ## The ViaVersion Suite
 
-ViaVersion isn't one plugin—it's an ecosystem.
+[ViaVersion](https://github.com/ViaVersion/ViaVersion) isn't one plugin—it's an ecosystem.
 
 ### ViaVersion (Core)
 
 **Purpose:** Allow newer clients to connect to older servers
 
-```
+```txt title="How ViaVersion Works"
 Example:
 Server: 1.20.4
 ViaVersion: Installed
@@ -66,7 +66,7 @@ Client 1.21 → ViaVersion translates → Server sees 1.20.4 client
 
 **Installation:**
 
-```bash
+```bash title="Installing ViaVersion"
 # Download ViaVersion
 wget https://github.com/ViaVersion/ViaVersion/releases/download/5.0.0/ViaVersion-5.0.0.jar
 
@@ -80,7 +80,7 @@ mv ViaVersion-5.0.0.jar plugins/
 
 **Purpose:** Allow older clients to connect to newer servers
 
-```
+```txt title="How ViaBackwards Works"
 Example:
 Server: 1.21
 ViaBackwards: Installed
@@ -88,11 +88,11 @@ ViaBackwards: Installed
 Client 1.19 → ViaBackwards translates → Server sees 1.21 client
 ```
 
-**Requires:** ViaVersion (core)
+**Requires:** [ViaVersion](https://github.com/ViaVersion/ViaVersion) (core)
 
 **Installation:**
 
-```bash
+```bash title="Installing ViaBackwards"
 # ViaBackwards requires ViaVersion
 # Download ViaBackwards
 wget https://github.com/ViaVersion/ViaBackwards/releases/download/5.0.0/ViaBackwards-5.0.0.jar
@@ -104,7 +104,7 @@ mv ViaBackwards-5.0.0.jar plugins/
 
 **Purpose:** Support extremely old clients (1.8 and below)
 
-```
+```txt title="How ViaRewind Works"
 Example:
 Server: 1.21
 ViaRewind: Installed
@@ -112,11 +112,11 @@ ViaRewind: Installed
 Client 1.8 → ViaRewind translates → Server sees 1.21 client
 ```
 
-**Requires:** ViaVersion + ViaBackwards
+**Requires:** [ViaVersion](https://github.com/ViaVersion/ViaVersion) + [ViaBackwards](https://github.com/ViaVersion/ViaBackwards)
 
 **Installation:**
 
-```bash
+```bash title="Installing ViaRewind"
 # Download ViaRewind
 wget https://github.com/ViaVersion/ViaRewind/releases/download/3.0.0/ViaRewind-3.0.0.jar
 
@@ -132,7 +132,9 @@ mv ViaRewind-3.0.0.jar plugins/
 | 1.19 | ✅ | ✅ | ✅ | 1.8 - 1.21+ |
 | 1.16.5 | ✅ | ❌ | ❌ | 1.16.5 - 1.21+ |
 
-**Note:** ViaBackwards only goes back ~3-4 versions. ViaRewind fills the gap.
+<Callout type="info">
+ViaBackwards only goes back ~3-4 versions. ViaRewind fills the gap to support extremely old versions like 1.8.
+</Callout>
 
 ## Configuration
 
@@ -140,7 +142,7 @@ mv ViaRewind-3.0.0.jar plugins/
 
 **config.yml:**
 
-```yaml
+```yaml title="ViaVersion config.yml"
 # Should ViaVersion check for updates?
 checkforupdates: true
 
@@ -185,7 +187,7 @@ character-width-fix: false
 
 **config.yml:**
 
-```yaml
+```yaml title="ViaBackwards config.yml"
 # Suppress conversion warnings
 suppress-conversion-warnings: false
 
@@ -204,7 +206,9 @@ sound-conversion: true
 
 ### Version-Specific Limitations
 
-Not everything can be translated perfectly:
+<Callout type="warning">
+Not everything can be translated perfectly between Minecraft versions. Some features will have limited functionality or appear differently on older clients.
+</Callout>
 
 | Feature | Version Introduced | Compatibility |
 |---------|-------------------|---------------|
@@ -233,7 +237,7 @@ Configuration means nothing without validation.
 
 **For each client version:**
 
-```
+```txt title="Connection Test Steps"
 1. Start server with ViaVersion suite
 2. Connect with test client
 3. Verify successful join
@@ -258,7 +262,7 @@ Expected:
 
 **Test:**
 
-```
+```txt title="Movement Test Steps"
 1. Connect with various client versions
 2. Walk, sprint, jump, swim, fly
 3. Note any jank or rubber-banding
@@ -271,7 +275,7 @@ Expected:
 
 **Known issues:**
 
-```
+```txt title="Known Movement Issues"
 Client 1.8:
 - Sprint mechanics slightly different (client-side prediction)
 - Swimming is walking underwater (pre-aquatic update)
@@ -287,7 +291,7 @@ Client 1.12:
 
 **Test:**
 
-```
+```txt title="Block Interaction Test"
 1. Place variety of blocks (new and old)
 2. Connect with various clients
 3. Verify blocks appear (even if placeholder)
@@ -302,7 +306,7 @@ Test blocks:
 
 **Expected behavior:**
 
-```
+```txt title="Expected Block Behavior"
 Client 1.16 seeing copper block (1.17):
 - Appears as stone or another placeholder
 - Collision box correct
@@ -315,7 +319,7 @@ Client 1.16 seeing copper block (1.17):
 
 **Test:**
 
-```
+```txt title="Combat Test Steps"
 1. Connect with 1.8 client (old combat)
 2. Connect with 1.9+ client (new combat)
 3. Test PvP between clients
@@ -341,7 +345,7 @@ Expected:
 
 **Test:**
 
-```
+```txt title="Item Test Steps"
 1. Give player items from various versions
 2. Connect with older clients
 3. Verify items appear (even if converted)
@@ -355,7 +359,7 @@ Test items:
 
 **Expected:**
 
-```
+```txt title="Expected Item Behavior"
 Client 1.8 receiving netherite sword:
 - Appears as diamond sword (or similar)
 - Functions as weapon
@@ -368,7 +372,7 @@ Client 1.8 receiving netherite sword:
 
 **Test:**
 
-```
+```txt title="Chat Test Steps"
 1. Connect with various clients
 2. Send chat messages
 3. Execute commands
@@ -383,7 +387,7 @@ Expected:
 
 **Format compatibility:**
 
-```yaml
+```yaml title="Chat Format Compatibility"
 # Avoid 1.16+ hex colors for older clients
 Good: "&c&lWarning"  # Works on all versions
 Bad: "&#FF5555Warning"  # Only works 1.16+
@@ -402,7 +406,7 @@ if (player.getProtocolVersion() >= 735) {  // 1.16+
 
 **Test (1.18+ server):**
 
-```
+```txt title="Below World Test"
 1. Teleport player to y=-64 (below old bedrock)
 2. Connect with 1.17- client
 3. Verify behavior
@@ -415,7 +419,7 @@ Expected:
 
 **Test (1.18+ server):**
 
-```
+```txt title="Above World Test"
 1. Build structure at y=300 (above old limit)
 2. Connect with 1.17- client
 3. Fly up to y=300
@@ -428,7 +432,7 @@ Expected:
 
 **Mitigation:**
 
-```yaml
+```yaml title="Safe Y-Level Ranges"
 # Build important structures within "safe" zones
 Safe Y range (all clients): 0-255
 Extended Y range (1.18+ only): -64-319
@@ -440,7 +444,7 @@ Extended Y range (1.18+ only): -64-319
 
 **Test:**
 
-```
+```txt title="Entity Test Steps"
 1. Spawn various mobs (old and new)
 2. Connect with different clients
 3. Verify mobs render
@@ -455,7 +459,7 @@ Test mobs:
 
 **Expected:**
 
-```
+```txt title="Expected Entity Behavior"
 Client 1.16 seeing Warden:
 - Appears as alternative mob (zombie, etc.)
 - Hitbox correct
@@ -465,7 +469,7 @@ Client 1.16 seeing Warden:
 
 ## Proxy Multi-Version Support
 
-Proxies (Velocity/BungeeCord) benefit greatly from ViaVersion.
+Proxies ([Velocity](https://papermc.io/software/velocity) / [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/)) benefit greatly from ViaVersion.
 
 ### ViaVersion on Proxy
 
@@ -476,30 +480,44 @@ Proxies (Velocity/BungeeCord) benefit greatly from ViaVersion.
 
 **Architecture:**
 
-```
+```txt title="Proxy with ViaVersion"
 Player (1.20) → Proxy (ViaVersion) → Backend 1.21
 Player (1.19) → Proxy (ViaVersion) → Backend 1.21
 Player (1.21) → Proxy (ViaVersion) → Backend 1.21
 ```
 
+<Callout type="info">
+Installing ViaVersion on the proxy allows you to translate protocols once instead of on each backend server, making it more efficient for networks.
+</Callout>
+
 **Installation:**
 
-```bash
+<Tabs items={['Velocity', 'BungeeCord']}>
+  <Tab value="Velocity">
+```bash title="Installing on Velocity"
 # Download ViaVersion for Velocity
 wget https://github.com/ViaVersion/ViaVersion/releases/download/5.0.0/ViaVersion-5.0.0.jar
 
 # Place in proxy plugins folder
 mv ViaVersion-5.0.0.jar velocity/plugins/
+```
+  </Tab>
+  <Tab value="BungeeCord">
+```bash title="Installing on BungeeCord"
+# Download ViaVersion for BungeeCord
+wget https://github.com/ViaVersion/ViaVersion/releases/download/5.0.0/ViaVersion-5.0.0.jar
 
-# Same for BungeeCord
+# Place in proxy plugins folder
 mv ViaVersion-5.0.0.jar bungeecord/plugins/
 ```
+  </Tab>
+</Tabs>
 
 ### Testing Proxy Multi-Version
 
 **Test scenario:**
 
-```
+```txt title="Proxy Test Setup"
 Setup:
 - Proxy: Velocity with ViaVersion
 - Backend 1: Paper 1.21 (lobby)
@@ -511,6 +529,10 @@ Test clients:
 - Client 1.20
 - Client 1.19
 ```
+
+<Callout type="warning">
+When using ViaVersion with proxies and different backend server versions, ensure all backends have compatible protocol forwarding configurations.
+</Callout>
 
 **Test matrix:**
 
@@ -528,7 +550,7 @@ Test clients:
 
 **Test:**
 
-```
+```txt title="Protocol Forwarding Test"
 1. Setup Velocity with modern forwarding
 2. Install ViaVersion on proxy
 3. Connect with various client versions
@@ -556,7 +578,7 @@ For truly comprehensive version support, ViaFabricPlus supports nearly every Min
 
 **How it works:**
 
-```
+```txt title="ViaFabricPlus Translation"
 Client: 1.21 with ViaFabricPlus
 Server: 1.8
 
@@ -567,7 +589,7 @@ ViaFabricPlus translates: Client sends 1.8 packets
 
 **Test scenario:**
 
-```
+```txt title="ViaFabricPlus Test Coverage"
 Server versions to test:
 - 1.21 (latest)
 - 1.20.4
@@ -608,7 +630,7 @@ Expected: Can connect to all servers
 
 **Fix:**
 
-```yaml
+```yaml title="Movement Optimization"
 # ViaVersion config.yml
 minimize-cooldown: true
 
@@ -633,7 +655,7 @@ minimize-cooldown: true
 **Cause:** Protocol differences in chunk format
 
 **Fix:**
-```yaml
+```yaml title="Chunk Loading Optimization"
 # Paper config
 # Increase chunk send rate for older protocols
 ```
@@ -667,7 +689,7 @@ Multi-version support has overhead.
 
 ### Optimization
 
-```yaml
+```yaml title="ViaVersion Performance Optimization"
 # ViaVersion config.yml
 
 # Reduce cache size (if memory constrained)
@@ -702,7 +724,7 @@ Manual testing every version is tedious. Bots automate this.
 
 **Scenario 1: Version Coverage Test**
 
-```
+```txt title="Version Coverage Test"
 Objective: Verify all supported versions can connect
 
 Setup:
@@ -723,7 +745,7 @@ Expected:
 
 **Scenario 2: Concurrent Multi-Version Load**
 
-```
+```txt title="Concurrent Load Test"
 Objective: Multiple versions online simultaneously
 
 Setup:
@@ -743,7 +765,7 @@ Expected:
 
 **Scenario 3: Version Migration Test**
 
-```
+```txt title="Version Migration Test"
 Objective: Client updates don't break connection
 
 Setup:
@@ -778,7 +800,7 @@ SoulFire with ViaFabricPlus:
 
 **Test Configuration:**
 
-```
+```txt title="SoulFire Test Configuration"
 Server: 1.16.5 (modded)
 SoulFire Configuration:
 - Protocol Version: 1.16.5 (use dropdown/config)
@@ -798,7 +820,7 @@ Expected:
 
 **Advanced Test: Version Matrix**
 
-```
+```txt title="Comprehensive Version Matrix Test"
 Test Goal: Verify server supports all advertised versions
 
 Server Setup:
@@ -831,6 +853,10 @@ Interpretation:
 ```
 
 ## Best Practices Summary
+
+<Callout type="info">
+For best results, use [Paper](https://papermc.io/) as your server software. It provides excellent performance and full compatibility with the ViaVersion suite.
+</Callout>
 
 1. **Install full ViaVersion suite** (ViaVersion + ViaBackwards + ViaRewind) for maximum compatibility
 2. **Test major versions**: 1.21, 1.20, 1.19, 1.16.5, 1.12.2, 1.8.9

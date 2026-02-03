@@ -12,93 +12,97 @@ Releasing untested plugins is like shipping code with a blindfold on. You might 
 
 - Plugin works perfectly in testing, breaks in production
 - Edge case crashes the server at 3 AM
-- Update to Paper breaks your plugin
+- Update to [Paper](https://papermc.io/) breaks your plugin
 - Two plugins conflict in ways you never imagined
 
+<Callout type="warn">
 Proper testing catches these issues before players do. This guide covers testing methodologies for both simple utility plugins and complex multiplayer minigames.
+</Callout>
 
 ## Types of Testing
 
 Different test types serve different purposes:
 
-### Unit Testing
+<Tabs items={['Unit Testing', 'Integration Testing', 'End-to-End Testing']}>
+  <Tab value="Unit Testing">
+    Tests individual components in isolation.
 
-Tests individual components in isolation.
+    **Example**: Testing a utility method that calculates damage
 
-**Example**: Testing a utility method that calculates damage
+    ```java title="DamageUtilTest.java"
+    @Test
+    public void testDamageCalculation() {
+        int damage = DamageUtil.calculateDamage(10, 0.5); // 10 base, 50% reduction
+        assertEquals(5, damage);
+    }
+    ```
 
-```java
-@Test
-public void testDamageCalculation() {
-    int damage = DamageUtil.calculateDamage(10, 0.5); // 10 base, 50% reduction
-    assertEquals(5, damage);
-}
-```
+    **Pros:**
+    - Fast (milliseconds)
+    - No server required
+    - Easy to pinpoint failures
+    - Runs in CI/CD pipelines
 
-**Pros:**
-- Fast (milliseconds)
-- No server required
-- Easy to pinpoint failures
-- Runs in CI/CD pipelines
+    **Cons:**
+    - Doesn't test Minecraft integration
+    - Can't test player interactions
+    - May miss real-world issues
+  </Tab>
 
-**Cons:**
-- Doesn't test Minecraft integration
-- Can't test player interactions
-- May miss real-world issues
+  <Tab value="Integration Testing">
+    Tests how components work together with Minecraft's API.
 
-### Integration Testing
+    **Example**: Testing a custom command
 
-Tests how components work together with Minecraft's API.
+    ```java title="HealCommandTest.java"
+    @Test
+    public void testHealCommand() {
+        Player player = server.addPlayer();
+        player.setHealth(10.0);
 
-**Example**: Testing a custom command
+        server.dispatchCommand(player, "heal");
 
-```java
-@Test
-public void testHealCommand() {
-    Player player = server.addPlayer();
-    player.setHealth(10.0);
+        assertEquals(20.0, player.getHealth(), 0.01);
+    }
+    ```
 
-    server.dispatchCommand(player, "heal");
+    **Pros:**
+    - Tests actual Minecraft interaction
+    - Catches integration bugs
+    - Still relatively fast
 
-    assertEquals(20.0, player.getHealth(), 0.01);
-}
-```
+    **Cons:**
+    - Requires mocking framework
+    - More setup than unit tests
+    - May not catch all edge cases
+  </Tab>
 
-**Pros:**
-- Tests actual Minecraft interaction
-- Catches integration bugs
-- Still relatively fast
+  <Tab value="End-to-End Testing">
+    Tests the complete plugin with real servers and clients.
 
-**Cons:**
-- Requires mocking framework
-- More setup than unit tests
-- May not catch all edge cases
+    **Example**: Testing a minigame with multiple players
 
-### End-to-End Testing
+    **Pros:**
+    - Tests real-world scenarios
+    - Catches network/timing issues
+    - Most confidence in functionality
 
-Tests the complete plugin with real servers and clients.
-
-**Example**: Testing a minigame with multiple players
-
-**Pros:**
-- Tests real-world scenarios
-- Catches network/timing issues
-- Most confidence in functionality
-
-**Cons:**
-- Slow (minutes)
-- Complex setup
-- Harder to debug failures
+    **Cons:**
+    - Slow (minutes)
+    - Complex setup
+    - Harder to debug failures
+  </Tab>
+</Tabs>
 
 ## Unit Testing with MockBukkit
 
-MockBukkit is the standard testing framework for Bukkit/Paper plugins.
+[MockBukkit](https://github.com/MockBukkit/MockBukkit) is the standard testing framework for Bukkit/Paper plugins.
 
 ### Setup
 
 **Add to your `pom.xml` (Maven):**
 
-```xml
+```xml title="pom.xml"
 <dependencies>
     <!-- Paper API -->
     <dependency>
@@ -126,9 +130,11 @@ MockBukkit is the standard testing framework for Bukkit/Paper plugins.
 </dependencies>
 ```
 
+Learn more about [JUnit 5](https://junit.org/junit5/) for additional testing features.
+
 **Or `build.gradle` (Gradle):**
 
-```groovy
+```groovy title="build.gradle"
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
 
@@ -139,7 +145,7 @@ dependencies {
 
 ### Basic Test Structure
 
-```java
+```java title="MyPluginTest.java"
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
@@ -179,7 +185,7 @@ public class MyPluginTest {
 
 ### Testing Commands
 
-```java
+```java title="FlyCommandTest.java"
 @Test
 public void testFlyCommand() {
     // Create a player
@@ -216,7 +222,7 @@ public void testFlyCommandRequiresPermission() {
 
 ### Testing Events
 
-```java
+```java title="EventHandlerTest.java"
 @Test
 public void testPlayerJoinMessage() {
     PlayerMock player = server.addPlayer("NewPlayer");
@@ -253,7 +259,7 @@ public void testDamageReduction() {
 
 ### Testing Configuration
 
-```java
+```java title="ConfigurationTest.java"
 @Test
 public void testConfigDefaults() {
     FileConfiguration config = plugin.getConfig();
@@ -279,7 +285,11 @@ public void testConfigReload() {
 
 ### Testing Asynchronous Code
 
-```java
+<Callout type="warn">
+Async tests require careful timing management. Use `CountDownLatch` or `CompletableFuture` for more reliable async testing instead of `Thread.sleep()`.
+</Callout>
+
+```java title="AsyncTaskTest.java"
 @Test
 public void testAsyncTask() throws InterruptedException {
     PlayerMock player = server.addPlayer("TestPlayer");
@@ -305,7 +315,7 @@ public void testAsyncTask() throws InterruptedException {
 
 ### Testing Inventories
 
-```java
+```java title="ShopGUITest.java"
 @Test
 public void testShopGUI() {
     PlayerMock player = server.addPlayer("TestPlayer");
@@ -353,13 +363,13 @@ public void testInventoryClick() {
 
 MockBukkit can't test everything—network issues, timing-dependent logic, and multi-server scenarios require real servers.
 
-WatchWolf launches actual Minecraft servers and clients for integration testing.
+[WatchWolf](https://github.com/AlchemistITRoad/WatchWolf) launches actual Minecraft servers and clients for integration testing.
 
 ### WatchWolf Setup
 
 **Add dependency:**
 
-```xml
+```xml title="pom.xml"
 <dependency>
     <groupId>io.github.alchemist-itroad</groupId>
     <artifactId>watchwolf</artifactId>
@@ -370,7 +380,7 @@ WatchWolf launches actual Minecraft servers and clients for integration testing.
 
 **Basic test:**
 
-```java
+```java title="MinigameIntegrationTest.java"
 import io.github.alchemist.watchwolf.WatchWolf;
 import io.github.alchemist.watchwolf.api.clients.ClientDescriptor;
 import io.github.alchemist.watchwolf.api.servers.ServerDescriptor;
@@ -420,13 +430,17 @@ public class MinigameIntegrationTest {
 - Resource intensive
 - Harder to debug
 
+<Callout type="info">
+Use WatchWolf for critical integration tests, but rely on MockBukkit for most testing to keep your test suite fast.
+</Callout>
+
 ## Testing Minigames
 
 Minigames have unique challenges—timing, multiple players, state management, and complex interactions.
 
 ### Test Minigame Lifecycle
 
-```java
+```java title="MinigameLifecycleTest.java"
 @Test
 public void testMinigameLifecycle() {
     // Setup
@@ -463,7 +477,7 @@ public void testMinigameLifecycle() {
 
 ### Test Win Conditions
 
-```java
+```java title="WinConditionTest.java"
 @Test
 public void testLastPlayerStanding() {
     Minigame game = new Minigame("PvPArena");
@@ -490,7 +504,7 @@ public void testLastPlayerStanding() {
 
 ### Test Team Assignment
 
-```java
+```java title="TeamBalancingTest.java"
 @Test
 public void testTeamBalancing() {
     TeamMinigame game = new TeamMinigame("CaptureTheFlag");
@@ -517,7 +531,7 @@ public void testTeamBalancing() {
 
 ### Test Scoring
 
-```java
+```java title="ScoringTest.java"
 @Test
 public void testScoring() {
     Minigame game = new Minigame("Spleef");
@@ -542,7 +556,7 @@ public void testScoring() {
 
 ### Test Spectator Mode
 
-```java
+```java title="SpectatorModeTest.java"
 @Test
 public void testSpectatorMode() {
     Minigame game = new Minigame("BedWars");
@@ -568,7 +582,7 @@ public void testSpectatorMode() {
 
 ### Test Arena Management
 
-```java
+```java title="ArenaRestorationTest.java"
 @Test
 public void testArenaRestoration() {
     Arena arena = new Arena("PvPArena");
@@ -599,7 +613,7 @@ public void testArenaRestoration() {
 
 Many plugins require multiple players to test properly. MockBukkit makes this easy:
 
-```java
+```java title="PartySystemTest.java"
 @Test
 public void testPartySystem() {
     Player leader = server.addPlayer("Leader");
@@ -631,7 +645,11 @@ public void testPartySystem() {
 
 Plugins can cause lag. Test performance under load:
 
-```java
+<Callout type="warn">
+Performance testing is critical for plugins that will run on production servers. A plugin that works fine with 10 players might bring a server to its knees with 100.
+</Callout>
+
+```java title="PerformanceTest.java"
 @Test
 public void testPerformanceUnderLoad() {
     long startTime = System.currentTimeMillis();
@@ -665,11 +683,9 @@ public void testPerformanceUnderLoad() {
 
 ## Continuous Integration
 
-Run tests automatically on every commit:
+Run tests automatically on every commit with [GitHub Actions](https://docs.github.com/en/actions):
 
-**GitHub Actions** (`.github/workflows/test.yml`):
-
-```yaml
+```yaml title=".github/workflows/test.yml"
 name: Plugin Tests
 
 on: [push, pull_request]
@@ -705,7 +721,9 @@ jobs:
           reporter: java-junit
 ```
 
-Now every push runs your tests automatically, catching regressions early.
+<Callout type="info">
+Now every push runs your tests automatically, catching regressions early. Set this up once and never worry about forgetting to run tests before committing.
+</Callout>
 
 ## Testing Multiplayer Minigames with Bots
 
@@ -732,7 +750,7 @@ MockBukkit simulates players, but doesn't test networking, timing, or real clien
 
 **Scenario 1: Lobby Filling**
 
-```
+```text title="Test Scenario: Lobby Filling"
 Goal: Verify minigame starts when enough players join
 
 Setup:
@@ -750,7 +768,7 @@ Expected: Minigame starts exactly when requirements met
 
 **Scenario 2: Mid-Game Join Handling**
 
-```
+```text title="Test Scenario: Mid-Game Join"
 Goal: Ensure players joining during active game are handled correctly
 
 Test:
@@ -764,7 +782,7 @@ Expected: Late joiners can't disrupt active game
 
 **Scenario 3: Player Disconnect During Game**
 
-```
+```text title="Test Scenario: Player Disconnect"
 Goal: Handle disconnects gracefully
 
 Test:
@@ -778,7 +796,7 @@ Expected: Game remains stable after disconnect
 
 **Scenario 4: Simultaneous Actions**
 
-```
+```text title="Test Scenario: Simultaneous Actions"
 Goal: Test concurrent player interactions
 
 Test:
@@ -792,7 +810,7 @@ Expected: Thread-safe handling of concurrent actions
 
 **Scenario 5: Minigame Endurance**
 
-```
+```text title="Test Scenario: Endurance Testing"
 Goal: Ensure minigame remains stable over time
 
 Test:
@@ -806,7 +824,7 @@ Expected: No memory leaks, stable performance
 
 ### Using SoulFire for Minigame Testing
 
-SoulFire's Fabric-based architecture makes it particularly effective for minigame testing:
+[SoulFire](/)'s Fabric-based architecture makes it particularly effective for minigame testing:
 
 **Fabric Client Benefits:**
 
@@ -816,7 +834,7 @@ SoulFire's Fabric-based architecture makes it particularly effective for minigam
 
 **Example Test Configuration:**
 
-```
+```yaml title="soulfire-test-config.yml"
 Minigame: Bed Wars (requires 8 players)
 
 SoulFire Config:
@@ -838,7 +856,7 @@ Test Procedure:
 
 **What to Monitor:**
 
-```bash
+```bash title="monitoring-commands.sh"
 # Server TPS during minigame
 /spark tps
 
@@ -852,18 +870,22 @@ tail -f logs/latest.log | grep -i error
 /spark heapsummary
 ```
 
-**Key Metrics:**
+Learn more about performance monitoring with the [Spark plugin](https://spark.lucko.me/).
+
+<Callout type="info">
+**Key Metrics to Track:**
 
 - **Join success rate**: Did all bots join the minigame?
 - **Startup time**: How long from 8th player to game start?
 - **Stability**: Any crashes or errors during gameplay?
 - **Completion rate**: Did minigame end properly?
 - **Cleanup**: Arena restored? Players teleported back?
+</Callout>
 
 ### Interpreting Results
 
 **Good Results:**
-```
+```text title="successful-test-output.txt"
 ✅ All 8 bots joined successfully
 ✅ Minigame started in 3 seconds after 8th join
 ✅ No errors in 10-minute test
@@ -872,7 +894,7 @@ tail -f logs/latest.log | grep -i error
 ```
 
 **Problems to Investigate:**
-```
+```text title="failed-test-output.txt"
 ❌ Only 6/8 bots joined (check join logic)
 ❌ Minigame never started (check player detection)
 ❌ TPS dropped to 15 (performance issue)
@@ -882,9 +904,8 @@ tail -f logs/latest.log | grep -i error
 
 ### Automated Minigame Testing Script
 
-```bash
+```bash title="minigame-test.sh"
 #!/bin/bash
-# minigame-test.sh
 
 echo "Starting minigame test..."
 
@@ -935,6 +956,9 @@ echo "✅ Test complete"
 
 ## Best Practices Summary
 
+<Callout type="info">
+**Essential Testing Best Practices:**
+
 1. **Write tests first**: TDD catches bugs before they exist
 2. **Test at multiple levels**: Unit tests for logic, integration tests for behavior, E2E for realism
 3. **Mock external dependencies**: Databases, APIs, other plugins
@@ -945,6 +969,7 @@ echo "✅ Test complete"
 8. **Document test scenarios**: Explain what you're testing and why
 9. **Keep tests fast**: Slow tests discourage running them
 10. **Test multiplayer scenarios with bots**: MockBukkit simulates, bots replicate
+</Callout>
 
 ## Conclusion
 
@@ -952,10 +977,12 @@ Testing Minecraft plugins doesn't have to be painful. With MockBukkit for unit/i
 
 The key is choosing the right tool for each test level:
 
-- **MockBukkit**: Fast unit and integration tests for logic validation
-- **WatchWolf**: Real server/client integration tests for complex scenarios
-- **Bot tools**: Multi-player stress testing and realistic behavior simulation
+- **[MockBukkit](https://github.com/MockBukkit/MockBukkit)**: Fast unit and integration tests for logic validation
+- **[WatchWolf](https://github.com/AlchemistITRoad/WatchWolf)**: Real server/client integration tests for complex scenarios
+- **[SoulFire](/)**: Multi-player stress testing and realistic behavior simulation
 
 By implementing comprehensive testing, you'll ship more stable plugins, spend less time debugging production issues, and build confidence in your code quality.
 
+<Callout type="warn">
 **Remember: Time spent writing tests is time saved debugging at 3 AM because someone found a crash bug.**
+</Callout>

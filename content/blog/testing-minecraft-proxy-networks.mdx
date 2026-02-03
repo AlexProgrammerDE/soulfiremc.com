@@ -10,17 +10,21 @@ tags: [minecraft, bungeecord, velocity, proxy, networking, server-network]
 
 A Minecraft proxy network sits between players and your game servers, routing connections and enabling features impossible with a single server.
 
+<Callout type="info" title="What is a Proxy Network?">
+A proxy acts as an intermediary between players and your game servers, enabling seamless server switching, centralized management, and enhanced security. Think of it as a smart router for your Minecraft network.
+</Callout>
+
 ### Why Use a Proxy?
 
 **Single Server Setup:**
-```
+```text title="Single Server Architecture"
 Player -> Minecraft Server (Survival)
 ```
 
 Players can only access one world. Switching requires disconnecting and reconnecting to a different IP.
 
 **Proxy Network Setup:**
-```
+```text title="Proxy Network Architecture"
 Player -> Proxy (Velocity/BungeeCord) -> Backend Servers:
                                          - Lobby
                                          - Survival
@@ -58,30 +62,12 @@ Players connect once, then seamlessly switch between servers with `/server` comm
 
 ## Velocity vs. BungeeCord
 
-### BungeeCord
-
-**Pros:**
-- Oldest, most plugins available
-- Well-documented
-- Widely understood
-
-**Cons:**
-- Outdated security model
-- Slower performance
-- Legacy forwarding mode vulnerable
-
-**Use case:** Existing networks, extensive plugin requirements
-
-### Waterfall
-
-BungeeCord fork with patches:
-- Bug fixes
-- Minor performance improvements
-- Still uses legacy forwarding
-
-**Use case:** BungeeCord replacement with compatibility
+<Tabs>
+<TabItem value="velocity" label="Velocity" default>
 
 ### Velocity
+
+[Velocity](https://papermc.io/software/velocity) is the modern, high-performance Minecraft proxy built by the PaperMC team.
 
 **Pros:**
 - Modern, secure by default
@@ -95,7 +81,45 @@ BungeeCord fork with patches:
 
 **Use case**: New networks, security-focused, performance-critical
 
-**Recommendation**: Use Velocity for new networks. Only use BungeeCord/Waterfall if you need specific legacy plugins.
+</TabItem>
+<TabItem value="bungeecord" label="BungeeCord">
+
+### BungeeCord
+
+[BungeeCord](https://www.spigotmc.org/wiki/bungeecord/) is the original Minecraft proxy solution, widely used but showing its age.
+
+**Pros:**
+- Oldest, most plugins available
+- Well-documented
+- Widely understood
+
+**Cons:**
+- Outdated security model
+- Slower performance
+- Legacy forwarding mode vulnerable
+
+**Use case:** Existing networks, extensive plugin requirements
+
+</TabItem>
+<TabItem value="waterfall" label="Waterfall">
+
+### Waterfall
+
+[Waterfall](https://github.com/PaperMC/Waterfall) is a BungeeCord fork maintained by PaperMC with bug fixes and performance improvements.
+
+BungeeCord fork with patches:
+- Bug fixes
+- Minor performance improvements
+- Still uses legacy forwarding
+
+**Use case:** BungeeCord replacement with compatibility
+
+</TabItem>
+</Tabs>
+
+<Callout type="success" title="Recommendation">
+Use **Velocity** for new networks. Only use BungeeCord/Waterfall if you need specific legacy plugins that aren't available for Velocity.
+</Callout>
 
 ## Setting Up Velocity
 
@@ -103,7 +127,7 @@ BungeeCord fork with patches:
 
 **Download Velocity:**
 
-```bash
+```bash title="Download and Setup Velocity"
 # Create proxy directory
 mkdir velocity-proxy
 cd velocity-proxy
@@ -117,7 +141,7 @@ mv velocity-*.jar velocity.jar
 
 **First run:**
 
-```bash
+```bash title="Initial Velocity Startup"
 java -Xms512M -Xmx512M -jar velocity.jar
 
 # Accept EULA (edit velocity.toml, change eula=false to eula=true)
@@ -132,7 +156,7 @@ java -Xms512M -Xmx512M -jar velocity.jar
 
 **velocity.toml:**
 
-```toml
+```toml title="velocity.toml - Main Configuration"
 # Server bind address
 bind = "0.0.0.0:25577"
 
@@ -170,9 +194,13 @@ try = [
 ]
 ```
 
+<Callout type="warning" title="Security Critical">
+The `forwarding-secret` is critical for security. Always generate a strong, random secret and keep it confidential. Never use default values in production.
+</Callout>
+
 **Generate strong forwarding secret:**
 
-```bash
+```bash title="Generate Random Secret"
 # Linux/Mac
 openssl rand -base64 32
 
@@ -191,7 +219,7 @@ Backend servers must:
 
 **server.properties** (all backend servers):
 
-```properties
+```properties title="server.properties - Backend Server Configuration"
 # CRITICAL: Disable online mode
 online-mode=false
 
@@ -207,15 +235,15 @@ server-port=25565  # lobby
 
 **spigot.yml** (all backend servers):
 
-```yaml
+```yaml title="spigot.yml - Backend Server Configuration"
 settings:
   # IMPORTANT: Disable BungeeCord mode for Velocity
   bungeecord: false
 ```
 
-**config/paper-global.yml** (all backend servers):
+**config/paper-global.yml** (all [Paper](https://papermc.io/) backend servers):
 
-```yaml
+```yaml title="paper-global.yml - Velocity Forwarding Configuration"
 proxies:
   velocity:
     enabled: true
@@ -223,13 +251,15 @@ proxies:
     secret: "SAME_SECRET_AS_VELOCITY_TOML"  # MUST MATCH
 ```
 
-**Security critical:** If `secret` doesn't match, players can't join. If it leaks, attackers can impersonate players.
+<Callout type="danger" title="Security Critical">
+If the `secret` doesn't match between Velocity and Paper, players cannot join. If the secret leaks, attackers can impersonate any player on your server. Treat this secret like a password.
+</Callout>
 
 ### Testing Basic Setup
 
 **1. Start all servers:**
 
-```bash
+```bash title="Starting All Servers"
 # Terminal 1: Lobby
 cd lobby-server
 java -jar paper.jar
@@ -249,7 +279,7 @@ Connect to proxy address: `localhost:25577`
 
 **3. Verify forwarding:**
 
-```bash
+```bash title="Verify Player List"
 # On proxy console
 /glist
 
@@ -263,7 +293,7 @@ Connect to proxy address: `localhost:25577`
 
 **4. Test server switching:**
 
-```bash
+```bash title="Test Server Switching"
 /server survival
 
 # Should seamlessly move to survival server
@@ -273,7 +303,7 @@ Connect to proxy address: `localhost:25577`
 
 **config.yml:**
 
-```yaml
+```yaml title="config.yml - BungeeCord Configuration"
 listeners:
   - host: 0.0.0.0:25577
     max_players: 500
@@ -299,20 +329,22 @@ priorities:
 
 **Backend servers (spigot.yml):**
 
-```yaml
+```yaml title="spigot.yml - BungeeCord Backend Configuration"
 settings:
   bungeecord: true  # Different from Velocity!
 ```
 
 **Backend servers (server.properties):**
 
-```properties
+```properties title="server.properties - BungeeCord Backend"
 online-mode=false  # Same as Velocity
 ```
 
 ## Player Info Forwarding Modes
 
-This is the most important security setting.
+<Callout type="info" title="Key Concept: Player Info Forwarding">
+Player info forwarding is how the proxy tells backend servers who a player is (username, UUID, skin). This is the most critical security setting in your proxy network. If misconfigured, attackers can impersonate any player.
+</Callout>
 
 ### Velocity Modern Forwarding (Recommended)
 
@@ -325,13 +357,13 @@ This is the most important security setting.
 
 **Configuration:**
 
-```toml
+```toml title="velocity.toml - Modern Forwarding"
 # velocity.toml
 player-info-forwarding-mode = "modern"
 forwarding-secret = "your-secret-here"
 ```
 
-```yaml
+```yaml title="paper-global.yml - Modern Forwarding Backend"
 # paper-global.yml (backend)
 proxies:
   velocity:
@@ -349,12 +381,12 @@ proxies:
 
 **Configuration:**
 
-```toml
+```toml title="velocity.toml - Legacy Forwarding"
 # velocity.toml
 player-info-forwarding-mode = "legacy"
 ```
 
-```yaml
+```yaml title="spigot.yml - Legacy Forwarding Backend"
 # spigot.yml (backend)
 settings:
   bungeecord: true
@@ -368,7 +400,7 @@ Adds additional security layer to legacy forwarding:
 
 **Installation:**
 
-```bash
+```bash title="BungeeGuard Installation"
 # Download BungeeGuard plugin
 # Place in proxy plugins/ folder
 # Place in backend plugins/ folder
@@ -387,7 +419,7 @@ allowed-tokens:
 
 **Objective:** Ensure proxy authenticates players
 
-```bash
+```bash title="Authentication Test"
 # Connect with valid Minecraft account
 # Should succeed
 
@@ -399,7 +431,7 @@ allowed-tokens:
 
 **Objective:** Backend rejects direct connections (bypassing proxy)
 
-```bash
+```bash title="Backend Direct Connection Test"
 # Try connecting directly to backend server
 # Example: localhost:25565 (lobby server)
 
@@ -410,7 +442,7 @@ allowed-tokens:
 
 **How to verify:**
 
-```bash
+```bash title="Verification Steps"
 # On backend server, try to join with:
 # - Your real username
 # - A fake username like "Notch"
@@ -426,7 +458,7 @@ This requires attempting to send crafted forwarding packets. If configured prope
 
 **Test script concept (don't actually exploit):**
 
-```python
+```python title="Theoretical Impersonation Test (Educational Only)"
 # Theoretical vulnerability test
 # If using legacy forwarding without BungeeGuard:
 
@@ -446,7 +478,7 @@ connect_to_backend(
 
 **Objective:** Seamless switching between backend servers
 
-```bash
+```bash title="Server Switching Commands"
 # Connect to proxy
 # Join lobby server (default)
 
@@ -472,7 +504,7 @@ connect_to_backend(
 
 **Objective:** Graceful handling of backend disconnect
 
-```bash
+```bash title="Connection Loss Test"
 # Connect and join lobby
 # Stop lobby server (simulate crash)
 
@@ -482,7 +514,7 @@ connect_to_backend(
 
 **Fallback configuration (velocity.toml):**
 
-```toml
+```toml title="velocity.toml - Fallback Server Configuration"
 [servers]
 lobby = "127.0.0.1:25565"
 survival = "127.0.0.1:25566"
@@ -499,7 +531,7 @@ try = [
 
 This requires multiple clients (bots ideal):
 
-```
+```text title="Concurrent Switching Test Scenario"
 Test:
 1. Connect 50 bots to lobby
 2. All execute /server survival simultaneously
@@ -515,7 +547,7 @@ Expected:
 
 **Objective:** Players switching servers quickly
 
-```bash
+```bash title="Rapid Server Switching Test"
 /server survival
 /server creative
 /server lobby
@@ -533,7 +565,7 @@ Expected:
 
 **Connection rate:**
 
-```bash
+```bash title="Connection Rate Benchmarks"
 # How many players can join per second?
 # Test by connecting bots rapidly
 
@@ -544,7 +576,7 @@ Expected:
 
 **Switching speed:**
 
-```bash
+```bash title="Switching Speed Benchmarks"
 # Measure time from /server command to arrival on new server
 
 # Excellent: <500ms
@@ -555,7 +587,7 @@ Expected:
 
 **Resource usage:**
 
-```bash
+```bash title="Monitor Proxy Resource Usage"
 # Monitor proxy with 100+ players online
 
 top -p $(pgrep -f velocity.jar)
@@ -568,7 +600,7 @@ top -p $(pgrep -f velocity.jar)
 
 **Test 1: Gradual Connection Load**
 
-```
+```text title="Gradual Load Test Phases"
 Phase 1: 10 bots connect, switch servers
 Phase 2: 50 bots connect, switch servers
 Phase 3: 100 bots connect, switch servers
@@ -583,7 +615,7 @@ Monitor:
 
 **Test 2: Connection Burst**
 
-```
+```text title="Connection Burst Test"
 All 100 bots connect within 10 seconds
 
 Monitor:
@@ -594,7 +626,7 @@ Monitor:
 
 **Test 3: Switching Storm**
 
-```
+```text title="Switching Storm Test"
 100 bots connected to lobby
 All execute /server survival simultaneously
 
@@ -627,7 +659,7 @@ Manual testing of proxy networks is tedious and limited. Bots enable comprehensi
 
 **Scenario 1: Proxy Connection Test**
 
-```
+```text title="Proxy Connection Test Scenario"
 Objective: Verify players can connect to proxy and reach lobby
 
 Setup:
@@ -644,7 +676,7 @@ Expected: 100% connection success rate
 
 **Scenario 2: Server Switching Test**
 
-```
+```text title="Server Switching Test Scenario"
 Objective: Validate /server command works under load
 
 Setup:
@@ -661,7 +693,7 @@ Expected: All switches succeed, no errors
 
 **Scenario 3: Forwarding Validation**
 
-```
+```text title="Forwarding Validation Test Scenario"
 Objective: Confirm player data forwards correctly
 
 Setup:
@@ -678,7 +710,7 @@ Expected: UUIDs match, player data intact
 
 **Scenario 4: Backend Failure Handling**
 
-```
+```text title="Backend Failure Test Scenario"
 Objective: Test fallback when backend server crashes
 
 Setup:
@@ -694,7 +726,7 @@ Expected: Bots moved to fallback (lobby) or kicked gracefully
 
 **Scenario 5: Network Partition Test**
 
-```
+```text title="Network Partition Test Scenario"
 Objective: How does proxy handle partial network issues?
 
 Setup:
@@ -715,7 +747,7 @@ SoulFire's multi-account support and connection control make it well-suited for 
 
 **Basic Proxy Test Configuration:**
 
-```
+```text title="SoulFire Basic Proxy Test Setup"
 Target: your-proxy-ip:25577
 Bot Count: 20
 Join Delay: 1000-2000ms
@@ -737,7 +769,7 @@ Since bots can execute commands, you can test server switching:
 
 **What to monitor:**
 
-```bash
+```bash title="Monitoring Commands"
 # On proxy
 /glist
 # Should show bots distributed across servers
@@ -753,7 +785,7 @@ tail -f proxy/logs/latest.log | grep -i error
 
 **Interpreting Results:**
 
-```
+```text title="Test Results Interpretation"
 Good Results:
 ✅ All bots connected to proxy
 ✅ /glist shows bots on correct servers
@@ -788,7 +820,7 @@ Problems:
 
 **Debug:**
 
-```bash
+```bash title="Test Proxy to Backend Connectivity"
 # Test connectivity from proxy to backend
 # On proxy server:
 telnet 127.0.0.1 25565
@@ -808,13 +840,13 @@ telnet 127.0.0.1 25565
 **Fix:**
 
 1. Verify velocity.toml:
-   ```toml
+   ```toml title="velocity.toml - Check Forwarding Settings"
    player-info-forwarding-mode = "modern"
    forwarding-secret = "your-secret"
    ```
 
 2. Verify paper-global.yml (backend):
-   ```yaml
+   ```yaml title="paper-global.yml - Check Forwarding Settings"
    proxies:
      velocity:
        enabled: true
@@ -834,7 +866,7 @@ telnet 127.0.0.1 25565
 
 **Option 1: Firewall backend (recommended)**
 
-```bash
+```bash title="Firewall Configuration"
 # Only allow connections from proxy IP
 sudo iptables -A INPUT -p tcp --dport 25565 -s PROXY_IP -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
@@ -845,7 +877,7 @@ sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
 
 **Option 2: Bind backend to localhost**
 
-```properties
+```properties title="server.properties - Bind to Localhost"
 # server.properties
 server-ip=127.0.0.1
 
@@ -884,7 +916,7 @@ server-ip=127.0.0.1
 
 **Debug:**
 
-```toml
+```toml title="velocity.toml - Increase Read Timeout"
 # velocity.toml
 [advanced]
 # Increase timeout
@@ -893,7 +925,8 @@ read-timeout = 60000  # 60 seconds (default: 30)
 
 ## Best Practices Summary
 
-1. **Use Velocity** for new networks (better security, performance)
+<Callout type="success" title="Best Practices Checklist">
+1. **Use [Velocity](https://papermc.io/software/velocity)** for new networks (better security, performance)
 2. **Enable Modern Forwarding** for best security
 3. **Generate strong secrets** - never use default values
 4. **Firewall backend servers** - only allow proxy connections
@@ -903,6 +936,7 @@ read-timeout = 60000  # 60 seconds (default: 30)
 8. **Use separate machines** - don't run proxy and all backends on one server
 9. **Test before production** - validate configuration with bot testing
 10. **Document your network** - keep diagrams and notes for troubleshooting
+</Callout>
 
 ## Conclusion
 
@@ -910,7 +944,7 @@ Minecraft proxy networks enable powerful multi-server setups, but they introduce
 
 Key takeaways:
 
-1. **Velocity Modern Forwarding** is the most secure option
+1. **[Velocity](https://papermc.io/software/velocity) Modern Forwarding** is the most secure option
 2. **Test forwarding thoroughly** - never assume it works
 3. **Firewall backend servers** - prevent direct connections
 4. **Load test with bots** - validate performance under realistic conditions
@@ -918,4 +952,6 @@ Key takeaways:
 
 With proper setup and testing, a proxy network provides seamless gameplay across multiple servers. Players enjoy instant world switching while you benefit from scalable, maintainable infrastructure.
 
-**Remember: Test your proxy setup before going live—a misconfigured proxy is a security disaster waiting to happen.**
+<Callout type="danger" title="Final Warning">
+Test your proxy setup before going live—a misconfigured proxy is a security disaster waiting to happen. Attackers can impersonate players, steal accounts, and compromise your entire network.
+</Callout>

@@ -6,6 +6,9 @@ date: 2026-02-09
 tags: [minecraft, automation, afk-prevention, server-management, bots]
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout'
+import { Step, Steps } from 'fumadocs-ui/components/steps'
+
 ## Understanding Server Automation
 
 Server automation handles repetitive tasks without human intervention. From keeping players active to maintaining server uptime, automation frees staff to focus on community building rather than mundane maintenance.
@@ -34,12 +37,43 @@ AFK (Away From Keyboard) detection kicks inactive players to free slots. While n
 
 Most servers use plugins to detect and handle AFK players.
 
+<Steps>
+  <Step>
+    ### Download and install AFK plugin
+
+    Choose an AFK detection plugin (AntiAFK or AFK+) and download it from [SpigotMC](https://www.spigotmc.org/) or [Bukkit](https://dev.bukkit.org/).
+  </Step>
+
+  <Step>
+    ### Configure plugin settings
+
+    Edit the plugin's `config.yml` file to set timeout duration, detection methods, and actions to take when players are AFK.
+  </Step>
+
+  <Step>
+    ### Set permissions
+
+    Configure permissions to allow certain players or ranks to bypass AFK detection using permission nodes like `afk.bypass`.
+  </Step>
+
+  <Step>
+    ### Test the system
+
+    Join your server and test the AFK detection by remaining idle for the configured timeout period.
+  </Step>
+
+  <Step>
+    ### Monitor and adjust
+
+    Review logs and player feedback to fine-tune detection sensitivity and timeout durations.
+  </Step>
+</Steps>
+
 #### Popular AFK Plugins
 
-**AntiAFK**
+**[AntiAFK](https://www.spigotmc.org/resources/antiafk.63713/)**
 
-```yaml
-# config.yml
+```yaml title="config.yml"
 detection:
   # Time in seconds before player marked AFK
   timeout: 300  # 5 minutes
@@ -64,10 +98,9 @@ actions:
     delay: 300
 ```
 
-**AFK+**
+**[AFK+](https://www.spigotmc.org/resources/afk.35065/)**
 
-```yaml
-# config.yml
+```yaml title="config.yml"
 afk:
   # Detection time
   auto-afk-time: 300
@@ -109,7 +142,7 @@ Players can use client-side methods to avoid AFK kicks.
 
 These mods add randomized behavior to avoid detection:
 
-```java
+```java title="Anti-AFK Movement Pattern"
 // Randomized movement pattern
 void avoidAFK() {
     // Random interval: 30-90 seconds
@@ -144,7 +177,7 @@ Bots can keep accounts active for specific purposes.
 
 **Basic AFK bot behavior:**
 
-```python
+```python title="afk_bot.py"
 # Pseudocode for AFK bot
 import time
 import random
@@ -172,6 +205,10 @@ def afk_bot():
 - Inventory management (organize items)
 - Entity interaction (attack nearby mobs)
 
+<Callout type="warn">
+**Ethical Considerations**: Bot-based AFK prevention may violate server Terms of Service. Always obtain permission from server administrators before using bots. Unauthorized bot usage can result in permanent bans and may be considered cheating depending on the context and server rules.
+</Callout>
+
 ## Auto-Reconnect Systems
 
 Connection drops happen—network issues, server restarts, crashes. Auto-reconnect ensures minimal downtime.
@@ -180,10 +217,9 @@ Connection drops happen—network issues, server restarts, crashes. Auto-reconne
 
 Plugins can reconnect players automatically after kicks/disconnects.
 
-**Auto Reconnect Plugin**
+**[Auto Reconnect Plugin](https://www.spigotmc.org/resources/auto-reconnect.71142/)**
 
-```yaml
-# config.yml
+```yaml title="config.yml"
 reconnect:
   # Enable auto-reconnect
   enabled: true
@@ -217,12 +253,12 @@ Clients can automatically reconnect after disconnect.
 
 **Fabric/Forge Mods:**
 
-- **ReconnectMod**: Auto-reconnects after disconnect
-- **Auto Reconnect**: Configurable reconnect delay and attempts
+- **[ReconnectMod](https://modrinth.com/mod/reconnect)**: Auto-reconnects after disconnect
+- **[Auto Reconnect](https://www.curseforge.com/minecraft/mc-mods/auto-reconnect)**: Configurable reconnect delay and attempts
 
 **Configuration example:**
 
-```json
+```json title="auto-reconnect-config.json"
 {
   "enabled": true,
   "delay": 5,
@@ -242,7 +278,7 @@ Bots can handle reconnection with customizable logic.
 
 **Reconnect strategies:**
 
-```python
+```python title="reconnect_backoff.py"
 # Simple exponential backoff
 def reconnect_with_backoff():
     attempt = 0
@@ -264,7 +300,7 @@ def reconnect_with_backoff():
 
 **Smart reconnection:**
 
-```python
+```python title="smart_reconnect.py"
 def smart_reconnect():
     while True:
         try:
@@ -288,16 +324,48 @@ Automation detects issues before players complain.
 
 ### Server Health Monitoring
 
+<Steps>
+  <Step>
+    ### Create monitoring script
+
+    Write a shell script to check server process status, TPS, and other health metrics.
+  </Step>
+
+  <Step>
+    ### Set up alerting
+
+    Configure Discord webhooks, email notifications, or SMS alerts for critical issues.
+  </Step>
+
+  <Step>
+    ### Schedule monitoring
+
+    Add the monitoring script to [cron](https://man7.org/linux/man-pages/man5/crontab.5.html) to run every 5-10 minutes.
+  </Step>
+
+  <Step>
+    ### Configure auto-restart
+
+    Add logic to automatically restart the server if it crashes or becomes unresponsive.
+  </Step>
+
+  <Step>
+    ### Review alerts
+
+    Monitor alert frequency and adjust thresholds to avoid alert fatigue.
+  </Step>
+</Steps>
+
 **Shell script monitoring:**
 
-```bash
+```bash title="monitor-server.sh"
 #!/bin/bash
 # monitor-server.sh
 
 # Check if server process running
 if ! pgrep -f "paper.jar" > /dev/null; then
     echo "ERROR: Server not running!"
-    # Send alert
+    # Send alert via Discord webhook (https://discord.com/developers/docs/resources/webhook)
     curl -X POST "https://discord.com/api/webhooks/YOUR_WEBHOOK" \
       -H "Content-Type: application/json" \
       -d '{"content": "🚨 Minecraft server is DOWN!"}'
@@ -307,7 +375,7 @@ if ! pgrep -f "paper.jar" > /dev/null; then
     ./start.sh
 fi
 
-# Check TPS via RCON
+# Check TPS via RCON (requires rcon-cli: https://github.com/itzg/rcon-cli)
 TPS=$(rcon-cli "spark tps" | grep -oP "TPS: \K[0-9.]+")
 if (( $(echo "$TPS < 18" | bc -l) )); then
     echo "WARNING: Low TPS ($TPS)"
@@ -317,9 +385,9 @@ if (( $(echo "$TPS < 18" | bc -l) )); then
 fi
 ```
 
-**Run with cron:**
+**Run with [cron](https://man7.org/linux/man-pages/man5/crontab.5.html):**
 
-```bash
+```bash title="crontab"
 # Check every 5 minutes
 */5 * * * * /path/to/monitor-server.sh
 ```
@@ -328,8 +396,10 @@ fi
 
 Track player counts over time:
 
-```python
+```python title="player-monitor.py"
 # player-monitor.py
+# Requires mcstatus library: pip install mcstatus
+# Documentation: https://pypi.org/project/mcstatus/
 import requests
 from mcstatus import JavaServer
 import time
@@ -371,7 +441,39 @@ while True:
 
 Regular backups prevent data loss:
 
-```bash
+<Steps>
+  <Step>
+    ### Create backup script
+
+    Create a shell script that saves the world, creates a compressed archive, and manages old backups.
+  </Step>
+
+  <Step>
+    ### Configure RCON
+
+    Set up [RCON](https://wiki.vg/RCON) in your `server.properties` to allow the script to send commands to the running server.
+  </Step>
+
+  <Step>
+    ### Test backup manually
+
+    Run the backup script manually to ensure it works correctly and doesn't corrupt world data.
+  </Step>
+
+  <Step>
+    ### Schedule with cron
+
+    Add the backup script to your [crontab](https://man7.org/linux/man-pages/man5/crontab.5.html) to run at desired intervals (daily, hourly, etc.).
+  </Step>
+
+  <Step>
+    ### Verify backups
+
+    Regularly test backup restoration to ensure backups are valid and complete.
+  </Step>
+</Steps>
+
+```bash title="backup-server.sh"
 #!/bin/bash
 # backup-server.sh
 
@@ -407,9 +509,9 @@ find "$BACKUP_DIR" -name "backup_*.tar.gz" -mtime +7 -delete
 echo "Backup created: backup_$DATE.tar.gz"
 ```
 
-**Schedule with cron:**
+**Schedule with [cron](https://man7.org/linux/man-pages/man5/crontab.5.html):**
 
-```bash
+```bash title="crontab"
 # Daily backup at 4 AM
 0 4 * * * /path/to/backup-server.sh
 
@@ -423,7 +525,7 @@ Regular restarts clear memory leaks and apply updates.
 
 ### Graceful Restart Script
 
-```bash
+```bash title="restart-server.sh"
 #!/bin/bash
 # restart-server.sh
 
@@ -464,7 +566,7 @@ cd /path/to/server
 
 **Schedule restarts:**
 
-```bash
+```bash title="crontab"
 # Restart daily at 5 AM (low traffic time)
 0 5 * * * /path/to/restart-server.sh
 
@@ -474,11 +576,12 @@ cd /path/to/server
 
 ### Update and Restart Automation
 
-```bash
+```bash title="update-and-restart.sh"
 #!/bin/bash
 # update-and-restart.sh
 
 SERVER_DIR="/path/to/server"
+# Paper API documentation: https://docs.papermc.io/misc/downloads-api
 PAPER_API="https://api.papermc.io/v2/projects/paper"
 
 # Get latest Paper build
@@ -534,7 +637,7 @@ Bots excel at repetitive, long-duration tasks.
 - Minimal movement (just AFK prevention)
 
 **Configuration:**
-```
+```yaml title="chunk-loader-config.yml"
 Bot Name: ChunkLoader_Farm1
 Location: X: 1000, Y: 64, Z: 2000 (near farm)
 Behavior: Anti-AFK (jump every 3-5 minutes)
@@ -550,14 +653,14 @@ Reconnect: Yes (on disconnect)
 - Keeps server online
 - Responds to /list (appears active)
 
-**Ethical note:** Check host ToS—some prohibit this.
+**Ethical note:** Check host Terms of Service (e.g., [Aternos ToS](https://aternos.org/terms/), [Minehut Terms](https://minehut.com/terms))—some prohibit this.
 
 ### Use Case 3: Economy Automation
 
 **Scenario:** Automated shop restocking
 
 **Bot workflow:**
-```
+```text title="Shop Restocking Workflow"
 1. Bot joins server
 2. Walks to storage area
 3. Collects items from chests
@@ -578,7 +681,7 @@ Reconnect: Yes (on disconnect)
 **Scenario:** Automated mining or farming
 
 **Bot workflow:**
-```
+```text title="Resource Gathering Workflows"
 Mining:
 1. Walk to mine
 2. Break blocks in pattern
@@ -603,7 +706,7 @@ Farming:
 **Scenario:** Test server stability over 24 hours
 
 **Bot workflow:**
-```
+```text title="Server Testing Workflow"
 1. 10 bots connect
 2. Bots perform varied actions:
    - Walking around
@@ -625,7 +728,7 @@ Farming:
 
 ## Automation with SoulFire
 
-For advanced automation scenarios, dedicated bot tools provide more control than simple scripts.
+For advanced automation scenarios, dedicated bot tools like [SoulFire](https://soulfiremc.com) provide more control than simple scripts. SoulFire offers a comprehensive platform for Minecraft server automation, stress testing, and bot management.
 
 ### Why Use Bots for Automation?
 
@@ -644,7 +747,7 @@ For advanced automation scenarios, dedicated bot tools provide more control than
 
 **Scenario 1: AFK Prevention for Testing**
 
-```
+```yaml title="afk-testing-config.yml"
 Purpose: Keep test accounts logged in during development
 
 Configuration:
@@ -661,7 +764,7 @@ Benefits:
 
 **Scenario 2: 24/7 Server Population**
 
-```
+```yaml title="population-config.yml"
 Purpose: Maintain minimum player count
 
 Configuration:
@@ -677,7 +780,7 @@ Use case:
 
 **Scenario 3: Automated Event Participation**
 
-```
+```yaml title="minigame-config.yml"
 Purpose: Fill minigame lobbies during low-traffic periods
 
 Configuration:
@@ -695,7 +798,7 @@ Workflow:
 
 **Scenario 4: Stress Test Automation**
 
-```
+```bash title="nightly-test.sh"
 Purpose: Automated nightly stress tests
 
 Script:
@@ -720,7 +823,7 @@ mail -s "Nightly Stress Test Results" admin@server.com < report.txt
 
 **Scenario 5: Chunk Pre-Loading**
 
-```
+```yaml title="chunk-preload-config.yml"
 Purpose: Pre-explore world before launch
 
 Configuration:
@@ -738,7 +841,7 @@ Benefits:
 
 **Metrics to track:**
 
-```bash
+```text title="Bot Status Dashboard"
 # Bot status dashboard
 Bot Name         | Status    | Uptime    | Location
 ----------------|-----------|-----------|-------------------
@@ -750,7 +853,7 @@ PopulationBot1  | Connected | 12h 30m   | Lobby
 
 **Automated alerts:**
 
-```python
+```python title="bot-monitor.py"
 # bot-monitor.py
 def check_bot_status():
     expected_bots = ["ChunkLoader1", "ChunkLoader2", "PopulationBot1"]
@@ -767,6 +870,10 @@ schedule.every(5).minutes.do(check_bot_status)
 ## Security and Ethical Considerations
 
 Automation is powerful but comes with responsibilities.
+
+<Callout type="warn">
+**Critical Warning**: Automation can violate server rules and Terms of Service. Unauthorized automation may result in permanent bans, IP blacklisting, and damage to your reputation in the Minecraft community. Always obtain explicit permission from server administrators before deploying any automation.
+</Callout>
 
 ### Server Rules
 
@@ -816,13 +923,17 @@ Many servers explicitly prohibit:
 
 ## Best Practices Summary
 
+<Callout>
+**Best Practices for Server Automation**: Follow these guidelines to ensure reliable, ethical, and maintainable automation systems for your Minecraft server infrastructure.
+</Callout>
+
 1. **Start simple**: Begin with basic AFK prevention before complex automation
 2. **Test thoroughly**: Automate slowly, validate each step
-3. **Monitor continuously**: Automated systems need monitoring
+3. **Monitor continuously**: Automated systems need monitoring with tools like [Prometheus](https://prometheus.io/) or [Grafana](https://grafana.com/)
 4. **Handle failures gracefully**: Always include error handling and reconnect logic
 5. **Document everything**: Future you will thank present you
 6. **Respect server rules**: Automation must comply with server policies
-7. **Use proper tools**: Dedicated bot tools for Minecraft, scripts for external tasks
+7. **Use proper tools**: Dedicated bot tools for Minecraft, scripts for external tasks, [RCON](https://wiki.vg/RCON) for server communication
 8. **Secure credentials**: Never hardcode passwords, use environment variables
 9. **Log actions**: Track what automation does for debugging
 10. **Have kill switches**: Ability to stop automation quickly if issues arise

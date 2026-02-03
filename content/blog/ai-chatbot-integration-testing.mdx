@@ -13,19 +13,19 @@ AI chatbots transform Minecraft servers from static worlds to dynamic, responsiv
 ### Use Cases
 
 **Player Support Bot**
-```
+```text title="Example Chat"
 Player: "How do I claim land?"
 AI Bot: "Use /claim while standing in the area you want to protect. You start with 100 claim blocks and earn more by playing!"
 ```
 
 **Lore/Story NPC**
-```
+```text title="Example Interaction"
 Player: "Tell me about the ancient temple"
 Wizard NPC (AI): "Ah, the Temple of Eternity... built centuries ago by the Skyborn civilization. Legend says it holds a powerful artifact..."
 ```
 
 **Moderation Assistant**
-```
+```text title="Moderation Features"
 AI monitors chat, flags suspicious behavior:
 - Repeated spam patterns
 - Toxic language
@@ -34,7 +34,7 @@ AI monitors chat, flags suspicious behavior:
 ```
 
 **Mini-game Host**
-```
+```text title="Trivia Example"
 AI Bot: "Welcome to Trivia Night! First question: Which block is only found in the Nether?"
 Player: "Netherrack?"
 AI Bot: "Correct! +10 points!"
@@ -54,6 +54,8 @@ AI Bot: "Correct! +10 points!"
 
 ### Cloud-Based LLMs
 
+<Tabs items={["OpenAI GPT", "Anthropic Claude", "Ollama"]}>
+  <Tab value="OpenAI GPT">
 **OpenAI GPT (GPT-4, GPT-3.5)**
 
 **Pros:**
@@ -68,9 +70,17 @@ AI Bot: "Correct! +10 points!"
 - Requires internet
 - Privacy concerns (data sent to OpenAI)
 
+<Callout type="warning">
+**Rate Limiting**: OpenAI enforces rate limits on API requests. Implement proper request queueing and cooldowns to avoid hitting these limits. Free tier users may face stricter limits.
+</Callout>
+
+<Callout type="info">
+**API Costs**: Monitor your usage carefully. GPT-4 costs approximately $0.01 per 1,000 tokens for input and $0.03 per 1,000 tokens for output. A typical chat response uses 500-2,000 tokens. Calculate your expected monthly costs before deploying to production.
+</Callout>
+
 **Setup:**
 
-```java
+```java title="GPTChatBot.java"
 // Using OpenAI API in Minecraft plugin
 public class GPTChatBot {
     private static final String API_KEY = "sk-...";
@@ -99,15 +109,53 @@ public class GPTChatBot {
 }
 ```
 
+Learn more: [OpenAI API Documentation](https://platform.openai.com/docs/api-reference)
+  </Tab>
+
+  <Tab value="Anthropic Claude">
 **Anthropic Claude**
 
 Similar to GPT, alternative provider:
 - Strong reasoning
 - Good at following instructions
 - Costs similar to GPT
+- Better at following complex instructions
+- Larger context windows
 
-### Self-Hosted LLMs (Ollama)
+<Callout type="info">
+**API Costs**: Claude pricing varies by model. Claude 3.5 Sonnet costs $3 per million input tokens and $15 per million output tokens. Compare costs with OpenAI to find the best option for your use case.
+</Callout>
 
+```java title="ClaudeChatBot.java"
+// Using Anthropic Claude API in Minecraft plugin
+public class ClaudeChatBot {
+    private static final String API_KEY = "sk-ant-...";
+    private static final String API_URL = "https://api.anthropic.com/v1/messages";
+
+    public String askClaude(String question) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("model", "claude-3-5-sonnet-20241022");
+        requestBody.put("max_tokens", 1024);
+
+        JSONArray messages = new JSONArray();
+        messages.put(new JSONObject()
+            .put("role", "user")
+            .put("content", question)
+        );
+
+        requestBody.put("messages", messages);
+
+        // Send HTTP request (async recommended)
+        // Parse response
+        // Return AI's answer
+    }
+}
+```
+
+Learn more: [Anthropic Claude Documentation](https://docs.anthropic.com/)
+  </Tab>
+
+  <Tab value="Ollama">
 **Ollama** runs LLMs locally on your server.
 
 **Pros:**
@@ -124,7 +172,7 @@ Similar to GPT, alternative provider:
 
 **Installation:**
 
-```bash
+```bash title="Install Ollama"
 # Install Ollama
 curl -fsSL https://ollama.com/install.sh | sh
 
@@ -149,7 +197,7 @@ ollama serve
 
 **Minecraft Integration:**
 
-```java
+```java title="OllamaChatBot.java"
 public class OllamaChatBot {
     private static final String OLLAMA_URL = "http://localhost:11434/api/generate";
 
@@ -166,6 +214,10 @@ public class OllamaChatBot {
 }
 ```
 
+Learn more: [Ollama Documentation](https://ollama.ai/)
+  </Tab>
+</Tabs>
+
 ## Minecraft AI Chat Plugins
 
 ### OllamaChat Plugin
@@ -178,7 +230,7 @@ public class OllamaChatBot {
 
 **Installation:**
 
-```bash
+```bash title="Download and Install Plugin"
 # Download plugin
 wget https://github.com/YourRepo/OllamaChat/releases/download/v1.0/OllamaChat.jar
 
@@ -187,7 +239,7 @@ mv OllamaChat.jar plugins/
 
 **Configuration (config.yml):**
 
-```yaml
+```yaml title="config.yml"
 # AI Provider
 provider: "ollama"  # or "openai", "claude"
 
@@ -228,7 +280,7 @@ log-conversations: true
 
 **Usage:**
 
-```
+```text title="Example Chat Interactions"
 Player: @ai How do I make a diamond pickaxe?
 AI Bot: You need 3 diamonds and 2 sticks. Place diamonds across the top row of a crafting table and sticks down the middle column!
 
@@ -250,7 +302,7 @@ Makes mobs and entities talk using AI.
 
 **Configuration:**
 
-```json
+```json title="creature-chat-config.json"
 {
   "entities": {
     "villager": {
@@ -271,7 +323,7 @@ Makes mobs and entities talk using AI.
 
 **Example:**
 
-```
+```text title="NPC Interactions"
 Player approaches Villager NPC
 Player: "What do you sell?"
 Villager (AI): "Hrm! I have enchanted books, tools, and armor. Very good prices! You have emeralds?"
@@ -289,7 +341,7 @@ Zombie (AI): "Brainsss... hungry... tasty brainsss..."
 
 **Test:**
 
-```
+```text title="Basic Functionality Test"
 1. Trigger AI with command
    Player: @ai hello
 
@@ -312,7 +364,7 @@ Expected: AI responds within 5 seconds
 
 **Test queries:**
 
-```
+```text title="Quality Test Queries"
 Q: "How do I claim land?"
 Expected: Accurate server-specific instructions
 
@@ -341,7 +393,7 @@ Expected: Relevant server lore/info
 
 **Test:**
 
-```
+```text title="Context Awareness Test"
 Player: @ai What biomes are near spawn?
 AI: Forest, plains, and mountains are nearby.
 
@@ -352,7 +404,7 @@ AI: The mountains have iron, coal, and emeralds, making them great for mining!
 
 **Configuration:**
 
-```yaml
+```yaml title="config.yml"
 use-context: true
 context-messages: 5
 ```
@@ -363,7 +415,7 @@ context-messages: 5
 
 **Test:**
 
-```
+```text title="Multi-Player Test"
 Player1: @ai How do I vote?
 Player2: @ai What's the economy system?
 Player3: @ai Can I teleport home?
@@ -378,16 +430,20 @@ Expected:
 
 **Objective:** Prevent spam/abuse
 
+<Callout type="warning">
+**Rate Limiting is Critical**: Without proper rate limiting, your AI service can be overwhelmed by spam or abuse. Always implement cooldowns and request limits to protect your API costs and server performance.
+</Callout>
+
 **Configuration:**
 
-```yaml
+```yaml title="config.yml"
 cooldown: 10  # seconds
 max-requests-per-minute: 6
 ```
 
 **Test:**
 
-```
+```text title="Rate Limiting Test"
 Player: @ai test
 [Wait for response]
 Player: @ai test2 (immediately)
@@ -404,7 +460,7 @@ Expected: Temp cooldown or warning
 
 **Test:**
 
-```
+```text title="Content Filtering Test"
 Player: @ai [inappropriate content]
 
 Expected:
@@ -415,7 +471,7 @@ Expected:
 
 **Implementation:**
 
-```yaml
+```yaml title="config.yml"
 content-filter:
   enabled: true
   blocked-keywords:
@@ -430,7 +486,7 @@ content-filter:
 
 **Test:**
 
-```
+```text title="Language Support Test"
 Player: @ai Comment obtenir du diamant? (French)
 Expected: Response in French
 
@@ -440,7 +496,7 @@ Expected: Response in Spanish
 
 **Configuration:**
 
-```yaml
+```yaml title="config.yml"
 languages:
   auto-detect: true
   supported: ["en", "es", "fr", "de", "pt"]
@@ -452,7 +508,7 @@ languages:
 
 **Test:**
 
-```
+```text title="Load Test"
 Simulate 50 players asking questions simultaneously
 
 Monitor:
@@ -473,7 +529,7 @@ Tailor AI personality and knowledge.
 
 ### General Server Assistant
 
-```yaml
+```yaml title="config.yml"
 system-prompt: |
   You are Steve, the helpful server assistant bot.
 
@@ -495,7 +551,7 @@ system-prompt: |
 
 ### Roleplay NPC
 
-```yaml
+```yaml title="config.yml"
 entities:
   wizard_npc:
     system-prompt: |
@@ -520,7 +576,7 @@ entities:
 
 ### Minigame Host
 
-```yaml
+```yaml title="config.yml"
 system-prompt: |
   You are the host of Trivia Tuesday on the server.
 
@@ -550,7 +606,7 @@ AI can help detect problematic behavior.
 
 ### Chat Monitoring
 
-```java
+```java title="ChatModerationPlugin.java"
 @EventHandler
 public void onChat(AsyncPlayerChatEvent event) {
     String message = event.getMessage();
@@ -578,7 +634,7 @@ public void onChat(AsyncPlayerChatEvent event) {
 
 AI excels at finding patterns humans miss:
 
-```
+```text title="Pattern Detection Examples"
 Normal: "Check out this cool build!"
 Spam: "JOIN FREECOINS.SCAM FOR FREE RANKS!!!"  ← AI detects
 
@@ -610,7 +666,7 @@ Manual testing of AI chat requires many queries. Bots automate this.
 
 **Scenario 1: Response Time Benchmark**
 
-```
+```text title="Response Time Benchmark"
 Objective: Measure AI response latency
 
 Setup:
@@ -636,7 +692,7 @@ Target:
 
 **Scenario 2: Concurrent Load Test**
 
-```
+```text title="Concurrent Load Test"
 Objective: AI handles multiple simultaneous queries
 
 Setup:
@@ -655,7 +711,7 @@ Expected:
 
 **Scenario 3: Context Persistence Test**
 
-```
+```text title="Context Persistence Test"
 Objective: AI maintains conversation context
 
 Setup:
@@ -677,7 +733,7 @@ Expected:
 
 **Scenario 4: Spam Prevention Test**
 
-```
+```text title="Spam Prevention Test"
 Objective: Rate limiting works
 
 Setup:
@@ -699,7 +755,7 @@ Expected:
 
 **Scenario 5: Content Filter Test**
 
-```
+```text title="Content Filter Test"
 Objective: Inappropriate queries rejected
 
 Setup:
@@ -723,7 +779,7 @@ Bots can send chat messages and monitor responses, enabling automated AI testing
 
 **Basic Test Configuration:**
 
-```
+```text title="Basic Bot Test Setup"
 Setup:
 - 5 bots connected
 - Auto-Chat plugin enabled
@@ -745,7 +801,7 @@ Logging:
 
 **Performance Benchmarking:**
 
-```
+```text title="Performance Benchmark Results"
 Test: 100 AI queries, measure response time
 
 Configuration:
@@ -771,7 +827,7 @@ Interpretation:
 
 **Stress Testing:**
 
-```
+```text title="Stress Test Results"
 Test: Concurrent query load
 
 Configuration:
