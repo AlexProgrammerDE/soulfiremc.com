@@ -38,7 +38,7 @@ const CookieConsentBanner = () => {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 sm:bottom-4 sm:left-4">
+    <div className="fixed bottom-0 left-0 z-50 sm:bottom-4 sm:left-4">
       <Card className="m-3 shadow-lg sm:max-w-md">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-lg">We use cookies</CardTitle>
