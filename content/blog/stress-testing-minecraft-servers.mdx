@@ -23,10 +23,10 @@ Minecraft servers have two critical performance indicators: TPS and MSPT.
 
 | TPS | MSPT | Server State |
 |-----|------|--------------|
-| 20.0 | <40ms | Healthy, has headroom |
+| 20.0 | &lt;40ms | Healthy, has headroom |
 | 18-19 | 40-50ms | Minor lag, running near limit |
 | 15-17 | 50-70ms | Noticeable delays |
-| <15 | >70ms | Severe, nearly unplayable |
+| &lt;15 | &gt;70ms | Severe, nearly unplayable |
 
 The best tool for monitoring both is [Spark](https://spark.lucko.me/), which works on Paper, Spigot, Fabric, Forge, and proxies. Install it, then use these commands in-game:
 
@@ -181,9 +181,9 @@ After testing, your Spark profiles and recorded metrics should point to specific
 
 **MSPT creeping up over time**: Memory pressure or resource exhaustion. Check Spark's heap summary for unusual object counts or steadily growing memory usage.
 
-**Good TPS but high CPU (>80%)**: You are close to the limit with no headroom for spikes. Optimize further or upgrade hardware.
+**Good TPS but high CPU (&gt;80%)**: You are close to the limit with no headroom for spikes. Optimize further or upgrade hardware.
 
-When Spark shows a specific plugin consuming more than 10% of CPU, investigate its configuration first -- many plugins have expensive features that can be disabled. If entity AI dominates the profile (>30%), lower mob caps. If chunk operations are excessive, tighten chunk loading rates in `paper-global.yml`.
+When Spark shows a specific plugin consuming more than 10% of CPU, investigate its configuration first -- many plugins have expensive features that can be disabled. If entity AI dominates the profile (&gt;30%), lower mob caps. If chunk operations are excessive, tighten chunk loading rates in `paper-global.yml`.
 
 ## Using SoulFire for Testing
 
