@@ -1,0 +1,124 @@
+---
+title: DDoS Protection for Minecraft Servers
+description: How DDoS protection actually works for Minecraft servers, what to look for in a provider, and how to verify your setup isn't leaking your real IP
+author: Pistonmaster
+date: 2026-02-06
+tags: [minecraft, ddos-protection, security, networking, tcp-proxy]
+---
+
+import { Callout } from 'fumadocs-ui/components/callout'
+
+## Why Firewall Rules Aren't Enough
+
+If you've followed our [anti-bot testing guide](/blog/anti-bot-systems-testing-guide), you've already got firewall rules and anti-bot plugins in place. That handles connection floods and bot join spam at the application level. But DDoS attacks are a different problem.
+
+A volumetric DDoS attack doesn't care about your iptables rules. It saturates your server's network link with raw traffic — sometimes tens of gigabits per second — before packets even reach your firewall. Your server goes offline not because it can't handle the connections, but because the pipe is full. No amount of server-side configuration fixes that.
+
+That's where dedicated DDoS protection comes in. It sits between players and your server, absorbing attack traffic at the network edge and only forwarding clean connections through.
+
+## How TCP Proxy Protection Works
+
+Most Minecraft DDoS protection services work as TCP reverse proxies. The flow looks like this:
+
+```
+Player → Protection Provider (filters traffic) → Your Server
+         [Public IP]                              [Hidden IP]
+```
+
+Players connect to the provider's IP address, not yours. The provider inspects incoming traffic, drops anything that looks like an attack, and forwards legitimate Minecraft connections to your actual server over a private tunnel.
+
+This happens at two levels:
+
+**Layer 3/4 (Network/Transport):** The provider absorbs volumetric floods — SYN floods, UDP reflection, amplification attacks. These get dropped at the edge before they consume bandwidth. This is the main reason you're paying for protection.
+
+**Layer 7 (Application):** Some providers also inspect Minecraft protocol traffic. They can detect bots that send malformed packets, connections that never complete the login handshake, or clients that behave suspiciously at the protocol level. This complements your server-side anti-bot plugins.
+
+The trade-off is latency. Every connection now routes through an extra hop. With a well-located provider, this adds 5-20ms. Pick a provider far from your players and it can be 50ms+, which is noticeable in PvP.
+
+<Callout type="warning">
+Your real server IP must stay hidden. If an attacker finds it, they bypass the proxy entirely and hit you directly. This means no DNS history pointing to your real IP, no plugins leaking it, and firewall rules that only accept connections from your provider's IP ranges.
+</Callout>
+
+## What to Look For
+
+Don't pick a provider based on name recognition alone. Here's what actually matters:
+
+**Proximity to your players.** A provider with nodes in Frankfurt doesn't help much if your players are in São Paulo. Check where the provider has points of presence and pick the one closest to your player base. Some providers offer multiple locations — use the one with the lowest round-trip time.
+
+**Bedrock and Geyser support.** If you run Geyser for Bedrock players, make sure the provider supports UDP forwarding. Not all do, and Bedrock players will silently fail to connect if it's missing.
+
+**Voice chat compatibility.** Proximity voice plugins like PlasmoVoice and SimpleVoiceChat use additional UDP ports. Some providers support forwarding these, others don't. If voice chat matters to your community, verify this before committing.
+
+**Pricing model.** Providers typically charge one of three ways:
+- **Subscription:** Fixed monthly fee for a set amount of bandwidth/protection. Predictable costs.
+- **Pay-as-you-go:** You pay per GB of filtered traffic or per attack mitigated. Cheap when quiet, expensive under sustained attack.
+- **One-time + usage:** Upfront fee for the service, then usage-based billing.
+
+For most servers, a subscription model is simpler to budget for. Pay-as-you-go can spike if you're being actively targeted.
+
+**Always-on vs on-demand.** Always-on filtering routes all traffic through the proxy permanently. On-demand only activates when an attack is detected, which means there's a detection delay where your server takes hits before protection kicks in. Always-on adds consistent latency but provides immediate protection.
+
+**Built-in hosting protection.** Some hosting providers include DDoS protection as part of their service. If you're shopping for a dedicated server anyway, this can save you from managing a separate protection layer. Check what your host includes before buying a third-party service on top.
+
+## Setting It Up
+
+The exact steps vary by provider, but the general flow is the same:
+
+### 1. Point DNS to the proxy
+
+Update your domain's DNS records (A record or SRV record) to point to the protection provider's IP, not your server's. Players should never resolve your real IP.
+
+```text
+# Before (exposed)
+mc.yourserver.com.  A  203.0.113.50
+
+# After (protected)
+mc.yourserver.com.  A  198.51.100.10  # Provider's IP
+```
+
+If you were previously using your real IP in server lists, forum posts, or Discord — change it everywhere. Cached DNS entries and old links are the most common way real IPs leak.
+
+### 2. Lock down the firewall
+
+Only allow Minecraft traffic from your protection provider's IP ranges. Block everything else on port 25565.
+
+```bash
+# Allow traffic from provider's IP range only
+sudo iptables -A INPUT -p tcp --dport 25565 -s 198.51.100.0/24 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
+```
+
+Your provider will publish their IP ranges — use those. This ensures that even if someone discovers your real IP, direct connections get dropped.
+
+### 3. Enable PROXY protocol (if supported)
+
+PROXY protocol lets the protection service pass the original player IP to your server. Without it, every player appears to connect from the proxy's IP, which breaks IP bans, geolocation, and per-IP rate limiting.
+
+Most Minecraft proxies (Velocity, BungeeCord) and some server software support PROXY protocol. Check your provider's documentation for the specific configuration.
+
+### 4. Verify player IPs
+
+After setup, join your server and check that your real IP shows up in the logs — not the proxy's IP. If every player shows the same IP, PROXY protocol isn't working and you need to fix it before going live.
+
+## Testing Your Protection
+
+Setting it up is half the job. You need to verify it actually works.
+
+**Check for IP leaks.** Your real server IP should not be discoverable:
+- Search DNS history tools (SecurityTrails, DNS Dumpster) for old records pointing to your real IP
+- Check Shodan for your real IP with port 25565 open
+- Try connecting directly to the real IP — it should be refused
+
+**Test player experience.** Connect through the proxy and check that join times are reasonable, latency isn't excessive, plugins see the correct player IP, and Bedrock players can connect if you use Geyser.
+
+**Load test through the proxy.** Use [SoulFire](/download) to connect bots through the protection layer, not directly to your server. This verifies the provider doesn't flag legitimate-looking bot traffic (which would also mean flagging real players during a busy event). Start with 20 bots and scale up, watching for connection failures or throttling.
+
+**Test failover.** What happens if the protection service goes down? Ideally your server becomes unreachable (because the firewall blocks direct connections) rather than exposed. This is the correct behavior — downtime is better than unprotected exposure.
+
+For application-layer defense on top of DDoS protection — anti-bot plugins, rate limiting, behavioral analysis — see our [anti-bot testing guide](/blog/anti-bot-systems-testing-guide).
+
+## Conclusion
+
+DDoS protection is one layer of a broader defense strategy. It handles the attacks that server-side tools can't — raw bandwidth floods that overwhelm your network before your server even sees the traffic. But it doesn't replace [firewall rules and anti-bot plugins](/blog/anti-bot-systems-testing-guide), which catch the smaller, smarter attacks that slip through as valid TCP connections.
+
+Get both layers right, test them, and your server stays online when it matters.

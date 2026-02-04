@@ -183,10 +183,9 @@ verification:
 
 ## DDoS Protection Services
 
-For servers facing professional attackers, dedicated services absorb traffic before it reaches you.
+Firewall rules and anti-bot plugins handle application-level attacks — bot joins, connection spam, protocol abuse. But a volumetric DDoS attack saturates your network link before packets even reach your server. That requires dedicated protection: a TCP reverse proxy that absorbs attack traffic at the edge and only forwards clean connections to your server.
 
-- **[TCPShield](https://tcpshield.com/)**: Minecraft-specific proxy network. Players connect to TCPShield, which filters malicious traffic and forwards clean connections. Free tier available, adds 5-20ms latency.
-- **[Cloudflare Spectrum](https://www.cloudflare.com/products/cloudflare-spectrum/)**: Enterprise-grade Layer 3/4 protection. Handles 100+ Gbps attacks but requires a Business/Enterprise plan.
+For a full walkthrough of how these services work, what to look for in a provider, and how to verify your setup isn't leaking your real IP, see our [DDoS protection guide](/blog/ddos-protection-minecraft-servers).
 
 ## Testing Your Defenses
 
