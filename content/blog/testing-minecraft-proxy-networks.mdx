@@ -131,7 +131,7 @@ Use **Velocity** for new networks. Only use BungeeCord/Waterfall if you need spe
 
 **Download Velocity:**
 
-```bash title="Download and Setup Velocity"
+```bash title="setup-velocity.sh"
 # Create proxy directory
 mkdir velocity-proxy
 cd velocity-proxy
@@ -145,7 +145,7 @@ mv velocity-*.jar velocity.jar
 
 **First run:**
 
-```bash title="Initial Velocity Startup"
+```bash
 java -Xms512M -Xmx512M -jar velocity.jar
 
 # Accept EULA (edit velocity.toml, change eula=false to eula=true)
@@ -160,7 +160,7 @@ java -Xms512M -Xmx512M -jar velocity.jar
 
 **velocity.toml:**
 
-```toml title="velocity.toml - Main Configuration"
+```toml title="velocity.toml"
 # Server bind address
 bind = "0.0.0.0:25577"
 
@@ -204,7 +204,7 @@ The `forwarding-secret` is critical for security. Always generate a strong, rand
 
 **Generate strong forwarding secret:**
 
-```bash title="Generate Random Secret"
+```bash
 # Linux/Mac
 openssl rand -base64 32
 
@@ -223,7 +223,7 @@ Backend servers must:
 
 **server.properties** (all backend servers):
 
-```properties title="server.properties - Backend Server Configuration"
+```properties title="server.properties"
 # CRITICAL: Disable online mode
 online-mode=false
 
@@ -239,7 +239,7 @@ server-port=25565  # lobby
 
 **spigot.yml** (all backend servers):
 
-```yaml title="spigot.yml - Backend Server Configuration"
+```yaml title="spigot.yml"
 settings:
   # IMPORTANT: Disable BungeeCord mode for Velocity
   bungeecord: false
@@ -247,7 +247,7 @@ settings:
 
 **config/paper-global.yml** (all [Paper](https://papermc.io/) backend servers):
 
-```yaml title="paper-global.yml - Velocity Forwarding Configuration"
+```yaml title="paper-global.yml"
 proxies:
   velocity:
     enabled: true
@@ -263,7 +263,7 @@ If the `secret` doesn't match between Velocity and Paper, players cannot join. I
 
 **1. Start all servers:**
 
-```bash title="Starting All Servers"
+```bash title="start-all.sh"
 # Terminal 1: Lobby
 cd lobby-server
 java -jar paper.jar
@@ -283,7 +283,7 @@ Connect to proxy address: `localhost:25577`
 
 **3. Verify forwarding:**
 
-```bash title="Verify Player List"
+```bash
 # On proxy console
 /glist
 
@@ -297,7 +297,7 @@ Connect to proxy address: `localhost:25577`
 
 **4. Test server switching:**
 
-```bash title="Test Server Switching"
+```bash
 /server survival
 
 # Should seamlessly move to survival server
@@ -307,7 +307,7 @@ Connect to proxy address: `localhost:25577`
 
 **config.yml:**
 
-```yaml title="config.yml - BungeeCord Configuration"
+```yaml title="config.yml"
 listeners:
   - host: 0.0.0.0:25577
     max_players: 500
@@ -333,14 +333,14 @@ priorities:
 
 **Backend servers (spigot.yml):**
 
-```yaml title="spigot.yml - BungeeCord Backend Configuration"
+```yaml title="spigot.yml"
 settings:
   bungeecord: true  # Different from Velocity!
 ```
 
 **Backend servers (server.properties):**
 
-```properties title="server.properties - BungeeCord Backend"
+```properties title="server.properties"
 online-mode=false  # Same as Velocity
 ```
 
@@ -361,13 +361,13 @@ Player info forwarding is how the proxy tells backend servers who a player is (u
 
 **Configuration:**
 
-```toml title="velocity.toml - Modern Forwarding"
+```toml title="velocity.toml"
 # velocity.toml
 player-info-forwarding-mode = "modern"
 forwarding-secret = "your-secret-here"
 ```
 
-```yaml title="paper-global.yml - Modern Forwarding Backend"
+```yaml title="paper-global.yml"
 # paper-global.yml (backend)
 proxies:
   velocity:
@@ -385,12 +385,12 @@ proxies:
 
 **Configuration:**
 
-```toml title="velocity.toml - Legacy Forwarding"
+```toml title="velocity.toml"
 # velocity.toml
 player-info-forwarding-mode = "legacy"
 ```
 
-```yaml title="spigot.yml - Legacy Forwarding Backend"
+```yaml title="spigot.yml"
 # spigot.yml (backend)
 settings:
   bungeecord: true
@@ -404,7 +404,7 @@ Adds additional security layer to legacy forwarding:
 
 **Installation:**
 
-```bash title="BungeeGuard Installation"
+```bash title="install-bungeeguard.sh"
 # Download BungeeGuard plugin
 # Place in proxy plugins/ folder
 # Place in backend plugins/ folder
@@ -423,7 +423,7 @@ allowed-tokens:
 
 **Objective:** Ensure proxy authenticates players
 
-```bash title="Authentication Test"
+```bash
 # Connect with valid Minecraft account
 # Should succeed
 
@@ -435,7 +435,7 @@ allowed-tokens:
 
 **Objective:** Backend rejects direct connections (bypassing proxy)
 
-```bash title="Backend Direct Connection Test"
+```bash
 # Try connecting directly to backend server
 # Example: localhost:25565 (lobby server)
 
@@ -446,7 +446,7 @@ allowed-tokens:
 
 **How to verify:**
 
-```bash title="Verification Steps"
+```bash
 # On backend server, try to join with:
 # - Your real username
 # - A fake username like "Notch"
@@ -462,7 +462,7 @@ This requires attempting to send crafted forwarding packets. If configured prope
 
 **Test script concept (don't actually exploit):**
 
-```python title="Theoretical Impersonation Test (Educational Only)"
+```python title="impersonation-test.py"
 # Theoretical vulnerability test
 # If using legacy forwarding without BungeeGuard:
 
@@ -482,7 +482,7 @@ connect_to_backend(
 
 **Objective:** Seamless switching between backend servers
 
-```bash title="Server Switching Commands"
+```bash
 # Connect to proxy
 # Join lobby server (default)
 
@@ -508,7 +508,7 @@ connect_to_backend(
 
 **Objective:** Graceful handling of backend disconnect
 
-```bash title="Connection Loss Test"
+```bash
 # Connect and join lobby
 # Stop lobby server (simulate crash)
 
@@ -518,7 +518,7 @@ connect_to_backend(
 
 **Fallback configuration (velocity.toml):**
 
-```toml title="velocity.toml - Fallback Server Configuration"
+```toml title="velocity.toml"
 [servers]
 lobby = "127.0.0.1:25565"
 survival = "127.0.0.1:25566"
@@ -551,7 +551,7 @@ Expected:
 
 **Objective:** Players switching servers quickly
 
-```bash title="Rapid Server Switching Test"
+```bash
 /server survival
 /server creative
 /server lobby
@@ -569,7 +569,7 @@ Expected:
 
 **Connection rate:**
 
-```bash title="Connection Rate Benchmarks"
+```bash
 # How many players can join per second?
 # Test by connecting bots rapidly
 
@@ -580,7 +580,7 @@ Expected:
 
 **Switching speed:**
 
-```bash title="Switching Speed Benchmarks"
+```bash
 # Measure time from /server command to arrival on new server
 
 # Excellent: <500ms
@@ -591,7 +591,7 @@ Expected:
 
 **Resource usage:**
 
-```bash title="Monitor Proxy Resource Usage"
+```bash
 # Monitor proxy with 100+ players online
 
 top -p $(pgrep -f velocity.jar)
@@ -773,7 +773,7 @@ Since bots can execute commands, you can test server switching:
 
 **What to monitor:**
 
-```bash title="Monitoring Commands"
+```bash
 # On proxy
 /glist
 # Should show bots distributed across servers
@@ -824,7 +824,7 @@ Problems:
 
 **Debug:**
 
-```bash title="Test Proxy to Backend Connectivity"
+```bash
 # Test connectivity from proxy to backend
 # On proxy server:
 telnet 127.0.0.1 25565
@@ -844,13 +844,13 @@ telnet 127.0.0.1 25565
 **Fix:**
 
 1. Verify velocity.toml:
-   ```toml title="velocity.toml - Check Forwarding Settings"
+   ```toml title="velocity.toml"
    player-info-forwarding-mode = "modern"
    forwarding-secret = "your-secret"
    ```
 
 2. Verify paper-global.yml (backend):
-   ```yaml title="paper-global.yml - Check Forwarding Settings"
+   ```yaml title="paper-global.yml"
    proxies:
      velocity:
        enabled: true
@@ -870,7 +870,7 @@ telnet 127.0.0.1 25565
 
 **Option 1: Firewall backend (recommended)**
 
-```bash title="Firewall Configuration"
+```bash title="firewall-setup.sh"
 # Only allow connections from proxy IP
 sudo iptables -A INPUT -p tcp --dport 25565 -s PROXY_IP -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
@@ -881,7 +881,7 @@ sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
 
 **Option 2: Bind backend to localhost**
 
-```properties title="server.properties - Bind to Localhost"
+```properties title="server.properties"
 # server.properties
 server-ip=127.0.0.1
 
@@ -920,7 +920,7 @@ server-ip=127.0.0.1
 
 **Debug:**
 
-```toml title="velocity.toml - Increase Read Timeout"
+```toml title="velocity.toml"
 # velocity.toml
 [advanced]
 # Increase timeout

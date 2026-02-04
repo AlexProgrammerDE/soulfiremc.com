@@ -18,7 +18,8 @@ Bot attacks on Minecraft servers have evolved from simple annoyances to sophisti
 **1. Connection Flooding**
 Thousands of bots attempt to connect simultaneously, overwhelming the server's connection handler before players even authenticate.
 
-```text title="Connection Rate Comparison"
+Connection rate comparison:
+```text
 Normal: 2-5 connections/second
 Attack: 200-2000 connections/second
 ```
@@ -108,7 +109,7 @@ Learn more about iptables in the [official documentation](https://netfilter.org/
 
 **Install iptables** (usually pre-installed on Linux):
 
-```bash title="Install iptables"
+```bash
 # Check if installed
 sudo iptables -V
 
@@ -123,7 +124,7 @@ sudo yum install iptables-services
 
 Limit how many connections a single IP can make:
 
-```bash title="iptables Connection Rate Limiting Rules"
+```bash
 # Allow established connections
 sudo iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
@@ -149,7 +150,7 @@ sudo iptables -A INPUT -p tcp --dport 25565 -j ACCEPT
 
 SYN floods exhaust connection pools by initiating but never completing TCP handshakes:
 
-```bash title="SYN Flood Protection Rules"
+```bash
 # Enable SYN cookies (kernel-level protection)
 sudo sysctl -w net.ipv4.tcp_syncookies=1
 
@@ -162,7 +163,7 @@ sudo iptables -A INPUT -p tcp --syn -j DROP
 
 If your players are primarily from specific regions:
 
-```bash title="Geographic IP Filtering Setup"
+```bash
 # Install geoip module
 sudo apt-get install xtables-addons-common libtext-csv-xs-perl
 
@@ -185,7 +186,7 @@ Geographic filtering can block legitimate players using VPNs or traveling. Use c
 
 Managing thousands of blocked IPs directly in iptables is inefficient. Use ipset for scalable blacklisting:
 
-```bash title="ipset Blacklist Configuration"
+```bash
 # Install ipset
 sudo apt-get install ipset
 
@@ -213,7 +214,7 @@ sudo ipset restore < /etc/ipset.conf
 
 #### Make Rules Persistent
 
-```bash title="Persist iptables Rules"
+```bash
 # Debian/Ubuntu
 sudo apt-get install iptables-persistent
 sudo netfilter-persistent save
@@ -229,7 +230,7 @@ sudo systemctl enable iptables
 
 nftables is the modern replacement for iptables with improved syntax and performance.
 
-```bash title="Install nftables"
+```bash
 # Install nftables (Debian/Ubuntu)
 sudo apt-get install nftables
 
@@ -243,7 +244,7 @@ sudo systemctl start nftables
 
 #### Basic nftables Configuration
 
-```bash title="nftables Rate Limiting"
+```bash
 # Create table and chain
 sudo nft add table inet filter
 sudo nft add chain inet filter input { type filter hook input priority 0 \; }
@@ -259,7 +260,7 @@ sudo nft add rule inet filter input tcp dport 25565 ct state new \
 sudo nft add rule inet filter input tcp dport 25565 drop
 ```
 
-```bash title="Save nftables Rules"
+```bash
 # Save current ruleset
 sudo nft list ruleset > /etc/nftables.conf
 
@@ -272,7 +273,7 @@ sudo nft list ruleset > /etc/nftables.conf
 
 UFW is a user-friendly frontend for iptables, ideal for simpler setups.
 
-```bash title="Install and Setup UFW"
+```bash
 # Install UFW (usually pre-installed on Ubuntu)
 sudo apt-get install ufw
 
@@ -283,7 +284,7 @@ sudo ufw allow 25565/tcp
 sudo ufw enable
 ```
 
-```bash title="UFW Rate Limiting"
+```bash
 # Basic rate limiting (6 connections per 30 seconds)
 sudo ufw limit 25565/tcp
 ```
@@ -304,7 +305,7 @@ While network filtering blocks crude attacks, sophisticated bots need behavioral
 
 **Installation:**
 
-```bash title="Install EpicGuard"
+```bash
 # Download latest release
 wget https://github.com/4drian3d/EpicGuard/releases/latest/download/EpicGuard.jar
 
@@ -313,6 +314,10 @@ mv EpicGuard.jar plugins/
 
 # Restart server
 ```
+
+<Callout type="info">
+The configuration examples below are for reference purposes. Always consult the [official EpicGuard documentation](https://github.com/4drian3d/EpicGuard) for the most up-to-date configuration options and best practices.
+</Callout>
 
 **Configuration** (`plugins/EpicGuard/config.yml`):
 
@@ -378,7 +383,7 @@ geographic-check:
 
 **Commands:**
 
-```bash title="EpicGuard Commands"
+```text
 # Whitelist a player manually
 /epicguard whitelist add PlayerName
 
@@ -396,7 +401,11 @@ geographic-check:
 
 A more modern alternative with active development:
 
-```yaml title="UltimateAntiBot config.yml"
+<Callout type="info">
+The configuration examples below are for reference purposes. Always consult the official UltimateAntiBot documentation for the most up-to-date configuration options and best practices.
+</Callout>
+
+```yaml title="config.yml"
 # config.yml
 settings:
   # Use iptables for kernel-level blocking (requires permissions)
@@ -457,7 +466,11 @@ For servers under heavy attack, commercial solutions offer advanced protection:
 - Advanced VPN/proxy detection
 - API for external integrations
 
-```yaml title="BotSentry config.yml"
+<Callout type="info">
+The configuration examples below are for reference purposes. Always consult the official BotSentry documentation for the most up-to-date configuration options and best practices.
+</Callout>
+
+```yaml title="config.yml"
 # Example config.yml
 detection:
   # Aggressive machine learning model
@@ -498,21 +511,21 @@ Your testing should answer:
 Test that normal players aren't affected:
 
 **Test Case 1.1: Single Player Join**
-```text title="Test Case 1.1"
+```text
 Setup: Configure anti-bot with ATTACK mode
 Action: Join with a real client
 Expected: Immediate join, no delays or challenges
 ```
 
 **Test Case 1.2: Multiple Legitimate Joins**
-```text title="Test Case 1.2"
+```text
 Setup: Same configuration
 Action: 5 real players join within 30 seconds
 Expected: All join successfully, no false positives
 ```
 
 **Test Case 1.3: Reconnect Pattern**
-```text title="Test Case 1.3"
+```text
 Setup: Enable reconnect-check: ALWAYS
 Action: Player disconnects and reconnects immediately
 Expected: Successful rejoin, or brief delay (<5 sec)
@@ -531,14 +544,14 @@ Expected: Successful rejoin, or brief delay (<5 sec)
 Now test with bot traffic:
 
 **Test Case 2.1: Slow Bot Join (5 bots)**
-```text title="Test Case 2.1"
+```text
 Setup: Anti-bot configured, 5 bots join over 60 seconds
 Expected: Some or all blocked depending on config
 Goal: Measure detection rate and false positive impact
 ```
 
 **Test Case 2.2: Rapid Bot Flood (50 bots in 10 seconds)**
-```text title="Test Case 2.2"
+```text
 Setup: Same configuration
 Action: 50 bot connections within 10 seconds
 Expected: Attack mode triggers, high block rate
@@ -546,14 +559,14 @@ Monitor: Server TPS, legitimate player impact
 ```
 
 **Test Case 2.3: Persistent Bot Reconnect (10 bots, 5 minutes)**
-```text title="Test Case 2.3"
+```text
 Setup: Bots repeatedly connect, get kicked, reconnect
 Expected: Blacklisting occurs, eventually blocking at network level
 Monitor: CPU usage, memory, blacklist size
 ```
 
 **Test Case 2.4: Proxy-Rotated Attack (50 different IPs)**
-```text title="Test Case 2.4"
+```text
 Setup: Bots use different proxies/IPs
 Expected: Behavioral checks catch them despite IP rotation
 Goal: Validate non-IP-based detection
@@ -567,7 +580,7 @@ Goal: Validate non-IP-based detection
 
 **Test Environment Setup:**
 
-```bash title="Setup Test Server"
+```bash
 # 1. Create isolated test server
 # Copy your production config
 cp -r /path/to/prod-server /path/to/test-server
@@ -586,7 +599,7 @@ java -Xmx2G -Xmx2G -jar paper.jar nogui
 
 When using bot tools for testing, configure realistic parameters:
 
-```text title="Test Configuration Parameters"
+```text
 Test Configuration:
 - Target: localhost:25566 (test server)
 - Bot Count: Start with 10, increase to 50
@@ -597,7 +610,7 @@ Test Configuration:
 
 **Metrics to Record:**
 
-```bash title="Recording Test Metrics"
+```text
 # Before test
 /spark tps  # Record baseline TPS
 /epicguard stats  # Record baseline stats
@@ -613,7 +626,7 @@ Test Configuration:
 
 **Analysis Template:**
 
-```text title="Test Analysis Template"
+```text
 Test: Rapid Bot Flood (50 bots, 10 seconds)
 Date: 2026-02-05
 Config: EpicGuard ATTACK mode, threshold=8
@@ -650,21 +663,21 @@ The worst outcome is blocking legitimate players. Test rigorously for false posi
 
 **False Positive Test Cases:**
 
-```text title="Test 3.1: Multiple Players, Same IP"
+```text
 Test 3.1: Multiple Players, Same IP
 Setup: 3 real players behind same router
 Action: All join within 60 seconds
 Expected: All successfully join
 ```
 
-```text title="Test 3.2: Player Using VPN"
+```text
 Test 3.2: Player Using VPN
 Setup: Real player connects through NordVPN
 Action: Join server
 Expected: Join succeeds (unless you explicitly block VPNs)
 ```
 
-```text title="Test 3.3: Rapid Reconnect"
+```text
 Test 3.3: Rapid Reconnect (Network Issue Simulation)
 Setup: Real player
 Action: Connect, disconnect immediately, reconnect 5 times in 30 seconds
@@ -705,7 +718,7 @@ Many anti-bot plugins include behavioral analysis. You can also create custom ch
 
 **Example: Movement Check Plugin Concept**
 
-```java title="Movement Check Plugin Pseudocode"
+```java
 // Pseudocode for a movement check
 @EventHandler
 public void onPlayerJoin(PlayerJoinEvent event) {
@@ -751,7 +764,7 @@ For servers facing professional attackers, consider dedicated DDoS protection.
 
 **Setup:**
 
-```bash title="TCPShield Setup Steps"
+```bash
 # 1. Sign up at tcpshield.com
 # 2. Add your server
 # 3. Configure your DNS
@@ -783,17 +796,15 @@ For servers facing professional attackers, consider dedicated DDoS protection.
 
 For larger servers, [Cloudflare Spectrum](https://www.cloudflare.com/products/cloudflare-spectrum/) provides enterprise-grade protection:
 
-```text title="Cloudflare Spectrum Overview"
-Benefits:
+**Benefits:**
 - Absorbs massive attacks (100+ Gbps)
 - Global Anycast network
 - Layer 3/4 and Layer 7 protection
 
-Limitations:
+**Limitations:**
 - Expensive ($20+ per server/month)
 - Requires Cloudflare Business/Enterprise plan
 - Complex setup
-```
 
 ## Monitoring and Alerting
 
@@ -803,7 +814,7 @@ Your anti-bot system needs monitoring to detect attacks early.
 
 Set up log parsing to detect patterns:
 
-```bash title="Log Analysis Script"
+```bash
 # Count connection attempts per IP in last hour
 grep "logged in" logs/latest.log | grep "$(date +%Y-%m-%d)" | \
   awk '{print $4}' | sort | uniq -c | sort -rn | head -20
@@ -818,7 +829,7 @@ grep "logged in" logs/latest.log | grep "$(date +%Y-%m-%d)" | \
 
 **Automated Alerting:**
 
-```bash title="/usr/local/bin/check-bot-attack.sh"
+```bash title="check-bot-attack.sh"
 #!/bin/bash
 # /usr/local/bin/check-bot-attack.sh
 
@@ -839,7 +850,7 @@ fi
 
 **Run with cron:**
 
-```bash title="Cron Schedule"
+```bash
 # Check every 5 minutes
 */5 * * * * /usr/local/bin/check-bot-attack.sh
 ```
@@ -902,7 +913,7 @@ Enable `server-list-bypass` plugin to test if your anti-bot's server-list check 
 ### Test Scenarios
 
 **Scenario 1: Connection Rate Limiting**
-```text title="Scenario 1: Connection Rate Limiting"
+```text
 Configuration:
 - Bot Count: 50
 - Join Delay: 100-200ms (aggressive)
@@ -913,7 +924,7 @@ Expected: Most bots blocked, attack mode triggered
 ```
 
 **Scenario 2: Reconnect Spam**
-```text title="Scenario 2: Reconnect Spam"
+```text
 Configuration:
 - Bot Count: 10
 - Plugins: Auto-reconnect enabled
@@ -924,7 +935,7 @@ Expected: Bots eventually blacklisted, further attempts blocked
 ```
 
 **Scenario 3: Behavioral Verification**
-```text title="Scenario 3: Behavioral Verification"
+```text
 Configuration:
 - Bot Count: 20
 - Plugins: Anti-AFK, Auto-Jump (simulate movement)
@@ -935,7 +946,7 @@ Expected: Moving bots pass longer before detection
 ```
 
 **Scenario 4: Server-List Check**
-```text title="Scenario 4: Server-List Check"
+```text
 Configuration:
 - Bot Count: 30
 - Plugins: Server-List-Bypass ENABLED for 15 bots, DISABLED for 15 bots
@@ -948,7 +959,7 @@ Expected: Bots without bypass get blocked, bots with bypass pass (if you need to
 
 After running tests, check your anti-bot plugin's stats:
 
-```bash title="Check Anti-Bot Statistics"
+```text
 /epicguard stats
 
 # Example output:

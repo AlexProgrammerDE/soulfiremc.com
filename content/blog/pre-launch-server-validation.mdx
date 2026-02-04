@@ -37,7 +37,9 @@ This guide ensures you're ready.
 
 **Test 1: Resource Capacity**
 
-```bash title="Server Resource Monitoring"
+Monitor idle server resources and check capacity:
+
+```bash
 # Monitor idle server resources
 htop
 
@@ -70,7 +72,9 @@ iperf3 -c speedtest.server.com
 
 **Test 2: Backup and Restore**
 
-```bash title="Backup Testing"
+Test your backup and restore process:
+
+```bash
 # Create full backup
 ./backup-server.sh
 
@@ -90,7 +94,9 @@ java -jar paper.jar --nogui
 
 **Automation:**
 
-```bash title="Cron Backup Automation"
+Schedule automatic backups with crontab:
+
+```bash
 # Schedule automatic backups
 crontab -e
 
@@ -109,7 +115,9 @@ crontab -e
 
 **Test 3: Security Audit**
 
-```bash title="Security Verification"
+Verify your security configuration:
+
+```bash
 # Check firewall rules
 sudo iptables -L -n
 
@@ -144,9 +152,11 @@ grep "PasswordAuthentication no" /etc/ssh/sshd_config
 
 **Test 4: Baseline Performance**
 
-```bash title="Spark Performance Baseline"
+Establish performance baseline using Spark (requires Spark plugin: https://spark.lucko.me/):
+
+```
 # Start empty server
-# Connect and run (requires Spark plugin: https://spark.lucko.me/)
+# Connect and run
 /spark tps
 /spark heapsummary
 
@@ -191,8 +201,10 @@ chunks:
 
 **Test 5: Spawn Area Optimization**
 
-```bash title="Chunky Pregeneration"
-# Pregenerate spawn chunks (requires Chunky plugin: https://github.com/pop4959/Chunky)
+Pregenerate spawn chunks using Chunky (requires Chunky plugin: https://github.com/pop4959/Chunky):
+
+```
+# Pregenerate spawn chunks
 /chunky center 0 0
 /chunky radius 5000
 /chunky start
@@ -225,7 +237,9 @@ chunks:
 
 **Test 6: Economy Balance**
 
-```text title="Economy Progression Testing"
+Test the economy progression path:
+
+```text
 Test progression path:
 1. New player joins
 2. Complete starter tasks
@@ -258,7 +272,9 @@ Monitor:
 
 **Test 7: Plugin Conflicts**
 
-```bash title="Plugin Conflict Detection"
+Check for plugin conflicts:
+
+```bash
 # List all plugins
 ls plugins/*.jar
 
@@ -273,7 +289,9 @@ tail -f logs/latest.log | grep -i error
 
 **Test each major plugin:**
 
-```text title="Plugin Testing Checklist"
+Test each plugin systematically:
+
+```text
 For each plugin:
 1. Verify it loads without errors
 2. Test primary feature
@@ -300,7 +318,9 @@ Example (Claim plugin):
 
 **Test 8: Permission Hierarchy**
 
-```yaml title="Permission Group Testing"
+Test user progression through permission groups:
+
+```yaml
 # Test user progression
 Groups to test:
 - default (new player)
@@ -329,7 +349,9 @@ For each group:
 
 **Test 9: First-Time User Experience (FTUE)**
 
-```text title="New Player Journey Test"
+Roleplay as a new player and test the onboarding experience:
+
+```text
 Roleplay as new player:
 1. Join server for first time
 2. Read welcome message
@@ -361,7 +383,9 @@ Validate:
 
 **Test 10: Visual Polish**
 
-```text title="Visual Polish Checklist"
+Inspect the visual quality of your server:
+
+```text
 Inspect spawn area:
 - Lighting correct (no dark patches)?
 - No floating blocks?
@@ -397,7 +421,9 @@ Test scoreboard (if used):
 
 **Test 11: Simulated Player Load**
 
-```text title="Load Test Progression"
+Test with progressively increasing player counts:
+
+```text
 Test progression:
 - 10 players: 5 minutes
 - 25 players: 10 minutes
@@ -419,7 +445,9 @@ Expected results:
 
 **Load test scenarios:**
 
-```text title="Load Test Scenarios"
+Test different types of load:
+
+```text
 Scenario 1: Mass Join (Launch Day Simulation)
 - 50 bots join within 2 minutes
 - Monitor server during surge
@@ -449,7 +477,9 @@ Scenario 4: Endurance Test
 
 **Test 12: Connection Quality**
 
-```bash title="Network Latency Testing"
+Test network latency from various locations:
+
+```bash
 # Test from various locations
 # Use VPS in different regions
 
@@ -480,7 +510,9 @@ traceroute your-server.com
 
 **Test 13: Staff Readiness**
 
-```text title="Staff Training Guide"
+Train your staff on common issues and procedures:
+
+```text
 Train staff on:
 - Common issues and solutions
 - Moderation commands
@@ -516,7 +548,9 @@ Fix: /co inspect, identify culprit, rollback if needed
 
 **Test 14: Communication Systems**
 
-```text title="Communication Verification"
+Verify all communication systems are ready:
+
+```text
 Verify:
 - Discord server configured
 - Staff channels ready
@@ -538,7 +572,9 @@ Test:
 
 **Test 15: Full Walkthrough**
 
-```text title="Complete Player Journey Test"
+Simulate a complete player journey from start to finish:
+
+```text
 Simulate complete player journey:
 
 Hour 1: Join and Orientation
@@ -582,7 +618,9 @@ Validate every feature works flawlessly.
 
 **Test 16: System Health**
 
-```bash title="System Health Check"
+Verify all critical systems are healthy:
+
+```bash
 # Check all services running
 ps aux | grep java  # Server
 ps aux | grep mysql  # Database (if used)
@@ -626,7 +664,9 @@ tail -100 logs/latest.log  # No errors
 
 ### T-Minus 1 Hour
 
-```text title="Final Pre-Launch Protocol"
+Execute the final pre-launch protocol:
+
+```text
 1. Final restart
    - /stop
    - Clear cache/temporary files
@@ -655,7 +695,9 @@ tail -100 logs/latest.log  # No errors
 
 ### T-Minus 0: Launch!
 
-```text title="Launch Monitoring Checklist"
+Monitor everything closely during launch:
+
+```text
 Monitor closely:
 - Player count
 - TPS (should stay >18)
@@ -688,7 +730,9 @@ Engage with players:
 
 **Metrics to track:**
 
-```text title="Launch Metrics Tracking"
+Track these key metrics during the first 24 hours:
+
+```text
 Players:
 - Peak concurrent players
 - Total unique joins
@@ -712,7 +756,9 @@ Engagement:
 
 **Review and iterate:**
 
-```text title="Post-Launch Review Template"
+Conduct a post-launch review:
+
+```text
 What went well:
 - Stable TPS throughout
 - No major bugs
@@ -754,7 +800,9 @@ Manual testing has limits. Bots enable comprehensive, realistic validation.
 
 **Scenario 1: Launch Day Simulation**
 
-```text title="Launch Day Test Configuration"
+Simulate the opening day player surge:
+
+```text
 Objective: Simulate opening day player surge
 
 Configuration:
@@ -784,7 +832,9 @@ Expected:
 
 **Scenario 2: Exploration Stress Test**
 
-```text title="Exploration Test Configuration"
+Test chunk loading performance during exploration:
+
+```text
 Objective: Test chunk loading during exploration
 
 Configuration:
@@ -813,7 +863,9 @@ Expected:
 
 **Scenario 3: Economy System Test**
 
-```text title="Economy Test Configuration"
+Verify the economy system handles transactions correctly:
+
+```text
 Objective: Verify economy handles transactions
 
 Configuration:
@@ -835,7 +887,9 @@ Validation:
 
 **Scenario 4: Claim System Test**
 
-```text title="Claim System Test Configuration"
+Validate land claiming under load:
+
+```text
 Objective: Validate land claiming under load
 
 Configuration:
@@ -856,7 +910,9 @@ Expected:
 
 **Scenario 5: Endurance and Memory Leak Test**
 
-```text title="Endurance Test Configuration"
+Conduct a long-term stability check:
+
+```text
 Objective: Long-term stability check
 
 Configuration:
@@ -891,7 +947,9 @@ Expected:
 
 **Good Launch Readiness:**
 
-```text title="Successful Test Results"
+Example of successful test results indicating launch readiness:
+
+```text
 Test Results:
 - 100/100 bots connected successfully (100%)
 - TPS during peak: 18.2 minimum, 19.5 average
@@ -910,7 +968,9 @@ Interpretation:
 
 **Needs Improvement:**
 
-```text title="Failed Test Results"
+Example of failed test results requiring action before launch:
+
+```text
 Test Results:
 - 85/100 bots connected (85% success)
 - TPS during peak: 12.5 minimum (❌)
@@ -939,7 +999,9 @@ Comprehensive pre-launch testing requires realistic client behavior and protocol
 
 **Launch Day Simulation:**
 
-```text title="SoulFire Launch Simulation"
+Configure SoulFire to simulate a realistic launch scenario:
+
+```text
 Configuration:
 - Bots: 100
 - Join Pattern: 10 per minute for 10 minutes
@@ -961,7 +1023,9 @@ Validate server handles launch day surge with:
 
 **What to Monitor:**
 
-```bash title="Launch Monitoring Commands"
+Monitor these metrics during the simulation:
+
+```bash
 # Server console
 tail -f logs/latest.log | grep -E "(ERROR|WARN|Exception)"
 
@@ -977,7 +1041,9 @@ htop  # Monitor CPU/RAM in separate terminal
 
 **Success Criteria:**
 
-```text title="Launch Readiness Criteria"
+Your server is ready for launch if it meets these criteria:
+
+```text
 ✅ 95+ bots connected
 ✅ TPS >18 during surge, >19 after stabilization
 ✅ No errors or exceptions
