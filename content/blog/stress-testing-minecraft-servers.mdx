@@ -11,15 +11,15 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Understanding Server Stress Testing
 
-Stress testing simulates high player loads on your Minecraft server to find performance bottlenecks before real players hit them. The goal isn't to see when the server crashes -- it's to find out how many players you can actually handle.
+Stress testing simulates high player loads so you can find performance problems before real players find them for you. The point isn't to see when the server crashes. It's to figure out how many players you can actually handle and where things start falling apart.
 
-A new plugin might work fine with 10 players and cause severe lag with 50. A VPS upgrade might not deliver the improvement you expected. Stress testing gives you hard numbers instead of guesses.
+A new plugin might work fine with 10 players and tank the server at 50. A VPS upgrade might not deliver the improvement you were hoping for. Stress testing gives you hard numbers instead of guesses.
 
 ### Key Performance Metrics
 
 Minecraft servers have two numbers you need to watch: TPS and MSPT.
 
-**TPS (Ticks Per Second)** measures the server's tick rate, targeting 20 ticks per second. **MSPT (Milliseconds Per Tick)** measures how long each tick takes to process. MSPT is more revealing because it shows performance trends before TPS actually drops -- a server at 45ms MSPT is still hitting 20 TPS but has almost no headroom left.
+**TPS (Ticks Per Second)** measures the server's tick rate, targeting 20 ticks per second. **MSPT (Milliseconds Per Tick)** measures how long each tick takes to process. MSPT is the one you should actually care about, because it shows performance trends before TPS drops. A server at 45ms MSPT is still hitting 20 TPS but has almost no headroom left.
 
 | TPS | MSPT | Server State |
 |-----|------|--------------|
@@ -38,7 +38,7 @@ The best tool for monitoring both is [Spark](https://spark.lucko.me/), which wor
 /spark gc               # Garbage collection activity
 ```
 
-Spark's profiler generates flamegraphs showing exactly where server time is spent. Look for the widest sections -- those consume the most time. Plugin names appearing disproportionately large indicate a problem worth investigating.
+Spark's profiler generates flamegraphs showing exactly where server time is spent. Look for the widest sections; those are eating the most time. If a plugin name shows up disproportionately large, that's your problem.
 
 ## Optimize Before Testing
 
@@ -48,18 +48,18 @@ Testing an unoptimized server wastes time. You'll just discover it needs optimiz
 
 ### Server Software
 
-[Paper](https://papermc.io/) is the standard for performance. It includes hundreds of optimizations over Spigot while maintaining plugin compatibility. For servers expecting 100+ players, consider [Pufferfish](https://pufferfish.host/) (a Paper fork tuned for high player counts). Avoid vanilla Bukkit and CraftBukkit -- they lack modern optimizations entirely.
+[Paper](https://papermc.io/) is the standard for performance. It includes hundreds of optimizations over Spigot while maintaining plugin compatibility. For servers expecting 100+ players, consider [Pufferfish](https://pufferfish.host/) (a Paper fork tuned for high player counts). Avoid vanilla Bukkit and CraftBukkit; they lack modern optimizations entirely.
 
 ### View and Simulation Distance
 
-These are the most impactful settings you'll adjust.
+These two settings make the biggest difference out of anything you'll touch.
 
 ```properties title="server.properties"
 view-distance=8
 simulation-distance=4
 ```
 
-Every chunk within simulation distance requires entity processing, crop growth, and redstone ticking -- far more expensive than just rendering terrain. Setting simulation distance lower than view distance gives players good visibility without the processing overhead.
+Every chunk within simulation distance requires entity processing, crop growth, and redstone ticking, which is far more expensive than just rendering terrain. Setting simulation distance lower than view distance gives players good visibility without the processing overhead.
 
 | Server Type | View Distance | Simulation Distance |
 |-------------|---------------|---------------------|
@@ -91,7 +91,7 @@ entities:
 
 ### Pregenerate Chunks
 
-Chunk generation is extremely expensive -- TPS can drop from 20 to 2-8 while generating new terrain. Use the [Chunky](https://modrinth.com/plugin/chunky) plugin to pregenerate before players explore:
+Chunk generation is brutally expensive. TPS can plummet from 20 down to 2-8 while generating new terrain. Use the [Chunky](https://modrinth.com/plugin/chunky) plugin to pregenerate before players explore:
 
 ```text
 /chunky world world
@@ -117,7 +117,7 @@ java -Xms10G -Xmx10G -XX:+UseZGC \
   -XX:+UseDynamicNumberOfGCThreads -jar paper.jar --nogui
 ```
 
-ZGC is self-tuning — no manual GC parameters needed. Compact Object Headers reduce per-object header size from 12 to 8 bytes, lowering memory usage and GC pressure across the board.
+ZGC is self-tuning, so you don't need to hand-tune GC parameters. Compact Object Headers reduce per-object header size from 12 to 8 bytes, lowering memory usage and GC pressure across the board.
 
 **Requirements:** 8+ CPU cores and 6GB+ allocated RAM. On smaller hardware, use G1GC instead.
 
@@ -143,19 +143,19 @@ java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
 
 #### G1GC vs ZGC
 
-**G1GC (Aikar's flags)** divides the heap into regions and collects garbage in phases, aiming for a 200ms pause time target. It still produces stop-the-world pauses that scale with heap size, but Aikar's tuning parameters optimize it for Minecraft's allocation patterns — lots of short-lived objects from chunk loading, entity processing, and packet handling. Works well on modest hardware and smaller heaps.
+**G1GC (Aikar's flags)** divides the heap into regions and collects garbage in phases, aiming for a 200ms pause time target. It still produces stop-the-world pauses that scale with heap size, but Aikar's tuning parameters optimize it for Minecraft's allocation patterns: lots of short-lived objects from chunk loading, entity processing, and packet handling. Works well on modest hardware and smaller heaps.
 
-**ZGC** does nearly all garbage collection concurrently with the application. Pause times stay under 1ms regardless of heap size, which eliminates those random TPS drops and rubber-banding caused by GC pauses. It's self-tuning and needs almost no configuration, but trades CPU cycles for those low pause times.
+**ZGC** does nearly all garbage collection concurrently with the application. Pause times stay under 1ms regardless of heap size. That's not a typo. Where G1GC can spike to 200ms+ (long enough for players to notice rubber-banding), ZGC pauses are measured in microseconds. brucethemoose's testing found no measurable server throughput hit, and Netflix's production data on Generational ZGC showed a 6-8% throughput improvement over G1 in allocation-heavy workloads. The tradeoff is higher CPU usage, since ZGC runs its collection threads concurrently instead of pausing everything.
 
-**Compact Object Headers** ([JEP 519](https://openjdk.org/jeps/519)) complement either collector. They shrink object headers from 12 bytes to 8 bytes, reducing heap usage and improving cache locality. Minecraft creates millions of small, short-lived objects per tick, so the savings add up — benchmarks show up to 22% less heap usage.
+**Compact Object Headers** ([JEP 519](https://openjdk.org/jeps/519)) complement either collector. They shrink object headers from 12 bytes to 8 bytes, reducing heap usage and improving cache locality. The SPECjbb2015 benchmark showed 22% less heap usage and 8% less CPU time with compact headers enabled. Amazon validated these numbers across hundreds of production services. For Minecraft specifically, where the server creates millions of small, short-lived objects per tick (chunk data, entity state, packets), that 10-20% reduction in live data memory is significant.
 
-**In practice:** If your server has 8+ cores and you're running Java 25, use ZGC — the sub-millisecond pauses mean GC is effectively invisible to players. If you're on older Java, constrained hardware (under 8 cores), or allocating less than 6GB RAM, stick with Aikar's G1GC flags. Monitor with `/spark gc` either way.
+**In practice:** If your server has 8+ cores and you're running Java 25, use ZGC. Sub-millisecond pauses mean players will never feel a GC hiccup. If you're on older Java, constrained hardware (under 8 cores), or allocating less than 6GB RAM, stick with Aikar's G1GC flags. Monitor with `/spark gc` either way.
 
 For deeper benchmarks and analysis, see [brucethemoose's Minecraft Performance Flags Benchmarks](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks) and [Obydux's modern startup flags](https://github.com/Obydux/Minecraft-startup-flags).
 
 ## Conducting the Stress Test
 
-The key is testing incrementally -- connecting 500 bots at once teaches you nothing except "it crashes."
+The key is testing incrementally. Connecting 500 bots at once teaches you nothing except "it crashes."
 
 ### Phase 1: Baseline
 
@@ -167,7 +167,7 @@ Increase bots in steps and hold each level for 10-15 minutes:
 
 | Step | Bots | Goal |
 |------|------|------|
-| 1 | 10 | Verify test setup works |
+| 1 | 10 | Confirm test setup works |
 | 2 | 25 | Watch for early degradation |
 | 3 | 50 | Typical peak for small servers |
 | 4 | 100 | Mid-size server stress test |
@@ -182,7 +182,7 @@ Idle bots standing still don't represent real players. Add movement and actions 
 <Tabs>
 <Tab value="movement" label="Movement" default>
 
-Tests entity tracking, pathfinding, collision detection, and chunk loading. Random walking is enough to stress entity tracking and collision — check EntityAI CPU usage and chunk loading frequency in Spark.
+Tests entity tracking, pathfinding, collision detection, and chunk loading. Random walking is enough to stress entity tracking and collision. Check EntityAI CPU usage and chunk loading frequency in Spark.
 
 </Tab>
 <Tab value="exploration" label="Exploration">
@@ -199,27 +199,27 @@ Tests mob AI, damage calculations, and entity death/spawn cycles. High entity AI
 
 ### Phase 4: Spike Testing
 
-Real servers experience sudden load spikes -- 100 players joining within 30 seconds during an event. Start with 10 bots connected, then join 50 simultaneously. Watch whether TPS drops below 15 during the surge and how long recovery takes.
+Real servers get sudden load spikes. Think 100 players joining within 30 seconds during an event. Start with 10 bots connected, then join 50 simultaneously. Watch whether TPS drops below 15 during the surge and how long recovery takes.
 
 ### Phase 5: Endurance
 
-Some issues only appear after hours: memory leaks, gradual resource exhaustion, increasing GC pause times. Connect 50-75% of your target capacity and let it run for 4-8 hours. Climbing memory usage or increasing MSPT over time signals a problem.
+Some issues only show up after hours: memory leaks, gradual resource exhaustion, increasing GC pause times. Connect 50-75% of your target capacity and let it run for 4-8 hours. If memory keeps climbing or MSPT creeps up over time, something's leaking.
 
 ## Identifying Bottlenecks
 
-**TPS drops proportionally with player count**: General overhead from entities, chunks, and networking. Reduce view/simulation distance and entity caps.
+**TPS drops proportionally with player count.** This is general overhead from entities, chunks, and networking. The fix is straightforward: reduce view/simulation distance and entity caps.
 
-**Random TPS spikes**: Usually chunk generation, large redstone devices, or plugin tasks running on the main thread. Pregenerate more world and profile during the spikes to identify the cause.
+**Random TPS spikes** are a different beast. Usually it's chunk generation, large redstone devices, or a plugin running heavy tasks on the main thread. Pregenerate more of the world and profile during the spikes. The flamegraph will tell you exactly what's blocking.
 
-**MSPT creeping up over time**: Memory pressure or resource exhaustion. Check Spark's heap summary for unusual object counts or steadily growing memory usage.
+**MSPT creeping up over time** points to memory pressure or resource exhaustion. Pull up Spark's heap summary and look for unusual object counts or memory usage that just keeps growing.
 
-**Good TPS but high CPU (&gt;80%)**: You're close to the limit with no headroom for spikes. Optimize further or upgrade hardware.
+If TPS looks fine but **CPU is pinned above 80%**, you're closer to the limit than you think. There's no headroom for spikes. Optimize further or upgrade hardware.
 
-When Spark shows a specific plugin consuming more than 10% of CPU, investigate its configuration first -- many plugins have expensive features that can be disabled. If entity AI dominates the profile (&gt;30%), lower mob caps. If chunk operations are excessive, tighten chunk loading rates in `paper-global.yml`.
+When Spark shows a specific plugin consuming more than 10% of CPU, investigate its configuration first. Many plugins have expensive features that can be disabled. If entity AI dominates the profile (>30%), lower mob caps. If chunk operations are excessive, tighten chunk loading rates in `paper-global.yml`.
 
 ## Using SoulFire for Testing
 
-I'd recommend [SoulFire](/download) for this. Unlike most bot frameworks that reimplement the Minecraft protocol from scratch, SoulFire runs actual Fabric client code -- so bots behave exactly like real players at the protocol level. You don't get weird packet timing or broken physics that throws off your results. The load is basically identical to real players, which is the whole point.
+I'd recommend [SoulFire](/download) for this. Unlike most bot frameworks that reimplement the Minecraft protocol from scratch, SoulFire runs actual Fabric client code, so bots behave exactly like real players at the protocol level. You don't get weird packet timing or broken physics that throws off your results. The load is basically identical to real players, which is the whole point.
 
 It also supports multiple Minecraft versions through ViaFabricPlus, so you can test whatever version you're running without hunting for a compatible tool.
 
@@ -235,4 +235,4 @@ It also supports multiple Minecraft versions through ViaFabricPlus, so you can t
 
 Don't just test once. Run tests before launches, after major plugin updates, before events with expected high turnout, and after hardware changes. A monthly baseline test catches gradual degradation from accumulating data and slow memory leaks that daily monitoring misses.
 
-The process is simple: optimize first, monitor with Spark, test incrementally with realistic behavior, fix what the profiles reveal, and retest. Do this before your players do it for you.
+The process is: optimize first, monitor with Spark, test incrementally with realistic behavior, fix what the profiles reveal, and retest. That's really all there is to it.

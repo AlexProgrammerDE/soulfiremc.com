@@ -10,115 +10,127 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Why Firewall Rules Aren't Enough
 
-If you've followed our [anti-bot testing guide](/blog/anti-bot-systems-testing-guide), you've already got firewall rules and anti-bot plugins in place. That handles connection floods and bot join spam at the application level. But DDoS attacks are a different problem.
+If you've followed our [anti-bot testing guide](/blog/anti-bot-systems-testing-guide), you've already got firewall rules and anti-bot plugins in place. That handles connection floods and bot join spam at the application level. But DDoS attacks are a different beast entirely.
 
 A volumetric DDoS attack doesn't care about your iptables rules. It saturates your server's network link with raw traffic — sometimes tens of gigabits per second — before packets even reach your firewall. Your server goes offline not because it can't handle the connections, but because the pipe is full. No amount of server-side configuration fixes that.
 
-Dedicated DDoS protection sits between players and your server, absorbing attack traffic at the network edge and only forwarding clean connections through.
+DDoS protection works by sitting in front of your server, soaking up all the garbage traffic, and only letting real player connections through to you.
 
 ## How TCP Proxy Protection Works
 
-Most Minecraft DDoS protection services work as TCP reverse proxies. The flow looks like this:
+Most Minecraft DDoS protection services work as TCP reverse proxies:
 
 ```
-Player → Protection Provider (filters traffic) → Your Server
+Player → Protection Service (filters traffic) → Your Server
          [Public IP]                              [Hidden IP]
 ```
 
-Players connect to the provider's IP address, not yours. The provider inspects incoming traffic, drops anything that looks like an attack, and forwards legitimate Minecraft connections to your actual server over a private tunnel.
+Players connect to the service's IP address, not yours. It inspects incoming traffic, drops anything that looks like an attack, and forwards legitimate Minecraft connections to your actual server over a private tunnel.
 
 This happens at two levels:
 
-**Layer 3/4 (Network/Transport):** The provider absorbs volumetric floods — SYN floods, UDP reflection, amplification attacks. These get dropped at the edge before they consume bandwidth. This is the main reason you're paying for protection.
+**Layer 3/4 (Network/Transport):** Volumetric floods get absorbed — SYN floods, UDP reflection, amplification attacks. They're dropped at the edge before they consume bandwidth. This is the main reason you're paying for protection.
 
-**Layer 7 (Application):** Some providers also inspect Minecraft protocol traffic. They can detect bots that send malformed packets, connections that never complete the login handshake, or clients that behave suspiciously at the protocol level. This complements your server-side anti-bot plugins.
+**Layer 7 (Application):** Some services also inspect Minecraft protocol traffic. They can detect bots sending malformed packets, connections that never complete the login handshake, or clients that behave suspiciously at the protocol level. Think of it as an extra anti-bot layer that works before traffic even reaches your plugins.
 
-The trade-off is latency. Every connection now routes through an extra hop. With a well-located provider, this adds 5-20ms. Pick a provider far from your players and it can be 50ms+, which is noticeable in PvP.
+The trade-off is latency. Every connection now routes through an extra hop. With a well-located service, this adds 5-20ms. Pick one that's far from your players and it can be 50ms+, which is noticeable in PvP.
 
 <Callout type="warning">
-Your real server IP must stay hidden. If an attacker finds it, they bypass the proxy entirely and hit you directly. This means no DNS history pointing to your real IP, no plugins leaking it, and firewall rules that only accept connections from your provider's IP ranges.
+Your origin server IP must stay hidden. If an attacker finds it, they bypass the proxy entirely and hit you directly. That means no DNS history pointing to your backend IP, no plugins leaking it, and firewall rules that only accept connections from your protection service's IP ranges.
 </Callout>
 
 ## What to Look For
 
-Don't pick a provider based on name recognition alone. Here's what actually matters:
+Don't pick a service based on name recognition alone. TCPShield is the name everyone knows, but it's far from the best option out there. Here's what actually matters:
 
-**Proximity to your players.** A provider with nodes in Frankfurt doesn't help much if your players are in São Paulo. Check where the provider has points of presence and pick the one closest to your player base. Some providers offer multiple locations — use the one with the lowest round-trip time.
+Location matters more than brand. A service with nodes in Frankfurt doesn't help much if your players are in South America. Check where it has points of presence and pick the one closest to your player base. NeoProtect's 17 global locations make this an easy win for most setups; Papyrus VIP's Enterprise plan goes even further with 330+ locations if you have a globally distributed player base.
 
-**Bedrock and Geyser support.** If you run Geyser for Bedrock players, make sure the provider supports UDP forwarding. Not all do, and Bedrock players will silently fail to connect if it's missing.
+If you run Geyser for Bedrock players, you need UDP forwarding — and not everyone supports it. Bedrock players will silently fail to connect if it's missing. NeoProtect handles this well; confirm with any other service before committing.
 
-**Voice chat compatibility.** Proximity voice plugins like PlasmoVoice and SimpleVoiceChat use additional UDP ports. Some providers support forwarding these, others don't. If voice chat matters to your community, verify this before committing.
+Proximity voice plugins like PlasmoVoice and SimpleVoiceChat use additional UDP ports, so if voice chat matters to your community, make sure the service supports forwarding those ports. Again, NeoProtect is one of the few that explicitly supports this.
 
-**Pricing model.** Providers typically charge one of three ways:
-- **Subscription:** Fixed monthly fee for a set amount of bandwidth/protection. Predictable costs.
-- **Pay-as-you-go:** You pay per GB of filtered traffic or per attack mitigated. Cheap when quiet, expensive under sustained attack.
-- **One-time + usage:** Upfront fee for the service, then usage-based billing.
+**Pricing models** vary a lot:
+- **Subscription:** Fixed monthly fee. Predictable costs, easy to budget.
+- **Pay-as-you-go:** You pay per GB of filtered traffic or per attack mitigated. Cheap when quiet, potentially expensive under sustained attack.
+- **One-time + usage:** Upfront fee, then usage-based billing.
 
-For most servers, a subscription model is simpler to budget for. Pay-as-you-go can spike if you're being actively targeted.
+For most servers, a subscription model is simpler to budget for. Pay-as-you-go can spike hard if you're being actively targeted — that's something to keep in mind with CosmicGuard especially, which gets pricey at scale unless you're already on hosting that bundles it (BerryByte and PufferFish Host both use CosmicGuard infrastructure).
 
-**Always-on vs on-demand.** Always-on filtering routes all traffic through the proxy permanently. On-demand only activates when an attack is detected, which means there's a detection delay where your server takes hits before protection kicks in. Always-on adds consistent latency but provides immediate protection.
+Always-on filtering routes all traffic through the proxy permanently. On-demand only activates when an attack is detected, which means there's a detection delay where your server takes hits before protection kicks in. Always prefer always-on; the small latency hit is worth it for immediate protection.
 
-**Built-in hosting protection.** Some hosting providers include DDoS protection as part of their service. If you're shopping for a dedicated server anyway, this means one less thing to manage. Check what your host includes before buying a third-party service on top.
+Some hosting companies include DDoS protection as part of their offering. If you're shopping for a dedicated server anyway, consider Tempest (Path.net) or OVH — both have solid built-in DDoS defense, and it's one less thing to manage.
+
+## My Recommendations
+
+After evaluating the major Minecraft DDoS protection services, here's where things stand:
+
+**NeoProtect** is my top pick. It's stable, feature-rich, and covers the things most competitors miss: Geyser/Bedrock support, voice chat plugin forwarding, anti-VPN filtering, and 17 global locations. There's a free plan to get started, so you can test it without committing. If you only take one recommendation from this post, make it this one.
+
+**Papyrus VIP** is worth considering if you need lots of geographic coverage. Seven standard locations is decent, and the Enterprise plan opens up 330+ locations — no one else comes close on that front. They also offer protection for your website, voice chat, and TeamSpeak, not just Minecraft.
+
+**CosmicGuard** has excellent filtering, but the pay-as-you-go model gets expensive at scale. It's a great deal if you're already hosting with BerryByte or PufferFish Host since they run on CosmicGuard's infrastructure — you get the protection built in. Otherwise, budget carefully.
+
+**TCPShield** is the most popular name in this space, but honestly, it's coasting on reputation at this point. Limited locations, and the feature set hasn't kept up with newer competitors. It works, but there's no reason to pick it over NeoProtect for new setups.
+
+**Infinity Filter** offers a one-time setup fee plus pay-as-you-go billing, which is a nice model if you don't want recurring costs. Only 3 locations though, so check latency before committing.
+
+**Arvoris** is a newer entry from the team behind Papyrus. $9.99/month for unlimited usage across 7 locations — simple pricing, no surprises. Still building its track record, but the people behind it know what they're doing.
 
 ## Setting It Up
 
-The exact steps vary by provider, but the general flow is the same:
+The exact steps vary by service, but the general flow is the same:
 
 ### 1. Point DNS to the proxy
 
-Update your domain's DNS records (A record or SRV record) to point to the protection provider's IP, not your server's. Players should never resolve your real IP.
+Update your domain's DNS records (A record or SRV record) to point to the protection service's IP, not your server's. Players should never resolve your actual IP.
 
 ```text
 # Before (exposed)
 mc.yourserver.com.  A  203.0.113.50
 
 # After (protected)
-mc.yourserver.com.  A  198.51.100.10  # Provider's IP
+mc.yourserver.com.  A  198.51.100.10  # Protection service's IP
 ```
 
-If you were previously using your real IP in server lists, forum posts, or Discord — change it everywhere. Cached DNS entries and old links are the most common way real IPs leak.
+If you previously shared your origin IP in server lists, forum posts, or Discord — change it everywhere. Cached DNS entries and old links are the most common way backend IPs leak.
 
 ### 2. Lock down the firewall
 
-Only allow Minecraft traffic from your protection provider's IP ranges. Block everything else on port 25565.
+Only allow Minecraft traffic from your protection service's IP ranges. Block everything else on port 25565.
 
 ```bash
-# Allow traffic from provider's IP range only
+# Allow traffic from protection service's IP range only
 sudo iptables -A INPUT -p tcp --dport 25565 -s 198.51.100.0/24 -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
 ```
 
-Your provider will publish their IP ranges — use those. This ensures that even if someone discovers your real IP, direct connections get dropped.
+Your service will publish their IP ranges — use those. This ensures that even if someone discovers your origin IP, direct connections get dropped.
 
 ### 3. Enable PROXY protocol (if supported)
 
 PROXY protocol lets the protection service pass the original player IP to your server. Without it, every player appears to connect from the proxy's IP, which breaks IP bans, geolocation, and per-IP rate limiting.
 
-Most Minecraft proxies (Velocity, BungeeCord) and some server software support PROXY protocol. Check your provider's documentation for the specific configuration.
+Most Minecraft proxies (Velocity, BungeeCord) and some server software support PROXY protocol. Check your service's documentation for the specific configuration.
 
-### 4. Verify player IPs
+### 4. Confirm player IPs work
 
-After setup, join your server and check that your real IP shows up in the logs — not the proxy's IP. If every player shows the same IP, PROXY protocol isn't working and you need to fix it before going live.
+After setup, join your server and check that your actual IP shows up in the logs — not the proxy's IP. If every player shows the same IP, PROXY protocol isn't configured correctly and you need to fix it before going live.
 
 ## Testing Your Protection
 
-Setting it up is half the job. You need to verify it actually works.
+Setting it up is half the job. You need to make sure it actually works.
 
-**Check for IP leaks.** Your real server IP should not be discoverable:
-- Search DNS history tools (SecurityTrails, DNS Dumpster) for old records pointing to your real IP
-- Check Shodan for your real IP with port 25565 open
-- Try connecting directly to the real IP — it should be refused
+**Check for IP leaks.** Your origin server IP shouldn't be discoverable:
+- Search DNS history tools (SecurityTrails, DNS Dumpster) for old records pointing to your backend IP
+- Check Shodan for your actual IP with port 25565 open
+- Try connecting directly to the origin IP — it should be refused
 
 **Test player experience.** Connect through the proxy and check that join times are reasonable, latency isn't excessive, plugins see the correct player IP, and Bedrock players can connect if you use Geyser.
 
-**Load test through the proxy.** Use [SoulFire](/download) to connect bots through the protection layer, not directly to your server. This verifies the provider doesn't flag legitimate-looking bot traffic (which would also mean flagging real players during a busy event). Start with 20 bots and scale up, watching for connection failures or throttling.
+**Load test through the proxy.** Use [SoulFire](/download) to connect bots through the protection layer, not directly to your server. This tells you whether the service flags legitimate-looking bot traffic (which would also mean flagging real players during a busy event). Start with 20 bots and scale up, watching for connection failures or throttling.
 
-**Test failover.** What happens if the protection service goes down? Ideally your server becomes unreachable (because the firewall blocks direct connections) rather than exposed. This is the correct behavior — downtime is better than unprotected exposure.
+**Test failover.** What happens if the protection service goes down? Ideally your server becomes unreachable (because the firewall blocks direct connections) rather than exposed. That's the correct behavior — downtime is better than unprotected exposure.
 
 For application-layer defense on top of DDoS protection — anti-bot plugins, rate limiting, behavioral analysis — see our [anti-bot testing guide](/blog/anti-bot-systems-testing-guide).
 
-## Conclusion
-
-DDoS protection handles the attacks that server-side tools can't — raw bandwidth floods that overwhelm your network before your server even sees the traffic. But it doesn't replace [firewall rules and anti-bot plugins](/blog/anti-bot-systems-testing-guide), which catch the smaller, smarter attacks that slip through as valid TCP connections.
-
-Get both layers right, test them, and your server stays online when it matters.
+DDoS protection and anti-bot plugins solve different problems, and you need both. Get the proxy layer right, lock down your firewall, and stop worrying about whether your server will survive the next attack.

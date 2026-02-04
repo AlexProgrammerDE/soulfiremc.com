@@ -11,7 +11,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps'
 
 ## The High Stakes of Launch Day
 
-Players who hit lag or broken features on day one don't come back, and the "laggy server" label is nearly impossible to shake. This guide walks through what to check so launch day doesn't blow up.
+Players who hit lag or broken features on day one don't come back. And the "laggy server" label? Nearly impossible to shake. This guide covers what to check so launch day doesn't blow up.
 
 ## Pre-Launch Validation
 
@@ -44,9 +44,9 @@ Players who hit lag or broken features on day one don't come back, and the "lagg
 
     Red flags: HDD instead of SSD, less than 2GB RAM per 10 expected players, shared hosting with unknown neighbors.
 
-    **Backups:** Test your restore process *before* launch, not after your first crash. Create a full backup, extract it to a separate directory, and verify the world loads. Schedule automated backups via cron — every 6 hours locally, daily offsite.
+    Your backup system needs to actually work *before* your first crash, not after. Create a full backup, extract it to a separate directory, and confirm the world loads cleanly. Then schedule automated backups via cron -- every 6 hours locally, daily offsite.
 
-    **Security:** Lock down your firewall to only the ports you need (25565, 22, 80/443 if applicable). Disable SSH password authentication. Install Fail2ban. Keep the backend IP hidden behind a proxy if possible.
+    On security: lock down your firewall to only the ports you need (25565, 22, 80/443 if applicable). Disable SSH password authentication, install Fail2ban, and keep the backend IP hidden behind a proxy if you can.
   </Step>
 
   <Step>
@@ -56,17 +56,17 @@ Players who hit lag or broken features on day one don't come back, and the "lagg
     For a thorough walkthrough of view/simulation distance tuning, entity limit configuration, chunk pregeneration, JVM flags, and profiling with Spark, see our [Stress Testing Minecraft Servers](/blog/stress-testing-minecraft-servers) guide. The sections below cover what to verify, not how to tune from scratch.
     </Callout>
 
-    **Get your numbers on an empty server first** using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. That's your baseline.
+    Get your numbers on an empty server first using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. That's your baseline.
 
     **Configuration checklist:**
 
-    - **View and simulation distance** — Lower simulation distance reduces entity processing overhead without sacrificing player visibility. See the [stress testing guide](/blog/stress-testing-minecraft-servers#view-and-simulation-distance) for recommended values by server size.
-    - **Entity limits** — Tighten Paper's mob spawn caps and collision limits. Default values are far too generous for servers expecting 50+ players.
-    - **World pregeneration** — Non-negotiable. Without it, 100 players exploring on launch day forces on-demand chunk generation and TPS drops to single digits. Use [Chunky](https://github.com/pop4959/Chunky) to pregenerate at least a 5,000-block radius from spawn. This can take hours — plan accordingly.
-    - **JVM flags** — On Java 25+ with 8+ cores, use [ZGC with Compact Object Headers](/blog/stress-testing-minecraft-servers#java-flags) for sub-millisecond GC pauses. On older Java or smaller hardware, use [Aikar's G1GC flags](https://docs.papermc.io/paper/aikars-flags). Match Xms and Xmx to your available RAM.
-    - **Server software** — [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
+    - **View and simulation distance** -- Lower simulation distance reduces entity processing overhead without sacrificing player visibility. See the [stress testing guide](/blog/stress-testing-minecraft-servers#view-and-simulation-distance) for recommended values by server size.
+    - **Entity limits** -- Tighten Paper's mob spawn caps and collision limits. Default values are far too generous for servers expecting 50+ players.
+    - **World pregeneration** -- Non-negotiable. Without it, 100 players exploring on launch day forces on-demand chunk generation and TPS drops to single digits. Use [Chunky](https://github.com/pop4959/Chunky) to pregenerate at least a 5,000-block radius from spawn. This can take hours -- plan accordingly.
+    - **JVM flags** -- On Java 25+ with 8+ cores, use [ZGC with Compact Object Headers](/blog/stress-testing-minecraft-servers#java-flags) for sub-millisecond GC pauses. On older Java or smaller hardware, use [Aikar's G1GC flags](https://docs.papermc.io/paper/aikars-flags). Match Xms and Xmx to your available RAM.
+    - **Server software** -- [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
 
-    Verify each setting, restart, and confirm your numbers haven't gotten worse before moving on.
+    Check each setting, restart, and make sure your numbers haven't gotten worse before moving on.
   </Step>
 
   <Step>
@@ -78,45 +78,45 @@ Players who hit lag or broken features on day one don't come back, and the "lagg
     tail -f logs/latest.log | grep -i error
     ```
 
-    Common sources of trouble: multiple economy plugins conflicting, duplicate feature plugins (two claim systems), and version mismatches. For each critical plugin — economy, permissions, claims, chat, teleportation, anti-cheat — verify it loads cleanly, test its primary features, test its interactions with other plugins, and check that permissions are correctly assigned.
+    Common sources of trouble: multiple economy plugins conflicting, duplicate feature plugins (two claim systems), and version mismatches. For each critical plugin -- economy, permissions, claims, chat, teleportation, anti-cheat -- confirm it loads cleanly, test its primary features, test its interactions with other plugins, and check that permissions are correctly assigned.
 
-    **Permission hierarchy:** Walk through each rank (default, member, VIP, moderator, admin) and verify that players can use exactly the commands they should and nothing more. Check chat prefixes, tab list formatting, and that there are no permission leaks giving default players access to moderation commands.
+    Walk through each rank (default, member, VIP, moderator, admin) and make sure players can use exactly the commands they should -- and nothing more. Check chat prefixes, tab list formatting, and look for permission leaks giving default players access to moderation commands. This is the kind of thing that ruins trust fast.
   </Step>
 
   <Step>
     ### Phase 4: Player Experience (3-5 Days Out)
 
-    **First-time user experience.** Join your own server as if you've never seen it before. Read the welcome message. Follow the instructions. Complete the starter tasks. This process should take 10-20 minutes and leave a new player with basic tools, a sense of direction, and know what to do next.
+    Join your own server like you've never seen it before. Read the welcome message. Follow the instructions. Complete the starter tasks. The whole thing should take 10-20 minutes and leave a new player with basic tools, a sense of direction, and a reason to keep playing.
 
-    Things to check at spawn: lighting has no dark patches, builds are complete (no scaffolding left), signs are readable and guide players to important areas, there are no hazards near the spawn point, and the `/help` command provides useful information. Post your rules where people can find them.
+    At spawn, look for dark patches in the lighting, unfinished builds (leftover scaffolding is classic), unreadable signs, hazards near the spawn point, and a `/help` command that actually tells players something useful. Post your rules where people can find them.
 
-    **Economy balance:** Walk through the progression path. A new player should be able to make their first purchase within 15 minutes and reach iron tools within 30 minutes. Diamond tools should take 2-3 hours, endgame items 20-40 hours. Watch out for players getting rich too quickly or one earning method vastly outperforming all others.
+    Then walk through the progression path. A new player should make their first purchase within 15 minutes and reach iron tools within 30. Diamond tools should take 2-3 hours, endgame items 20-40 hours. If one earning method vastly outperforms everything else, your economy will collapse within the first week.
   </Step>
 
   <Step>
     ### Phase 5: Load Testing (2-3 Days Out)
 
-    This is where bot testing becomes essential. Manual testing can't simulate 100 players joining simultaneously, maintain consistent load for hours, or create repeatable stress scenarios. Our [stress testing guide](/blog/stress-testing-minecraft-servers) covers the full methodology — incremental load ramps, realistic bot behavior, spike testing, and endurance runs. Follow that process here, but focus on these launch-specific scenarios:
+    Now you need bots. You can't click around with five friends and call that a load test. Our [stress testing guide](/blog/stress-testing-minecraft-servers) covers the full methodology -- incremental load ramps, realistic bot behavior, spike testing, and endurance runs. Follow that process, but focus on these launch-specific scenarios:
 
-    - **Mass join:** Simulate 50-100 players connecting within a few minutes — the launch surge. Watch for connection failures, spawn area performance, and TPS dips during the initial flood.
-    - **Spawn pressure:** Your spawn area will bear the heaviest load on day one. Verify it handles your full target player count without rubber-banding or block interaction delays.
-    - **Endurance:** Run at 50-75% of target capacity for 4-12 hours. Watch for memory leaks, TPS degradation over time, increasing GC pauses, and accumulating errors in the log.
+    - **Mass join:** Simulate 50-100 players connecting within a few minutes -- the launch surge. Keep an eye on connection failures, spawn area performance, and TPS dips during the initial flood.
+    - **Spawn pressure:** Your spawn area will bear the heaviest load on day one. Test it at your full target player count and look for rubber-banding or block interaction delays.
+    - **Endurance:** Run at 50-75% of target capacity for 4-12 hours. Monitor for memory leaks, TPS degradation over time, increasing GC pauses, and accumulating errors in the log.
 
-    **Network latency:** Test connectivity from your target regions. Under 100ms is good, 100-200ms is acceptable, above 250ms will noticeably affect gameplay.
+    Also test connectivity from your target regions. Under 100ms is good, 100-200ms is acceptable, above 250ms and players will feel it.
   </Step>
 
   <Step>
     ### Phase 6: Staff and Communications (1-2 Days Out)
 
-    Train your staff on common issues and moderation commands before launch, not during it. Document solutions to predictable problems: "can't claim land" (check balance), "can't use command" (check rank), "grief reported" (use `/co inspect`, rollback if needed). Set up an on-call schedule so you have coverage during peak hours.
+    Your staff need to know what to do when things go wrong -- and things will go wrong. Write up a quick-reference doc with the three or four most common issues: "can't claim land" (check their balance), "can't use command" (check their rank), "grief reported" (use `/co inspect`, rollback if needed). Make sure everyone's tested these commands on the actual server, not just read about them. Set up an on-call schedule so you have coverage during peak hours.
 
-    Verify Discord channels are configured, staff bots respond to commands, and your announcement is drafted and ready to send.
+    On Discord: have your announcement drafted, your channel permissions locked down so launch-day chaos doesn't spill everywhere, and at least one staff bot responding to commands. Don't wing this part.
   </Step>
 
   <Step>
     ### Phase 7: Final Validation (Day Before Launch)
 
-    Do a complete walkthrough of the player journey — join, orientation, resource gathering, claiming, building, social features, economy. If something breaks during this walkthrough, fix it now — not tomorrow with 100 players online.
+    Do a complete walkthrough of the player journey -- join, orientation, resource gathering, claiming, building, social features, economy. If something breaks during this walkthrough, fix it now. Not tomorrow with 100 players online.
 
     Run final system health checks:
 
@@ -143,27 +143,27 @@ Players who hit lag or broken features on day one don't come back, and the "lagg
 ## Launch Day Protocol
 
 <Callout type="warning" title="Launch Day Priorities">
-- **Stability over features** — disable anything that isn't rock-solid
-- **Have a rollback plan** — be ready to revert if critical issues emerge
-- **Communicate delays immediately** — players appreciate honesty
-- **All staff online** — no exceptions during the launch window
+- **Stability over features** -- disable anything that isn't rock-solid
+- **Have a rollback plan** -- be ready to revert if critical issues emerge
+- **Communicate delays immediately** -- players appreciate honesty
+- **All staff online** -- no exceptions during the launch window
 </Callout>
 
-**One hour before launch:** Restart the server fresh. Clear temporary files. Verify TPS is at 20.0, all plugins loaded green, and external connections work. Assemble staff and open communications.
+One hour out, restart the server fresh. Clear temporary files. Confirm TPS is at 20.0, all plugins loaded green, and external connections work. Get staff assembled and comms open.
 
-**At launch:** Remove the whitelist (or start adding players), send your announcement, and monitor closely. Watch player count, TPS, chat, and the console for errors. Staff should be actively welcoming players and answering questions.
+When you flip the switch -- remove the whitelist or start adding players -- send your announcement and start monitoring. Player count, TPS, chat, console errors. Staff should be actively welcoming players and answering questions, not lurking in a staff channel.
 
-**First hour priorities:** Fix anything that blocks core gameplay immediately (broken claims, connection issues, economy bugs). Defer cosmetic issues like typos on signs to the next day. One crash during the first hour costs you more players than any other time.
+In the first hour, fix anything that blocks core gameplay immediately: broken claims, connection issues, economy bugs. Cosmetic stuff like sign typos can wait until tomorrow. But a crash in the first hour? That costs you more players than at any other time.
 
 ## Post-Launch
 
-**First 24 hours:** Track peak concurrent players, total unique joins, average session length, minimum TPS during peak, crashes, and plugin errors.
+For the first 24 hours, track the numbers that matter: peak concurrent players, total unique joins, average session length, minimum TPS during peak, crashes, and plugin errors.
 
-**First week:** Review what went well and what didn't. Adjust economy balancing, improve spawn signage, fix minor bugs, recruit additional staff if needed. Fix things fast — the first week sets the tone.
+During the first week, dig into what actually happened. Which plugins threw errors? Where did players get stuck or confused? Did the economy hold up or did someone find an exploit on day two? Fix things fast -- the first week sets the tone for everything that follows.
 
 ## Using SoulFire for Load Testing
 
-Manual testing can validate features, but it can't answer the question that matters most: will your server survive 100 players joining at once? SoulFire runs actual Fabric client code, so bots behave like real players at the protocol level — your server can't tell the difference.
+Testing features by hand is fine, but it won't tell you the one thing that actually matters: can your server survive 100 players joining at once? SoulFire runs actual Fabric client code, so bots behave like real players at the protocol level -- your server can't tell the difference.
 
 Configure a launch simulation: 100 bots joining over 10 minutes (10 per minute), with Auto-Respawn, Anti-AFK, and Auto-Reconnect enabled. Let it run for 2 hours while monitoring with Spark and watching the console for errors.
 
@@ -179,8 +179,6 @@ tail -f logs/latest.log | grep -E "(ERROR|WARN|Exception)"
 - Spawn area handles the full player count without rubber-banding
 - Commands remain responsive throughout
 
-If you hit less than 85% connection success, TPS drops below 15, or memory usage exceeds 90%, you need to optimize your configuration, fix plugin errors, or upgrade hardware before going live.
+If you're hitting less than 85% connection success, TPS drops below 15, or memory usage exceeds 90%, you need to optimize your configuration, fix plugin errors, or upgrade hardware before going live.
 
-## Conclusion
-
-Launch day is not the time to discover your server can't handle 50 players — test with 100 before you advertise for 50.
+Launch day isn't the time to discover your server buckles at 50 players. Test with 100 before you advertise for 50.

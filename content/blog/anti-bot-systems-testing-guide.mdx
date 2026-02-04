@@ -11,7 +11,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Defending Your Minecraft Server Against Bots
 
-Bot attacks on Minecraft servers range from crude connection floods to proxy-rotated campaigns that can drain bandwidth, crash your server, and drive away real players. This guide covers how to build layered defenses and, just as importantly, how to test that they actually work.
+Bot attacks range from dumb connection floods to proxy-rotated campaigns that'll drain your bandwidth, crash your server, and drive away the players who actually matter. This guide covers how to build layered defenses and how to test that they hold up under pressure.
 
 <Callout type="danger">
 **This guide is for server admins testing their own infrastructure.** Don't run bot attacks or load tests on servers you don't own or have explicit permission to test. Unauthorized attacks are illegal and unethical.
@@ -21,23 +21,23 @@ Bot attacks on Minecraft servers range from crude connection floods to proxy-rot
 
 - **Connection flooding**: Hundreds or thousands of simultaneous connection attempts overwhelm the server's handler before authentication even begins.
 - **Join/leave spam**: Bots join, immediately disconnect, and reconnect, consuming resources during authentication and world loading.
-- **Proxy-rotated attacks**: Traffic routed through thousands of proxies makes IP-based blocking ineffective.
+- **Proxy-rotated attacks**: Traffic routed through thousands of proxies makes IP-based blocking useless.
 - **Protocol-level attacks**: Malformed or excessive packets exploit server vulnerabilities or burn CPU cycles.
 
 ### Defense in Layers
 
-No single solution stops every attack. You want multiple layers so that attackers who bypass one still hit another.
+There's no silver bullet here. You want multiple layers so that when attackers get past one, they still hit another.
 
 | Layer | Where | Tools | Catches |
 |-------|-------|-------|---------|
 | Network/Firewall | Before Minecraft | iptables, nftables, UFW | Raw connection floods, IP-based attacks |
 | Proxy | BungeeCord/Velocity | Proxy anti-bot plugins | Distributed attacks, early filtering |
-| Server | Paper/Spigot | EpicGuard, UltimateAntiBot | Behavioral analysis, verification |
+| Server | Paper/Spigot | EpicGuard, BotSentry | Behavioral analysis, challenge-response |
 | Game | Plugin-level | AuthMe, custom systems | In-game bot behavior, AFK farming |
 
 ## Network-Level Protection
 
-The first line of defense blocks attacks before they reach your Minecraft server.
+Your first line of defense should block attacks before they ever touch your Minecraft process.
 
 <Tabs items={['iptables', 'nftables', 'UFW']}>
   <Tab value="iptables">
@@ -123,11 +123,11 @@ UFW's rate limiting is less flexible than iptables/nftables. For advanced protec
 
 ## Server-Level Anti-Bot Plugins
 
-Network filtering blocks crude attacks, but sophisticated bots need behavioral analysis at the server level.
+Network filtering stops crude attacks, but sophisticated bots need behavioral analysis at the server level.
 
 ### EpicGuard
 
-[EpicGuard](https://github.com/4drian3d/EpicGuard) is a popular open-source anti-bot plugin (discontinued as of 2025, but still widely used and forked). Consult the [official documentation](https://github.com/4drian3d/EpicGuard) for the latest configuration options.
+[EpicGuard](https://github.com/4drian3d/EpicGuard) is a popular open-source anti-bot plugin (discontinued as of 2025, but still widely used and forked). It's a great pick for smaller servers -- straightforward to configure, low overhead, and it gets the job done without a lot of fuss. Consult the [official documentation](https://github.com/4drian3d/EpicGuard) for the latest configuration options.
 
 ```yaml title="plugins/EpicGuard/config.yml"
 check-mode:
@@ -155,9 +155,13 @@ attack:
 | `connection-threshold` | 5-10 | Lower = more sensitive, higher risk of false positives |
 | `auto-whitelist` | true | Reduces overhead for known players |
 
+### BotSentry
+
+If you're running a larger server or dealing with more persistent attacks, [BotSentry](https://www.spigotmc.org/resources/botsentry.55924/) is worth the investment. It has more advanced challenge-response checks than EpicGuard and handles high-volume attacks more gracefully. The detection logic is smarter out of the box, and it's actively maintained.
+
 ### UltimateAntiBot
 
-A more modern alternative with iptables integration. It adds detected bot IPs straight to your firewall, blocking them at the kernel level.
+Another solid option with iptables integration. It adds detected bot IPs straight to your firewall, blocking them at the kernel level. This is nice because it means repeat offenders don't even make it to your Java process.
 
 ```yaml title="config.yml"
 settings:
@@ -183,13 +187,15 @@ verification:
 
 ## DDoS Protection Services
 
-Firewall rules and anti-bot plugins handle application-level attacks — bot joins, connection spam, protocol abuse. But a volumetric DDoS attack saturates your network link before packets even reach your server. That requires dedicated protection: a TCP reverse proxy that absorbs attack traffic at the edge and only forwards clean connections to your server.
+Firewall rules and anti-bot plugins handle application-level attacks -- bot joins, connection spam, protocol abuse. But a volumetric DDoS attack saturates your network link before packets even reach your server. That's a completely different problem, and it requires a TCP reverse proxy that absorbs attack traffic at the edge.
 
-For a full walkthrough of how these services work, what to look for in a provider, and how to verify your setup isn't leaking your real IP, see our [DDoS protection guide](/blog/ddos-protection-minecraft-servers).
+Some DDoS protection providers like NeoProtect and CosmicGuard also bundle their own bot protection layer that stacks on top of whatever server-side plugins you're running. That's a real advantage -- you get network-level filtering and application-aware bot detection before traffic ever hits your box.
+
+For a full walkthrough of how these services work and how to make sure your real IP isn't leaking, see our [DDoS protection guide](/blog/ddos-protection-minecraft-servers).
 
 ## Testing Your Defenses
 
-You need to verify that your anti-bot setup actually blocks attacks while letting legitimate players through.
+Configuring anti-bot plugins without testing them is wishful thinking. You need to confirm that your setup actually blocks attacks while letting legitimate players through.
 
 ### Setting Up a Test Environment
 
@@ -207,30 +213,30 @@ java -Xms2G -Xmx2G -jar paper.jar nogui
 
 ### What to Test
 
-**Baseline (legitimate traffic)**: Join with a real client. Have multiple real players join within 30 seconds. Disconnect and reconnect rapidly. All of these should work without delays or false positives.
+Start with legitimate traffic. Join with a real client. Have a few friends join within 30 seconds. Disconnect and reconnect a bunch of times. Everything should work without delays or false blocks.
 
-**Simulated attacks**: Start small (10 bots over 60 seconds) and escalate (50 bots in 10 seconds, sustained reconnect spam over 5 minutes). Monitor which checks trigger, how quickly attack mode activates, and whether TPS degrades.
+Then move to simulated attacks. Start small -- 10 bots over 60 seconds -- and escalate from there. 50 bots in 10 seconds, sustained reconnect spam over 5 minutes. Watch which checks trigger, how fast attack mode kicks in, and whether your TPS tanks.
 
-**False positives**: Test scenarios that mimic legitimate but suspicious behavior. Multiple players behind the same router, players on VPNs, and players with unstable connections that cause rapid reconnects. If any get blocked, adjust thresholds or whitelist them.
+Don't skip false positive testing either. Multiple players behind the same router, players on VPNs, players with flaky connections that cause rapid reconnects. If any of those get blocked, you need to loosen your thresholds or add whitelist exceptions.
 
 ### Using SoulFire for Testing
 
-SoulFire is built on Fabric and runs actual Minecraft client code, so it works well for anti-bot testing. Your anti-bot system can't tell SoulFire apart from a real client just by checking for protocol quirks, which means your tests will look like real attacks.
+SoulFire is built on Fabric and runs actual Minecraft client code, which makes it ideal for anti-bot testing. Your protection can't tell SoulFire apart from a real client by checking for protocol quirks. That's the whole point -- your tests should look like real attacks.
 
 Useful SoulFire plugins for testing:
 
-- **server-list-bypass**: Tests whether your server-list check actually blocks bots that skip the ping step
+- **server-list-bypass**: Tests whether your server-list check actually catches bots that skip the ping step
 - **anti-afk**: Generates random movement to test behavioral analysis
-- **auto-chat-message**: Tests chat-based verification systems
+- **auto-chat-message**: Tests chat-based challenge-response systems
 - **client-settings**: Sends proper client configuration packets
 
 ### Interpreting Results
 
-After running tests, check your plugin's statistics:
+After running tests, look at your plugin's statistics.
 
-If most bots are getting through, you need more checks or lower thresholds. If most are blocked but some slip through, review which specific checks failed and fine-tune those. If nearly all bots are blocked, shift your attention to false positives — check that real players behind VPNs or shared IPs aren't getting caught.
+Most bots getting through? You need stricter checks or lower thresholds. Most blocked but some slipping through? Figure out which specific checks failed and tighten those. And if nearly all bots are blocked, start worrying about false positives -- make sure real players behind VPNs or shared IPs aren't getting caught in the crossfire.
 
-You're not aiming for 100% block rate. That inevitably means blocking real players too. The goal is reducing attacks to a level your server can absorb while real players still get in.
+You're not aiming for a 100% block rate. That always means blocking real players too. The goal is reducing attacks to a level your server can absorb while real players still get in without friction.
 
 ## Monitoring
 
@@ -258,13 +264,6 @@ fi
 */5 * * * * /usr/local/bin/check-bot-attack.sh
 ```
 
-Track these metrics over time: blocks per hour, attack frequency, detection speed, TPS during attacks versus baseline, and the rate at which you're manually whitelisting false positives. If that last number is climbing, your thresholds are too aggressive.
+Track these metrics over time: blocks per hour, attack frequency, detection speed, and TPS during attacks versus baseline. Also keep an eye on how often you're manually whitelisting false positives -- if that number keeps growing, it's time to dial back your thresholds.
 
-## Conclusion
-
-- **Layer your defenses** so no single bypass is fatal
-- **Test before an attack forces you to** — use realistic bot traffic against an isolated copy of your server
-- **Monitor continuously** so you catch attacks early and spot configuration drift
-- **Balance security with accessibility** — if your false positive rate is climbing, your thresholds are too aggressive
-
-Keep your plugins updated, review your logs, and re-test after every configuration change.
+The best anti-bot setup is one you've actually tested, not one you copied from a guide and hoped for the best. Clone your server, throw SoulFire at it, tune your configs, and re-test after every change. That's it.
