@@ -50,48 +50,21 @@ Red flags: HDD instead of SSD, less than 2GB RAM per 10 expected players, shared
 
 ### Phase 2: Server Configuration (1-2 Weeks Out)
 
-<Callout type="info" title="Recommended Tools">
-- **[Paper](https://papermc.io/)** for superior performance over Spigot/Bukkit
-- **[Spark](https://spark.lucko.me/)** for profiling and monitoring
-- **[Chunky](https://github.com/pop4959/Chunky)** for world pregeneration
-- **[Aikar's JVM flags](https://docs.papermc.io/paper/aikars-flags)** for optimized garbage collection
+<Callout type="info" title="Detailed Optimization Guide">
+For a thorough walkthrough of view/simulation distance tuning, entity limit configuration, chunk pregeneration, JVM flags, and profiling with Spark, see our [Stress Testing Minecraft Servers](/blog/stress-testing-minecraft-servers) guide. The sections below cover what to verify, not how to tune from scratch.
 </Callout>
 
-**Establish a performance baseline** on an empty server using Spark. You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
+**Establish a performance baseline** on an empty server using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
 
-Key configuration values to tune:
+**Configuration checklist:**
 
-```properties title="server.properties"
-view-distance=8
-simulation-distance=4
-spawn-protection=16
-max-players=100
-online-mode=true
-```
+- **View and simulation distance** — Lower simulation distance reduces entity processing overhead without sacrificing player visibility. See the [stress testing guide](/blog/stress-testing-minecraft-servers#view-and-simulation-distance) for recommended values by server size.
+- **Entity limits** — Tighten Paper's mob spawn caps and collision limits. Default values are far too generous for servers expecting 50+ players.
+- **World pregeneration** — Non-negotiable. Without it, 100 players exploring on launch day forces on-demand chunk generation and TPS drops to single digits. Use [Chunky](https://github.com/pop4959/Chunky) to pregenerate at least a 5,000-block radius from spawn. This can take hours — plan accordingly.
+- **JVM flags** — Use [Aikar's flags](https://docs.papermc.io/paper/aikars-flags) for optimized garbage collection. Match Xms and Xmx to your available RAM.
+- **Server software** — [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
 
-```yaml title="paper-world-defaults.yml"
-spawn-limits:
-  monster: 20
-  creature: 5
-  water_creature: 2
-
-entities:
-  behavior:
-    max-entity-collisions: 2
-
-chunks:
-  auto-save-interval: 300
-```
-
-**Pregenerate your world.** This is non-negotiable. Without pregeneration, 100 players exploring on launch day forces the server to generate chunks on-demand. TPS drops to 5-10, block interactions lag for seconds, and players leave. Use Chunky to pregenerate at least a 5,000-block radius from spawn:
-
-```
-/chunky center 0 0
-/chunky radius 5000
-/chunky start
-```
-
-This can take hours. Plan accordingly.
+Verify each setting, restart, and confirm your baseline metrics haven't regressed before moving on.
 
 ### Phase 3: Plugin Validation (1 Week Out)
 
@@ -115,15 +88,11 @@ Things to check at spawn: lighting has no dark patches, builds are complete (no 
 
 ### Phase 5: Load Testing (2-3 Days Out)
 
-This is where bot testing becomes essential. Manual testing can't simulate 100 players joining simultaneously, maintain consistent load for hours, or create repeatable stress scenarios.
+This is where bot testing becomes essential. Manual testing can't simulate 100 players joining simultaneously, maintain consistent load for hours, or create repeatable stress scenarios. Our [stress testing guide](/blog/stress-testing-minecraft-servers) covers the full methodology — incremental load ramps, realistic bot behavior, spike testing, and endurance runs. Follow that process here, but focus on these launch-specific scenarios:
 
-**Ramp up gradually.** Connect 10 bots for 5 minutes, then 25 for 10 minutes, then 50 for 15 minutes, working up to your target capacity. Monitor TPS (should stay above 18), MSPT (under 50ms), RAM (under 75% of max), and CPU (under 80%) at each stage using Spark.
-
-**Key test scenarios:**
-
-- **Mass join:** 50-100 bots connecting within a few minutes, simulating the launch surge. Watch for connection failures, spawn area performance, and TPS dips during the initial flood.
-- **Exploration:** 25-30 bots walking in random directions, generating chunks and testing disk I/O under movement load. Pregenerated areas should handle this easily; if TPS drops, your pregeneration radius may be too small.
-- **Endurance:** 30-40 bots connected for 4-12 hours performing basic actions. Watch for memory leaks (steadily increasing RAM), TPS degradation over time, increasing GC pauses, and accumulating errors in the log.
+- **Mass join:** Simulate 50-100 players connecting within a few minutes — the launch surge. Watch for connection failures, spawn area performance, and TPS dips during the initial flood.
+- **Spawn pressure:** Your spawn area will bear the heaviest load on day one. Verify it handles your full target player count without rubber-banding or block interaction delays.
+- **Endurance:** Run at 50-75% of target capacity for 4-12 hours. Watch for memory leaks, TPS degradation over time, increasing GC pauses, and accumulating errors in the log.
 
 **Network latency:** Test connectivity from your target regions. Under 100ms is good, 100-200ms is acceptable, above 250ms will noticeably affect gameplay.
 
