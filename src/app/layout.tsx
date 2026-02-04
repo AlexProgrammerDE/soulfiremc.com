@@ -9,6 +9,7 @@ import type { Organization, WithContext } from "schema-dts";
 import { Toaster } from "sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { JsonLd } from "@/components/json-ld";
+import { getRequiredEnv } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -73,12 +74,12 @@ export default async function RootLayout({
       "Advanced Minecraft bot tool for testing, automation, and development.",
     sameAs: [
       "https://github.com/AlexProgrammerDE/SoulFire",
-      "https://discord.gg/soulfiremc",
+      getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
     ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Technical Support",
-      url: "https://discord.gg/soulfiremc",
+      url: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
     },
   };
 
