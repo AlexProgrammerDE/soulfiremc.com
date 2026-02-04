@@ -9,7 +9,12 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import type { FAQPage, SoftwareApplication, VideoObject, WithContext } from "schema-dts";
+import type {
+  FAQPage,
+  SoftwareApplication,
+  VideoObject,
+  WithContext,
+} from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
@@ -22,7 +27,7 @@ import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
-import { HeroBackground, TerminalAnimation, HomeFaq } from "./page.client";
+import { HeroBackground, HomeFaq, TerminalAnimation } from "./page.client";
 
 const plugins = [
   "Kill Aura",
