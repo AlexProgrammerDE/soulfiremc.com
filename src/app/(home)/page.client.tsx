@@ -10,6 +10,12 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 
 const GrainGradient = dynamic(
@@ -216,5 +222,24 @@ export function TerminalAnimation() {
         </div>
       </pre>
     </div>
+  );
+}
+
+export function HomeFaq({
+  items,
+}: {
+  items: { question: string; answer: string }[];
+}) {
+  return (
+    <Accordion type="single" collapsible className="w-full">
+      {items.map((item, i) => (
+        <AccordionItem key={item.question} value={`faq-${i}`}>
+          <AccordionTrigger>{item.question}</AccordionTrigger>
+          <AccordionContent className="text-muted-foreground">
+            {item.answer}
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 }

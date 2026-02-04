@@ -9,7 +9,7 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import type { SoftwareApplication, VideoObject, WithContext } from "schema-dts";
+import type { FAQPage, SoftwareApplication, VideoObject, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
@@ -22,7 +22,7 @@ import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
-import { HeroBackground, TerminalAnimation } from "./page.client";
+import { HeroBackground, TerminalAnimation, HomeFaq } from "./page.client";
 
 const plugins = [
   "Kill Aura",
@@ -149,6 +149,44 @@ const features = [
   },
 ];
 
+const faqItems = [
+  {
+    question: "What is SoulFire?",
+    answer:
+      "SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling — they're virtually indistinguishable from real players. It's designed for stress testing servers, automating tasks, and development.",
+  },
+  {
+    question: "Is SoulFire free?",
+    answer:
+      "Yes. SoulFire is fully open source under the AGPL-3.0 license. You can download it, use it, modify it, and contribute back to the project at no cost.",
+  },
+  {
+    question: "What Minecraft versions does SoulFire support?",
+    answer:
+      "Every version ever released — from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support.",
+  },
+  {
+    question: "Can servers detect SoulFire bots?",
+    answer:
+      "SoulFire bots run real Fabric client code, so they behave identically to real players at the protocol level. Standard anti-cheat and anti-bot plugins can't distinguish them by packet analysis alone. This makes SoulFire ideal for testing whether your server's defenses actually work.",
+  },
+  {
+    question: "How do I install SoulFire?",
+    answer:
+      "Download the native installer for your platform (Windows, macOS, or Linux) from the download page. No Java installation required — everything is bundled. Just install and run.",
+  },
+  {
+    question: "Does SoulFire support Bedrock Edition?",
+    answer:
+      "Yes. SoulFire can connect to Bedrock Edition servers via built-in protocol translation. Some features are still being added, but core functionality like joining, moving, and interacting works.",
+  },
+  {
+    question: "Can I write custom plugins?",
+    answer:
+      "Yes. SoulFire plugins are Fabric mods with full access to the Minecraft API. You can create custom bot behaviors, automate complex tasks, or build testing scenarios tailored to your server.",
+  },
+];
+
 export default function Page() {
   const softwareJsonLd: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
@@ -188,6 +226,19 @@ export default function Page() {
     url: "https://soulfiremc.com",
   };
 
+  const faqJsonLd: WithContext<FAQPage> = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question" as const,
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer" as const,
+        text: item.answer,
+      },
+    })),
+  };
+
   const videoJsonLd: WithContext<VideoObject> = {
     "@context": "https://schema.org",
     "@type": "VideoObject",
@@ -205,6 +256,7 @@ export default function Page() {
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex-1">
       <JsonLd data={softwareJsonLd} />
       <JsonLd data={videoJsonLd} />
+      <JsonLd data={faqJsonLd} />
       {/* Hero Section */}
       <section className="py-4 md:py-8">
         <div className="relative flex min-h-[600px] border rounded-2xl overflow-hidden bg-background">
@@ -299,6 +351,21 @@ export default function Page() {
             <BentoCard key={feature.name} {...feature} />
           ))}
         </BentoGrid>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16">
+        <div className="w-full max-w-3xl mx-auto">
+          <div className="flex flex-col space-y-4 mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="max-w-[700px] text-muted-foreground md:text-lg">
+              Common questions about SoulFire
+            </p>
+          </div>
+          <HomeFaq items={faqItems} />
+        </div>
       </section>
 
       {/* Terminal Demo Section */}
