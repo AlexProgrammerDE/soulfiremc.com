@@ -63,7 +63,7 @@ You've spent months building your server — custom plugins, detailed spawn, bal
     - **View and simulation distance** — Lower simulation distance reduces entity processing overhead without sacrificing player visibility. See the [stress testing guide](/blog/stress-testing-minecraft-servers#view-and-simulation-distance) for recommended values by server size.
     - **Entity limits** — Tighten Paper's mob spawn caps and collision limits. Default values are far too generous for servers expecting 50+ players.
     - **World pregeneration** — Non-negotiable. Without it, 100 players exploring on launch day forces on-demand chunk generation and TPS drops to single digits. Use [Chunky](https://github.com/pop4959/Chunky) to pregenerate at least a 5,000-block radius from spawn. This can take hours — plan accordingly.
-    - **JVM flags** — Use [Aikar's flags](https://docs.papermc.io/paper/aikars-flags) for optimized garbage collection. Match Xms and Xmx to your available RAM.
+    - **JVM flags** — On Java 25+ with 8+ cores, use [ZGC with Compact Object Headers](/blog/stress-testing-minecraft-servers#java-flags) for sub-millisecond GC pauses. On older Java or smaller hardware, use [Aikar's G1GC flags](https://docs.papermc.io/paper/aikars-flags). Match Xms and Xmx to your available RAM.
     - **Server software** — [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
 
     Verify each setting, restart, and confirm your numbers haven't gotten worse before moving on.

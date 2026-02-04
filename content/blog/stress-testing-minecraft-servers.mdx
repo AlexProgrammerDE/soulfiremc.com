@@ -103,7 +103,26 @@ Run this overnight or on a separate server, then copy the world files to product
 
 ### Java Flags
 
-Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) for garbage collection tuning. Replace the memory values with your available RAM (Xms and Xmx should match):
+The right JVM flags depend on your Java version and hardware. Java 25 brought production-ready [ZGC](https://wiki.openjdk.org/display/zgc) and [Compact Object Headers (JEP 519)](https://openjdk.org/jeps/519), which together are now the recommended choice for servers with sufficient hardware. For older Java versions or smaller setups, [Aikar's G1GC flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) remain solid.
+
+Replace the memory values with your available RAM (Xms and Xmx should match):
+
+<Tabs>
+<Tab value="zgc" label="Java 25+ (ZGC)" default>
+
+```bash title="start-server.sh"
+java -Xms10G -Xmx10G -XX:+UseZGC \
+  -XX:+UseCompactObjectHeaders -XX:+AlwaysPreTouch \
+  -XX:+DisableExplicitGC -XX:+PerfDisableSharedMem \
+  -XX:+UseDynamicNumberOfGCThreads -jar paper.jar --nogui
+```
+
+ZGC is self-tuning — no manual GC parameters needed. Compact Object Headers reduce per-object header size from 12 to 8 bytes, lowering memory usage and GC pressure across the board.
+
+**Requirements:** 8+ CPU cores and 6GB+ allocated RAM. On smaller hardware, use G1GC instead.
+
+</Tab>
+<Tab value="g1gc" label="Java 21 and below (Aikar's G1GC)">
 
 ```bash title="start-server.sh"
 java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
@@ -118,6 +137,21 @@ java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
   -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem \
   -XX:MaxTenuringThreshold=1 -jar paper.jar --nogui
 ```
+
+</Tab>
+</Tabs>
+
+#### G1GC vs ZGC
+
+**G1GC (Aikar's flags)** divides the heap into regions and collects garbage in phases. It aims for a configurable pause time target (200ms in Aikar's config) but still produces stop-the-world pauses that scale with heap size. The extensive tuning parameters in Aikar's flags optimize G1's behavior for Minecraft's allocation patterns — lots of short-lived objects from chunk loading, entity processing, and packet handling. G1GC works well on modest hardware and smaller heap sizes.
+
+**ZGC** takes a fundamentally different approach: nearly all garbage collection work happens concurrently with the application. Pause times stay under 1ms regardless of heap size, eliminating GC-related lag spikes — the kind that show up as random TPS drops or rubber-banding. ZGC is self-tuning and needs almost no configuration, but trades CPU cycles for those low pause times.
+
+**Compact Object Headers** ([JEP 519](https://openjdk.org/jeps/519)) complement either collector. They shrink object headers from 12 bytes to 8 bytes, which reduces heap usage and improves cache locality. Minecraft creates millions of small, short-lived objects per tick, so the savings add up. On production workloads, this has shown up to 22% less heap usage and measurably faster execution.
+
+**In practice:** If your server has 8+ cores and you're running Java 25, use ZGC — the sub-millisecond pauses mean GC is effectively invisible to players. If you're on older Java, constrained hardware (under 8 cores), or allocating less than 6GB RAM, stick with Aikar's G1GC flags. Monitor with `/spark gc` either way.
+
+For deeper benchmarks and analysis, see [brucethemoose's Minecraft Performance Flags Benchmarks](https://github.com/brucethemoose/Minecraft-Performance-Flags-Benchmarks) and [Obydux's modern startup flags](https://github.com/Obydux/Minecraft-startup-flags).
 
 ## Conducting the Stress Test
 
