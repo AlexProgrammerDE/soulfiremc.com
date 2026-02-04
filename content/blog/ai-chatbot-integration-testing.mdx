@@ -11,11 +11,11 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## AI Chatbots in Minecraft
 
-AI chatbots can turn a Minecraft server into something that feels alive. Instead of static signs and pre-written FAQs, players get a server assistant that answers questions in natural language, NPCs that hold actual conversations, and moderation that catches nuance rather than just keyword lists. This guide covers how to set one up, which LLM providers to consider, and how to properly test the integration before your players find the edge cases for you.
+Instead of static signs and pre-written FAQs, you can give players a server assistant that answers questions in natural language, NPCs that hold actual conversations, and moderation that catches nuance rather than keyword lists. This guide covers how to set one up, which LLM providers work well, and how to test the integration before your players find the edge cases for you.
 
 ### Choosing an LLM Provider
 
-The first decision is where your AI runs. Each option has real trade-offs around cost, quality, and privacy.
+The first decision is where your AI runs. The trade-offs come down to cost, quality, and privacy.
 
 <Tabs items={["OpenAI GPT", "Anthropic Claude", "Ollama (Self-Hosted)"]}>
   <Tab value="OpenAI GPT">
@@ -53,7 +53,7 @@ Learn more: [OpenAI API Documentation](https://platform.openai.com/docs/api-refe
 
   <Tab value="Anthropic Claude">
 
-Strong alternative to GPT with excellent instruction-following and large context windows. Particularly good at maintaining character consistency for NPC personas.
+Another cloud option. In our testing, Claude tends to hold character better over long NPC conversations — it's less likely to break persona mid-dialogue than GPT.
 
 **Trade-offs:** Similar cost structure to OpenAI. Claude Sonnet 4.5 runs $3/million input tokens, $15/million output tokens. Claude Haiku 4.5 is cheaper at $1/$5 if you don't need top-tier quality.
 
@@ -85,7 +85,7 @@ Learn more: [Anthropic Claude Documentation](https://docs.anthropic.com/)
 
 Runs LLMs locally on your hardware. No API costs, no rate limits, and player data never leaves your server.
 
-**Trade-offs:** Requires a capable machine. An 8B parameter model needs at least 8GB of RAM and benefits from a GPU. Response quality is lower than the cloud APIs, but perfectly adequate for server assistant and NPC tasks. A big recent addition is [GPT-OSS](https://github.com/openai/gpt-oss) — OpenAI's open-weight model that runs locally and punches well above its weight.
+**Trade-offs:** Requires a capable machine. An 8B parameter model needs at least 8GB of RAM and benefits from a GPU. Response quality is lower than the cloud APIs, but good enough for answering server questions and running NPC dialogue. A big recent addition is [GPT-OSS](https://github.com/openai/gpt-oss) — OpenAI's open-weight model that runs locally and punches well above its weight.
 
 ```bash title="Terminal"
 # Install and start Ollama
@@ -149,11 +149,9 @@ content-filter:
   response: "I'm here to help with server questions only!"
 ```
 
-The system prompt is where most of the value lies. A vague prompt produces vague answers. A specific prompt that includes your server's IP, rules, economy system, and custom commands produces an assistant that actually helps.
+The system prompt is where most of the value lies. A specific prompt that includes your server's IP, rules, economy system, and custom commands produces an assistant that actually helps — a generic "You are a helpful assistant" prompt produces generic answers.
 
 ### Crafting System Prompts
-
-The difference between a useful AI assistant and a generic chatbot is almost entirely in the system prompt.
 
 **Server assistant example:**
 
@@ -218,12 +216,12 @@ public void onChat(AsyncPlayerChatEvent event) {
 AI moderation catches subtle patterns: a player saying "nice base, would be a shame if something happened to it" is a grief threat that no keyword filter would flag. It also handles scam detection, spam patterns, and multi-language toxicity without maintaining enormous word lists.
 
 <Callout type="warning">
-AI moderation should flag and log, not auto-ban. Keep a human in the loop for final decisions on serious actions. False positives are inevitable, especially early on.
+AI moderation should flag and log, not auto-ban. Let staff make the final call on serious actions. False positives are inevitable, especially early on.
 </Callout>
 
 ## Testing AI Chat Integration
 
-Making sure AI chat actually works well under real conditions is where most setups fall short. Here's what to actually test.
+Here's what to actually test.
 
 ### Functional Testing
 
@@ -248,7 +246,7 @@ Without rate limiting, a single player can burn through your API budget in minut
 
 ### Load Testing with Bots
 
-Manual testing covers functionality, but it can't tell you what happens when 50 players ask questions at the same time during a server event. This is where you need bots.
+Manual testing covers functionality, but it can't tell you what happens when 50 players ask questions at the same time during a server event.
 
 **What to measure:**
 
@@ -276,4 +274,4 @@ A few things that are easy to overlook before going live:
 - **Cost monitoring**: For cloud LLMs, set up billing alerts. A popular server can generate thousands of queries per day.
 - **Prompt iteration**: Your first system prompt won't be your best. Review logs regularly and refine based on what players actually ask versus what the AI actually answers.
 
-Plan on rewriting your system prompt at least a few times in the first month. The servers that do it well treat their prompts like code: version-controlled, tested, and iterated on constantly.
+Plan on rewriting your system prompt at least a few times in the first month. Check your logs regularly, see what players are actually asking, and adjust accordingly.

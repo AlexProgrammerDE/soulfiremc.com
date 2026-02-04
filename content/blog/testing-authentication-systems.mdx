@@ -10,7 +10,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Understanding Minecraft Authentication
 
-Every server needs to decide how it checks who's connecting. Minecraft supports two modes out of the box, and plugins extend offline mode with password-based security.
+Minecraft supports two authentication modes out of the box, and plugins extend offline mode with password-based security.
 
 ### Online vs Offline Mode
 
@@ -178,7 +178,7 @@ With `ipCheck: true`, a session token from one IP shouldn't work from a differen
 
 ## Load Testing with Bots
 
-Manual testing covers correctness, but you need bots to test what happens under real load -- concurrency issues and performance problems won't show up any other way.
+Manual testing covers correctness, but concurrency issues and performance problems won't show up without real load.
 
 ### What to Test
 
@@ -201,7 +201,7 @@ mysql -e "SHOW PROCESSLIST;"
 /spark tps
 ```
 
-A healthy auth system handles 100 concurrent logins without dropping TPS below 19. If you see timeouts or "too many connections" errors, increase your database connection pool or switch from SQLite to MySQL.
+If your auth system handles 100 concurrent logins without noticeable TPS drops, you're in good shape. If you see timeouts or "too many connections" errors, increase your database connection pool or switch from SQLite to MySQL.
 
 ## Best Practices
 
@@ -218,4 +218,4 @@ A few things that are easy to get wrong:
 
 On the infrastructure side, use MySQL for anything beyond a dev server -- SQLite doesn't handle concurrent logins well. And test under load before you go live. Race conditions and connection pool exhaustion are the kind of bugs that only show up when 50 players log in at once.
 
-Auth is your server's front door. Test it the way an attacker would -- with automation, edge cases, and bad input -- and you'll know it holds up before your players have to find out the hard way.
+Test your auth the way an attacker would -- with automation, edge cases, and bad input -- and you'll know it holds up before your players find out the hard way.

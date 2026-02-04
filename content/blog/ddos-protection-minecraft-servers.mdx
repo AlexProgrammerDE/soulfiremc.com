@@ -14,7 +14,7 @@ If you've followed our [anti-bot testing guide](/blog/anti-bot-systems-testing-g
 
 A volumetric DDoS attack doesn't care about your iptables rules. It saturates your server's network link with raw traffic — sometimes tens of gigabits per second — before packets even reach your firewall. Your server goes offline not because it can't handle the connections, but because the pipe is full. No amount of server-side configuration fixes that.
 
-That's where dedicated DDoS protection comes in. It sits between players and your server, absorbing attack traffic at the network edge and only forwarding clean connections through.
+Dedicated DDoS protection sits between players and your server, absorbing attack traffic at the network edge and only forwarding clean connections through.
 
 ## How TCP Proxy Protection Works
 
@@ -58,7 +58,7 @@ For most servers, a subscription model is simpler to budget for. Pay-as-you-go c
 
 **Always-on vs on-demand.** Always-on filtering routes all traffic through the proxy permanently. On-demand only activates when an attack is detected, which means there's a detection delay where your server takes hits before protection kicks in. Always-on adds consistent latency but provides immediate protection.
 
-**Built-in hosting protection.** Some hosting providers include DDoS protection as part of their service. If you're shopping for a dedicated server anyway, this can save you from managing a separate protection layer. Check what your host includes before buying a third-party service on top.
+**Built-in hosting protection.** Some hosting providers include DDoS protection as part of their service. If you're shopping for a dedicated server anyway, this means one less thing to manage. Check what your host includes before buying a third-party service on top.
 
 ## Setting It Up
 
@@ -119,6 +119,6 @@ For application-layer defense on top of DDoS protection — anti-bot plugins, ra
 
 ## Conclusion
 
-DDoS protection is one layer of a broader defense strategy. It handles the attacks that server-side tools can't — raw bandwidth floods that overwhelm your network before your server even sees the traffic. But it doesn't replace [firewall rules and anti-bot plugins](/blog/anti-bot-systems-testing-guide), which catch the smaller, smarter attacks that slip through as valid TCP connections.
+DDoS protection handles the attacks that server-side tools can't — raw bandwidth floods that overwhelm your network before your server even sees the traffic. But it doesn't replace [firewall rules and anti-bot plugins](/blog/anti-bot-systems-testing-guide), which catch the smaller, smarter attacks that slip through as valid TCP connections.
 
 Get both layers right, test them, and your server stays online when it matters.

@@ -189,7 +189,7 @@ For a full walkthrough of how these services work, what to look for in a provide
 
 ## Testing Your Defenses
 
-Configuration without validation is guesswork. You need to verify that your anti-bot setup actually blocks attacks while letting legitimate players through.
+You need to verify that your anti-bot setup actually blocks attacks while letting legitimate players through.
 
 ### Setting Up a Test Environment
 
@@ -228,14 +228,9 @@ Useful SoulFire plugins for testing:
 
 After running tests, check your plugin's statistics:
 
-| Block Rate | Assessment | Action |
-|------------|------------|--------|
-| &lt;50% | Ineffective | Enable more checks, lower thresholds |
-| 50-80% | Moderate | Review which checks failed, fine-tune |
-| 80-95% | Good | Minor tuning, monitor false positives |
-| &gt;95% | Excellent | Strong protection, watch for over-blocking |
+If most bots are getting through, you need more checks or lower thresholds. If most are blocked but some slip through, review which specific checks failed and fine-tune those. If nearly all bots are blocked, shift your attention to false positives — check that real players behind VPNs or shared IPs aren't getting caught.
 
-The goal isn't 100% blocking (that inevitably means false positives) but reducing attacks to manageable levels while keeping the door open for real players.
+You're not aiming for 100% block rate. That inevitably means blocking real players too. The goal is reducing attacks to a level your server can absorb while real players still get in.
 
 ## Monitoring
 
@@ -267,11 +262,9 @@ Track these metrics over time: blocks per hour, attack frequency, detection spee
 
 ## Conclusion
 
-Attackers evolve, and your defenses need to keep pace. The key principles:
-
 - **Layer your defenses** so no single bypass is fatal
-- **Test before an attack forces you to**, using realistic bot traffic against an isolated copy of your server
+- **Test before an attack forces you to** — use realistic bot traffic against an isolated copy of your server
 - **Monitor continuously** so you catch attacks early and spot configuration drift
-- **Balance security with accessibility** because the most secure server is one nobody can join, which defeats the purpose
+- **Balance security with accessibility** — if your false positive rate is climbing, your thresholds are too aggressive
 
-Keep your plugins updated, review your logs, and re-test after every configuration change. Your legitimate players will thank you.
+Keep your plugins updated, review your logs, and re-test after every configuration change.

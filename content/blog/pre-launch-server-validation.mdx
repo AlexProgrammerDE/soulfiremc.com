@@ -11,7 +11,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps'
 
 ## The High Stakes of Launch Day
 
-You've spent months building your server — custom plugins, detailed spawn, balanced economy, a world you're proud of. A failed launch undoes all of that. Players who hit lag or broken features on day one don't come back, and the "laggy server" label is nearly impossible to shake. This guide walks through what to check so launch day doesn't blow up.
+Players who hit lag or broken features on day one don't come back, and the "laggy server" label is nearly impossible to shake. This guide walks through what to check so launch day doesn't blow up.
 
 ## Pre-Launch Validation
 
@@ -56,7 +56,7 @@ You've spent months building your server — custom plugins, detailed spawn, bal
     For a thorough walkthrough of view/simulation distance tuning, entity limit configuration, chunk pregeneration, JVM flags, and profiling with Spark, see our [Stress Testing Minecraft Servers](/blog/stress-testing-minecraft-servers) guide. The sections below cover what to verify, not how to tune from scratch.
     </Callout>
 
-    **Get your numbers on an empty server first** using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
+    **Get your numbers on an empty server first** using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. That's your baseline.
 
     **Configuration checklist:**
 
@@ -90,7 +90,7 @@ You've spent months building your server — custom plugins, detailed spawn, bal
 
     Things to check at spawn: lighting has no dark patches, builds are complete (no scaffolding left), signs are readable and guide players to important areas, there are no hazards near the spawn point, and the `/help` command provides useful information. Post your rules where people can find them.
 
-    **Economy balance:** Walk through the progression path. A new player should be able to make their first purchase within 15 minutes and reach iron tools within 30 minutes. Diamond tools should take 2-3 hours, endgame items 20-40 hours. Watch out for players getting rich too quickly (causes inflation and boredom) or one earning method vastly outperforming all others (causes exploitation).
+    **Economy balance:** Walk through the progression path. A new player should be able to make their first purchase within 15 minutes and reach iron tools within 30 minutes. Diamond tools should take 2-3 hours, endgame items 20-40 hours. Watch out for players getting rich too quickly or one earning method vastly outperforming all others.
   </Step>
 
   <Step>
@@ -159,11 +159,11 @@ You've spent months building your server — custom plugins, detailed spawn, bal
 
 **First 24 hours:** Track peak concurrent players, total unique joins, average session length, minimum TPS during peak, crashes, and plugin errors.
 
-**First week:** Review what went well and what didn't. Adjust economy balancing, improve spawn signage, fix minor bugs, recruit additional staff if needed. The servers that succeed long-term are the ones that iterate quickly after launch.
+**First week:** Review what went well and what didn't. Adjust economy balancing, improve spawn signage, fix minor bugs, recruit additional staff if needed. Fix things fast — the first week sets the tone.
 
 ## Using SoulFire for Load Testing
 
-Manual testing can validate features, but it can't answer the question that matters most: will your server survive 100 players joining at once? SoulFire's Fabric-based architecture produces realistic client behavior and full protocol compliance, making it ideal for pre-launch stress testing.
+Manual testing can validate features, but it can't answer the question that matters most: will your server survive 100 players joining at once? SoulFire runs actual Fabric client code, so bots behave like real players at the protocol level — your server can't tell the difference.
 
 Configure a launch simulation: 100 bots joining over 10 minutes (10 per minute), with Auto-Respawn, Anti-AFK, and Auto-Reconnect enabled. Let it run for 2 hours while monitoring with Spark and watching the console for errors.
 
@@ -183,4 +183,4 @@ If you hit less than 85% connection success, TPS drops below 15, or memory usage
 
 ## Conclusion
 
-A successful launch is preparation, not luck. Test infrastructure early, validate every plugin, optimize your spawn area, and run realistic load tests with bots. The time you invest in pre-launch validation pays off in player retention, server reputation, and your own sanity on opening day. Launch day is not the time to discover your server can't handle 50 players — test with 100 before you advertise for 50.
+Launch day is not the time to discover your server can't handle 50 players — test with 100 before you advertise for 50.

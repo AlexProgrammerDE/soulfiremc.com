@@ -98,7 +98,7 @@ Not everything translates perfectly. Older clients will see approximations for c
 
 ## Proxy Multi-Version Support
 
-On networks using [Velocity](https://papermc.io/software/velocity) or [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/), installing ViaVersion on the proxy is the preferred approach. It translates once at the edge instead of on every backend server, and it lets backends run different Minecraft versions behind a single entry point.
+On networks using [Velocity](https://papermc.io/software/velocity) or [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/), installing ViaVersion on the proxy is the preferred approach. It handles translation in one place instead of on every backend server, and it lets backends run different Minecraft versions behind a single entry point.
 
 <Tabs items={['Velocity', 'BungeeCord']}>
   <Tab value="Velocity">
@@ -125,7 +125,7 @@ When combining ViaVersion with proxy-level protocol forwarding (e.g., Velocity m
 
 ## ViaFabricPlus (Client-Side)
 
-[ViaFabricPlus](https://github.com/ViaVersion/ViaFabricPlus) is a client-side Fabric mod that lets a modern client connect to virtually any server version -- including Alpha, Beta, and even snapshots. A single client installation can verify connectivity against every version your server claims to support.
+[ViaFabricPlus](https://github.com/ViaVersion/ViaFabricPlus) is a client-side Fabric mod that lets a modern client connect to virtually any server version -- including Alpha, Beta, and even snapshots. A single client installation can verify connectivity against every version your server supports.
 
 ## Testing Multi-Version Support
 
@@ -180,10 +180,10 @@ For load testing, connect bots across multiple versions simultaneously -- for ex
 
 ## Performance
 
-ViaVersion adds modest overhead: roughly 5-10% CPU for packet translation, 50-100 MB of RAM for caches, and 1-5 ms of added latency per translated packet. If you're running a large network (1000+ concurrent players) or extremely latency-sensitive competitive PvP, profile before and after installation.
+ViaVersion adds modest overhead. In our testing, expect some extra CPU for packet translation, additional RAM for caches, and a few milliseconds of added latency per translated packet. On small to mid-size servers you won't notice it. If you're running 1000+ concurrent players or latency-sensitive competitive PvP, profile before and after installation to see the actual impact on your hardware.
 
 To minimize overhead, keep `debug` off, disable `cache-values` if memory is tight, and always run the latest Via plugin versions -- they frequently include performance improvements.
 
 ## Wrapping Up
 
-Multi-version support turns your server from "update or leave" into "just connect." Install the full ViaVersion suite, test a representative spread of client versions, and automate that testing with bots so you catch regressions early. The biggest gotchas -- world height on pre-1.18 clients, combat system differences, and block placeholders -- are well-understood and manageable once you know they exist. Keep your Via plugins up to date, validate after every server update, and your players will never have to think about version numbers again.
+Install the full ViaVersion suite, test a representative spread of client versions, and automate that testing with bots so you catch regressions early. The biggest gotchas — world height on pre-1.18 clients, combat system differences, and block placeholders — are all covered above. Keep your Via plugins up to date and validate after every server update.

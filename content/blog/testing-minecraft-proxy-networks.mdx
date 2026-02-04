@@ -1,6 +1,6 @@
 ---
 title: Testing Minecraft Proxy Networks - BungeeCord and Velocity Guide
-description: Learn how to test and configure Minecraft proxy networks, validate forwarding modes, troubleshoot connection issues, and make sure players don't notice the wiring
+description: How to test and configure Minecraft proxy networks, validate forwarding modes, and troubleshoot connection issues
 author: Pistonmaster
 date: 2026-02-07
 tags: [minecraft, bungeecord, velocity, proxy, networking, server-network]
@@ -11,7 +11,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Testing Minecraft Proxy Networks
 
-A proxy sits between players and your backend servers, routing connections so players can switch between lobbies, survival worlds, and minigames without ever disconnecting. This guide covers how to set up, secure, and test proxy networks using [Velocity](https://papermc.io/software/velocity) and [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/).
+A proxy sits between players and your backend servers, routing connections so players can switch between lobbies, survival worlds, and minigames without disconnecting. This guide covers how to set up, secure, and test proxy networks using [Velocity](https://papermc.io/software/velocity) and [BungeeCord](https://www.spigotmc.org/wiki/bungeecord/).
 
 ### Why Run a Proxy?
 
@@ -24,7 +24,7 @@ A minimal network is one proxy, one lobby server, and one or more game servers. 
 <Tabs>
 <Tab value="velocity" label="Velocity" default>
 
-[Velocity](https://papermc.io/software/velocity) is the modern choice, built by the PaperMC team. It uses a secure forwarding protocol by default (HMAC-signed player data), has the best performance of any proxy, and offers a clean plugin API. The ecosystem is smaller than BungeeCord's, but most popular plugins already have Velocity versions.
+[Velocity](https://papermc.io/software/velocity) is the modern choice, built by the PaperMC team. It uses a secure forwarding protocol by default (HMAC-signed player data), outperforms BungeeCord in benchmarks, and offers a clean plugin API. The ecosystem is smaller than BungeeCord's, but most popular plugins already have Velocity versions.
 
 Use Velocity for any new network.
 
@@ -131,7 +131,7 @@ On backends, set `online-mode=false` in server.properties and `bungeecord: true`
 
 ## Player Info Forwarding
 
-Forwarding is how the proxy tells backend servers who a player actually is -- their username, UUID, and skin. This is what people get wrong the most, and it's the most dangerous to mess up.
+Forwarding is how the proxy tells backend servers who a player actually is -- their username, UUID, and skin. This is the most dangerous part to mess up.
 
 **Velocity Modern Forwarding** signs player data with an HMAC using the shared secret. The backend verifies the signature before accepting the connection. Without the secret, nobody can fake a player identity. This is the recommended mode.
 
@@ -179,7 +179,7 @@ tail -f velocity-proxy/logs/latest.log | grep -i error
 /spark tps
 ```
 
-A healthy proxy handles 100+ connections per second, switches servers in under 500ms, and stays under 1GB of RAM. If you see connection timeouts during bursts, increase `read-timeout` in the `[advanced]` section of velocity.toml. If switching is slow, check that backend spawn chunks are pregenerated and not causing lag on player join.
+In our testing, a properly configured Velocity proxy handles 100+ connections per second, switches servers in under 500ms, and stays under 1GB of RAM. If you see connection timeouts during bursts, increase `read-timeout` in the `[advanced]` section of velocity.toml. If switching is slow, check that backend spawn chunks are pregenerated and not causing lag on player join.
 
 ## Troubleshooting
 
@@ -201,4 +201,4 @@ sudo iptables -A INPUT -p tcp --dport 25565 -j DROP
 
 ### Conclusion
 
-A properly configured proxy lets players hop between servers without friction, but the margin for error is thin. Misconfigured forwarding is a direct security vulnerability, and untested setups fall apart under real load. Set up modern forwarding, verify it works, lock down your backends, and load test with bots before you open to players. The time you spend testing now saves you from impersonation exploits and crash-inducing surprises later.
+Misconfigured forwarding is a direct security vulnerability, and untested setups fall apart under real load. Set up modern forwarding, verify it works, lock down your backends, and load test with bots before you open to players.
