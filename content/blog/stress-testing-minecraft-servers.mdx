@@ -1,5 +1,5 @@
 ---
-title: Stress Testing Minecraft Servers - A Complete Guide
+title: Stress Testing Minecraft Servers
 description: Learn how to properly stress test your Minecraft server, measure performance metrics, identify bottlenecks, and optimize for peak player loads
 author: Pistonmaster
 date: 2026-02-04
@@ -11,13 +11,13 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Understanding Server Stress Testing
 
-Stress testing simulates high player loads on your Minecraft server to find performance bottlenecks before real players hit them. The goal is not to see when the server crashes -- it is to understand how performance degrades under load and what capacity you can reliably support.
+Stress testing simulates high player loads on your Minecraft server to find performance bottlenecks before real players hit them. The goal isn't to see when the server crashes -- it's to find out how many players you can actually handle.
 
-Without testing, you are gambling with your players' experience. A new plugin might work fine with 10 players and cause severe lag with 50. A VPS upgrade might not deliver the improvement you expected. Stress testing gives you hard numbers instead of guesses.
+Without testing, you're gambling with your players' experience. A new plugin might work fine with 10 players and cause severe lag with 50. A VPS upgrade might not deliver the improvement you expected. Stress testing gives you hard numbers instead of guesses.
 
 ### Key Performance Metrics
 
-Minecraft servers have two critical performance indicators: TPS and MSPT.
+Minecraft servers have two numbers you need to watch: TPS and MSPT.
 
 **TPS (Ticks Per Second)** measures the server's tick rate, targeting 20 ticks per second. **MSPT (Milliseconds Per Tick)** measures how long each tick takes to process. MSPT is often more revealing because it shows performance trends before TPS actually drops -- a server at 45ms MSPT is still hitting 20 TPS but has almost no headroom left.
 
@@ -43,7 +43,7 @@ Spark's profiler generates flamegraphs showing exactly where server time is spen
 ## Optimize Before Testing
 
 <Callout type="warning">
-Testing an unoptimized server wastes time. You will just discover it needs optimization. Establish a solid performance baseline first, then stress test to validate your capacity.
+Testing an unoptimized server wastes time. You'll just discover it needs optimization. Get your server running well first, then stress test to see what it can handle.
 </Callout>
 
 ### Server Software
@@ -52,7 +52,7 @@ Testing an unoptimized server wastes time. You will just discover it needs optim
 
 ### View and Simulation Distance
 
-These are the most impactful settings you will adjust.
+These are the most impactful settings you'll adjust.
 
 ```properties title="server.properties"
 view-distance=8
@@ -121,7 +121,7 @@ java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
 
 ## Conducting the Stress Test
 
-With your server optimized and Spark installed, you are ready to test. The key is testing incrementally -- connecting 500 bots at once teaches you nothing except "it crashes."
+The key is testing incrementally -- connecting 500 bots at once teaches you nothing except "it crashes."
 
 ### Phase 1: Baseline
 
@@ -143,7 +143,7 @@ At each step, record TPS, MSPT (current, median, and 95th percentile), memory tr
 
 ### Phase 3: Realistic Behavior
 
-Idle bots standing still do not represent real players. Add movement and actions to stress the systems that matter:
+Idle bots standing still don't represent real players. Add movement and actions to actually hit the parts that slow down:
 
 <Tabs>
 <Tab value="movement" label="Movement" default>
@@ -173,34 +173,32 @@ Some issues only appear after hours: memory leaks, gradual resource exhaustion, 
 
 ## Identifying Bottlenecks
 
-After testing, your Spark profiles and recorded metrics should point to specific bottlenecks.
-
 **TPS drops proportionally with player count**: General overhead from entities, chunks, and networking. Reduce view/simulation distance and entity caps.
 
 **Random TPS spikes**: Usually chunk generation, large redstone devices, or plugin tasks running on the main thread. Pregenerate more world and profile during the spikes to identify the cause.
 
 **MSPT creeping up over time**: Memory pressure or resource exhaustion. Check Spark's heap summary for unusual object counts or steadily growing memory usage.
 
-**Good TPS but high CPU (&gt;80%)**: You are close to the limit with no headroom for spikes. Optimize further or upgrade hardware.
+**Good TPS but high CPU (&gt;80%)**: You're close to the limit with no headroom for spikes. Optimize further or upgrade hardware.
 
 When Spark shows a specific plugin consuming more than 10% of CPU, investigate its configuration first -- many plugins have expensive features that can be disabled. If entity AI dominates the profile (&gt;30%), lower mob caps. If chunk operations are excessive, tighten chunk loading rates in `paper-global.yml`.
 
 ## Using SoulFire for Testing
 
-SoulFire is a Fabric-based bot tool that runs actual Minecraft client code. This matters for stress testing because traditional bot frameworks reimplement the protocol and physics, which can produce different packet timing, inaccurate physics, and detectable patterns that real players would not exhibit.
+I'd recommend [SoulFire](/download) for this. Unlike most bot frameworks that reimplement the Minecraft protocol from scratch, SoulFire runs actual Fabric client code -- so bots behave exactly like real players at the protocol level. You don't get weird packet timing or broken physics that throws off your results. The load is basically identical to real players, which is the whole point.
 
-Because SoulFire bots are indistinguishable from real clients at the protocol level, the server load they generate accurately reflects what real players would cause. Combined with multi-version support via ViaFabricPlus, you can test against any Minecraft version.
+It also supports multiple Minecraft versions through ViaFabricPlus, so you can test whatever version you're running without hunting for a compatible tool.
 
-**Basic test procedure:**
+**Here's how I usually run a test:**
 
 1. Set your target server and bot count in the SoulFire interface
-2. Configure join delays (1-3 seconds between bots) for realistic connection patterns
-3. Enable movement and activity plugins for realistic behavior
-4. Monitor server performance with Spark during the test
-5. Run for 15-30 minutes per load level
+2. Stagger the joins (1-3 seconds between bots) so you don't flood the login server
+3. Turn on the movement and activity plugins so bots aren't just standing there
+4. Keep Spark running on the server the whole time
+5. Hold each load level for 15-30 minutes before bumping it up
 
 ## When to Test
 
-Stress testing is not a one-time activity. Run tests before launches, after major plugin updates, before events with expected high turnout, and after hardware changes. A monthly baseline test catches gradual degradation from accumulating data and slow memory leaks that daily monitoring misses.
+Don't just test once. Run tests before launches, after major plugin updates, before events with expected high turnout, and after hardware changes. A monthly baseline test catches gradual degradation from accumulating data and slow memory leaks that daily monitoring misses.
 
-The methodology is simple: optimize first, monitor with Spark, test incrementally with realistic behavior, fix what the profiles reveal, and retest. Do this before your players do it for you.
+The process is simple: optimize first, monitor with Spark, test incrementally with realistic behavior, fix what the profiles reveal, and retest. Do this before your players do it for you.

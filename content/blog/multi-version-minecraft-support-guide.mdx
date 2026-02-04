@@ -11,13 +11,13 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Understanding Protocol Versioning
 
-Every Minecraft version uses a different network protocol. A 1.20 client cannot talk to a 1.21 server out of the box -- they simply do not speak the same language. Traditionally this means players must run the exact version the server is on, which fractures your player base every time Mojang ships an update.
+Every Minecraft version uses a different network protocol. A 1.20 client cannot talk to a 1.21 server out of the box -- they simply don't speak the same language. Traditionally this means players must run the exact version the server is on, which fractures your player base every time Mojang ships an update.
 
 The [ViaVersion](https://github.com/ViaVersion/ViaVersion) suite solves this by translating packets on the fly, so a single server can accept clients spanning from 1.8 all the way to the latest release.
 
 ## The ViaVersion Suite
 
-ViaVersion is not one plugin -- it is three, each covering a different direction of translation.
+ViaVersion isn't one plugin -- it's three, each covering a different direction of translation.
 
 | Plugin | Direction | Example |
 |--------|-----------|---------|
@@ -86,7 +86,7 @@ sound-conversion: true
 
 ### Version-Specific Limitations
 
-Not everything translates perfectly. Older clients will see approximations for content that did not exist in their version.
+Not everything translates perfectly. Older clients will see approximations for content that didn't exist in their version.
 
 | Feature | Introduced | Behavior on Older Clients |
 |---------|------------|---------------------------|
@@ -117,7 +117,7 @@ mv ViaRewind-3.0.0.jar bungeecord/plugins/
   </Tab>
 </Tabs>
 
-A typical proxy network might have a 1.21 lobby, a 1.20.4 survival world, and a 1.19 creative world. With ViaVersion on the proxy, any client version can move between all three backends seamlessly.
+A typical proxy network might have a 1.21 lobby, a 1.20.4 survival world, and a 1.19 creative world. With ViaVersion on the proxy, any client version can move between all three backends without reconnecting.
 
 <Callout type="warning">
 When combining ViaVersion with proxy-level protocol forwarding (e.g., Velocity modern forwarding), verify that UUIDs and skins resolve correctly for every client version. This is the most common source of subtle bugs.
@@ -125,11 +125,11 @@ When combining ViaVersion with proxy-level protocol forwarding (e.g., Velocity m
 
 ## ViaFabricPlus (Client-Side)
 
-[ViaFabricPlus](https://github.com/ViaVersion/ViaFabricPlus) is a client-side Fabric mod that lets a modern client connect to virtually any server version -- including Alpha, Beta, and even snapshots. It is extremely useful for testing: a single client installation can verify connectivity against every version your server claims to support.
+[ViaFabricPlus](https://github.com/ViaVersion/ViaFabricPlus) is a client-side Fabric mod that lets a modern client connect to virtually any server version -- including Alpha, Beta, and even snapshots. A single client installation can verify connectivity against every version your server claims to support.
 
 ## Testing Multi-Version Support
 
-Configuration alone does not guarantee compatibility. You need to validate it.
+Just installing the plugins isn't enough — you need to actually test it.
 
 ### What to Test
 
@@ -180,7 +180,7 @@ For load testing, connect bots across multiple versions simultaneously -- for ex
 
 ## Performance
 
-ViaVersion adds modest overhead: roughly 5-10% CPU for packet translation, 50-100 MB of RAM for caches, and 1-5 ms of added latency per translated packet. For the vast majority of servers this is negligible. If you are running a large network (1000+ concurrent players) or extremely latency-sensitive competitive PvP, profile before and after installation.
+ViaVersion adds modest overhead: roughly 5-10% CPU for packet translation, 50-100 MB of RAM for caches, and 1-5 ms of added latency per translated packet. If you're running a large network (1000+ concurrent players) or extremely latency-sensitive competitive PvP, profile before and after installation.
 
 To minimize overhead, keep `debug` off, disable `cache-values` if memory is tight, and always run the latest Via plugin versions -- they frequently include performance improvements.
 

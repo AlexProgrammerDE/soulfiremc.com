@@ -11,7 +11,7 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## AI Chatbots in Minecraft
 
-AI chatbots can turn a Minecraft server into something that feels genuinely alive. Instead of static signs and pre-written FAQs, players get a server assistant that answers questions in natural language, NPCs that hold actual conversations, and moderation that catches nuance rather than just keyword lists. This guide covers how to set one up, which LLM providers to consider, and how to properly test the integration before your players find the edge cases for you.
+AI chatbots can turn a Minecraft server into something that feels alive. Instead of static signs and pre-written FAQs, players get a server assistant that answers questions in natural language, NPCs that hold actual conversations, and moderation that catches nuance rather than just keyword lists. This guide covers how to set one up, which LLM providers to consider, and how to properly test the integration before your players find the edge cases for you.
 
 ### Choosing an LLM Provider
 
@@ -22,7 +22,7 @@ The first decision is where your AI runs. Each option has real trade-offs around
 
 The most established option. GPT-4 produces high-quality responses with strong reasoning, and GPT-3.5-turbo is cheaper for simpler use cases.
 
-**Trade-offs:** Requires an API key and internet connection. Costs roughly $0.01/1K input tokens for GPT-4. You are sending player chat data to OpenAI's servers, which may matter depending on your server's privacy stance.
+**Trade-offs:** Requires an API key and internet connection. Costs roughly $0.01/1K input tokens for GPT-4. You're sending player chat data to OpenAI's servers, which may matter depending on your server's privacy stance.
 
 ```java title="GPTChatBot.java"
 public class GPTChatBot {
@@ -120,7 +120,7 @@ Learn more: [Ollama Documentation](https://ollama.ai/)
 
 ### Plugin Configuration
 
-Most AI chat plugins follow the same pattern: define a trigger keyword, set up a system prompt, configure rate limiting, and point at your LLM provider. Here is a typical configuration:
+Most AI chat plugins follow the same pattern: define a trigger keyword, set up a system prompt, configure rate limiting, and point at your LLM provider. Here's a typical configuration:
 
 ```yaml title="config.yml"
 provider: "ollama"  # or "openai", "claude"
@@ -222,7 +222,7 @@ AI moderation should flag and log, not auto-ban. Keep a human in the loop for fi
 
 ## Testing AI Chat Integration
 
-Getting AI chat running is straightforward. Making sure it actually works well under real conditions is where most setups fall short. Here are the areas that matter.
+Making sure AI chat actually works well under real conditions is where most setups fall short. Here's what to actually test.
 
 ### Functional Testing
 
@@ -238,7 +238,7 @@ If any of these fail, the issue is almost always in the system prompt or the pro
 ### Safety and Rate Limiting
 
 <Callout type="info">
-Without rate limiting, a single player can burn through your API budget in minutes. This is not optional for cloud-hosted LLMs.
+Without rate limiting, a single player can burn through your API budget in minutes. This isn't optional for cloud-hosted LLMs.
 </Callout>
 
 - **Cooldown enforcement**: Send two queries back-to-back and verify the second is blocked with a cooldown message. Wait the configured interval and verify the next query succeeds.
@@ -247,7 +247,7 @@ Without rate limiting, a single player can burn through your API budget in minut
 
 ### Load Testing with Bots
 
-Manual testing covers functionality, but it cannot tell you what happens when 50 players ask questions at the same time during a server event. This is where bot-driven testing becomes essential.
+Manual testing covers functionality, but it can't tell you what happens when 50 players ask questions at the same time during a server event. This is where you need bots.
 
 **What to measure:**
 
@@ -256,7 +256,7 @@ Connect 10-50 bots using a tool like [SoulFire](https://soulfiremc.com) and have
 - **Response time distribution**: Average, median, 95th percentile, and maximum. Target under 5 seconds average, under 10 for 95th percentile.
 - **Success rate**: What percentage of queries actually get answered? Anything below 95% indicates a queueing or timeout problem.
 - **Server TPS impact**: AI processing should not drag down server performance. If TPS drops below 18 during the test, the plugin is likely doing synchronous work on the main thread.
-- **AI service resource usage**: Monitor CPU and RAM on whatever is running your LLM. If Ollama hits 85%+ CPU during load tests, you will need to scale or queue more aggressively before a real event.
+- **AI service resource usage**: Monitor CPU and RAM on whatever is running your LLM. If Ollama hits 85%+ CPU during load tests, you'll need to scale or queue more aggressively before a real event.
 
 **Interpreting results:**
 
@@ -264,7 +264,7 @@ If all queries are answered but response times climb linearly with bot count, th
 
 ### Regression Testing
 
-Every time you update a system prompt, swap models, or upgrade the plugin, re-run your test suite. AI behavior is inherently variable, so the goal is not identical responses but consistent quality. Keep a list of 20-30 representative questions and spot-check the answers after each change.
+Every time you update a system prompt, swap models, or upgrade the plugin, re-run your test suite. AI doesn't give the same answer twice, so the goal isn't identical responses but consistent quality. Keep a list of 20-30 representative questions and spot-check the answers after each change.
 
 ## Production Considerations
 
@@ -273,6 +273,6 @@ A few things that are easy to overlook before going live:
 - **Fallback behavior**: What happens when your LLM provider is down? The plugin should either queue requests or tell the player to try again later, not silently fail.
 - **Conversation logging**: Log AI interactions for debugging and prompt improvement, but be transparent with players about it.
 - **Cost monitoring**: For cloud LLMs, set up billing alerts. A popular server can generate thousands of queries per day.
-- **Prompt iteration**: Your first system prompt will not be your best. Review logs regularly and refine based on what players actually ask versus what the AI actually answers.
+- **Prompt iteration**: Your first system prompt won't be your best. Review logs regularly and refine based on what players actually ask versus what the AI actually answers.
 
-Running AI chat in production is an ongoing process, not a one-time setup. The servers that do it well treat their system prompts like code: version-controlled, tested, and continuously improved.
+Plan on rewriting your system prompt at least a few times in the first month. The servers that do it well treat their prompts like code: version-controlled, tested, and iterated on constantly.

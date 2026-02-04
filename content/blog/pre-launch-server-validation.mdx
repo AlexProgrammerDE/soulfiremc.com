@@ -1,6 +1,6 @@
 ---
 title: Pre-Launch Server Validation - Preparing for Opening Day
-description: A comprehensive checklist for validating your Minecraft server before launch, from performance testing to spawn optimization and player experience
+description: Checklist for validating your Minecraft server before launch, from performance testing to spawn optimization and player experience
 author: Pistonmaster
 date: 2026-02-12
 tags: [minecraft, server-launch, testing, optimization, checklist, preparation]
@@ -11,7 +11,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps'
 
 ## The High Stakes of Launch Day
 
-You've spent months building your server — custom plugins, detailed spawn, balanced economy, curated world. A failed launch undoes all of that. Players who hit lag or broken features on day one don't come back, and the "laggy server" label is nearly impossible to shake. This guide walks through a structured validation process so launch day goes smoothly.
+You've spent months building your server — custom plugins, detailed spawn, balanced economy, a world you're proud of. A failed launch undoes all of that. Players who hit lag or broken features on day one don't come back, and the "laggy server" label is nearly impossible to shake. This guide walks through what to check so launch day doesn't blow up.
 
 ## Pre-Launch Validation
 
@@ -56,7 +56,7 @@ You've spent months building your server — custom plugins, detailed spawn, bal
     For a thorough walkthrough of view/simulation distance tuning, entity limit configuration, chunk pregeneration, JVM flags, and profiling with Spark, see our [Stress Testing Minecraft Servers](/blog/stress-testing-minecraft-servers) guide. The sections below cover what to verify, not how to tune from scratch.
     </Callout>
 
-    **Establish a performance baseline** on an empty server using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
+    **Get your numbers on an empty server first** using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
 
     **Configuration checklist:**
 
@@ -66,7 +66,7 @@ You've spent months building your server — custom plugins, detailed spawn, bal
     - **JVM flags** — Use [Aikar's flags](https://docs.papermc.io/paper/aikars-flags) for optimized garbage collection. Match Xms and Xmx to your available RAM.
     - **Server software** — [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
 
-    Verify each setting, restart, and confirm your baseline metrics haven't regressed before moving on.
+    Verify each setting, restart, and confirm your numbers haven't gotten worse before moving on.
   </Step>
 
   <Step>
@@ -86,9 +86,9 @@ You've spent months building your server — custom plugins, detailed spawn, bal
   <Step>
     ### Phase 4: Player Experience (3-5 Days Out)
 
-    **First-time user experience.** Join your own server as if you've never seen it before. Read the welcome message. Follow the instructions. Complete the starter tasks. This process should take 10-20 minutes and leave a new player with basic tools, a sense of direction, and an understanding of what your server offers.
+    **First-time user experience.** Join your own server as if you've never seen it before. Read the welcome message. Follow the instructions. Complete the starter tasks. This process should take 10-20 minutes and leave a new player with basic tools, a sense of direction, and know what to do next.
 
-    Things to check at spawn: lighting has no dark patches, builds are complete (no scaffolding left), signs are readable and guide players to important areas, there are no hazards near the spawn point, and the `/help` command provides useful information. Rules should be posted and accessible.
+    Things to check at spawn: lighting has no dark patches, builds are complete (no scaffolding left), signs are readable and guide players to important areas, there are no hazards near the spawn point, and the `/help` command provides useful information. Post your rules where people can find them.
 
     **Economy balance:** Walk through the progression path. A new player should be able to make their first purchase within 15 minutes and reach iron tools within 30 minutes. Diamond tools should take 2-3 hours, endgame items 20-40 hours. Watch out for players getting rich too quickly (causes inflation and boredom) or one earning method vastly outperforming all others (causes exploitation).
   </Step>
@@ -116,7 +116,7 @@ You've spent months building your server — custom plugins, detailed spawn, bal
   <Step>
     ### Phase 7: Final Validation (Day Before Launch)
 
-    Do a complete walkthrough of the player journey — join, orientation, resource gathering, claiming, building, social features, economy. Every feature should work without errors.
+    Do a complete walkthrough of the player journey — join, orientation, resource gathering, claiming, building, social features, economy. If something breaks during this walkthrough, fix it now — not tomorrow with 100 players online.
 
     Run final system health checks:
 

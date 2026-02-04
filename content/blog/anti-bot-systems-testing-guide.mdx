@@ -1,6 +1,6 @@
 ---
 title: Testing Anti-Bot Systems - Protecting Your Minecraft Server
-description: A comprehensive guide to testing and configuring anti-bot protection, from EpicGuard to iptables, with strategies to defend against bot attacks
+description: How to test and configure anti-bot protection, from EpicGuard to iptables, with strategies to defend against bot attacks
 author: Pistonmaster
 date: 2026-02-05
 tags: [minecraft, security, anti-bot, epicguard, ddos-protection, server-security]
@@ -11,10 +11,10 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Defending Your Minecraft Server Against Bots
 
-Bot attacks on Minecraft servers range from crude connection floods to sophisticated proxy-rotated campaigns that can drain bandwidth, crash your server, and drive away legitimate players. This guide covers how to build layered defenses and, critically, how to test that they actually work.
+Bot attacks on Minecraft servers range from crude connection floods to proxy-rotated campaigns that can drain bandwidth, crash your server, and drive away real players. This guide covers how to build layered defenses and, just as importantly, how to test that they actually work.
 
 <Callout type="danger">
-**This guide is for server administrators testing their own infrastructure.** Never perform bot attacks or load testing on servers you don't own or have explicit permission to test. Unauthorized attacks are illegal and unethical.
+**This guide is for server admins testing their own infrastructure.** Don't run bot attacks or load tests on servers you don't own or have explicit permission to test. Unauthorized attacks are illegal and unethical.
 </Callout>
 
 ### Common Attack Types
@@ -26,7 +26,7 @@ Bot attacks on Minecraft servers range from crude connection floods to sophistic
 
 ### Defense in Layers
 
-No single solution stops every attack. Effective protection uses multiple layers so that attackers who bypass one hit another.
+No single solution stops every attack. You want multiple layers so that attackers who bypass one still hit another.
 
 | Layer | Where | Tools | Catches |
 |-------|-------|-------|---------|
@@ -157,7 +157,7 @@ attack:
 
 ### UltimateAntiBot
 
-A more modern alternative with iptables integration. Detected bot IPs get added directly to your firewall, blocking them at the kernel level.
+A more modern alternative with iptables integration. It adds detected bot IPs straight to your firewall, blocking them at the kernel level.
 
 ```yaml title="config.yml"
 settings:
@@ -216,7 +216,7 @@ java -Xms2G -Xmx2G -jar paper.jar nogui
 
 ### Using SoulFire for Testing
 
-SoulFire's Fabric-based architecture makes it particularly effective for anti-bot testing because it uses actual Minecraft client code. Your anti-bot system can't detect bots simply by checking for protocol quirks, which means tests reflect real-world attack patterns.
+SoulFire is built on Fabric and runs actual Minecraft client code, so it works well for anti-bot testing. Your anti-bot system can't tell SoulFire apart from a real client just by checking for protocol quirks, which means your tests will look like real attacks.
 
 Useful SoulFire plugins for testing:
 
@@ -236,7 +236,7 @@ After running tests, check your plugin's statistics:
 | 80-95% | Good | Minor tuning, monitor false positives |
 | &gt;95% | Excellent | Strong protection, watch for over-blocking |
 
-The goal is not 100% blocking (that inevitably means false positives) but reducing attacks to manageable levels while keeping the door open for real players.
+The goal isn't 100% blocking (that inevitably means false positives) but reducing attacks to manageable levels while keeping the door open for real players.
 
 ## Monitoring
 
@@ -268,7 +268,7 @@ Track these metrics over time: blocks per hour, attack frequency, detection spee
 
 ## Conclusion
 
-Anti-bot protection is an ongoing process. Attackers evolve, and your defenses need to keep pace. The key principles:
+Attackers evolve, and your defenses need to keep pace. The key principles:
 
 - **Layer your defenses** so no single bypass is fatal
 - **Test before an attack forces you to**, using realistic bot traffic against an isolated copy of your server
