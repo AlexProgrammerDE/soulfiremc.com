@@ -44,7 +44,12 @@ export const metadata: Metadata = {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     canonical: "./",
     types: {
-      "application/rss+xml": "/blog/feed.xml",
+      "application/rss+xml": [
+        {
+          title: "SoulFire Blog Feed",
+          url: "/blog/feed.xml",
+        },
+      ],
     },
   },
 };
