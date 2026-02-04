@@ -16,116 +16,128 @@ You've spent months building your server — custom plugins, detailed spawn, bal
 ## Pre-Launch Validation
 
 <Steps>
+  <Step>
+    ### Phase 1: Infrastructure (2-4 Weeks Out)
 
-### Phase 1: Infrastructure (2-4 Weeks Out)
+    Start with the foundation. No amount of plugin tuning saves you from bad hardware or missing backups.
 
-Start with the foundation. No amount of plugin tuning saves you from bad hardware or missing backups.
+    **Hardware requirements by server size:**
 
-**Hardware requirements by server size:**
+    | Server Size | RAM | CPU | Disk | Network |
+    |-------------|-----|-----|------|---------|
+    | Small (10-20 players) | 4GB | 2 cores | 20GB SSD | 100 Mbps |
+    | Medium (50-100) | 8GB | 4 cores | 50GB SSD | 500 Mbps |
+    | Large (200+) | 16GB+ | 8+ cores | 100GB+ SSD | 1 Gbps |
 
-| Server Size | RAM | CPU | Disk | Network |
-|-------------|-----|-----|------|---------|
-| Small (10-20 players) | 4GB | 2 cores | 20GB SSD | 100 Mbps |
-| Medium (50-100) | 8GB | 4 cores | 50GB SSD | 500 Mbps |
-| Large (200+) | 16GB+ | 8+ cores | 100GB+ SSD | 1 Gbps |
+    Run baseline checks on your hardware before anything else:
 
-Run baseline checks on your hardware before anything else:
+    ```bash
+    # Disk I/O speed — target >200 MB/s for SSD
+    dd if=/dev/zero of=/tmp/test bs=1G count=1 oflag=direct
 
-```bash
-# Disk I/O speed — target >200 MB/s for SSD
-dd if=/dev/zero of=/tmp/test bs=1G count=1 oflag=direct
+    # Network bandwidth
+    iperf3 -c speedtest.server.com
 
-# Network bandwidth
-iperf3 -c speedtest.server.com
+    # Disk space — keep >50% free for headroom
+    df -h
+    ```
 
-# Disk space — keep >50% free for headroom
-df -h
-```
+    Red flags: HDD instead of SSD, less than 2GB RAM per 10 expected players, shared hosting with unknown neighbors.
 
-Red flags: HDD instead of SSD, less than 2GB RAM per 10 expected players, shared hosting with unknown neighbors.
+    **Backups:** Test your restore process *before* launch, not after your first crash. Create a full backup, extract it to a separate directory, and verify the world loads. Schedule automated backups via cron — every 6 hours locally, daily offsite.
 
-**Backups:** Test your restore process *before* launch, not after your first crash. Create a full backup, extract it to a separate directory, and verify the world loads. Schedule automated backups via cron — every 6 hours locally, daily offsite.
+    **Security:** Lock down your firewall to only the ports you need (25565, 22, 80/443 if applicable). Disable SSH password authentication. Install Fail2ban. Keep the backend IP hidden behind a proxy if possible.
+  </Step>
 
-**Security:** Lock down your firewall to only the ports you need (25565, 22, 80/443 if applicable). Disable SSH password authentication. Install Fail2ban. Keep the backend IP hidden behind a proxy if possible.
+  <Step>
+    ### Phase 2: Server Configuration (1-2 Weeks Out)
 
-### Phase 2: Server Configuration (1-2 Weeks Out)
+    <Callout type="info" title="Detailed Optimization Guide">
+    For a thorough walkthrough of view/simulation distance tuning, entity limit configuration, chunk pregeneration, JVM flags, and profiling with Spark, see our [Stress Testing Minecraft Servers](/blog/stress-testing-minecraft-servers) guide. The sections below cover what to verify, not how to tune from scratch.
+    </Callout>
 
-<Callout type="info" title="Detailed Optimization Guide">
-For a thorough walkthrough of view/simulation distance tuning, entity limit configuration, chunk pregeneration, JVM flags, and profiling with Spark, see our [Stress Testing Minecraft Servers](/blog/stress-testing-minecraft-servers) guide. The sections below cover what to verify, not how to tune from scratch.
-</Callout>
+    **Establish a performance baseline** on an empty server using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
 
-**Establish a performance baseline** on an empty server using [Spark](https://spark.lucko.me/). You want TPS at 20.0, MSPT under 10ms, RAM under 25% of max, and CPU under 20%. These numbers give you a reference point for everything that follows.
+    **Configuration checklist:**
 
-**Configuration checklist:**
+    - **View and simulation distance** — Lower simulation distance reduces entity processing overhead without sacrificing player visibility. See the [stress testing guide](/blog/stress-testing-minecraft-servers#view-and-simulation-distance) for recommended values by server size.
+    - **Entity limits** — Tighten Paper's mob spawn caps and collision limits. Default values are far too generous for servers expecting 50+ players.
+    - **World pregeneration** — Non-negotiable. Without it, 100 players exploring on launch day forces on-demand chunk generation and TPS drops to single digits. Use [Chunky](https://github.com/pop4959/Chunky) to pregenerate at least a 5,000-block radius from spawn. This can take hours — plan accordingly.
+    - **JVM flags** — Use [Aikar's flags](https://docs.papermc.io/paper/aikars-flags) for optimized garbage collection. Match Xms and Xmx to your available RAM.
+    - **Server software** — [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
 
-- **View and simulation distance** — Lower simulation distance reduces entity processing overhead without sacrificing player visibility. See the [stress testing guide](/blog/stress-testing-minecraft-servers#view-and-simulation-distance) for recommended values by server size.
-- **Entity limits** — Tighten Paper's mob spawn caps and collision limits. Default values are far too generous for servers expecting 50+ players.
-- **World pregeneration** — Non-negotiable. Without it, 100 players exploring on launch day forces on-demand chunk generation and TPS drops to single digits. Use [Chunky](https://github.com/pop4959/Chunky) to pregenerate at least a 5,000-block radius from spawn. This can take hours — plan accordingly.
-- **JVM flags** — Use [Aikar's flags](https://docs.papermc.io/paper/aikars-flags) for optimized garbage collection. Match Xms and Xmx to your available RAM.
-- **Server software** — [Paper](https://papermc.io/) is the baseline. For 100+ player targets, consider [Pufferfish](https://pufferfish.host/).
+    Verify each setting, restart, and confirm your baseline metrics haven't regressed before moving on.
+  </Step>
 
-Verify each setting, restart, and confirm your baseline metrics haven't regressed before moving on.
+  <Step>
+    ### Phase 3: Plugin Validation (1 Week Out)
 
-### Phase 3: Plugin Validation (1 Week Out)
+    Start the server and watch the logs for errors:
 
-Start the server and watch the logs for errors:
+    ```bash
+    tail -f logs/latest.log | grep -i error
+    ```
 
-```bash
-tail -f logs/latest.log | grep -i error
-```
+    Common sources of trouble: multiple economy plugins conflicting, duplicate feature plugins (two claim systems), and version mismatches. For each critical plugin — economy, permissions, claims, chat, teleportation, anti-cheat — verify it loads cleanly, test its primary features, test its interactions with other plugins, and check that permissions are correctly assigned.
 
-Common sources of trouble: multiple economy plugins conflicting, duplicate feature plugins (two claim systems), and version mismatches. For each critical plugin — economy, permissions, claims, chat, teleportation, anti-cheat — verify it loads cleanly, test its primary features, test its interactions with other plugins, and check that permissions are correctly assigned.
+    **Permission hierarchy:** Walk through each rank (default, member, VIP, moderator, admin) and verify that players can use exactly the commands they should and nothing more. Check chat prefixes, tab list formatting, and that there are no permission leaks giving default players access to moderation commands.
+  </Step>
 
-**Permission hierarchy:** Walk through each rank (default, member, VIP, moderator, admin) and verify that players can use exactly the commands they should and nothing more. Check chat prefixes, tab list formatting, and that there are no permission leaks giving default players access to moderation commands.
+  <Step>
+    ### Phase 4: Player Experience (3-5 Days Out)
 
-### Phase 4: Player Experience (3-5 Days Out)
+    **First-time user experience.** Join your own server as if you've never seen it before. Read the welcome message. Follow the instructions. Complete the starter tasks. This process should take 10-20 minutes and leave a new player with basic tools, a sense of direction, and an understanding of what your server offers.
 
-**First-time user experience.** Join your own server as if you've never seen it before. Read the welcome message. Follow the instructions. Complete the starter tasks. This process should take 10-20 minutes and leave a new player with basic tools, a sense of direction, and an understanding of what your server offers.
+    Things to check at spawn: lighting has no dark patches, builds are complete (no scaffolding left), signs are readable and guide players to important areas, there are no hazards near the spawn point, and the `/help` command provides useful information. Rules should be posted and accessible.
 
-Things to check at spawn: lighting has no dark patches, builds are complete (no scaffolding left), signs are readable and guide players to important areas, there are no hazards near the spawn point, and the `/help` command provides useful information. Rules should be posted and accessible.
+    **Economy balance:** Walk through the progression path. A new player should be able to make their first purchase within 15 minutes and reach iron tools within 30 minutes. Diamond tools should take 2-3 hours, endgame items 20-40 hours. Watch out for players getting rich too quickly (causes inflation and boredom) or one earning method vastly outperforming all others (causes exploitation).
+  </Step>
 
-**Economy balance:** Walk through the progression path. A new player should be able to make their first purchase within 15 minutes and reach iron tools within 30 minutes. Diamond tools should take 2-3 hours, endgame items 20-40 hours. Watch out for players getting rich too quickly (causes inflation and boredom) or one earning method vastly outperforming all others (causes exploitation).
+  <Step>
+    ### Phase 5: Load Testing (2-3 Days Out)
 
-### Phase 5: Load Testing (2-3 Days Out)
+    This is where bot testing becomes essential. Manual testing can't simulate 100 players joining simultaneously, maintain consistent load for hours, or create repeatable stress scenarios. Our [stress testing guide](/blog/stress-testing-minecraft-servers) covers the full methodology — incremental load ramps, realistic bot behavior, spike testing, and endurance runs. Follow that process here, but focus on these launch-specific scenarios:
 
-This is where bot testing becomes essential. Manual testing can't simulate 100 players joining simultaneously, maintain consistent load for hours, or create repeatable stress scenarios. Our [stress testing guide](/blog/stress-testing-minecraft-servers) covers the full methodology — incremental load ramps, realistic bot behavior, spike testing, and endurance runs. Follow that process here, but focus on these launch-specific scenarios:
+    - **Mass join:** Simulate 50-100 players connecting within a few minutes — the launch surge. Watch for connection failures, spawn area performance, and TPS dips during the initial flood.
+    - **Spawn pressure:** Your spawn area will bear the heaviest load on day one. Verify it handles your full target player count without rubber-banding or block interaction delays.
+    - **Endurance:** Run at 50-75% of target capacity for 4-12 hours. Watch for memory leaks, TPS degradation over time, increasing GC pauses, and accumulating errors in the log.
 
-- **Mass join:** Simulate 50-100 players connecting within a few minutes — the launch surge. Watch for connection failures, spawn area performance, and TPS dips during the initial flood.
-- **Spawn pressure:** Your spawn area will bear the heaviest load on day one. Verify it handles your full target player count without rubber-banding or block interaction delays.
-- **Endurance:** Run at 50-75% of target capacity for 4-12 hours. Watch for memory leaks, TPS degradation over time, increasing GC pauses, and accumulating errors in the log.
+    **Network latency:** Test connectivity from your target regions. Under 100ms is good, 100-200ms is acceptable, above 250ms will noticeably affect gameplay.
+  </Step>
 
-**Network latency:** Test connectivity from your target regions. Under 100ms is good, 100-200ms is acceptable, above 250ms will noticeably affect gameplay.
+  <Step>
+    ### Phase 6: Staff and Communications (1-2 Days Out)
 
-### Phase 6: Staff and Communications (1-2 Days Out)
+    Train your staff on common issues and moderation commands before launch, not during it. Document solutions to predictable problems: "can't claim land" (check balance), "can't use command" (check rank), "grief reported" (use `/co inspect`, rollback if needed). Set up an on-call schedule so you have coverage during peak hours.
 
-Train your staff on common issues and moderation commands before launch, not during it. Document solutions to predictable problems: "can't claim land" (check balance), "can't use command" (check rank), "grief reported" (use `/co inspect`, rollback if needed). Set up an on-call schedule so you have coverage during peak hours.
+    Verify Discord channels are configured, staff bots respond to commands, and your announcement is drafted and ready to send.
+  </Step>
 
-Verify Discord channels are configured, staff bots respond to commands, and your announcement is drafted and ready to send.
+  <Step>
+    ### Phase 7: Final Validation (Day Before Launch)
 
-### Phase 7: Final Validation (Day Before Launch)
+    Do a complete walkthrough of the player journey — join, orientation, resource gathering, claiming, building, social features, economy. Every feature should work without errors.
 
-Do a complete walkthrough of the player journey — join, orientation, resource gathering, claiming, building, social features, economy. Every feature should work without errors.
+    Run final system health checks:
 
-Run final system health checks:
+    ```bash
+    # Verify services
+    ps aux | grep java
+    ps aux | grep mysql
 
-```bash
-# Verify services
-ps aux | grep java
-ps aux | grep mysql
+    # Disk space
+    df -h
 
-# Disk space
-df -h
+    # DNS resolution
+    nslookup your-server.com
 
-# DNS resolution
-nslookup your-server.com
+    # Recent backup exists
+    ls -lh backups/
 
-# Recent backup exists
-ls -lh backups/
-
-# No errors in logs
-tail -100 logs/latest.log
-```
-
+    # No errors in logs
+    tail -100 logs/latest.log
+    ```
+  </Step>
 </Steps>
 
 ## Launch Day Protocol
