@@ -20,9 +20,9 @@ The first decision is where your AI runs. Each option has real trade-offs around
 <Tabs items={["OpenAI GPT", "Anthropic Claude", "Ollama (Self-Hosted)"]}>
   <Tab value="OpenAI GPT">
 
-The most established option. GPT-4 produces high-quality responses with strong reasoning, and GPT-3.5-turbo is cheaper for simpler use cases.
+The most established option. The GPT-4.1 family hits a good balance of cost and quality for server chatbots — GPT-4.1-mini is the sweet spot for most use cases. GPT-5 exists and is more capable, but it's overkill and more expensive for answering "how do I claim land?" questions.
 
-**Trade-offs:** Requires an API key and internet connection. Costs roughly $0.01/1K input tokens for GPT-4. You're sending player chat data to OpenAI's servers, which may matter depending on your server's privacy stance.
+**Trade-offs:** Requires an API key and internet connection. GPT-4.1-mini runs about $0.40/million input tokens; GPT-4.1-nano is even cheaper at $0.10/million. You're sending player chat data to OpenAI's servers, which may matter depending on your server's privacy stance.
 
 ```java title="GPTChatBot.java"
 public class GPTChatBot {
@@ -30,7 +30,7 @@ public class GPTChatBot {
 
     public String askGPT(String question) {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("model", "gpt-3.5-turbo");
+        requestBody.put("model", "gpt-4.1-mini");
 
         JSONArray messages = new JSONArray();
         messages.put(new JSONObject()
@@ -53,9 +53,9 @@ Learn more: [OpenAI API Documentation](https://platform.openai.com/docs/api-refe
 
   <Tab value="Anthropic Claude">
 
-Strong alternative to GPT with excellent instruction-following and larger context windows. Particularly good at maintaining character consistency for NPC personas.
+Strong alternative to GPT with excellent instruction-following and large context windows. Particularly good at maintaining character consistency for NPC personas.
 
-**Trade-offs:** Similar cost structure to OpenAI. Claude 3.5 Sonnet runs $3/million input tokens, $15/million output tokens.
+**Trade-offs:** Similar cost structure to OpenAI. Claude Sonnet 4.5 runs $3/million input tokens, $15/million output tokens. Claude Haiku 4.5 is cheaper at $1/$5 if you don't need top-tier quality.
 
 ```java title="ClaudeChatBot.java"
 public class ClaudeChatBot {
@@ -63,7 +63,7 @@ public class ClaudeChatBot {
 
     public String askClaude(String question) {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("model", "claude-3-5-sonnet-20241022");
+        requestBody.put("model", "claude-sonnet-4-5-20250929");
         requestBody.put("max_tokens", 1024);
 
         JSONArray messages = new JSONArray();
@@ -85,12 +85,12 @@ Learn more: [Anthropic Claude Documentation](https://docs.anthropic.com/)
 
 Runs LLMs locally on your hardware. No API costs, no rate limits, and player data never leaves your server.
 
-**Trade-offs:** Requires a capable machine. A 7B parameter model like Mistral needs at least 8GB of RAM and benefits significantly from a GPU. Response quality is generally lower than GPT-4, but perfectly adequate for server assistant and NPC tasks.
+**Trade-offs:** Requires a capable machine. An 8B parameter model needs at least 8GB of RAM and benefits from a GPU. Response quality is lower than the cloud APIs, but perfectly adequate for server assistant and NPC tasks. A big recent addition is [GPT-OSS](https://github.com/openai/gpt-oss) — OpenAI's open-weight model that runs locally and punches well above its weight.
 
 ```bash title="Terminal"
 # Install and start Ollama
 curl -fsSL https://ollama.com/install.sh | sh
-ollama pull mistral
+ollama pull gpt-oss:20b
 ollama serve
 ```
 
@@ -100,7 +100,7 @@ public class OllamaChatBot {
 
     public String askOllama(String question) {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("model", "mistral");
+        requestBody.put("model", "gpt-oss:20b");
         requestBody.put("prompt", question);
         requestBody.put("stream", false);
         // Send HTTP POST, parse JSON response
@@ -110,11 +110,12 @@ public class OllamaChatBot {
 
 | Model | Parameters | Min RAM | GPU |
 |-------|------------|---------|-----|
-| Mistral 7B | 7B | 8GB | Optional |
-| Llama2 7B | 7B | 8GB | Optional |
-| Llama2 13B | 13B | 16GB | Recommended |
+| GPT-OSS 20B | 21B (3.6B active) | 16GB | Optional |
+| Llama 4 8B | 8B | 8GB | Optional |
+| Qwen3 8B | 8B | 8GB | Optional |
+| Gemma 3 4B | 4B | 6GB | Optional |
 
-Learn more: [Ollama Documentation](https://ollama.ai/)
+Learn more: [Ollama Documentation](https://ollama.com/)
   </Tab>
 </Tabs>
 

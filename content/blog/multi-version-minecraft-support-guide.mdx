@@ -138,7 +138,7 @@ Cover these areas across your supported client versions:
 - **Connection**: Client joins without errors, spawns normally, server console is clean.
 - **Movement**: Walking, sprinting, jumping, and swimming feel correct. Some rubber-banding on 1.8 clients is expected due to physics prediction differences.
 - **Blocks and items**: Newer content appears as placeholders on older clients. Collision and breaking still work.
-- **Combat**: 1.8 clients use spam-clicking; 1.9+ clients use attack cooldowns. Both should register hits, but the feel will always differ. Consider [OldCombatMechanics](https://github.com/kernitus/BukkyCraft-OldCombatMechanics) if you want to normalize this.
+- **Combat**: 1.8 clients use spam-clicking; 1.9+ clients use attack cooldowns. Both should register hits, but the feel will always differ. Consider [OldCombatMechanics](https://github.com/kernitus/BukkitOldCombatMechanics) if you want to normalize this.
 - **Chat**: Messages and commands work. Avoid hex colors (`&#FF5555`) in messages sent to pre-1.16 clients; stick to legacy color codes (`&c`) for universal compatibility.
 - **World height**: On 1.18+ servers, clients below 1.18 cannot see blocks outside the classic y=0-255 range. Build important structures within that safe zone.
 - **Entities**: New mobs render as substitute mobs on old clients. Hitboxes and server-side AI remain correct.
