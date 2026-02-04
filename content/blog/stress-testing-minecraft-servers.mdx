@@ -11,288 +11,99 @@ import { Callout } from 'fumadocs-ui/components/callout'
 
 ## Understanding Server Stress Testing
 
-Stress testing is the practice of simulating high player loads on your Minecraft server to evaluate how it performs under pressure. Whether you're launching a new server, deploying a major update, or scaling your infrastructure, stress testing helps you identify performance bottlenecks before they impact real players.
+Stress testing simulates high player loads on your Minecraft server to find performance bottlenecks before real players hit them. The goal is not to see when the server crashes -- it is to understand how performance degrades under load and what capacity you can reliably support.
 
-The goal isn't just to see when your server crashes—it's to understand how it degrades under load, where the bottlenecks are, and what capacity you can reliably support.
+Without testing, you are gambling with your players' experience. A new plugin might work fine with 10 players and cause severe lag with 50. A VPS upgrade might not deliver the improvement you expected. Stress testing gives you hard numbers instead of guesses.
 
-### Why Stress Testing Matters
+### Key Performance Metrics
 
-Without stress testing, you're essentially gambling with your players' experience. Here's what proper testing prevents:
+Minecraft servers have two critical performance indicators: TPS and MSPT.
 
-- **Launch day disasters**: Your new server opens, 200 players join simultaneously, and TPS drops to 5
-- **Update surprises**: A new plugin seems fine with 10 players but causes severe lag with 50
-- **Hardware uncertainty**: You don't know if that VPS upgrade was worth it
-- **Plugin conflicts**: Multiple plugins work individually but compete for resources under load
+**TPS (Ticks Per Second)** measures the server's tick rate, targeting 20 ticks per second. **MSPT (Milliseconds Per Tick)** measures how long each tick takes to process. MSPT is often more revealing because it shows performance trends before TPS actually drops -- a server at 45ms MSPT is still hitting 20 TPS but has almost no headroom left.
 
-## Key Performance Metrics
+| TPS | MSPT | Server State |
+|-----|------|--------------|
+| 20.0 | <40ms | Healthy, has headroom |
+| 18-19 | 40-50ms | Minor lag, running near limit |
+| 15-17 | 50-70ms | Noticeable delays |
+| <15 | >70ms | Severe, nearly unplayable |
 
-Before stress testing, you need to understand what you're measuring. Minecraft servers have specific performance indicators that reveal different aspects of server health.
+The best tool for monitoring both is [Spark](https://spark.lucko.me/), which works on Paper, Spigot, Fabric, Forge, and proxies. Install it, then use these commands in-game:
 
-### TPS (Ticks Per Second)
-
-Minecraft runs on a tick-based system, targeting 20 ticks per second (one tick every 50ms). TPS is the single most important metric for server performance.
-
-| TPS Value | Server State | Player Experience |
-|-----------|--------------|-------------------|
-| 20.0 | Healthy | Smooth gameplay, no lag |
-| 18.0-19.0 | Minor lag | Occasional stutters |
-| 15.0-17.0 | Moderate lag | Noticeable delays |
-| &lt;15.0 | Severe lag | Nearly unplayable |
-
-**How to check TPS:**
-
-```bash
-# Paper/Spigot servers
-/tps
-
-# With spark plugin (recommended)
-/spark tps
+```text
+/spark tps              # Shows TPS, MSPT, and CPU usage
+/spark profiler start   # Start CPU profiler
+/spark profiler stop    # Stop and generate shareable report
+/spark heapsummary      # Memory breakdown
+/spark gc               # Garbage collection activity
 ```
 
-### MSPT (Milliseconds Per Tick)
+Spark's profiler generates flamegraphs showing exactly where server time is spent. Look for the widest sections -- those consume the most time. Plugin names appearing disproportionately large indicate a problem worth investigating.
 
-MSPT measures how long the server takes to process each tick. This is often more revealing than TPS because it shows performance trends before TPS drops.
+## Optimize Before Testing
 
-| MSPT Value | Status | What It Means |
-|------------|--------|---------------|
-| &lt;40ms | Excellent | Server has headroom |
-| 40-50ms | Good | Running at target |
-| &gt;50ms | Dropping ticks | Can't maintain 20 TPS |
-| &gt;100ms | Critical | Severe performance issues |
-
-**Check MSPT:**
-
-```bash
-/mspt  # Paper servers
-
-/spark tps  # Shows TPS, MSPT, and CPU usage
-```
-
-The spark output shows three values: current MSPT, median MSPT (over 10 seconds), and 95th percentile. The 95th percentile is crucial—it shows your worst-case performance excluding outliers.
-
-### Memory Usage
-
-Monitor both heap memory and GC (garbage collection) activity. Frequent GC pauses can cause lag spikes even when average TPS looks healthy.
-
-```bash
-# Check memory usage
-/spark heapsummary
-
-# Monitor GC activity
-/spark gc
-```
-
-### CPU Usage
-
-High CPU usage indicates computational bottlenecks—too many entities, complex redstone, or inefficient plugins.
-
-```bash
-/spark tps  # Shows CPU percentage
-```
-
-## Server Optimization Fundamentals
-
-<Callout type="warning" title="Optimize Before Testing">
-Before stress testing, optimize your baseline configuration. Testing an unoptimized server wastes time—you'll just discover it needs optimization. Always establish a solid performance foundation first.
+<Callout type="warning">
+Testing an unoptimized server wastes time. You will just discover it needs optimization. Establish a solid performance baseline first, then stress test to validate your capacity.
 </Callout>
 
-### 1. Choose the Right Server Software
+### Server Software
 
-**[Paper](https://papermc.io/)** is the gold standard for performance. It includes hundreds of optimizations over Spigot while maintaining plugin compatibility.
+[Paper](https://papermc.io/) is the standard for performance. It includes hundreds of optimizations over Spigot while maintaining plugin compatibility. For servers expecting 100+ players, consider [Pufferfish](https://pufferfish.host/) (a Paper fork tuned for high player counts). Avoid vanilla Bukkit and CraftBukkit -- they lack modern optimizations entirely.
 
-<Tabs>
-<Tab value="paper" label="Paper (Recommended)" default>
+### View and Simulation Distance
 
-Best all-around choice for most servers. Excellent plugin compatibility with significant performance improvements over Spigot.
-
-```bash title="download-paper.sh"
-# Download Paper (example for 1.21)
-wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/latest/downloads/paper-1.21-latest.jar
-```
-
-**Pros:**
-- Hundreds of performance optimizations
-- Full Spigot plugin compatibility
-- Active development and updates
-- Excellent community support
-
-</Tab>
-<Tab value="purpur" label="Purpur">
-
-Paper fork with additional gameplay features and further optimizations. Ideal if you want extra configuration options.
-
-```bash title="download-purpur.sh"
-# Download Purpur (example for 1.21)
-wget https://api.purpurmc.org/v2/purpur/1.21/latest/download
-```
-
-**Pros:**
-- All Paper optimizations included
-- Additional configuration options
-- Extra gameplay features
-- Performance tweaks for specific scenarios
-
-</Tab>
-<Tab value="pufferfish" label="Pufferfish">
-
-Paper fork specifically optimized for large player counts. Best for servers expecting 100+ concurrent players.
-
-**Pros:**
-- Optimized for high player counts
-- Additional async operations
-- Entity activation range improvements
-- Better mob spawning algorithms
-
-</Tab>
-<Tab value="folia" label="Folia (Experimental)">
-
-Experimental multi-threaded Paper fork. Only for specific use cases with multiple isolated worlds.
-
-**Pros:**
-- Multi-threaded world ticking
-- Potential for massive player counts
-
-**Cons:**
-- Limited plugin compatibility
-- Experimental and unstable
-- Not suitable for most servers
-
-</Tab>
-</Tabs>
-
-<Callout type="warning" title="Avoid Legacy Software">
-Avoid Bukkit and CraftBukkit—they're severely outdated in terms of performance and lack modern optimizations.
-</Callout>
-
-### 2. Configure View and Simulation Distance
-
-These are the most impactful performance settings you'll adjust.
-
-**server.properties:**
+These are the most impactful settings you will adjust.
 
 ```properties title="server.properties"
-# View distance - how far players can see
 view-distance=8
-
-# Simulation distance - how far the server processes entities/blocks
 simulation-distance=4
 ```
 
-**Recommended values:**
+Every chunk within simulation distance requires entity processing, crop growth, and redstone ticking -- far more expensive than just rendering terrain. Setting simulation distance lower than view distance gives players good visibility without the processing overhead.
 
 | Server Type | View Distance | Simulation Distance |
 |-------------|---------------|---------------------|
-| Budget/High player count | 5-6 | 3-4 |
+| Budget / high player count | 5-6 | 3-4 |
 | Mid-range | 7-8 | 4-5 |
 | High-performance | 10+ | 6-8 |
 
-**Why simulation distance matters more**: Every chunk within simulation distance requires entity processing, crop growth, redstone ticking, and more. This is far more expensive than simply rendering chunks.
+### Entity Limits
 
-Setting simulation distance lower than view distance is the secret weapon—players get good visibility without the processing overhead.
-
-### 3. Optimize Entity Limits
-
-**paper-world-defaults.yml:**
+Mob AI is one of the most expensive operations on any Minecraft server. Tighten the defaults in `paper-world-defaults.yml`:
 
 ```yaml title="paper-world-defaults.yml"
 entities:
   spawning:
-    # Spawn limits per player (prevents farm exploitation)
     spawn-limits:
       monster: 20
       creature: 5
       water_creature: 2
       water_ambient: 2
-      water_underground_creature: 3
-      axolotl: 3
       ambient: 1
-
-  # How often mobs spawn (higher = less frequent)
-  ticks-per-spawn:
-    monster: 10
-    creature: 400
-    water_creature: 400
-    water_ambient: 400
-    axolotl: 400
-    ambient: 400
-
-entities-target-range:
-  # Reduce AI range for mobs
-  monsters: 32
-  creatures: 32
-```
-
-**Why this matters**: Mob AI is expensive. Limiting spawn counts and reducing their targeting range significantly improves performance.
-
-### 4. Pregene rate Chunks
-
-Chunk generation is extremely expensive. Generate your world before players explore it.
-
-**Using Chunky (recommended):**
-
-Install Chunky plugin, then run these commands in-game:
-
-```bash
-/chunky world world
-/chunky radius 5000
-/chunky start
-
-# Monitor progress
-/chunky status
-```
-
-**Pre-generation benefits:**
-- Eliminates real-time generation lag (TPS drops from 20 to 2-8 during exploration)
-- Prevents chunk loading errors and stuttering
-- Catches world generation bugs before players encounter them
-- Dramatically improves launch day experience
-
-**Pro tip**: Pre-generate during off-peak hours or on a separate test server. The generation process itself causes significant lag.
-
-<Callout type="warning" title="Performance Warning">
-Chunk generation during pregeneration will cause severe lag. Never pregenerate while players are online. Run this process overnight or on a separate test server, then copy the world files to your production server.
-</Callout>
-
-### 5. Configure Paper's Advanced Settings
-
-**paper-global.yml:**
-
-```yaml title="paper-global.yml"
-chunk-loading-advanced:
-  # Prevent massive lag from chunk loading
-  player-max-chunk-load-rate: 100.0
-
-packet-limiter:
-  # Protect against packet flooding
-  kick-message: '&cSent too many packets'
-  limits:
-    all:
-      interval: 7.0
-      max-packet-rate: 500.0
-
-async-chunks:
-  # Load chunks off main thread
-  threads: -1  # Auto-detect CPU cores
-```
-
-**paper-world-defaults.yml:**
-
-Additional settings for paper-world-defaults.yml:
-
-```yaml title="paper-world-defaults.yml"
-# Use per-player mob spawning (like singleplayer)
-spawn-limits:
-  spawn-mechanism: per-player  # Much better than "bukkit"
-
-# Reduce entity collision checks
-entities:
+    ticks-per-spawn:
+      monster: 10
+      creature: 400
+      water_creature: 400
+      ambient: 400
   behavior:
     max-entity-collisions: 2  # Down from 8
 ```
 
-### 6. Optimize Java Flags
+### Pregenerate Chunks
 
-Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) (recommended by most hosting providers). Replace `-Xms10G -Xmx10G` with your available RAM (Xms and Xmx values should match):
+Chunk generation is extremely expensive -- TPS can drop from 20 to 2-8 while generating new terrain. Use the [Chunky](https://modrinth.com/plugin/chunky) plugin to pregenerate before players explore:
+
+```text
+/chunky world world
+/chunky radius 5000
+/chunky start
+```
+
+Run this overnight or on a separate server, then copy the world files to production. Never pregenerate while players are online.
+
+### Java Flags
+
+Use [Aikar's flags](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/) for garbage collection tuning. Replace the memory values with your available RAM (Xms and Xmx should match):
 
 ```bash title="start-server.sh"
 java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
@@ -305,483 +116,91 @@ java -Xms10G -Xmx10G -XX:+UseG1GC -XX:+ParallelRefProcEnabled \
   -XX:G1MixedGCLiveThresholdPercent=90 \
   -XX:G1RSetUpdatingPauseTimePercent=5 \
   -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem \
-  -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs \
-  -Daikars.new.flags=true -jar paper.jar --nogui
+  -XX:MaxTenuringThreshold=1 -jar paper.jar --nogui
 ```
 
-<Callout type="info" title="Additional Resources">
-For more optimization guides, check out:
-- [Paper's optimization guide](https://docs.papermc.io/paper/reference/server-optimization)
-- [SpigotMC's optimization wiki](https://www.spigotmc.org/wiki/spigot-optimization/)
-- [Aikar's flags explained](https://aikar.co/2018/07/02/tuning-the-jvm-g1gc-garbage-collector-flags-for-minecraft/)
-</Callout>
+## Conducting the Stress Test
 
-## Setting Up Performance Monitoring
+With your server optimized and Spark installed, you are ready to test. The key is testing incrementally -- connecting 500 bots at once teaches you nothing except "it crashes."
 
-Before stress testing, set up monitoring tools so you can analyze what happens under load.
+### Phase 1: Baseline
 
-### Install Spark
+Start with an empty server. Record idle TPS (should be 20.0), MSPT (should be under 10ms), memory usage, and CPU. This is your reference point.
 
-[Spark](https://spark.lucko.me/) is the best Minecraft profiler available. It works on Paper, Spigot, Fabric, Forge, and proxies.
+### Phase 2: Gradual Load
 
-**Installation:**
+Increase bots in steps and hold each level for 10-15 minutes:
 
-1. Download from [SpigotMC](https://www.spigotmc.org/resources/spark.57242/) or [Modrinth](https://modrinth.com/mod/spark)
-2. Place `spark.jar` in your `plugins/` folder
-3. Restart the server
+| Step | Bots | Goal |
+|------|------|------|
+| 1 | 10 | Verify test setup works |
+| 2 | 25 | Watch for early degradation |
+| 3 | 50 | Typical peak for small servers |
+| 4 | 100 | Mid-size server stress test |
+| 5 | 200+ | Find the breaking point |
 
-**Essential commands:**
+At each step, record TPS, MSPT (current, median, and 95th percentile), memory trends, and any errors. Run a Spark profiler for 2 minutes during each level to capture where time is being spent.
 
-```bash
-# Quick health check
-/spark tps
+### Phase 3: Realistic Behavior
 
-# Start a 60-second CPU profiler
-/spark profiler start
-
-# Stop and generate report
-/spark profiler stop
-
-# Generate heap dump
-/spark heapsummary
-
-# Monitor GC activity
-/spark gc
-```
-
-Spark generates web-based reports you can share with others for analysis.
-
-### Understanding Spark Profiles
-
-When you run `/spark profiler`, it creates a flamegraph showing where server time is spent:
-
-- **Red zones**: Main thread operations (world ticking, entity processing)
-- **Plugin names**: Show which plugins are consuming CPU
-- **Method names**: Reveal exactly which operations are slow
-
-**How to read a profile:**
-1. Look for the widest sections—these consume the most time
-2. Check if plugins appear disproportionately large
-3. Identify if vanilla operations (entities, chunks) dominate
-4. Compare before/after profiles when making changes
-
-## Conducting a Stress Test
-
-Now you're ready to stress test. Here's a methodical approach.
-
-### Phase 1: Establish Baseline (0 Load)
-
-Start with an empty server and record idle performance:
-
-```bash
-/spark tps
-/spark heapsummary
-```
-
-**Record:**
-- Idle TPS (should be 20.0)
-- Idle MSPT (should be &lt;10ms)
-- Base memory usage
-- CPU usage
-
-This baseline helps identify when load causes degradation.
-
-### Phase 2: Gradual Load Testing
-
-Don't immediately test with 500 bots—you'll learn nothing except "it crashes." Test incrementally:
-
-**Test progression:**
-
-| Test | Bot Count | Duration | Goal |
-|------|-----------|----------|------|
-| 1 | 10 | 5 min | Verify test setup works |
-| 2 | 25 | 10 min | Watch for early degradation |
-| 3 | 50 | 15 min | Typical peak load for small servers |
-| 4 | 100 | 15 min | Stress test for mid-size servers |
-| 5 | 200+ | 15 min | Find breaking point |
-
-**During each test:**
-
-```bash
-# Monitor every 60 seconds
-/spark tps
-/spark heapsummary
-
-# Run a full profile for 120 seconds
-/spark profiler start --timeout 120
-```
-
-**Record these metrics:**
-
-- Average TPS over test duration
-- MSPT (current, median, 95th percentile)
-- Memory usage trends
-- Any error messages or warnings
-- Player join success rate
-- Time to join (connection speed)
-
-### Phase 3: Behavioral Testing
-
-Idle bots don't represent real players. Add realistic behaviors:
+Idle bots standing still do not represent real players. Add movement and actions to stress the systems that matter:
 
 <Tabs>
-<Tab value="movement" label="Movement Stress" default>
+<Tab value="movement" label="Movement" default>
 
-**What it tests**: Entity tracking, pathfinding, collision detection, chunk loading from player movement
-
-**How to set up**: Configure bots to walk randomly or follow waypoints
-
-**Expected impact**: Moderate CPU usage, tests entity tracking systems
-
-**What to monitor**:
-- EntityAI CPU usage in Spark
-- Chunk loading frequency
-- Network packet rates
+Tests entity tracking, pathfinding, collision detection, and chunk loading. Even simple random walking provides valuable data. Monitor EntityAI CPU usage and chunk loading frequency in Spark.
 
 </Tab>
-<Tab value="exploration" label="Chunk Loading Stress">
+<Tab value="exploration" label="Exploration">
 
-**What it tests**: World I/O, chunk generation (if not pregenerated), async chunk loading
-
-**How to set up**: Bots flying or rapidly moving to unexplored areas
-
-**Expected impact**: High disk I/O, potential TPS drops if chunks aren't pregenerated
-
-**What to monitor**:
-- Chunk generation time in Spark
-- Disk I/O metrics
-- TPS during exploration
+Tests world I/O and chunk generation. Bots flying or moving to unexplored areas reveal whether your pregeneration was sufficient. Watch for disk I/O spikes and TPS drops.
 
 </Tab>
-<Tab value="combat" label="Combat Stress">
+<Tab value="combat" label="Combat">
 
-**What it tests**: Mob AI, damage calculations, entity death/spawn cycles
-
-**How to set up**: Bots attacking nearby mobs or each other (PvP)
-
-**Expected impact**: High entity AI usage, frequent entity state changes
-
-**What to monitor**:
-- EntityAI percentage in profiles
-- Mob spawn/despawn rates
-- Server tick time during combat
-
-</Tab>
-<Tab value="redstone" label="Redstone Stress">
-
-**What it tests**: Block updates, redstone ticking, chunk ticking
-
-**How to set up**: Build test redstone contraptions, have bots activate them
-
-**Expected impact**: Periodic TPS drops, high block update rates
-
-**What to monitor**:
-- Redstone ticking in Spark
-- Block update frequency
-- Chunk tick time
+Tests mob AI, damage calculations, and entity death/spawn cycles. High entity AI usage and frequent state changes stress the server differently than passive movement.
 
 </Tab>
 </Tabs>
 
-Most bot tools support basic movement patterns. Even simple random walking provides valuable data.
-
 ### Phase 4: Spike Testing
 
-Real servers experience sudden load spikes—100 players join within 30 seconds during events.
+Real servers experience sudden load spikes -- 100 players joining within 30 seconds during an event. Start with 10 bots connected, then join 50 simultaneously. Watch whether TPS drops below 15 during the surge and how long recovery takes.
 
-**Spike test procedure:**
+### Phase 5: Endurance
 
-1. Start with 10 bots connected
-2. Join 50 additional bots simultaneously
-3. Monitor TPS during the surge
-4. Wait 5 minutes for stabilization
-5. Check if TPS recovers to baseline
+Some issues only appear after hours: memory leaks, gradual resource exhaustion, increasing GC pause times. Connect 50-75% of your target capacity and let it run for 4-8 hours. Steadily climbing memory usage or gradually increasing MSPT signals a problem.
 
-**What to watch:**
-- Does TPS drop below 15 during the spike?
-- How long until TPS stabilizes?
-- Do any plugins throw errors?
-- Does chunk loading keep up?
+## Identifying Bottlenecks
 
-### Phase 5: Endurance Testing
+After testing, your Spark profiles and recorded metrics should point to specific bottlenecks.
 
-Some issues only appear after hours of runtime—memory leaks, gradual resource exhaustion.
+**TPS drops proportionally with player count**: General overhead from entities, chunks, and networking. Reduce view/simulation distance and entity caps.
 
-**Endurance test:**
+**Random TPS spikes**: Usually chunk generation, large redstone devices, or plugin tasks running on the main thread. Pregenerate more world and profile during the spikes to identify the cause.
 
-1. Connect 50-75% of your target capacity
-2. Keep them connected for 4-8 hours
-3. Monitor memory usage trends
-4. Watch for gradual TPS degradation
+**MSPT creeping up over time**: Memory pressure or resource exhaustion. Check Spark's heap summary for unusual object counts or steadily growing memory usage.
 
-**Signs of problems:**
-- Memory usage climbing steadily (memory leak)
-- Gradually increasing MSPT (resource exhaustion)
-- More frequent GC pauses over time
+**Good TPS but high CPU (>80%)**: You are close to the limit with no headroom for spikes. Optimize further or upgrade hardware.
 
-## Analyzing Results and Identifying Bottlenecks
+When Spark shows a specific plugin consuming more than 10% of CPU, investigate its configuration first -- many plugins have expensive features that can be disabled. If entity AI dominates the profile (>30%), lower mob caps. If chunk operations are excessive, tighten chunk loading rates in `paper-global.yml`.
 
-After testing, analyze your data to find bottlenecks.
+## Using SoulFire for Testing
 
-### TPS Degradation Patterns
+SoulFire is a Fabric-based bot tool that runs actual Minecraft client code. This matters for stress testing because traditional bot frameworks reimplement the protocol and physics, which can produce different packet timing, inaccurate physics, and detectable patterns that real players would not exhibit.
 
-**Pattern: TPS drops proportionally with player count**
-- **Cause**: General overhead (entities, chunks, networking)
-- **Solution**: Optimize view/simulation distance, reduce entity caps
+Because SoulFire bots are indistinguishable from real clients at the protocol level, the server load they generate accurately reflects what real players would cause. Combined with multi-version support via ViaFabricPlus, you can test against any Minecraft version.
 
-**Pattern: TPS spikes down randomly**
-- **Cause**: Chunk generation, large redstone devices, or plugin tasks
-- **Solution**: Pregenerate chunks, limit redstone, profile with Spark
+**Basic test procedure:**
 
-**Pattern: TPS stable but MSPT creeping up**
-- **Cause**: Gradual resource exhaustion or memory pressure
-- **Solution**: Check for memory leaks, optimize GC, review plugin efficiency
-
-**Pattern: Good TPS but high CPU usage (>80%)**
-- **Cause**: CPU bottleneck—limited headroom for spikes
-- **Solution**: Optimize further or upgrade CPU
-
-### Reading Spark Profiles
-
-Generate a profile during degraded performance:
-
-```bash
-/spark profiler start --timeout 300
-# Wait for performance issues to occur
-/spark profiler stop
-```
-
-**What to look for:**
-
-1. **Plugin names taking >10% of CPU**: Investigate configuration or replace plugin
-2. **Entity AI dominating**: Reduce mob caps or entity ranges
-3. **Chunk operations excessive**: Adjust chunk loading settings
-4. **Redstone ticking consuming time**: Limit redstone contraptions
-
-**Example findings:**
-
-```
-EntityAI: 35% (too high - reduce mob counts)
-ChunkGeneration: 20% (pregenerate more)
-PluginX: 15% (check if necessary, optimize config)
-WorldTick: 20% (normal)
-NetworkManager: 10% (normal)
-```
-
-### Memory Analysis
-
-```bash
-/spark heapsummary
-```
-
-Look for:
-- **High memory usage (>85%)**: Risk of GC thrashing
-- **Unusual object counts**: Potential memory leaks
-- **Chunk data dominating**: May need to reduce view distance
-
-## Common Bottlenecks and Solutions
-
-### Bottleneck: Entity Overload
-
-**Symptoms**: High MSPT, Spark shows EntityAI using >30% CPU
-
-**Solutions:**
-
-Reduce entity load in paper-world-defaults.yml:
-
-```yaml title="paper-world-defaults.yml"
-entities:
-  spawning:
-    spawn-limits:
-      monster: 15  # Reduce from 20
-      creature: 3  # Reduce from 5
-
-  # Increase despawn distance
-  despawn-ranges:
-    monster:
-      soft: 28  # Start despawning
-      hard: 96  # Force despawn
-```
-
-### Bottleneck: Chunk Loading
-
-**Symptoms**: TPS drops when players explore, chunk load errors
-
-**Solutions:**
-
-1. Pregenerate more world
-2. Reduce view distance
-3. Reduce chunk loading rate in paper-global.yml:
-
-```yaml title="paper-global.yml"
-chunk-loading-advanced:
-  player-max-chunk-load-rate: 50.0  # Reduce from 100
-```
-
-### Bottleneck: Redstone Lag
-
-**Symptoms**: Periodic TPS drops, Spark shows redstone ticking
-
-**Solutions:**
-
-1. Use redstone limiters (plugins like RedstoneControl)
-2. Educate players on efficient designs
-3. Limit chunk ticking in paper-world-defaults.yml:
-
-```yaml title="paper-world-defaults.yml"
-max-auto-save-chunks-per-tick: 6
-```
-
-### Bottleneck: Plugin Overhead
-
-**Symptoms**: Specific plugin shows in Spark profile
-
-**Solutions:**
-
-1. Check plugin configuration for expensive features
-2. Update to latest version (may have optimizations)
-3. Consider alternatives with better performance
-4. Disable if not essential
-
-## Interpreting Test Results
-
-After testing, you should be able to answer:
-
-1. **Maximum safe capacity**: How many players before TPS drops below 18?
-2. **Comfortable capacity**: How many players can you host at 20 TPS with headroom?
-3. **Bottleneck identification**: What limits your capacity (CPU, RAM, entities, plugins)?
-4. **Spike tolerance**: Can you handle sudden load increases?
-5. **Stability over time**: Does performance degrade during long sessions?
-
-**Example results interpretation:**
-
-```
-Baseline: 20 TPS, 5ms MSPT, 30% CPU
-50 players: 20 TPS, 35ms MSPT, 60% CPU ✅ Good
-100 players: 19 TPS, 48ms MSPT, 85% CPU ⚠️ Near limit
-150 players: 16 TPS, 65ms MSPT, 95% CPU ❌ Over capacity
-
-Conclusion: Comfortable capacity = 75 players
-            Maximum capacity = 100 players
-            Bottleneck: CPU (85%+ at capacity)
-```
-
-## Using Bots for Stress Testing
-
-While manual testing with real players provides the most accurate results, it's impractical for most testing scenarios. Automated bot tools let you run repeatable tests on demand.
-
-### What to Look For in Bot Tools
-
-When selecting a bot solution for stress testing:
-
-**Essential features:**
-- Multiple bot support (100+ simultaneous connections)
-- Connection control (join delays, staggered spawning)
-- Basic movement (walking, looking around)
-- Protocol compliance (proper packet handling)
-- Proxy support (for realistic network paths)
-- Resource efficiency (bots shouldn't consume excessive host resources)
-
-**Nice-to-have features:**
-- Action simulation (breaking blocks, attacking, chatting)
-- API/CLI for automation
-- Metrics reporting
-- Multi-version support
-
-### Testing with SoulFire
-
-SoulFire is a Fabric-based bot tool that addresses many limitations of traditional bot frameworks. Because it runs the actual Minecraft client code, bots behave identically to real players from the server's perspective—critical for accurate stress testing.
-
-**Why this matters for testing**:
-
-Traditional bot frameworks (like Mineflayer) reimplement Minecraft's protocol and physics. This can lead to:
-- Different packet timing than real clients
-- Inaccurate physics calculations
-- Missed edge cases in newer protocol versions
-- Detectable patterns that real players wouldn't exhibit
-
-SoulFire's Fabric architecture means:
-- **Perfect protocol parity**: Packets match real clients exactly
-- **Accurate physics**: Movement, collisions identical to real players
-- **Reliable multi-version support**: Via ViaFabricPlus, test any Minecraft version
-- **Realistic resource usage**: Server load matches real player patterns
-
-**Basic stress test approach:**
-
-1. Configure target server and bot count in the SoulFire interface
-2. Set join delays to simulate realistic connection patterns (1-3 seconds between bots)
+1. Set your target server and bot count in the SoulFire interface
+2. Configure join delays (1-3 seconds between bots) for realistic connection patterns
 3. Enable movement and activity plugins for realistic behavior
-4. Monitor server performance during bot connection phase
-5. Run test for 15-30 minutes to observe stability
+4. Monitor server performance with Spark during the test
+5. Run for 15-30 minutes per load level
 
-The goal is simulating realistic player behavior patterns while collecting server performance data. Even basic movement is enough to stress entity tracking, chunk loading, and network processing.
+## When to Test
 
-## Continuous Testing Strategy
+Stress testing is not a one-time activity. Run tests before launches, after major plugin updates, before events with expected high turnout, and after hardware changes. A monthly baseline test catches gradual degradation from accumulating data and slow memory leaks that daily monitoring misses.
 
-Don't just test once—integrate stress testing into your development workflow.
-
-### When to Stress Test
-
-- **Before launch**: Validate capacity claims
-- **After major updates**: Ensure new plugins don't degrade performance
-- **Before events**: Verify you can handle expected turnout
-- **After hardware changes**: Confirm improvements delivered value
-- **Monthly**: Catch gradual degradation (memory leaks, accumulating data)
-
-### Automated Testing
-
-Set up recurring tests:
-
-```bash title="weekly-stress-test.sh"
-#!/bin/bash
-# weekly-stress-test.sh
-
-echo "Starting weekly stress test..."
-
-# Start bots (using your chosen tool)
-start_bots 50
-
-# Wait 15 minutes
-sleep 900
-
-# Collect metrics
-rcon-cli "spark profiler stop" > /var/log/minecraft/stress-test-$(date +%Y%m%d).log
-rcon-cli "spark tps" >> /var/log/minecraft/stress-test-$(date +%Y%m%d).log
-
-# Stop bots
-stop_bots
-
-echo "Stress test complete. Check /var/log/minecraft/ for results."
-```
-
-## Best Practices Summary
-
-<Callout type="info" title="Testing Best Practices">
-Follow these essential guidelines for effective stress testing:
-
-1. **Optimize before testing**: Don't test an unoptimized baseline
-2. **Test incrementally**: Start small, increase gradually
-3. **Monitor comprehensively**: Use [Spark](https://spark.lucko.me/) for detailed profiling
-4. **Test realistically**: Idle bots don't represent real players
-5. **Document everything**: Record metrics, configurations, and findings
-6. **Test regularly**: Make it part of your maintenance routine
-7. **Test spikes**: Sudden load increases reveal different issues than gradual scaling
-8. **Consider network**: Test from realistic network locations
-9. **Account for growth**: Target 70-80% of max capacity for safety margin
-10. **Share results**: Use Spark profiles to collaborate on optimization
-</Callout>
-
-## Conclusion
-
-Stress testing isn't about finding the exact moment your server crashes—it's about understanding how it performs under various loads, identifying bottlenecks, and optimizing before players experience problems.
-
-The methodology is straightforward:
-1. Optimize your baseline configuration
-2. Set up monitoring tools (Spark)
-3. Test incrementally with realistic behaviors
-4. Analyze results to find bottlenecks
-5. Optimize and retest
-
-By following this guide, you'll launch with confidence, knowing exactly what your server can handle and where its limits are. Your players will thank you with smooth, lag-free gameplay—even during peak hours.
-
-Remember: **The best stress test is the one you run before your players do it for you.**
+The methodology is simple: optimize first, monitor with Spark, test incrementally with realistic behavior, fix what the profiles reveal, and retest. Do this before your players do it for you.

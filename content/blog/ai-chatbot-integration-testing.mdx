@@ -8,86 +8,24 @@ tags: [minecraft, ai, chatbot, gpt, ollama, llm, automation]
 
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import { Callout } from 'fumadocs-ui/components/callout'
-import { Step, Steps } from 'fumadocs-ui/components/steps'
 
 ## AI Chatbots in Minecraft
 
-AI chatbots transform Minecraft servers from static worlds to dynamic, responsive environments. From helpful assistants answering player questions to intelligent NPCs with personality, AI brings life to your server.
+AI chatbots can turn a Minecraft server into something that feels genuinely alive. Instead of static signs and pre-written FAQs, players get a server assistant that answers questions in natural language, NPCs that hold actual conversations, and moderation that catches nuance rather than just keyword lists. This guide covers how to set one up, which LLM providers to consider, and how to properly test the integration before your players find the edge cases for you.
 
-### Use Cases
+### Choosing an LLM Provider
 
-**Player Support Bot**
-```text title="Example Chat"
-Player: "How do I claim land?"
-AI Bot: "Use /claim while standing in the area you want to protect. You start with 100 claim blocks and earn more by playing!"
-```
+The first decision is where your AI runs. Each option has real trade-offs around cost, quality, and privacy.
 
-**Lore/Story NPC**
-```text title="Example Interaction"
-Player: "Tell me about the ancient temple"
-Wizard NPC (AI): "Ah, the Temple of Eternity... built centuries ago by the Skyborn civilization. Legend says it holds a powerful artifact..."
-```
-
-**Moderation Assistant**
-```text title="Moderation Features"
-AI monitors chat, flags suspicious behavior:
-- Repeated spam patterns
-- Toxic language
-- Scam attempts
-- Rule violations
-```
-
-**Mini-game Host**
-```text title="Trivia Example"
-AI Bot: "Welcome to Trivia Night! First question: Which block is only found in the Nether?"
-Player: "Netherrack?"
-AI Bot: "Correct! +10 points!"
-```
-
-### Benefits
-
-| Benefit | Description |
-|---------|-------------|
-| **24/7 Availability** | Never sleeps, always ready to help |
-| **Instant Responses** | No waiting for staff |
-| **Consistent Information** | Same answer to same question |
-| **Language Support** | Can respond in multiple languages |
-| **Scalability** | Handles unlimited simultaneous conversations |
-
-## AI Chat Technologies
-
-### Cloud-Based LLMs
-
-<Tabs items={["OpenAI GPT", "Anthropic Claude", "Ollama"]}>
+<Tabs items={["OpenAI GPT", "Anthropic Claude", "Ollama (Self-Hosted)"]}>
   <Tab value="OpenAI GPT">
-**OpenAI GPT (GPT-4, GPT-3.5)**
 
-**Pros:**
-- Extremely high quality responses
-- Broad knowledge
-- Strong reasoning
-- Supports chat history/context
+The most established option. GPT-4 produces high-quality responses with strong reasoning, and GPT-3.5-turbo is cheaper for simpler use cases.
 
-**Cons:**
-- Requires API key
-- Costs money per request (GPT-4: ~$0.01/1K tokens)
-- Requires internet
-- Privacy concerns (data sent to OpenAI)
-
-<Callout type="warning">
-**Rate Limiting**: OpenAI enforces rate limits on API requests. Implement proper request queueing and cooldowns to avoid hitting these limits. Free tier users may face stricter limits.
-</Callout>
-
-<Callout type="info">
-**API Costs**: Monitor your usage carefully. GPT-4 costs approximately $0.01 per 1,000 tokens for input and $0.03 per 1,000 tokens for output. A typical chat response uses 500-2,000 tokens. Calculate your expected monthly costs before deploying to production.
-</Callout>
-
-**Setup:**
+**Trade-offs:** Requires an API key and internet connection. Costs roughly $0.01/1K input tokens for GPT-4. You are sending player chat data to OpenAI's servers, which may matter depending on your server's privacy stance.
 
 ```java title="GPTChatBot.java"
-// Using OpenAI API in Minecraft plugin
 public class GPTChatBot {
-    private static final String API_KEY = "sk-...";
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
 
     public String askGPT(String question) {
@@ -105,10 +43,7 @@ public class GPTChatBot {
         );
 
         requestBody.put("messages", messages);
-
-        // Send HTTP request (async recommended)
-        // Parse response
-        // Return AI's answer
+        // Send HTTP request async, parse response
     }
 }
 ```
@@ -117,23 +52,13 @@ Learn more: [OpenAI API Documentation](https://platform.openai.com/docs/api-refe
   </Tab>
 
   <Tab value="Anthropic Claude">
-**Anthropic Claude**
 
-Similar to GPT, alternative provider:
-- Strong reasoning
-- Good at following instructions
-- Costs similar to GPT
-- Better at following complex instructions
-- Larger context windows
+Strong alternative to GPT with excellent instruction-following and larger context windows. Particularly good at maintaining character consistency for NPC personas.
 
-<Callout type="info">
-**API Costs**: Claude pricing varies by model. Claude 3.5 Sonnet costs $3 per million input tokens and $15 per million output tokens. Compare costs with OpenAI to find the best option for your use case.
-</Callout>
+**Trade-offs:** Similar cost structure to OpenAI. Claude 3.5 Sonnet runs $3/million input tokens, $15/million output tokens.
 
 ```java title="ClaudeChatBot.java"
-// Using Anthropic Claude API in Minecraft plugin
 public class ClaudeChatBot {
-    private static final String API_KEY = "sk-ant-...";
     private static final String API_URL = "https://api.anthropic.com/v1/messages";
 
     public String askClaude(String question) {
@@ -148,10 +73,7 @@ public class ClaudeChatBot {
         );
 
         requestBody.put("messages", messages);
-
-        // Send HTTP request (async recommended)
-        // Parse response
-        // Return AI's answer
+        // Send HTTP request async, parse response
     }
 }
 ```
@@ -159,47 +81,18 @@ public class ClaudeChatBot {
 Learn more: [Anthropic Claude Documentation](https://docs.anthropic.com/)
   </Tab>
 
-  <Tab value="Ollama">
-**Ollama** runs LLMs locally on your server.
+  <Tab value="Ollama (Self-Hosted)">
 
-**Pros:**
-- Free (no API costs)
-- Private (data stays on your server)
-- Offline capable
-- No rate limits
+Runs LLMs locally on your hardware. No API costs, no rate limits, and player data never leaves your server.
 
-**Cons:**
-- Requires powerful hardware (GPU recommended)
-- Quality lower than GPT-4
-- Setup more complex
-- Resource intensive
+**Trade-offs:** Requires a capable machine. A 7B parameter model like Mistral needs at least 8GB of RAM and benefits significantly from a GPU. Response quality is generally lower than GPT-4, but perfectly adequate for server assistant and NPC tasks.
 
-**Installation:**
-
-```bash title="Install Ollama"
-# Install Ollama
+```bash title="Terminal"
+# Install and start Ollama
 curl -fsSL https://ollama.com/install.sh | sh
-
-# Download a model
-ollama pull llama2  # 7B parameter model
-# or
-ollama pull mistral  # Faster, good quality
-# or
-ollama pull codellama  # Good for technical questions
-
-# Start Ollama server
+ollama pull mistral
 ollama serve
 ```
-
-**Hardware Requirements:**
-
-| Model | Parameters | RAM Needed | GPU Needed |
-|-------|------------|------------|------------|
-| Llama2 7B | 7 billion | 8GB | Optional |
-| Llama2 13B | 13 billion | 16GB | Recommended |
-| Mistral 7B | 7 billion | 8GB | Optional |
-
-**Minecraft Integration:**
 
 ```java title="OllamaChatBot.java"
 public class OllamaChatBot {
@@ -210,328 +103,58 @@ public class OllamaChatBot {
         requestBody.put("model", "mistral");
         requestBody.put("prompt", question);
         requestBody.put("stream", false);
-
-        // Send HTTP POST request
-        // Parse JSON response
-        // Return response field
+        // Send HTTP POST, parse JSON response
     }
 }
 ```
+
+| Model | Parameters | Min RAM | GPU |
+|-------|------------|---------|-----|
+| Mistral 7B | 7B | 8GB | Optional |
+| Llama2 7B | 7B | 8GB | Optional |
+| Llama2 13B | 13B | 16GB | Recommended |
 
 Learn more: [Ollama Documentation](https://ollama.ai/)
   </Tab>
 </Tabs>
 
-## Minecraft AI Chat Plugins
+### Plugin Configuration
 
-### OllamaChat Plugin
-
-**Features:**
-- Multi-language support
-- Custom prompts
-- Conversation history
-- Multiple AI providers (Ollama, OpenAI, etc.)
-
-**Installation:**
-
-```bash title="Download and Install Plugin"
-# Download plugin
-wget https://github.com/YourRepo/OllamaChat/releases/download/v1.0/OllamaChat.jar
-
-mv OllamaChat.jar plugins/
-```
-
-**Configuration (config.yml):**
+Most AI chat plugins follow the same pattern: define a trigger keyword, set up a system prompt, configure rate limiting, and point at your LLM provider. Here is a typical configuration:
 
 ```yaml title="config.yml"
-# AI Provider
 provider: "ollama"  # or "openai", "claude"
 
-# Ollama settings
 ollama:
   url: "http://localhost:11434"
   model: "mistral"
-  timeout: 30  # seconds
+  timeout: 30
 
-# OpenAI settings (if using)
-openai:
-  api-key: "sk-..."
-  model: "gpt-3.5-turbo"
-
-# Chat trigger
 trigger: "@ai"  # Players type "@ai question here"
 
-# System prompt
 system-prompt: |
   You are a helpful assistant on a Minecraft server.
   Answer questions about the server, game mechanics, and help players.
   Keep responses concise (1-3 sentences).
   Be friendly and encouraging.
 
-# Context
 use-context: true
-context-messages: 5  # Remember last 5 messages
+context-messages: 5  # Remember last 5 messages per player
 
-# Rate limiting
 cooldown: 10  # seconds between requests per player
 
-# Permissions
-permission: "ollamachat.use"  # Who can use @ai
-
-# Logging
-log-conversations: true
-```
-
-**Usage:**
-
-```text title="Example Chat Interactions"
-Player: @ai How do I make a diamond pickaxe?
-AI Bot: You need 3 diamonds and 2 sticks. Place diamonds across the top row of a crafting table and sticks down the middle column!
-
-Player: @ai What's the server IP?
-AI Bot: You're already on the server! Share this IP with friends: play.example.com
-
-Player: @ai Tell me a joke
-AI Bot: Why did the creeper cross the road? To get to the other ssssside!
-```
-
-### CreatureChat (Fabric/Forge Mod)
-
-Makes mobs and entities talk using AI.
-
-**Features:**
-- NPCs respond to player chat
-- Context-aware (knows what NPC is)
-- Supports 100+ LLM providers
-
-**Configuration:**
-
-```json title="creature-chat-config.json"
-{
-  "entities": {
-    "villager": {
-      "enabled": true,
-      "personality": "Friendly trader, loves emeralds",
-      "responds_to": ["trade", "buy", "sell", "emerald"]
-    },
-    "zombie": {
-      "enabled": true,
-      "personality": "Brain-hungry zombie, speaks in groans",
-      "responds_to": ["brains", "hungry"]
-    }
-  },
-  "provider": "ollama",
-  "model": "mistral"
-}
-```
-
-**Example:**
-
-```text title="NPC Interactions"
-Player approaches Villager NPC
-Player: "What do you sell?"
-Villager (AI): "Hrm! I have enchanted books, tools, and armor. Very good prices! You have emeralds?"
-
-Player approaches Zombie
-Player: "Why do you want brains?"
-Zombie (AI): "Brainsss... hungry... tasty brainsss..."
-```
-
-## Testing AI Chat Integration
-
-### Test 1: Basic Functionality
-
-**Objective:** AI responds to queries
-
-**Test:**
-
-```text title="Basic Functionality Test"
-1. Trigger AI with command
-   Player: @ai hello
-
-2. Verify response received
-
-Expected: AI responds within 5 seconds
-```
-
-**Common issues:**
-
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| No response | AI service offline | Check Ollama/API running |
-| Timeout | Slow model | Use faster model, increase timeout |
-| Error message | API key invalid | Verify credentials |
-
-### Test 2: Response Quality
-
-**Objective:** Responses are helpful and accurate
-
-**Test queries:**
-
-```text title="Quality Test Queries"
-Q: "How do I claim land?"
-Expected: Accurate server-specific instructions
-
-Q: "What's the server IP?"
-Expected: Actual server IP
-
-Q: "How do I craft a chest?"
-Expected: Correct crafting recipe
-
-Q: "Tell me about the spawn area"
-Expected: Relevant server lore/info
-```
-
-**Quality rubric:**
-
-| Aspect | Good | Bad |
-|--------|------|-----|
-| Accuracy | Correct info | Wrong or outdated |
-| Relevance | Answers question | Off-topic |
-| Length | Concise (1-3 sentences) | Essay or too brief |
-| Tone | Friendly, helpful | Rude or robotic |
-
-### Test 3: Context Awareness
-
-**Objective:** AI remembers conversation context
-
-**Test:**
-
-```text title="Context Awareness Test"
-Player: @ai What biomes are near spawn?
-AI: Forest, plains, and mountains are nearby.
-
-Player: @ai Which has the best resources?
-AI: The mountains have iron, coal, and emeralds, making them great for mining!
-(Correctly references "mountains" from previous message)
-```
-
-**Configuration:**
-
-```yaml title="config.yml"
-use-context: true
-context-messages: 5
-```
-
-### Test 4: Multi-Player Handling
-
-**Objective:** AI handles multiple simultaneous conversations
-
-**Test:**
-
-```text title="Multi-Player Test"
-Player1: @ai How do I vote?
-Player2: @ai What's the economy system?
-Player3: @ai Can I teleport home?
-
-Expected:
-- All 3 get responses
-- Responses don't mix up (Player1 doesn't get Player2's answer)
-- Reasonable response time (<10 seconds each)
-```
-
-### Test 5: Rate Limiting
-
-**Objective:** Prevent spam/abuse
-
-<Callout type="warning">
-**Rate Limiting is Critical**: Without proper rate limiting, your AI service can be overwhelmed by spam or abuse. Always implement cooldowns and request limits to protect your API costs and server performance.
-</Callout>
-
-**Configuration:**
-
-```yaml title="config.yml"
-cooldown: 10  # seconds
-max-requests-per-minute: 6
-```
-
-**Test:**
-
-```text title="Rate Limiting Test"
-Player: @ai test
-[Wait for response]
-Player: @ai test2 (immediately)
-
-Expected: "Please wait 10 seconds before asking again"
-
-Player: @ai (repeat 10 times rapidly)
-Expected: Temp cooldown or warning
-```
-
-### Test 6: Content Filtering
-
-**Objective:** AI doesn't respond to inappropriate queries
-
-**Test:**
-
-```text title="Content Filtering Test"
-Player: @ai [inappropriate content]
-
-Expected:
-- AI declines to answer
-- Generic response: "I can only help with server-related questions"
-- Optionally log for moderation review
-```
-
-**Implementation:**
-
-```yaml title="config.yml"
 content-filter:
   enabled: true
-  blocked-keywords:
-    - "explicit term 1"
-    - "explicit term 2"
   response: "I'm here to help with server questions only!"
 ```
 
-### Test 7: Language Support
+The system prompt is where most of the value lies. A vague prompt produces vague answers. A specific prompt that includes your server's IP, rules, economy system, and custom commands produces an assistant that actually helps.
 
-**Objective:** Multi-language capabilities
+### Crafting System Prompts
 
-**Test:**
+The difference between a useful AI assistant and a generic chatbot is almost entirely in the system prompt.
 
-```text title="Language Support Test"
-Player: @ai Comment obtenir du diamant? (French)
-Expected: Response in French
-
-Player: @ai ¿Cómo hago una granja? (Spanish)
-Expected: Response in Spanish
-```
-
-**Configuration:**
-
-```yaml title="config.yml"
-languages:
-  auto-detect: true
-  supported: ["en", "es", "fr", "de", "pt"]
-```
-
-### Test 8: Performance Under Load
-
-**Objective:** System handles many requests
-
-**Test:**
-
-```text title="Load Test"
-Simulate 50 players asking questions simultaneously
-
-Monitor:
-- Response time degradation
-- Queue length
-- CPU/RAM usage
-- Error rate
-
-Expected:
-- <15 second response time (with queue)
-- No crashes
-- Graceful degradation
-```
-
-## Advanced: Custom System Prompts
-
-Tailor AI personality and knowledge.
-
-### General Server Assistant
+**Server assistant example:**
 
 ```yaml title="config.yml"
 system-prompt: |
@@ -545,86 +168,43 @@ system-prompt: |
   - Claiming: /claim command, costs 10 coins per chunk
 
   Guidelines:
-  - Be friendly and concise
-  - Answer in 1-3 sentences
+  - Be friendly and concise (1-3 sentences)
   - Direct complex questions to staff (/helpop command)
-  - Encourage positive gameplay
-
-  If you don't know an answer, say "I'm not sure, please ask staff with /helpop"
+  - If you don't know an answer, say "I'm not sure, please ask staff with /helpop"
 ```
 
-### Roleplay NPC
+**Roleplay NPC example:**
 
 ```yaml title="config.yml"
 entities:
   wizard_npc:
     system-prompt: |
       You are Eldrin, an ancient wizard who runs the magic shop.
-
-      Personality: Wise, slightly mysterious, occasionally cryptic
-      Background: 500 years old, studied at the Arcane Academy
-      Shop: Sells enchanted books, potions, magical items
+      Personality: Wise, slightly mysterious, occasionally cryptic.
+      Background: 500 years old, studied at the Arcane Academy.
 
       Speech patterns:
       - Start sentences with "Ah," or "Indeed,"
       - Reference "the old ways" occasionally
       - Speak in slightly formal English
 
-      Knowledge:
-      - You know all enchantments
-      - You know potion recipes
-      - You remember old server history/lore
-
       If asked to do something you can't: "That is beyond even my considerable powers..."
 ```
 
-### Minigame Host
+For NPC interactions, mods like CreatureChat (Fabric/Forge) let you assign AI personalities to individual mobs and entities, each with their own context and behavior constraints.
 
-```yaml title="config.yml"
-system-prompt: |
-  You are the host of Trivia Tuesday on the server.
+### AI-Assisted Moderation
 
-  Style: Energetic, encouraging, fun
-  Tone: Upbeat game show host
-
-  You run trivia about:
-  - Minecraft mechanics
-  - Server history
-  - Pop culture
-  - General knowledge
-
-  Format:
-  - Ask a question
-  - Accept correct answers (be flexible with wording)
-  - Award points: Easy (5pts), Medium (10pts), Hard (20pts)
-  - Keep track of scores
-  - Congratulate correct answers enthusiastically
-  - Encourage wrong answers: "Not quite, but good try!"
-
-  Keep questions appropriate for all ages.
-```
-
-## AI Moderation Assistance
-
-AI can help detect problematic behavior.
-
-### Chat Monitoring
+Beyond chat assistance, AI can monitor messages for patterns that keyword filters miss:
 
 ```java title="ChatModerationPlugin.java"
 @EventHandler
 public void onChat(AsyncPlayerChatEvent event) {
     String message = event.getMessage();
-
-    // Send to AI for analysis
     String analysis = analyzeChatMessage(message);
 
-    // AI returns JSON
-    // {
-    //   "toxic": false,
-    //   "spam": false,
-    //   "scam": false,
-    //   "confidence": 0.95
-    // }
+    // AI returns structured analysis:
+    // { "toxic": false, "spam": false, "scam": false, "confidence": 0.95 }
 
     if (analysis.toxic && confidence > 0.8) {
         event.setCancelled(true);
@@ -634,254 +214,65 @@ public void onChat(AsyncPlayerChatEvent event) {
 }
 ```
 
-### Pattern Detection
+AI moderation catches subtle patterns: a player saying "nice base, would be a shame if something happened to it" is a grief threat that no keyword filter would flag. It also handles scam detection, spam patterns, and multi-language toxicity without maintaining enormous word lists.
 
-AI excels at finding patterns humans miss:
+<Callout type="warning">
+AI moderation should flag and log, not auto-ban. Keep a human in the loop for final decisions on serious actions. False positives are inevitable, especially early on.
+</Callout>
 
-```text title="Pattern Detection Examples"
-Normal: "Check out this cool build!"
-Spam: "JOIN FREECOINS.SCAM FOR FREE RANKS!!!"  ← AI detects
+## Testing AI Chat Integration
 
-Normal: "Anyone want to trade?"
-Scam: "I'm Notch give me your password for free diamonds"  ← AI detects
+Getting AI chat running is straightforward. Making sure it actually works well under real conditions is where most setups fall short. Here are the areas that matter.
 
-Normal: "Can someone help me?"
-Grief threat: "nice base would be a shame if something happened to it"  ← AI detects
-```
+### Functional Testing
 
-## Testing AI Chatbots with Bots
+Start with the basics: does the AI respond at all, and are the responses useful?
 
-Manual testing of AI chat requires many queries. Bots automate this.
+- **Trigger recognition**: Send `@ai hello` and verify a response arrives within a reasonable window (under 5 seconds for cloud, under 10 for self-hosted).
+- **Response quality**: Ask server-specific questions ("How do I claim land?", "What's the server IP?") and verify the answers match your system prompt's knowledge.
+- **Context persistence**: Send a multi-turn conversation and check that follow-up questions reference previous answers correctly. Ask "What biomes are near spawn?", then "Which has the best resources?" -- the AI should connect these.
+- **Multi-language**: If your server is international, verify the AI responds in the player's language.
 
-### Why Bots for AI Testing?
+If any of these fail, the issue is almost always in the system prompt or the provider configuration, not the plugin itself.
 
-**Manual testing limitations:**
-- Can't test 50 simultaneous queries
-- Tedious to test hundreds of questions
-- Hard to measure response time consistently
+### Safety and Rate Limiting
 
-**Bot testing benefits:**
-- Test concurrent load (10, 50, 100 simultaneous requests)
-- Automated query library (test same questions consistently)
-- Performance benchmarking (accurate timing)
-- Regression testing (verify updates don't break AI)
+<Callout type="info">
+Without rate limiting, a single player can burn through your API budget in minutes. This is not optional for cloud-hosted LLMs.
+</Callout>
 
-### Test Scenarios
+- **Cooldown enforcement**: Send two queries back-to-back and verify the second is blocked with a cooldown message. Wait the configured interval and verify the next query succeeds.
+- **Content filtering**: Send queries that should be rejected and verify the AI declines gracefully rather than engaging.
+- **Conversation isolation**: Have two players ask questions simultaneously and verify their responses are not mixed up.
 
-**Scenario 1: Response Time Benchmark**
+### Load Testing with Bots
 
-```text title="Response Time Benchmark"
-Objective: Measure AI response latency
+Manual testing covers functionality, but it cannot tell you what happens when 50 players ask questions at the same time during a server event. This is where bot-driven testing becomes essential.
 
-Setup:
-- 10 bots connected
-- List of 100 test questions
+**What to measure:**
 
-Test:
-1. Each bot sends 10 questions (100 total)
-2. Measure time from send to response received
-3. Calculate statistics
+Connect 10-50 bots and have them send AI queries simultaneously. Track:
 
-Metrics:
-- Average response time
-- Median response time
-- 95th percentile (slowest 5%)
-- Max response time
+- **Response time distribution**: Average, median, 95th percentile, and maximum. Target under 5 seconds average, under 10 for 95th percentile.
+- **Success rate**: What percentage of queries actually get answered? Anything below 95% indicates a queueing or timeout problem.
+- **Server TPS impact**: AI processing should not drag down server performance. If TPS drops below 18 during the test, the plugin is likely doing synchronous work on the main thread.
+- **AI service resource usage**: Monitor CPU and RAM on whatever is running your LLM. If Ollama hits 85%+ CPU during load tests, you will need to scale or queue more aggressively before a real event.
 
-Target:
-- Average: <3 seconds
-- 95th percentile: <10 seconds
-- No timeouts
-```
+**Interpreting results:**
 
-**Scenario 2: Concurrent Load Test**
+If all queries are answered but response times climb linearly with bot count, the system is queueing properly but may need a faster model or additional capacity. If queries start timing out entirely, check whether the plugin has a proper request queue or is dropping requests under load.
 
-```text title="Concurrent Load Test"
-Objective: AI handles multiple simultaneous queries
+### Regression Testing
 
-Setup:
-- 50 bots connected
+Every time you update a system prompt, swap models, or upgrade the plugin, re-run your test suite. AI behavior is inherently variable, so the goal is not identical responses but consistent quality. Keep a list of 20-30 representative questions and spot-check the answers after each change.
 
-Test:
-1. All 50 bots send @ai query at same time
-2. Monitor queue, response times
-3. Check for errors or crashes
+## Production Considerations
 
-Expected:
-- All queries eventually answered
-- No crashes
-- Graceful queueing
-```
+A few things that are easy to overlook before going live:
 
-**Scenario 3: Context Persistence Test**
+- **Fallback behavior**: What happens when your LLM provider is down? The plugin should either queue requests or tell the player to try again later, not silently fail.
+- **Conversation logging**: Log AI interactions for debugging and prompt improvement, but be transparent with players about it.
+- **Cost monitoring**: For cloud LLMs, set up billing alerts. A popular server can generate thousands of queries per day.
+- **Prompt iteration**: Your first system prompt will not be your best. Review logs regularly and refine based on what players actually ask versus what the AI actually answers.
 
-```text title="Context Persistence Test"
-Objective: AI maintains conversation context
-
-Setup:
-- 1 bot connected
-- Multi-turn conversation script
-
-Test:
-Bot sends sequence:
-1. "@ai What's the server IP?"
-2. [Wait for response]
-3. "@ai Thanks! What's the best way to get there?"
-4. [Wait for response]
-5. "@ai And what should I bring?"
-
-Expected:
-- Response 2 understands "get there" means "to the server"
-- Response 3 continues context logically
-```
-
-**Scenario 4: Spam Prevention Test**
-
-```text title="Spam Prevention Test"
-Objective: Rate limiting works
-
-Setup:
-- 1 bot connected
-- Cooldown set to 10 seconds
-
-Test:
-1. Bot sends @ai query
-2. Immediately sends another (within cooldown)
-3. Verify blocked
-4. Wait 10 seconds
-5. Send another
-6. Verify allowed
-
-Expected:
-- Query 2 blocked with cooldown message
-- Query 3 succeeds
-```
-
-**Scenario 5: Content Filter Test**
-
-```text title="Content Filter Test"
-Objective: Inappropriate queries rejected
-
-Setup:
-- Bot with test query list including edge cases
-
-Test:
-Bot sends queries:
-- Normal: "@ai how do I craft?"
-- Borderline: "@ai what's the best weapon?"
-- Inappropriate: [filtered content]
-
-Expected:
-- Normal queries answered
-- Inappropriate queries politely declined
-- Borderline queries handled appropriately
-```
-
-### Using Bots for AI Chat Testing
-
-Bots can send chat messages and monitor responses, enabling automated AI testing.
-
-**Basic Test Configuration:**
-
-```text title="Basic Bot Test Setup"
-Setup:
-- 5 bots connected
-- Auto-Chat plugin enabled
-- Message list: Test questions for AI
-
-Test Flow:
-1. Bot 1 sends: "@ai how do I claim land?"
-2. Bot waits for AI response
-3. Bot logs response time and content
-4. Bot 2 sends next question
-5. Repeat through question list
-
-Logging:
-[2026-02-11 14:32:10] Bot1 -> @ai how do I claim land?
-[2026-02-11 14:32:13] AI -> Use /claim while standing in area... (3.2s)
-[2026-02-11 14:32:15] Bot2 -> @ai what's the economy?
-[2026-02-11 14:32:18] AI -> We use coins as currency... (2.9s)
-```
-
-**Performance Benchmarking:**
-
-```text title="Performance Benchmark Results"
-Test: 100 AI queries, measure response time
-
-Configuration:
-- 10 bots
-- Each sends 10 questions
-- Questions sent sequentially (wait for response)
-
-Results:
-Questions: 100
-Successful: 98
-Failed: 2 (timeout)
-Avg response time: 4.2s
-Median: 3.8s
-95th percentile: 8.1s
-Max: 12.4s
-
-Interpretation:
-✅ Good: 98% success rate
-⚠️ Warning: 2 timeouts (investigate AI service)
-✅ Good: Average under 5s
-⚠️ Acceptable: 95th percentile under 10s (some slow queries)
-```
-
-**Stress Testing:**
-
-```text title="Stress Test Results"
-Test: Concurrent query load
-
-Configuration:
-- 50 bots
-- All send @ai query within 1 second
-
-Monitor:
-- How many queries answered?
-- Response time distribution
-- Server TPS impact
-- AI service CPU/RAM
-
-Results:
-Queries sent: 50
-Queries answered: 50
-Time to answer all: 45 seconds
-TPS during test: 18-20 (acceptable)
-AI service CPU: 85% (near capacity)
-
-Interpretation:
-✅ All queries answered (queue working)
-⚠️ 45 seconds for 50 queries = ~1s per query (queueing adds delay)
-⚠️ High CPU on AI service (may need scaling)
-```
-
-## Best Practices Summary
-
-1. **Choose appropriate model**: GPT-4 for quality, Ollama for privacy/cost
-2. **Craft good system prompts**: Specific personality, knowledge, and constraints
-3. **Implement rate limiting**: Prevent spam and abuse
-4. **Use context wisely**: Balance memory vs. API costs
-5. **Filter content**: Block inappropriate queries
-6. **Monitor performance**: Track response times and errors
-7. **Test with load**: Ensure AI handles peak traffic
-8. **Have fallbacks**: What happens if AI service is down?
-9. **Log conversations**: Debug and improve prompts
-10. **Respect privacy**: Be transparent about AI data collection
-
-## Conclusion
-
-AI chatbots transform Minecraft servers from static worlds to dynamic, responsive communities. From player support to roleplay NPCs to moderation assistance, AI adds intelligence and personality that elevates the player experience.
-
-Key takeaways:
-
-1. **Multiple options**: Cloud (GPT) for quality, self-hosted (Ollama) for privacy/cost
-2. **System prompts** define personality and knowledge
-3. **Testing is critical**: Verify quality, performance, and safety
-4. **Rate limiting** prevents abuse
-5. **Bot testing** enables comprehensive, automated validation
-
-With proper configuration, testing, and monitoring, AI chatbots become valuable team members—always online, always helpful, always learning.
-
-**Remember: AI is a tool, not a replacement for human community management. Use it to augment, not replace, human interaction.**
+Running AI chat in production is an ongoing process, not a one-time setup. The servers that do it well treat their system prompts like code: version-controlled, tested, and continuously improved.

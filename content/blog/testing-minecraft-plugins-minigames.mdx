@@ -8,146 +8,62 @@ tags: [minecraft, plugin-development, testing, mockbukkit, minigames, java]
 
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import { Callout } from 'fumadocs-ui/components/callout'
-import { Step, Steps } from 'fumadocs-ui/components/steps'
 
 ## Why Testing Matters for Plugin Development
 
-Releasing untested plugins is like shipping code with a blindfold on. You might get lucky, but probably not. Every Minecraft plugin developer has experienced:
+Every plugin developer has shipped something that worked in dev and broke in production. AFK players triggering edge cases, Paper updates shifting behavior, two plugins conflicting in ways nobody predicted. Testing is how you stop firefighting and start shipping with confidence.
 
-- Plugin works perfectly in testing, breaks in production
-- Edge case crashes the server at 3 AM
-- Update to [Paper](https://papermc.io/) breaks your plugin
-- Two plugins conflict in ways you never imagined
-
-<Callout type="warn">
-Proper testing catches these issues before players do. This guide covers testing methodologies for both simple utility plugins and complex multiplayer minigames.
-</Callout>
-
-## Types of Testing
-
-Different test types serve different purposes:
-
-<Tabs items={['Unit Testing', 'Integration Testing', 'End-to-End Testing']}>
-  <Tab value="Unit Testing">
-    Tests individual components in isolation.
-
-    **Example**: Testing a utility method that calculates damage
-
-    ```java title="DamageUtilTest.java"
-    @Test
-    public void testDamageCalculation() {
-        int damage = DamageUtil.calculateDamage(10, 0.5); // 10 base, 50% reduction
-        assertEquals(5, damage);
-    }
-    ```
-
-    **Pros:**
-    - Fast (milliseconds)
-    - No server required
-    - Easy to pinpoint failures
-    - Runs in CI/CD pipelines
-
-    **Cons:**
-    - Doesn't test Minecraft integration
-    - Can't test player interactions
-    - May miss real-world issues
-  </Tab>
-
-  <Tab value="Integration Testing">
-    Tests how components work together with Minecraft's API.
-
-    **Example**: Testing a custom command
-
-    ```java title="HealCommandTest.java"
-    @Test
-    public void testHealCommand() {
-        Player player = server.addPlayer();
-        player.setHealth(10.0);
-
-        server.dispatchCommand(player, "heal");
-
-        assertEquals(20.0, player.getHealth(), 0.01);
-    }
-    ```
-
-    **Pros:**
-    - Tests actual Minecraft interaction
-    - Catches integration bugs
-    - Still relatively fast
-
-    **Cons:**
-    - Requires mocking framework
-    - More setup than unit tests
-    - May not catch all edge cases
-  </Tab>
-
-  <Tab value="End-to-End Testing">
-    Tests the complete plugin with real servers and clients.
-
-    **Example**: Testing a minigame with multiple players
-
-    **Pros:**
-    - Tests real-world scenarios
-    - Catches network/timing issues
-    - Most confidence in functionality
-
-    **Cons:**
-    - Slow (minutes)
-    - Complex setup
-    - Harder to debug failures
-  </Tab>
-</Tabs>
+This guide covers the full testing stack: MockBukkit for fast unit tests, WatchWolf for real server integration, and bot-driven testing for minigames that need actual concurrent players.
 
 ## Unit Testing with MockBukkit
 
-[MockBukkit](https://github.com/MockBukkit/MockBukkit) is the standard testing framework for Bukkit/Paper plugins.
+[MockBukkit](https://github.com/MockBukkit/MockBukkit) is the standard testing framework for Bukkit/Paper plugins. It simulates a server in-process, so tests run in milliseconds without spinning up Minecraft.
 
 ### Setup
 
-**Add to your `pom.xml` (Maven):**
+<Tabs items={['Maven', 'Gradle']}>
+  <Tab value="Maven">
+    ```xml title="pom.xml"
+    <dependencies>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
 
-```xml title="pom.xml"
-<dependencies>
-    <!-- Paper API -->
-    <dependency>
-        <groupId>io.papermc.paper</groupId>
-        <artifactId>paper-api</artifactId>
-        <version>1.21-R0.1-SNAPSHOT</version>
-        <scope>provided</scope>
-    </dependency>
+        <dependency>
+            <groupId>com.github.seeseemelk</groupId>
+            <artifactId>MockBukkit-v1.21</artifactId>
+            <version>4.0.0</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!-- MockBukkit for testing -->
-    <dependency>
-        <groupId>com.github.seeseemelk</groupId>
-        <artifactId>MockBukkit-v1.21</artifactId>
-        <version>4.0.0</version>
-        <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    ```
+  </Tab>
 
-    <!-- JUnit 5 -->
-    <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>5.10.2</version>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-```
+  <Tab value="Gradle">
+    ```groovy title="build.gradle"
+    dependencies {
+        compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
 
-Learn more about [JUnit 5](https://junit.org/junit5/) for additional testing features.
-
-**Or `build.gradle` (Gradle):**
-
-```groovy title="build.gradle"
-dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT'
-
-    testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:4.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-}
-```
+        testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:4.0.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    }
+    ```
+  </Tab>
+</Tabs>
 
 ### Basic Test Structure
+
+Every MockBukkit test follows the same pattern: mock the server, load your plugin, run tests, then tear down.
 
 ```java title="MyPluginTest.java"
 import be.seeseemelk.mockbukkit.MockBukkit;
@@ -166,16 +82,12 @@ public class MyPluginTest {
 
     @BeforeEach
     public void setUp() {
-        // Create mock server
         server = MockBukkit.mock();
-
-        // Load your plugin
         plugin = MockBukkit.load(MyPlugin.class);
     }
 
     @AfterEach
     public void tearDown() {
-        // Clean up after each test
         MockBukkit.unmock();
     }
 
@@ -187,22 +99,19 @@ public class MyPluginTest {
 }
 ```
 
-### Testing Commands
+### Testing Commands and Events
+
+Commands and events are the core of most plugins. MockBukkit lets you dispatch commands, fire events, and assert the results.
 
 ```java title="FlyCommandTest.java"
 @Test
 public void testFlyCommand() {
-    // Create a player
     PlayerMock player = server.addPlayer("TestPlayer");
 
-    // Execute command
     boolean success = server.dispatchCommand(player, "fly");
 
-    // Verify
     assertTrue(success, "Command should execute successfully");
     assertTrue(player.getAllowFlight(), "Player should have flight enabled");
-
-    // Check player received message
     player.assertSaid("Flight enabled!");
 }
 
@@ -210,44 +119,21 @@ public void testFlyCommand() {
 public void testFlyCommandRequiresPermission() {
     PlayerMock player = server.addPlayer("TestPlayer");
 
-    // Player has no permission
-    assertFalse(player.hasPermission("myplugin.fly"));
-
-    // Command should fail
     server.dispatchCommand(player, "fly");
 
-    // Player shouldn't have flight
     assertFalse(player.getAllowFlight());
-
-    // Check error message
     player.assertSaid("You don't have permission!");
 }
 ```
 
-### Testing Events
+Events work the same way -- create the event, fire it through the plugin manager, and check the outcome:
 
 ```java title="EventHandlerTest.java"
 @Test
-public void testPlayerJoinMessage() {
-    PlayerMock player = server.addPlayer("NewPlayer");
-
-    // Trigger join event
-    PlayerJoinEvent event = new PlayerJoinEvent(player, "NewPlayer joined");
-    server.getPluginManager().callEvent(event);
-
-    // Verify plugin handled event
-    assertEquals("&eWelcome, NewPlayer!", event.getJoinMessage());
-}
-
-@Test
 public void testDamageReduction() {
     PlayerMock player = server.addPlayer("TestPlayer");
+    player.getInventory().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 
-    // Give player armor
-    ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
-    player.getInventory().setHelmet(helmet);
-
-    // Create damage event
     EntityDamageEvent event = new EntityDamageEvent(
         player,
         EntityDamageEvent.DamageCause.ENTITY_ATTACK,
@@ -256,434 +142,65 @@ public void testDamageReduction() {
 
     server.getPluginManager().callEvent(event);
 
-    // Plugin should reduce damage
-    assertTrue(event.getDamage() < 10.0, "Damage should be reduced");
-}
-```
-
-### Testing Configuration
-
-```java title="ConfigurationTest.java"
-@Test
-public void testConfigDefaults() {
-    FileConfiguration config = plugin.getConfig();
-
-    assertEquals(100, config.getInt("max-health"));
-    assertEquals(true, config.getBoolean("enable-pvp"));
-    assertEquals("Welcome!", config.getString("join-message"));
-}
-
-@Test
-public void testConfigReload() {
-    // Modify config
-    plugin.getConfig().set("max-health", 200);
-    plugin.saveConfig();
-
-    // Reload plugin
-    plugin.reloadConfig();
-
-    // Verify change persisted
-    assertEquals(200, plugin.getConfig().getInt("max-health"));
-}
-```
-
-### Testing Asynchronous Code
-
-<Callout type="warn">
-Async tests require careful timing management. Use `CountDownLatch` or `CompletableFuture` for more reliable async testing instead of `Thread.sleep()`.
-</Callout>
-
-```java title="AsyncTaskTest.java"
-@Test
-public void testAsyncTask() throws InterruptedException {
-    PlayerMock player = server.addPlayer("TestPlayer");
-    AtomicBoolean taskRan = new AtomicBoolean(false);
-
-    // Schedule async task
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-        // Simulate database query
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        taskRan.set(true);
-    });
-
-    // Wait for async task
-    Thread.sleep(200);
-
-    assertTrue(taskRan.get(), "Async task should have run");
+    assertTrue(event.getDamage() < 10.0, "Damage should be reduced by armor");
 }
 ```
 
 ### Testing Inventories
 
+GUI plugins need inventory tests. MockBukkit tracks open inventories and supports click simulation:
+
 ```java title="ShopGUITest.java"
 @Test
 public void testShopGUI() {
     PlayerMock player = server.addPlayer("TestPlayer");
-
-    // Open shop GUI
     plugin.openShopGUI(player);
 
-    // Get opened inventory
     Inventory inv = player.getOpenInventory().getTopInventory();
 
     assertEquals(27, inv.getSize(), "Shop should be 3 rows");
-    assertEquals("&6Shop", inv.getTitle());
-
-    // Check items
-    ItemStack sword = inv.getItem(0);
-    assertNotNull(sword);
-    assertEquals(Material.DIAMOND_SWORD, sword.getType());
-}
-
-@Test
-public void testInventoryClick() {
-    PlayerMock player = server.addPlayer("TestPlayer");
-    plugin.openShopGUI(player);
-
-    Inventory inv = player.getOpenInventory().getTopInventory();
-
-    // Simulate click
-    InventoryClickEvent event = new InventoryClickEvent(
-        player.getOpenInventory(),
-        InventoryType.SlotType.CONTAINER,
-        0, // slot
-        ClickType.LEFT,
-        InventoryAction.PICKUP_ALL
-    );
-
-    server.getPluginManager().callEvent(event);
-
-    // Verify purchase logic ran
-    assertTrue(event.isCancelled(), "Event should be cancelled");
-    // Verify player received item, money deducted, etc.
+    assertNotNull(inv.getItem(0));
+    assertEquals(Material.DIAMOND_SWORD, inv.getItem(0).getType());
 }
 ```
+
+<Callout type="warn">
+Async tests are tricky with MockBukkit. Avoid `Thread.sleep()` -- use `CountDownLatch` or `CompletableFuture` for reliable timing in async test assertions.
+</Callout>
 
 ## Integration Testing with WatchWolf
 
-MockBukkit can't test everything—network issues, timing-dependent logic, and multi-server scenarios require real servers.
-
-[WatchWolf](https://github.com/AlchemistITRoad/WatchWolf) launches actual Minecraft servers and clients for integration testing.
-
-### WatchWolf Setup
-
-**Add dependency:**
-
-```xml title="pom.xml"
-<dependency>
-    <groupId>io.github.alchemist-itroad</groupId>
-    <artifactId>watchwolf</artifactId>
-    <version>1.2.0</version>
-    <scope>test</scope>
-</dependency>
-```
-
-**Basic test:**
+MockBukkit simulates the API, but it can't test networking, real tick timing, or packet-level behavior. [WatchWolf](https://github.com/AlchemistITRoad/WatchWolf) fills that gap by launching actual Minecraft servers and connecting real clients.
 
 ```java title="MinigameIntegrationTest.java"
-import io.github.alchemist.watchwolf.WatchWolf;
-import io.github.alchemist.watchwolf.api.clients.ClientDescriptor;
-import io.github.alchemist.watchwolf.api.servers.ServerDescriptor;
-import org.junit.jupiter.api.Test;
-
 public class MinigameIntegrationTest {
 
     @Test
     public void testMinigameFlow() throws Exception {
         try (WatchWolf watchWolf = new WatchWolf()) {
-            // Start server
             ServerDescriptor server = watchWolf.startServer("1.21", "paper");
             server.installPlugin("MyPlugin.jar");
             server.waitForStartup();
 
-            // Connect clients
             ClientDescriptor player1 = watchWolf.startClient("Player1");
             ClientDescriptor player2 = watchWolf.startClient("Player2");
 
             player1.connect(server);
             player2.connect(server);
 
-            // Execute minigame commands
             player1.executeCommand("/minigame join");
             player2.executeCommand("/minigame join");
 
-            // Wait for minigame to start
             Thread.sleep(5000);
 
-            // Verify both players in game
             assertTrue(server.isPlayerOnline("Player1"));
             assertTrue(server.isPlayerOnline("Player2"));
-
-            // Test minigame logic...
         }
     }
 }
 ```
 
-**Benefits:**
-- Tests with real Minecraft clients/servers
-- Catches network/timing issues
-- Validates multi-player interactions
-
-**Drawbacks:**
-- Slow (30+ seconds per test)
-- Resource intensive
-- Harder to debug
-
-<Callout type="info">
-Use WatchWolf for critical integration tests, but rely on MockBukkit for most testing to keep your test suite fast.
-</Callout>
-
-## Testing Minigames
-
-Minigames have unique challenges—timing, multiple players, state management, and complex interactions.
-
-### Test Minigame Lifecycle
-
-```java title="MinigameLifecycleTest.java"
-@Test
-public void testMinigameLifecycle() {
-    // Setup
-    Minigame game = new Minigame("TestArena");
-
-    // Test initial state
-    assertEquals(GameState.WAITING, game.getState());
-
-    // Add players
-    Player p1 = server.addPlayer("Player1");
-    Player p2 = server.addPlayer("Player2");
-
-    game.addPlayer(p1);
-    game.addPlayer(p2);
-
-    assertEquals(2, game.getPlayerCount());
-
-    // Start game
-    game.start();
-    assertEquals(GameState.ACTIVE, game.getState());
-
-    // Player leaves
-    game.removePlayer(p1);
-    assertEquals(1, game.getPlayerCount());
-
-    // End game
-    game.end();
-    assertEquals(GameState.ENDED, game.getState());
-
-    // Verify cleanup
-    assertTrue(game.getPlayers().isEmpty());
-}
-```
-
-### Test Win Conditions
-
-```java title="WinConditionTest.java"
-@Test
-public void testLastPlayerStanding() {
-    Minigame game = new Minigame("PvPArena");
-
-    Player p1 = server.addPlayer("Player1");
-    Player p2 = server.addPlayer("Player2");
-    Player p3 = server.addPlayer("Player3");
-
-    game.addPlayer(p1);
-    game.addPlayer(p2);
-    game.addPlayer(p3);
-
-    game.start();
-
-    // Simulate players dying
-    game.handlePlayerDeath(p2);
-    game.handlePlayerDeath(p3);
-
-    // Game should end, p1 should win
-    assertEquals(GameState.ENDED, game.getState());
-    assertEquals(p1, game.getWinner());
-}
-```
-
-### Test Team Assignment
-
-```java title="TeamBalancingTest.java"
-@Test
-public void testTeamBalancing() {
-    TeamMinigame game = new TeamMinigame("CaptureTheFlag");
-
-    // Add 10 players
-    for (int i = 1; i <= 10; i++) {
-        Player p = server.addPlayer("Player" + i);
-        game.addPlayer(p);
-    }
-
-    // Assign teams
-    game.balanceTeams();
-
-    // Each team should have 5 players
-    assertEquals(5, game.getTeam("RED").size());
-    assertEquals(5, game.getTeam("BLUE").size());
-
-    // Players should not be on both teams
-    for (Player p : game.getTeam("RED")) {
-        assertFalse(game.getTeam("BLUE").contains(p));
-    }
-}
-```
-
-### Test Scoring
-
-```java title="ScoringTest.java"
-@Test
-public void testScoring() {
-    Minigame game = new Minigame("Spleef");
-    Player p1 = server.addPlayer("Player1");
-
-    game.addPlayer(p1);
-    game.start();
-
-    // Initial score
-    assertEquals(0, game.getScore(p1));
-
-    // Player scores points
-    game.addScore(p1, 10);
-    assertEquals(10, game.getScore(p1));
-
-    // Multiple score additions
-    game.addScore(p1, 5);
-    game.addScore(p1, 3);
-    assertEquals(18, game.getScore(p1));
-}
-```
-
-### Test Spectator Mode
-
-```java title="SpectatorModeTest.java"
-@Test
-public void testSpectatorMode() {
-    Minigame game = new Minigame("BedWars");
-    Player p1 = server.addPlayer("Player1");
-
-    game.addPlayer(p1);
-    game.start();
-
-    // Player dies, becomes spectator
-    game.handlePlayerDeath(p1);
-
-    assertTrue(game.isSpectator(p1));
-    assertEquals(GameMode.SPECTATOR, p1.getGameMode());
-
-    // Spectator can't interact
-    assertFalse(game.canBreakBlocks(p1));
-    assertFalse(game.canDamageEntities(p1));
-
-    // Spectator shouldn't count toward win conditions
-    assertEquals(0, game.getActivePlayers().size());
-}
-```
-
-### Test Arena Management
-
-```java title="ArenaRestorationTest.java"
-@Test
-public void testArenaRestoration() {
-    Arena arena = new Arena("PvPArena");
-    World world = server.addSimpleWorld("arena_world");
-
-    // Set arena bounds
-    Location corner1 = new Location(world, 0, 64, 0);
-    Location corner2 = new Location(world, 10, 74, 10);
-    arena.setRegion(corner1, corner2);
-
-    // Save initial state
-    arena.saveSnapshot();
-
-    // Modify arena (simulate gameplay)
-    world.getBlockAt(5, 65, 5).setType(Material.AIR);
-    world.getBlockAt(3, 66, 3).setType(Material.TNT);
-
-    // Restore arena
-    arena.restoreSnapshot();
-
-    // Verify restoration
-    assertEquals(Material.GRASS_BLOCK, world.getBlockAt(5, 65, 5).getType());
-    assertEquals(Material.AIR, world.getBlockAt(3, 66, 3).getType());
-}
-```
-
-## Testing with Multiple Players
-
-Many plugins require multiple players to test properly. MockBukkit makes this easy:
-
-```java title="PartySystemTest.java"
-@Test
-public void testPartySystem() {
-    Player leader = server.addPlayer("Leader");
-    Player member1 = server.addPlayer("Member1");
-    Player member2 = server.addPlayer("Member2");
-
-    // Create party
-    server.dispatchCommand(leader, "party create");
-
-    // Invite members
-    server.dispatchCommand(leader, "party invite Member1");
-    server.dispatchCommand(leader, "party invite Member2");
-
-    // Members accept
-    server.dispatchCommand(member1, "party accept");
-    server.dispatchCommand(member2, "party accept");
-
-    // Verify party
-    Party party = plugin.getPartyManager().getParty(leader);
-    assertNotNull(party);
-    assertEquals(3, party.getMembers().size());
-    assertTrue(party.isLeader(leader));
-    assertTrue(party.isMember(member1));
-    assertTrue(party.isMember(member2));
-}
-```
-
-## Performance Testing
-
-Plugins can cause lag. Test performance under load:
-
-<Callout type="warn">
-Performance testing is critical for plugins that will run on production servers. A plugin that works fine with 10 players might bring a server to its knees with 100.
-</Callout>
-
-```java title="PerformanceTest.java"
-@Test
-public void testPerformanceUnderLoad() {
-    long startTime = System.currentTimeMillis();
-
-    // Add 100 players
-    List<PlayerMock> players = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
-        players.add(server.addPlayer("Player" + i));
-    }
-
-    long endTime = System.currentTimeMillis();
-    long duration = endTime - startTime;
-
-    // Should complete in reasonable time
-    assertTrue(duration < 5000, "Adding 100 players took " + duration + "ms");
-
-    // Test plugin operations with 100 players
-    startTime = System.currentTimeMillis();
-
-    for (PlayerMock player : players) {
-        plugin.processPlayer(player); // Your plugin logic
-    }
-
-    endTime = System.currentTimeMillis();
-    duration = endTime - startTime;
-
-    // Processing 100 players should be fast
-    assertTrue(duration < 1000, "Processing 100 players took " + duration + "ms");
-}
-```
+WatchWolf tests are slow (30+ seconds each) and resource-heavy, so use them selectively for scenarios that genuinely need real server behavior. MockBukkit should still be your primary testing tool.
 
 ## Continuous Integration
 
@@ -697,7 +214,6 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
@@ -725,268 +241,48 @@ jobs:
           reporter: java-junit
 ```
 
-<Callout type="info">
-Now every push runs your tests automatically, catching regressions early. Set this up once and never worry about forgetting to run tests before committing.
-</Callout>
+Set this up once and every push catches regressions before they reach your players.
 
-## Testing Multiplayer Minigames with Bots
+## Testing Minigames with Bots
 
-MockBukkit simulates players, but doesn't test networking, timing, or real client behavior. For comprehensive minigame testing, you need actual clients.
+Minigames have problems that MockBukkit and WatchWolf alone cannot catch: concurrent player actions causing race conditions, network disconnects mid-game, lobby countdown edge cases, arena cleanup failures after dozens of rounds. These require sustained testing with multiple real clients.
 
-### Why Use Bots for Minigame Testing?
+### What Bots Test That Mocks Cannot
 
-**Challenges MockBukkit can't solve:**
+MockBukkit gives you simulated players. Bots give you real protocol connections hitting your server concurrently. The difference matters for:
 
-1. **Network timing**: Packet delays, connection drops
-2. **Client-side prediction**: Movement desyncs, rubber-banding
-3. **Concurrent actions**: Multiple players acting simultaneously
-4. **Server tick timing**: Actions spread across multiple ticks
-5. **Real-world edge cases**: Connection loss during minigame, rejoining mid-game
+- **Thread safety**: Ten bots opening chests at the same tick exposes race conditions that sequential mock calls never will.
+- **Network edge cases**: A bot disconnecting mid-teleport tests your cleanup code in ways `server.removePlayer()` does not.
+- **Tick-accurate timing**: Lobby countdowns, grace periods, and respawn delays depend on real server ticks, not simulated ones.
 
-**Bots provide:**
+### Key Scenarios to Test
 
-- Real client connections (tests networking layer)
-- Concurrent player actions (tests thread safety)
-- Sustained load (tests performance over time)
-- Repeatable scenarios (regression testing)
+**Lobby threshold and countdown**: Connect bots one at a time up to your minimum player count. Verify the game stays in WAITING until the threshold is met, starts the countdown on the right join, and transitions to ACTIVE after the countdown finishes. Then test what happens when a player leaves during the countdown -- does it cancel or continue?
 
-### Minigame Test Scenarios
+**Mid-game disconnects**: Start a game with the minimum players, then disconnect one bot. The game should handle the removal cleanly: remove them from the active player list, check if a win condition is now met, and not throw exceptions on the next tick when it tries to reference the missing player.
 
-**Scenario 1: Lobby Filling**
+**Simultaneous actions**: Have all bots perform an action on the same tick -- breaking a block, clicking an NPC, or entering a region trigger. This is where concurrency bugs hide. If your plugin stores game state in a `HashMap` instead of a `ConcurrentHashMap`, this is where it shows.
 
-```text title="Test Scenario: Lobby Filling"
-Goal: Verify minigame starts when enough players join
-
-Setup:
-- Set minigame to require 8 players
-- Configure 2-second countdown after threshold reached
-
-Test:
-1. Connect 7 bots - minigame should stay in lobby
-2. Connect 8th bot - countdown should start
-3. Wait 2 seconds - minigame should start
-4. Verify all 8 players marked as "active"
-
-Expected: Minigame starts exactly when requirements met
-```
-
-**Scenario 2: Mid-Game Join Handling**
-
-```text title="Test Scenario: Mid-Game Join"
-Goal: Ensure players joining during active game are handled correctly
-
-Test:
-1. Start minigame with 8 bots
-2. After game starts, connect 9th bot
-3. Verify 9th bot becomes spectator (or is rejected)
-4. Verify 9th bot doesn't interfere with gameplay
-
-Expected: Late joiners can't disrupt active game
-```
-
-**Scenario 3: Player Disconnect During Game**
-
-```text title="Test Scenario: Player Disconnect"
-Goal: Handle disconnects gracefully
-
-Test:
-1. Start minigame with 4 bots
-2. Disconnect 1 bot mid-game
-3. Verify game continues with 3 players
-4. Verify disconnected player cleaned up properly
-
-Expected: Game remains stable after disconnect
-```
-
-**Scenario 4: Simultaneous Actions**
-
-```text title="Test Scenario: Simultaneous Actions"
-Goal: Test concurrent player interactions
-
-Test:
-1. Start minigame with 10 bots
-2. All bots execute action simultaneously (break block, open chest, etc.)
-3. Verify all actions processed correctly
-4. Verify no race conditions or data corruption
-
-Expected: Thread-safe handling of concurrent actions
-```
-
-**Scenario 5: Minigame Endurance**
-
-```text title="Test Scenario: Endurance Testing"
-Goal: Ensure minigame remains stable over time
-
-Test:
-1. Start minigame with 8 bots
-2. Run for 30 minutes
-3. Monitor memory usage, TPS, errors
-4. Complete minigame cycle (start -> play -> end -> restart)
-
-Expected: No memory leaks, stable performance
-```
+**Full lifecycle endurance**: Run the complete cycle -- lobby, countdown, gameplay, win condition, cleanup, arena reset, next round -- for 20-30 minutes. Watch for memory leaks (arena snapshots not being freed), TPS degradation, and state that leaks between rounds.
 
 ### Using SoulFire for Minigame Testing
 
-[SoulFire](/)'s Fabric-based architecture makes it particularly effective for minigame testing:
+[SoulFire](https://soulfiremc.com) is particularly effective for this because its Fabric-based client architecture means bots behave like real players at the protocol level. Physics, movement, and packet handling all match a genuine Minecraft client.
 
-**Fabric Client Benefits:**
+A typical test setup: configure 8 bots with staggered join delays (2-4 seconds between each), enable the Auto Respawn and Anti-AFK plugins so bots behave naturally, and let them run through your minigame. Monitor server TPS with [Spark](https://spark.lucko.me/) and watch your server logs for exceptions.
 
-1. **Accurate physics**: Bots move identically to real players
-2. **Protocol compliance**: Packets match real clients
-3. **Behavior simulation**: Enable plugins for realistic actions
-
-**Example Test Configuration:**
-
-```yaml title="soulfire-test-config.yml"
-Minigame: Bed Wars (requires 8 players)
-
-SoulFire Config:
-- Bots: 8
-- Join Delay: 2000-4000ms (stagger joins naturally)
-- Plugins:
-  - Auto Respawn (handle deaths)
-  - Anti-AFK (move around)
-  - Auto Jump (simulate player activity)
-
-Test Procedure:
-1. Start bots joining lobby
-2. Monitor server logs for minigame start
-3. Let minigame run for 5 minutes
-4. Check for errors, crashes, or unexpected behavior
-5. Verify minigame ends properly
-6. Confirm cleanup (players returned to lobby, arena restored)
-```
-
-**What to Monitor:**
-
-```bash title="monitoring-commands.sh"
-# Server TPS during minigame
-/spark tps
-
-# Check for errors
-tail -f logs/latest.log | grep -i error
-
-# Monitor plugin-specific metrics
-/minigame stats
-
-# Memory usage
-/spark heapsummary
-```
-
-Learn more about performance monitoring with the [Spark plugin](https://spark.lucko.me/).
-
-<Callout type="info">
-**Key Metrics to Track:**
-
-- **Join success rate**: Did all bots join the minigame?
-- **Startup time**: How long from 8th player to game start?
-- **Stability**: Any crashes or errors during gameplay?
-- **Completion rate**: Did minigame end properly?
-- **Cleanup**: Arena restored? Players teleported back?
-</Callout>
-
-### Interpreting Results
-
-**Good Results:**
-```text title="successful-test-output.txt"
-✅ All 8 bots joined successfully
-✅ Minigame started in 3 seconds after 8th join
-✅ No errors in 10-minute test
-✅ TPS remained 19-20 throughout
-✅ Minigame ended and reset properly
-```
-
-**Problems to Investigate:**
-```text title="failed-test-output.txt"
-❌ Only 6/8 bots joined (check join logic)
-❌ Minigame never started (check player detection)
-❌ TPS dropped to 15 (performance issue)
-❌ Errors in console (bug in game logic)
-❌ Arena not restored (cleanup bug)
-```
-
-### Automated Minigame Testing Script
-
-```bash title="minigame-test.sh"
-#!/bin/bash
-
-echo "Starting minigame test..."
-
-# Start test server
-./start-test-server.sh &
-sleep 30  # Wait for server startup
-
-# Start bots (using your bot tool)
-start_bots 8
-
-# Wait for minigame to start (check logs)
-timeout=60
-elapsed=0
-while ! grep -q "Minigame started" logs/latest.log; do
-  sleep 1
-  elapsed=$((elapsed + 1))
-  if [ $elapsed -ge $timeout ]; then
-    echo "FAIL: Minigame never started"
-    exit 1
-  fi
-done
-
-echo "✅ Minigame started after $elapsed seconds"
-
-# Let game run for 5 minutes
-sleep 300
-
-# Check for errors
-if grep -q "ERROR" logs/latest.log; then
-  echo "❌ FAIL: Errors detected"
-  grep "ERROR" logs/latest.log
-  exit 1
-fi
-
-echo "✅ No errors detected"
-
-# Stop bots
-stop_bots
-
-# Check cleanup
-sleep 10
-if ! grep -q "Arena restored" logs/latest.log; then
-  echo "⚠️  WARNING: Arena may not have restored"
-fi
-
-echo "✅ Test complete"
-```
-
-## Best Practices Summary
-
-<Callout type="info">
-**Essential Testing Best Practices:**
-
-1. **Write tests first**: TDD catches bugs before they exist
-2. **Test at multiple levels**: Unit tests for logic, integration tests for behavior, E2E for realism
-3. **Mock external dependencies**: Databases, APIs, other plugins
-4. **Test edge cases**: Empty lists, null values, concurrent access
-5. **Use CI/CD**: Automate testing on every commit
-6. **Test performance**: Don't just test correctness, test speed
-7. **Test with realistic data**: Don't just test with "Player1"
-8. **Document test scenarios**: Explain what you're testing and why
-9. **Keep tests fast**: Slow tests discourage running them
-10. **Test multiplayer scenarios with bots**: MockBukkit simulates, bots replicate
-</Callout>
-
-## Conclusion
-
-Testing Minecraft plugins doesn't have to be painful. With MockBukkit for unit/integration tests and bot tools for E2E testing, you can catch bugs before they reach production.
-
-The key is choosing the right tool for each test level:
-
-- **[MockBukkit](https://github.com/MockBukkit/MockBukkit)**: Fast unit and integration tests for logic validation
-- **[WatchWolf](https://github.com/AlchemistITRoad/WatchWolf)**: Real server/client integration tests for complex scenarios
-- **[SoulFire](/)**: Multi-player stress testing and realistic behavior simulation
-
-By implementing comprehensive testing, you'll ship more stable plugins, spend less time debugging production issues, and build confidence in your code quality.
+The things to look for are straightforward: Did all bots join the game? Did the game start when expected? Did TPS stay above 19? Did the game end and clean up properly? Any `NullPointerException` or `ConcurrentModificationException` in the logs means you have a bug that would have hit real players.
 
 <Callout type="warn">
-**Remember: Time spent writing tests is time saved debugging at 3 AM because someone found a crash bug.**
+Bot testing complements MockBukkit -- it does not replace it. Use MockBukkit for fast iteration on game logic, and bot testing for validating that logic holds up under real conditions.
 </Callout>
+
+## Choosing the Right Tool
+
+Each testing layer catches different classes of bugs:
+
+- **[MockBukkit](https://github.com/MockBukkit/MockBukkit)**: Fast, in-process tests for commands, events, inventories, and game logic. Run these on every commit.
+- **[WatchWolf](https://github.com/AlchemistITRoad/WatchWolf)**: Real server/client tests for protocol-level and timing-sensitive behavior. Run these for critical paths.
+- **[SoulFire](https://soulfiremc.com)**: Multi-bot stress testing and realistic minigame simulation. Run these before releases and after major changes.
+
+Start with MockBukkit coverage for your core logic, add WatchWolf tests for scenarios that need real servers, and use SoulFire to validate that your minigame survives contact with actual concurrent players. The time you invest in testing is time you do not spend debugging production crashes.
