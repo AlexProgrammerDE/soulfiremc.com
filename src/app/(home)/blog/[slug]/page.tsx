@@ -137,6 +137,7 @@ export default async function BlogPost(props: {
               src={page.data.cover}
               alt={page.data.title}
               fill
+              priority
               className="object-cover"
             />
           </div>
@@ -271,6 +272,7 @@ export async function generateMetadata(props: {
       description: page.data.description,
       images: ogImage,
       type: "article",
+      section: "Minecraft",
       publishedTime: page.data.date
         ? new Date(page.data.date).toISOString()
         : undefined,

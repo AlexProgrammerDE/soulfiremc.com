@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import type { ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
@@ -6,6 +7,12 @@ import {
   DiscordMemberBadgeSkeleton,
 } from "./discord-badge";
 import { GetAccountsClient, type Provider } from "./page.client";
+
+export const metadata: Metadata = {
+  title: "Get Accounts",
+  description:
+    "Trusted Minecraft account providers for bot testing with SoulFire. Compare MFA, token, and cookie accounts.",
+};
 
 const PROVIDERS: Provider[] = [
   // Token/Cookie Accounts (Temporary)

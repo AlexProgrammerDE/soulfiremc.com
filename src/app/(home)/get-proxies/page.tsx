@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import type { ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { GetProxiesClient, type Provider } from "./page.client";
+
+export const metadata: Metadata = {
+  title: "Get Proxies",
+  description:
+    "Trusted proxy providers for Minecraft bot testing with SoulFire. Compare residential, datacenter, ISP, and mobile proxies.",
+};
 
 const PROVIDERS: Provider[] = [
   // Sponsor always first
