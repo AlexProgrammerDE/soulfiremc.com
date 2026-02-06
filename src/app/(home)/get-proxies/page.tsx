@@ -85,41 +85,12 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "residential", "datacenter"],
   },
   {
-    name: "SOAX",
-    logo: "/providers/soax.svg",
-    testimonial:
-      "155M+ IPs in 195 countries with 99.95% success rate and 0.55s response time. Strong geo-targeting capabilities.",
-    url: "https://soax.com",
-    badges: ["high-quality", "residential", "mobile"],
-  },
-  {
     name: "IPRoyal",
     logo: "/providers/iproyal.svg",
     testimonial:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
     url: "https://iproyal.com/?r=soulfire",
     badges: ["budget-friendly", "residential", "datacenter", "isp"],
-  },
-  {
-    name: "Rayobyte",
-    logo: "/providers/rayobyte.svg",
-    testimonial:
-      "300K+ dedicated datacenter IPs with unlimited threads, traffic, and domains. Reliable option for high-volume scraping.",
-    url: "https://rayobyte.com",
-    badges: ["datacenter", "unlimited-bandwidth"],
-  },
-  {
-    name: "Storm Proxies",
-    logo: "/providers/stormproxies.png",
-    testimonial:
-      "Affordable rotating residential and datacenter proxies with unlimited bandwidth. Simple pricing for small-scale projects.",
-    url: "https://stormproxies.com",
-    badges: [
-      "budget-friendly",
-      "unlimited-bandwidth",
-      "residential",
-      "datacenter",
-    ],
   },
   {
     name: "NetNut",
