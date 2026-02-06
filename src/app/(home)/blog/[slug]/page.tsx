@@ -1,5 +1,5 @@
 import { InlineTOC } from "fumadocs-ui/components/inline-toc";
-import { ArrowLeft, ChevronRight, Clock } from "lucide-react";
+import { ChevronRight, Clock } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -47,10 +47,7 @@ export default async function BlogPost(props: {
 
   const MDX = page.data.body;
   const readingTime = getReadingTime(page.data.structuredData);
-  const relatedPosts = getRelatedPosts(
-    params.slug,
-    page.data.tags,
-  );
+  const relatedPosts = getRelatedPosts(params.slug, page.data.tags);
   const lastModified = page.data.lastModified
     ? new Date(page.data.lastModified)
     : undefined;
