@@ -1,6 +1,19 @@
 "use client";
 
-import { BookOpen, ExternalLink, Filter, Heart, Info } from "lucide-react";
+import {
+  BookOpen,
+  Building2,
+  ExternalLink,
+  Filter,
+  Gift,
+  Globe,
+  Heart,
+  Home,
+  Infinity as InfinityIcon,
+  Smartphone,
+  Star,
+  Wifi,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
@@ -52,67 +65,82 @@ export type Provider = {
 
 const BADGE_CONFIG: Record<
   Badge,
-  { label: string; className: string; description: string }
+  {
+    label: string;
+    className: string;
+    description: string;
+    icon: React.ReactNode;
+  }
 > = {
   "free-tier": {
     label: "Free Tier",
     className: "bg-green-500/10 text-green-600 dark:text-green-400",
     description:
       "This provider offers a free tier, allowing you to test their service before committing to a paid plan.",
+    icon: <Gift className="h-3 w-3" />,
   },
   "high-quality": {
     label: "High Quality",
     className: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
     description:
       "Premium proxies with high reliability, fast speeds, and excellent uptime. Best for demanding use cases.",
+    icon: <Star className="h-3 w-3" />,
   },
   residential: {
     label: "Residential",
     className: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
     description:
       "Real residential IP addresses from ISPs. Harder to detect and block, ideal for realistic testing scenarios.",
+    icon: <Home className="h-3 w-3" />,
   },
   datacenter: {
     label: "Datacenter",
     className: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
     description:
       "Fast and affordable proxies from data centers. Great for high-volume testing where speed matters most.",
+    icon: <Building2 className="h-3 w-3" />,
   },
   "unlimited-bandwidth": {
     label: "Unlimited Bandwidth",
     className: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
     description:
       "No data caps or bandwidth limits. Perfect for extensive bot testing without worrying about usage.",
+    icon: <InfinityIcon className="h-3 w-3" />,
   },
   sponsor: {
     label: "Sponsor",
     className: "bg-pink-500/10 text-pink-600 dark:text-pink-400",
     description:
       "This provider sponsors SoulFire monthly, helping fund the development of the project.",
+    icon: <Heart className="h-3 w-3 fill-current" />,
   },
   "budget-friendly": {
     label: "Budget Friendly",
     className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
     description:
       "Affordable pricing with good value for money. Great for smaller projects or those on a tight budget.",
+    icon: <Globe className="h-3 w-3" />,
   },
   enterprise: {
     label: "Enterprise",
     className: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
     description:
       "Enterprise-grade solution with advanced features, compliance certifications, and dedicated support.",
+    icon: <Building2 className="h-3 w-3" />,
   },
   isp: {
     label: "ISP",
     className: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
     description:
       "Static ISP proxies that combine datacenter speed with residential trust levels.",
+    icon: <Wifi className="h-3 w-3" />,
   },
   mobile: {
     label: "Mobile",
     className: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
     description:
       "Mobile carrier IP addresses. Highest trust level, ideal for mobile app testing.",
+    icon: <Smartphone className="h-3 w-3" />,
   },
 };
 
@@ -143,9 +171,8 @@ function ProviderBadge({
         <span
           className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${classNameOverride ?? config.className}`}
         >
-          {badge === "sponsor" && <Heart className="h-3 w-3 fill-current" />}
+          {config.icon}
           {config.label}
-          <Info className="h-3 w-3 opacity-60" />
         </span>
       </HoverCardTrigger>
       <HoverCardContent className="w-64 text-sm">

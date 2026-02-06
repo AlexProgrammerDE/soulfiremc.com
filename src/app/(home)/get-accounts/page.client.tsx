@@ -4,9 +4,13 @@ import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
   BookOpen,
+  Check,
   ExternalLink,
   Filter,
-  Info,
+  Package,
+  Shield,
+  Star,
+  Zap,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,37 +58,47 @@ type Props = {
 
 const BADGE_CONFIG: Record<
   Badge,
-  { label: string; className: string; description: string }
+  {
+    label: string;
+    className: string;
+    description: string;
+    icon: React.ReactNode;
+  }
 > = {
   "soulfire-compatible": {
     label: "SoulFire Compatible",
     className: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
     description:
       "This account type is directly supported by SoulFire. You can use these accounts with SoulFire right away.",
+    icon: <Check className="h-3 w-3" />,
   },
   "high-quality": {
     label: "High Quality",
     className: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
     description:
       "Premium accounts with high reliability and low ban rates. Best for demanding use cases.",
+    icon: <Star className="h-3 w-3" />,
   },
   "instant-delivery": {
     label: "Instant Delivery",
     className: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
     description:
       "Accounts are delivered automatically and instantly after purchase - no waiting required.",
+    icon: <Zap className="h-3 w-3" />,
   },
   "lifetime-warranty": {
     label: "Lifetime Warranty",
     className: "bg-green-500/10 text-green-600 dark:text-green-400",
     description:
       "Accounts come with lifetime warranty - get a replacement if your account stops working.",
+    icon: <Shield className="h-3 w-3" />,
   },
   "bulk-discount": {
     label: "Bulk Discount",
     className: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
     description:
       "Significant discounts available when purchasing accounts in bulk quantities.",
+    icon: <Package className="h-3 w-3" />,
   },
 };
 
@@ -137,8 +151,8 @@ function ProviderBadge({ badge }: { badge: Badge }) {
         <span
           className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
         >
+          {config.icon}
           {config.label}
-          <Info className="h-3 w-3 opacity-60" />
         </span>
       </HoverCardTrigger>
       <HoverCardContent className="w-64 text-sm">
