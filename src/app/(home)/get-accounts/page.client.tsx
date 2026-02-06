@@ -287,7 +287,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
 
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
-      <div className="space-y-4 text-center max-w-3xl mx-auto">
+      <div className="space-y-4 text-center max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           Get Minecraft Accounts
         </h1>
@@ -309,7 +309,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
       </div>
 
       {/* Filter Section */}
-      <div className="max-w-3xl mx-auto w-full space-y-4">
+      <div className="max-w-5xl mx-auto w-full space-y-4">
         <div className="flex items-center gap-2 mb-3">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-medium">Filters:</span>
@@ -402,7 +402,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
       </div>
 
       {filteredProviders.length === 0 ? (
-        <div className="max-w-3xl mx-auto w-full">
+        <div className="max-w-5xl mx-auto w-full">
           <Card className="p-8 text-center">
             <p className="text-muted-foreground">
               No providers match the selected filters. Try removing some
@@ -414,7 +414,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
         <>
           {/* MFA Accounts Section */}
           {mfaProviders.length > 0 && (
-            <div className="max-w-3xl mx-auto w-full space-y-4">
+            <div className="max-w-5xl mx-auto w-full space-y-4">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold">
                   MFA Accounts (Permanent)
@@ -424,7 +424,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                   and username as you want.
                 </p>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {mfaProviders.map((provider, index) => (
                   <ProviderCard
                     key={`${provider.name}-${index}`}
@@ -438,7 +438,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
 
           {/* Token/Cookie Accounts Section */}
           {tokenProviders.length > 0 && (
-            <div className="max-w-3xl mx-auto w-full space-y-4">
+            <div className="max-w-5xl mx-auto w-full space-y-4">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold">
                   Token/Cookie Accounts (Temporary)
@@ -452,7 +452,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                   token/cookie accounts. Only MFA accounts are supported.
                 </p>
               </div>
-              <div className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {tokenProviders.map((provider, index) => (
                   <ProviderCard
                     key={`${provider.name}-${index}`}
@@ -466,7 +466,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
         </>
       )}
 
-      <div className="border-t pt-6 max-w-3xl mx-auto text-center space-y-2">
+      <div className="border-t pt-6 max-w-5xl mx-auto text-center space-y-2">
         <p className="text-sm text-muted-foreground">
           <strong>Source:</strong> Provider list curated from{" "}
           <a

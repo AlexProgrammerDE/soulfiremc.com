@@ -225,7 +225,7 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
 
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
-      <div className="space-y-4 text-center max-w-3xl mx-auto">
+      <div className="space-y-4 text-center max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           Get Proxies
         </h1>
@@ -247,7 +247,7 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
       </div>
 
       {/* Filter Section */}
-      <div className="max-w-3xl mx-auto w-full">
+      <div className="max-w-5xl mx-auto w-full">
         <div className="flex items-center gap-2 mb-3">
           <Filter className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-medium">Filter by type:</span>
@@ -283,7 +283,7 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 max-w-3xl mx-auto w-full">
+      <div className="max-w-5xl mx-auto w-full">
         {filteredProviders.length === 0 ? (
           <Card className="p-8 text-center">
             <p className="text-muted-foreground">
@@ -292,13 +292,15 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
             </p>
           </Card>
         ) : (
-          filteredProviders.map((provider) => (
-            <ProviderCard key={provider.name} provider={provider} />
-          ))
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {filteredProviders.map((provider) => (
+              <ProviderCard key={provider.name} provider={provider} />
+            ))}
+          </div>
         )}
       </div>
 
-      <div className="border-t pt-6 max-w-3xl mx-auto text-center space-y-2">
+      <div className="border-t pt-6 max-w-5xl mx-auto text-center space-y-2">
         <p className="text-sm text-muted-foreground">
           <strong>Disclosure:</strong> This page contains affiliate links. When
           you purchase through these links, we may earn a commission at no extra
