@@ -23,6 +23,7 @@ const PROVIDERS: Provider[] = [
       "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
     url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
     badges: ["sponsor", "budget-friendly", "datacenter"],
+    sponsor: true,
     couponCode: "SOULFIREMC",
     couponDiscount:
       "15% off IPv4/IPv6/ISP - 39% off Residential - 10% off Mobile proxies",

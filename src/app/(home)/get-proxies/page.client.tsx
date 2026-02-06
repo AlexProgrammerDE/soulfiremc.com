@@ -209,8 +209,8 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
   };
 
   const filteredProviders = useMemo(() => {
-    // Sponsor always first
-    const sponsor = providers.find((p) => p.sponsor);
+    // Sponsors always first (in their original order)
+    const sponsors = providers.filter((p) => p.sponsor);
     const nonSponsors = providers.filter((p) => !p.sponsor);
 
     const filtered =
@@ -220,7 +220,7 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
             badges.every((filter) => provider.badges.includes(filter)),
           );
 
-    return sponsor ? [sponsor, ...filtered] : filtered;
+    return [...sponsors, ...filtered];
   }, [providers, badges]);
 
   return (
