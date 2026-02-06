@@ -13,6 +13,7 @@ const PROVIDERS: Provider[] = [
     url: "https://affiliate.thordata.com/soulfire",
     badges: ["sponsor", "high-quality", "residential", "mobile", "isp"],
     sponsor: true,
+    sponsorTheme: "pink",
     couponCode: "THORDATA",
     couponDiscount: "20% off",
   },
@@ -24,6 +25,7 @@ const PROVIDERS: Provider[] = [
     url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
     badges: ["sponsor", "budget-friendly", "datacenter", "isp", "mobile", "residential"],
     sponsor: true,
+    sponsorTheme: "amber",
     couponCode: "SOULFIREMC",
     couponDiscount:
       "15% off IPv4/IPv6/ISP - 39% off Residential - 10% off Mobile proxies",

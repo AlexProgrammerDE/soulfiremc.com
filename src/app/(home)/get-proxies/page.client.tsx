@@ -19,6 +19,25 @@ type FilterableBadge = (typeof BADGES)[number];
 
 type Badge = FilterableBadge | "sponsor";
 
+type SponsorTheme = {
+  ring: string;
+  bg: string;
+  badge: string;
+};
+
+const SPONSOR_THEMES: Record<string, SponsorTheme> = {
+  pink: {
+    ring: "ring-pink-500/50",
+    bg: "bg-gradient-to-r from-pink-500/5 to-purple-500/5",
+    badge: "bg-pink-500/10 text-pink-600 dark:text-pink-400",
+  },
+  amber: {
+    ring: "ring-amber-500/50",
+    bg: "bg-gradient-to-r from-amber-500/5 to-orange-500/5",
+    badge: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  },
+};
+
 export type Provider = {
   name: string;
   logo?: string;
@@ -26,6 +45,7 @@ export type Provider = {
   url: string;
   badges: Badge[];
   sponsor?: boolean;
+  sponsorTheme?: string;
   couponCode?: string;
   couponDiscount?: string;
 };
@@ -109,13 +129,19 @@ const FILTER_BADGES: FilterableBadge[] = [
   "high-quality",
 ];
 
-function ProviderBadge({ badge }: { badge: Badge }) {
+function ProviderBadge({
+  badge,
+  classNameOverride,
+}: {
+  badge: Badge;
+  classNameOverride?: string;
+}) {
   const config = BADGE_CONFIG[badge];
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
+          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${classNameOverride ?? config.className}`}
         >
           {badge === "sponsor" && <Heart className="h-3 w-3 fill-current" />}
           {config.label}
@@ -148,12 +174,14 @@ function ProviderLogo({ provider }: { provider: Provider }) {
 }
 
 function ProviderCard({ provider }: { provider: Provider }) {
+  const theme = provider.sponsorTheme
+    ? SPONSOR_THEMES[provider.sponsorTheme]
+    : undefined;
+
   return (
     <Card
       className={`transition-all duration-300 hover:shadow-lg ${
-        provider.sponsor
-          ? "ring-2 ring-pink-500/50 bg-gradient-to-r from-pink-500/5 to-purple-500/5"
-          : ""
+        theme ? `ring-2 ${theme.ring} ${theme.bg}` : ""
       }`}
     >
       <div className="flex flex-col sm:flex-row gap-4 p-6">
@@ -165,7 +193,13 @@ function ProviderCard({ provider }: { provider: Provider }) {
             <h3 className="text-xl font-semibold">{provider.name}</h3>
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
-                <ProviderBadge key={badge} badge={badge} />
+                <ProviderBadge
+                  key={badge}
+                  badge={badge}
+                  classNameOverride={
+                    badge === "sponsor" ? theme?.badge : undefined
+                  }
+                />
               ))}
             </div>
           </div>
