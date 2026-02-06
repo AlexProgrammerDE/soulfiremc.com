@@ -29,7 +29,7 @@ type Badge =
   | "bulk-discount"
   | "soulfire-compatible";
 
-type Category = "low-quality-alts" | "high-quality-alts" | "mfa-accounts";
+type Category = "token-accounts" | "mfa-accounts";
 
 type SortOption = "default" | "price-asc" | "price-desc";
 
@@ -92,13 +92,9 @@ const CATEGORY_CONFIG: Record<
   Category,
   { label: string; description: string }
 > = {
-  "low-quality-alts": {
-    label: "Low Quality Alts",
-    description: "Budget token accounts - cheap but may have issues",
-  },
-  "high-quality-alts": {
-    label: "High Quality Alts",
-    description: "Cookie and token accounts - temporary but affordable",
+  "token-accounts": {
+    label: "Token/Cookie Accounts",
+    description: "Temporary accounts - budget to premium tiers",
   },
   "mfa-accounts": {
     label: "MFA Accounts",
@@ -129,11 +125,7 @@ const FILTER_BADGES: Badge[] = [
   "bulk-discount",
 ];
 
-const FILTER_CATEGORIES: Category[] = [
-  "mfa-accounts",
-  "high-quality-alts",
-  "low-quality-alts",
-];
+const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "token-accounts"];
 
 const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"];
 
@@ -281,12 +273,8 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
     });
   }, [providers, badges, category]);
 
-  const lowQualityProviders = sortProviders(
-    filteredProviders.filter((p) => p.category === "low-quality-alts"),
-    sort,
-  );
-  const highQualityProviders = sortProviders(
-    filteredProviders.filter((p) => p.category === "high-quality-alts"),
+  const tokenProviders = sortProviders(
+    filteredProviders.filter((p) => p.category === "token-accounts"),
     sort,
   );
   const mfaProviders = sortProviders(
@@ -448,16 +436,16 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
             </div>
           )}
 
-          {/* High Quality Alts Section */}
-          {highQualityProviders.length > 0 && (
+          {/* Token/Cookie Accounts Section */}
+          {tokenProviders.length > 0 && (
             <div className="max-w-3xl mx-auto w-full space-y-4">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold">
-                  High Quality Token/Cookie Accounts (Temporary)
+                  Token/Cookie Accounts (Temporary)
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Exclusive temporary accounts - only you get them, lasting
-                  longer with fewer issues. Prices shown are per account.
+                  Temporary accounts ranging from budget tokens to premium
+                  cookies. Prices shown are per account.
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-500">
                   <strong>Note:</strong> SoulFire does not currently support
@@ -465,36 +453,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                 </p>
               </div>
               <div className="flex flex-col gap-4">
-                {highQualityProviders.map((provider, index) => (
-                  <ProviderCard
-                    key={`${provider.name}-${index}`}
-                    provider={provider}
-                    discordBadge={discordBadges[provider.url]}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Low Quality Alts Section */}
-          {lowQualityProviders.length > 0 && (
-            <div className="max-w-3xl mx-auto w-full space-y-4">
-              <div className="space-y-1">
-                <h2 className="text-2xl font-semibold">
-                  Low Quality Token Accounts (Temporary)
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Budget token accounts - often sold by multiple shops at once.
-                  May get logged from another location or banned by someone
-                  else. Cheaper but with drawbacks.
-                </p>
-                <p className="text-sm text-yellow-600 dark:text-yellow-500">
-                  <strong>Note:</strong> SoulFire does not currently support
-                  token/cookie accounts. Only MFA accounts are supported.
-                </p>
-              </div>
-              <div className="flex flex-col gap-4">
-                {lowQualityProviders.map((provider, index) => (
+                {tokenProviders.map((provider, index) => (
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}

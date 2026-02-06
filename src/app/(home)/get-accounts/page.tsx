@@ -8,52 +8,7 @@ import {
 import { GetAccountsClient, type Provider } from "./page.client";
 
 const PROVIDERS: Provider[] = [
-  // Low Quality Account Shops (budget options)
-  {
-    name: "Nicealts",
-    logo: "/accounts/nicealts.png",
-    testimonial:
-      "Budget token accounts at the lowest price point. Good for basic use cases where quality isn't critical.",
-    url: "https://discord.gg/nicealts",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "low-quality-alts",
-    price: "5¢",
-    priceValue: 0.05,
-  },
-  {
-    name: "Mog Alts",
-    logo: "/accounts/mogalts.png",
-    testimonial:
-      "Low-cost token accounts for budget-conscious users. Basic accounts at competitive prices.",
-    url: "https://discord.gg/PeThFREW4y",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "low-quality-alts",
-    price: "5¢",
-    priceValue: 0.05,
-  },
-  {
-    name: "ZZXGP",
-    logo: "/accounts/zzxgp.png",
-    testimonial:
-      "Budget tier token accounts alongside their premium offerings. Good entry point for new users.",
-    url: "https://discord.gg/gycmTvrfnj",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "low-quality-alts",
-    price: "5¢",
-    priceValue: 0.05,
-  },
-  {
-    name: "Less | Unbanned",
-    logo: "/accounts/lessunbanned.png",
-    testimonial:
-      "Specializes in unbanned accounts. Good option if you need accounts without existing bans.",
-    url: "https://discord.gg/teMqsB3PYG",
-    badges: ["instant-delivery"],
-    category: "low-quality-alts",
-    price: "5¢",
-    priceValue: 0.05,
-  },
-  // High Quality Account Shops (ranked by value)
+  // Token/Cookie Accounts (Temporary)
   {
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
@@ -62,7 +17,7 @@ const PROVIDERS: Provider[] = [
     url: "https://discord.gg/ravealts",
     websiteUrl: "https://ravealts.com",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "high-quality-alts",
+    category: "token-accounts",
     price: "10-15¢",
     priceValue: 0.1,
     couponCode: "SOULFIRE",
@@ -72,23 +27,23 @@ const PROVIDERS: Provider[] = [
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
     testimonial:
-      "Best value for high quality accounts. Offers both temporary tokens/cookies and permanent MFA accounts with responsive support.",
+      "Offers multiple tiers from budget tokens to high-quality cookies. Responsive support and reliable delivery across all price points.",
     url: "https://discord.gg/nicealts",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "high-quality-alts",
-    price: "10¢",
-    priceValue: 0.1,
+    category: "token-accounts",
+    price: "5-10¢",
+    priceValue: 0.05,
   },
   {
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
     testimonial:
-      "Versatile shop offering multiple tiers from budget to premium. Known for reliable cookie/token accounts and competitive MFA pricing.",
+      "Versatile shop offering multiple tiers from budget tokens to premium cookies. Good entry point for new users with competitive pricing.",
     url: "https://discord.gg/gycmTvrfnj",
     badges: ["instant-delivery", "bulk-discount"],
-    category: "high-quality-alts",
-    price: "12¢",
-    priceValue: 0.12,
+    category: "token-accounts",
+    price: "5-12¢",
+    priceValue: 0.05,
   },
   {
     name: "YYY",
@@ -97,9 +52,20 @@ const PROVIDERS: Provider[] = [
       "High quality cookie and token accounts at competitive prices. Reliable delivery through their dedicated platform.",
     url: "https://discord.gg/rmxayvwc5K",
     badges: ["high-quality", "instant-delivery"],
-    category: "high-quality-alts",
+    category: "token-accounts",
     price: "12¢",
     priceValue: 0.12,
+  },
+  {
+    name: "Mog Alts",
+    logo: "/accounts/mogalts.png",
+    testimonial:
+      "Low-cost token accounts for budget-conscious users. Basic accounts at competitive prices.",
+    url: "https://discord.gg/PeThFREW4y",
+    badges: ["instant-delivery", "bulk-discount"],
+    category: "token-accounts",
+    price: "5¢",
+    priceValue: 0.05,
   },
   {
     name: "Localts",
@@ -108,9 +74,20 @@ const PROVIDERS: Provider[] = [
       "Premium tier accounts with emphasis on quality over quantity. Higher price point but accounts known to last longer.",
     url: "https://discord.gg/B4xkxHwmd4",
     badges: ["high-quality", "lifetime-warranty"],
-    category: "high-quality-alts",
+    category: "token-accounts",
     price: "25¢",
     priceValue: 0.25,
+  },
+  {
+    name: "Less | Unbanned",
+    logo: "/accounts/lessunbanned.png",
+    testimonial:
+      "Specializes in unbanned accounts. Good option if you need accounts without existing bans.",
+    url: "https://discord.gg/teMqsB3PYG",
+    badges: ["instant-delivery"],
+    category: "token-accounts",
+    price: "5¢",
+    priceValue: 0.05,
   },
   // MFA (Permanent Full Access) Accounts
   {
