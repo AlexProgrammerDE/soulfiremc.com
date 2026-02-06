@@ -26,8 +26,9 @@ function getFoldersWithPageFiles(dir: string): string[] {
     const fullPath = path.join(dir, item);
     const stat = fs.statSync(fullPath);
 
-    // If the item is a directory, recursively search it.
-    if (stat.isDirectory()) {
+    // If the item is a directory (skip dynamic route segments like [slug]),
+    // recursively search it.
+    if (stat.isDirectory() && !item.startsWith("[")) {
       foldersWithPageFiles.push(...getFoldersWithPageFiles(fullPath));
     }
   }

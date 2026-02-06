@@ -1,9 +1,17 @@
 "use client";
 
-import { BookOpen, ExternalLink, Filter, Info } from "lucide-react";
+import {
+  ArrowDownNarrowWide,
+  ArrowUpNarrowWide,
+  BookOpen,
+  ExternalLink,
+  Filter,
+  Info,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useQueryStates } from "nuqs";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -12,14 +20,18 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { CouponCode } from "../get-proxies/coupon-code";
+import { accountsSearchParams } from "./search-params";
 
 type Badge =
   | "high-quality"
   | "instant-delivery"
   | "lifetime-warranty"
-  | "bulk-discount";
+  | "bulk-discount"
+  | "soulfire-compatible";
 
 type Category = "low-quality-alts" | "high-quality-alts" | "mfa-accounts";
+
+type SortOption = "default" | "price-asc" | "price-desc";
 
 export type Provider = {
   name: string;
@@ -30,6 +42,7 @@ export type Provider = {
   badges: Badge[];
   category: Category;
   price: string;
+  priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
 };
@@ -43,6 +56,12 @@ const BADGE_CONFIG: Record<
   Badge,
   { label: string; className: string; description: string }
 > = {
+  "soulfire-compatible": {
+    label: "SoulFire Compatible",
+    className: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
+    description:
+      "This account type is directly supported by SoulFire. You can use these accounts with SoulFire right away.",
+  },
   "high-quality": {
     label: "High Quality",
     className: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
@@ -87,7 +106,23 @@ const CATEGORY_CONFIG: Record<
   },
 };
 
+const SORT_CONFIG: Record<
+  SortOption,
+  { label: string; icon?: React.ReactNode }
+> = {
+  default: { label: "Recommended" },
+  "price-asc": {
+    label: "Price: Low to High",
+    icon: <ArrowUpNarrowWide className="h-3 w-3" />,
+  },
+  "price-desc": {
+    label: "Price: High to Low",
+    icon: <ArrowDownNarrowWide className="h-3 w-3" />,
+  },
+};
+
 const FILTER_BADGES: Badge[] = [
+  "soulfire-compatible",
   "high-quality",
   "instant-delivery",
   "lifetime-warranty",
@@ -99,6 +134,8 @@ const FILTER_CATEGORIES: Category[] = [
   "high-quality-alts",
   "low-quality-alts",
 ];
+
+const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"];
 
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -172,7 +209,11 @@ function ProviderCard({
           )}
           <div className="flex gap-2">
             <Button asChild>
-              <a href={provider.url} target="_blank" rel="noopener noreferrer">
+              <a
+                href={provider.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
                 Get Accounts
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
@@ -182,7 +223,7 @@ function ProviderCard({
                 <a
                   href={provider.websiteUrl}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                 >
                   Website
                   <ExternalLink className="ml-2 h-4 w-4" />
@@ -196,48 +237,65 @@ function ProviderCard({
   );
 }
 
-export function GetAccountsClient({ providers, discordBadges }: Props) {
-  const [activeFilters, setActiveFilters] = useState<Badge[]>([]);
-  const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
+  if (sort === "default") return providers;
+  return [...providers].sort((a, b) =>
+    sort === "price-asc"
+      ? a.priceValue - b.priceValue
+      : b.priceValue - a.priceValue,
+  );
+}
 
-  const toggleFilter = (badge: Badge) => {
-    setActiveFilters((prev) =>
-      prev.includes(badge) ? prev.filter((b) => b !== badge) : [...prev, badge],
-    );
+export function GetAccountsClient({ providers, discordBadges }: Props) {
+  const [{ category, badges, sort }, setParams] = useQueryStates(
+    accountsSearchParams,
+    { shallow: false },
+  );
+
+  const toggleBadge = (badge: Badge) => {
+    const newBadges = badges.includes(badge)
+      ? badges.filter((b) => b !== badge)
+      : [...badges, badge];
+    setParams({ badges: newBadges });
   };
 
-  const toggleCategory = (category: Category) => {
-    setActiveCategory((prev) => (prev === category ? null : category));
+  const toggleCategory = (cat: Category) => {
+    setParams({ category: category === cat ? null : cat });
+  };
+
+  const setSort = (newSort: SortOption) => {
+    setParams({ sort: newSort });
   };
 
   const clearFilters = () => {
-    setActiveFilters([]);
-    setActiveCategory(null);
+    setParams({ category: null, badges: [], sort: "default" });
   };
 
   const filteredProviders = useMemo(() => {
     return providers.filter((provider) => {
-      const matchesCategory = activeCategory
-        ? provider.category === activeCategory
-        : true;
+      const matchesCategory = category ? provider.category === category : true;
       const matchesBadges =
-        activeFilters.length === 0 ||
-        activeFilters.every((filter) => provider.badges.includes(filter));
+        badges.length === 0 ||
+        badges.every((filter) => provider.badges.includes(filter));
       return matchesCategory && matchesBadges;
     });
-  }, [providers, activeFilters, activeCategory]);
+  }, [providers, badges, category]);
 
-  const lowQualityProviders = filteredProviders.filter(
-    (p) => p.category === "low-quality-alts",
+  const lowQualityProviders = sortProviders(
+    filteredProviders.filter((p) => p.category === "low-quality-alts"),
+    sort,
   );
-  const highQualityProviders = filteredProviders.filter(
-    (p) => p.category === "high-quality-alts",
+  const highQualityProviders = sortProviders(
+    filteredProviders.filter((p) => p.category === "high-quality-alts"),
+    sort,
   );
-  const mfaProviders = filteredProviders.filter(
-    (p) => p.category === "mfa-accounts",
+  const mfaProviders = sortProviders(
+    filteredProviders.filter((p) => p.category === "mfa-accounts"),
+    sort,
   );
 
-  const hasActiveFilters = activeFilters.length > 0 || activeCategory !== null;
+  const hasActiveFilters =
+    badges.length > 0 || category !== null || sort !== "default";
 
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
@@ -282,14 +340,14 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
         <div className="space-y-2">
           <span className="text-xs text-muted-foreground">Category:</span>
           <div className="flex flex-wrap gap-2">
-            {FILTER_CATEGORIES.map((category) => {
-              const config = CATEGORY_CONFIG[category];
-              const isActive = activeCategory === category;
+            {FILTER_CATEGORIES.map((cat) => {
+              const config = CATEGORY_CONFIG[cat];
+              const isActive = category === cat;
               return (
                 <button
                   type="button"
-                  key={category}
-                  onClick={() => toggleCategory(category)}
+                  key={cat}
+                  onClick={() => toggleCategory(cat)}
                   className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                     isActive
                       ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
@@ -309,18 +367,44 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
           <div className="flex flex-wrap gap-2">
             {FILTER_BADGES.map((badge) => {
               const config = BADGE_CONFIG[badge];
-              const isActive = activeFilters.includes(badge);
+              const isActive = badges.includes(badge);
               return (
                 <button
                   type="button"
                   key={badge}
-                  onClick={() => toggleFilter(badge)}
+                  onClick={() => toggleBadge(badge)}
                   className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                     isActive
                       ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
+                  {config.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sort */}
+        <div className="space-y-2">
+          <span className="text-xs text-muted-foreground">Sort:</span>
+          <div className="flex flex-wrap gap-2">
+            {SORT_OPTIONS.map((option) => {
+              const config = SORT_CONFIG[option];
+              const isActive = sort === option;
+              return (
+                <button
+                  type="button"
+                  key={option}
+                  onClick={() => setSort(option)}
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                    isActive
+                      ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
+                >
+                  {config.icon}
                   {config.label}
                 </button>
               );
@@ -429,7 +513,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
           <a
             href="https://alts.watchdog.gay"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer nofollow"
             className="underline hover:text-foreground"
           >
             alts.watchdog.gay

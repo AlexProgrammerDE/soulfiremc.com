@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import type { ItemList, WithContext } from "schema-dts";
+import { JsonLd } from "@/components/json-ld";
 import {
   DiscordMemberBadge,
   DiscordMemberBadgeSkeleton,
@@ -16,6 +18,7 @@ const PROVIDERS: Provider[] = [
     badges: ["instant-delivery", "bulk-discount"],
     category: "low-quality-alts",
     price: "5¢",
+    priceValue: 0.05,
   },
   {
     name: "Mog Alts",
@@ -26,6 +29,7 @@ const PROVIDERS: Provider[] = [
     badges: ["instant-delivery", "bulk-discount"],
     category: "low-quality-alts",
     price: "5¢",
+    priceValue: 0.05,
   },
   {
     name: "ZZXGP",
@@ -36,6 +40,7 @@ const PROVIDERS: Provider[] = [
     badges: ["instant-delivery", "bulk-discount"],
     category: "low-quality-alts",
     price: "5¢",
+    priceValue: 0.05,
   },
   {
     name: "Less | Unbanned",
@@ -46,6 +51,7 @@ const PROVIDERS: Provider[] = [
     badges: ["instant-delivery"],
     category: "low-quality-alts",
     price: "5¢",
+    priceValue: 0.05,
   },
   // High Quality Account Shops (ranked by value)
   {
@@ -58,6 +64,7 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
     category: "high-quality-alts",
     price: "10-15¢",
+    priceValue: 0.1,
     couponCode: "SOULFIRE",
     couponDiscount: "10% off",
   },
@@ -70,6 +77,7 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
     category: "high-quality-alts",
     price: "10¢",
+    priceValue: 0.1,
   },
   {
     name: "ZZXGP",
@@ -80,6 +88,7 @@ const PROVIDERS: Provider[] = [
     badges: ["instant-delivery", "bulk-discount"],
     category: "high-quality-alts",
     price: "12¢",
+    priceValue: 0.12,
   },
   {
     name: "YYY",
@@ -90,6 +99,7 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "instant-delivery"],
     category: "high-quality-alts",
     price: "12¢",
+    priceValue: 0.12,
   },
   {
     name: "Localts",
@@ -100,6 +110,7 @@ const PROVIDERS: Provider[] = [
     badges: ["high-quality", "lifetime-warranty"],
     category: "high-quality-alts",
     price: "25¢",
+    priceValue: 0.25,
   },
   // MFA (Permanent Full Access) Accounts
   {
@@ -109,9 +120,10 @@ const PROVIDERS: Provider[] = [
       "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
     url: "https://discord.gg/ravealts",
     websiteUrl: "https://ravealts.com",
-    badges: ["high-quality", "lifetime-warranty"],
+    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$5.67",
+    priceValue: 5.67,
     couponCode: "SOULFIRE",
     couponDiscount: "10% off",
   },
@@ -121,9 +133,10 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Permanent Minecraft accounts with full access. Reliable option for mains or long-term alts.",
     url: "https://discord.gg/5Wc4tA2ypY",
-    badges: ["high-quality", "lifetime-warranty"],
+    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$4.50",
+    priceValue: 4.5,
   },
   {
     name: "Nicealts",
@@ -131,9 +144,10 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Also offers permanent MFA accounts in addition to their popular token/cookie selection. Trusted provider with responsive support.",
     url: "https://discord.gg/nicealts",
-    badges: ["high-quality", "lifetime-warranty"],
+    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
-    price: "$5",
+    price: "$5.00",
+    priceValue: 5.0,
   },
   {
     name: "Aqua MFA",
@@ -141,9 +155,10 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Budget MFA accounts at low prices. Note: accounts may be sourced from public breaches with higher pullback rates.",
     url: "https://discord.gg/87XFhsS35V",
-    badges: ["instant-delivery"],
+    badges: ["instant-delivery", "soulfire-compatible"],
     category: "mfa-accounts",
-    price: "$4-$5.5",
+    price: "$4.00-$5.50",
+    priceValue: 4.0,
   },
   {
     name: "ZZXGP",
@@ -151,9 +166,10 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Budget MFA accounts at competitive prices. Note: accounts are likely Hypixel banned and may have higher pullback rates.",
     url: "https://discord.gg/gycmTvrfnj",
-    badges: ["instant-delivery"],
+    badges: ["instant-delivery", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$4.50",
+    priceValue: 4.5,
   },
   {
     name: "Brano",
@@ -161,9 +177,10 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Specializes in premium OG usernames, Minecon capes, and rare collectible accounts. Higher price point for exclusive items.",
     url: "https://discord.gg/EsbhHkm9e4",
-    badges: ["high-quality", "lifetime-warranty"],
+    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
-    price: "$50+",
+    price: "$50.00+",
+    priceValue: 50.0,
   },
 ];
 
@@ -186,7 +203,31 @@ export default function GetAccountsPage() {
     }
   }
 
+  const itemListJsonLd: WithContext<ItemList> = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Minecraft Account Providers",
+    description:
+      "Trusted Minecraft account providers for bot testing with SoulFire. Compare MFA, high-quality, and budget accounts.",
+    numberOfItems: PROVIDERS.length,
+    itemListElement: PROVIDERS.map((provider, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: provider.name,
+      description: provider.testimonial,
+      url: provider.websiteUrl ?? provider.url,
+    })),
+  };
+
   return (
-    <GetAccountsClient providers={PROVIDERS} discordBadges={discordBadges} />
+    <>
+      <JsonLd data={itemListJsonLd} />
+      <Suspense>
+        <GetAccountsClient
+          providers={PROVIDERS}
+          discordBadges={discordBadges}
+        />
+      </Suspense>
+    </>
   );
 }
