@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { Blog, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { blogSource } from "@/lib/source";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description:
+    "Latest updates, tutorials, and insights about Minecraft bot testing, server stress testing, and SoulFire development.",
+};
 
 export default function BlogIndex() {
   const posts = blogSource.getPages().sort((a, b) => {
