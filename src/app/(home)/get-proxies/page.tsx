@@ -16,6 +16,17 @@ const PROVIDERS: Provider[] = [
     couponCode: "THORDATA",
     couponDiscount: "20% off",
   },
+  {
+    name: "Proxy-Seller",
+    logo: "/providers/proxyseller.svg",
+    testimonial:
+      "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
+    url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
+    badges: ["sponsor", "budget-friendly", "datacenter"],
+    couponCode: "SOULFIREMC",
+    couponDiscount:
+      "15% off IPv4/IPv6/ISP - 39% off Residential - 10% off Mobile proxies",
+  },
   // Higher recommends
   {
     name: "Webshare",
@@ -99,14 +110,6 @@ const PROVIDERS: Provider[] = [
       "85M+ residential IPs with ISP-based network for fast speeds. Direct ISP connectivity reduces latency.",
     url: "https://netnut.io?ref=odblmzc",
     badges: ["high-quality", "residential", "isp"],
-  },
-  {
-    name: "Proxy-Seller",
-    logo: "/providers/proxyseller.svg",
-    testimonial:
-      "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
-    url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
-    badges: ["budget-friendly", "datacenter"],
   },
 ];
 
