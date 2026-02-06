@@ -73,6 +73,8 @@ const features = [
     name: "High performance",
     description:
       "Built on Fabric with official Minecraft client code. Bots use real physics, real networking, and are virtually indistinguishable from real players.",
+    href: "/docs",
+    cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
     background: (
       <AnimatedGridPattern
