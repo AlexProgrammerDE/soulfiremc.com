@@ -7,7 +7,7 @@ import { GetProxiesClient, type Provider } from "./page.client";
 export const metadata: Metadata = {
   title: "Get Proxies",
   description:
-    "Trusted proxy providers for Minecraft bot testing with SoulFire. Compare residential, datacenter, ISP, and mobile proxies.",
+    "Best proxy providers for Minecraft bot testing — compare residential, datacenter, ISP, and mobile proxies. Free tiers available, with coupon codes and bulk pricing from top providers.",
 };
 
 const PROVIDERS: Provider[] = [

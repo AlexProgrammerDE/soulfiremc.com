@@ -11,7 +11,7 @@ import { GetAccountsClient, type Provider } from "./page.client";
 export const metadata: Metadata = {
   title: "Get Accounts",
   description:
-    "Trusted Minecraft account providers for bot testing with SoulFire. Compare MFA, token, and cookie accounts.",
+    "Buy cheap Minecraft accounts for bot testing — compare MFA, token, and cookie accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
 };
 
 const PROVIDERS: Provider[] = [

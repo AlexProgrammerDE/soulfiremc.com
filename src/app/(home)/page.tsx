@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import type {
+  BreadcrumbList,
   FAQPage,
   SoftwareApplication,
   VideoObject,
@@ -259,11 +260,25 @@ export default function Page() {
     duration: "PT5M",
   };
 
+  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://soulfiremc.com",
+      },
+    ],
+  };
+
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex-1">
       <JsonLd data={softwareJsonLd} />
       <JsonLd data={videoJsonLd} />
       <JsonLd data={faqJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       {/* Hero Section */}
       <section className="py-4 md:py-8">
         <div className="relative flex min-h-[600px] border rounded-2xl overflow-hidden bg-background">

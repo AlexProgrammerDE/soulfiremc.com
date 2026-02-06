@@ -1,9 +1,18 @@
+import { Clock } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import type { Blog, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { blogSource } from "@/lib/source";
+
+function getReadingTime(structuredData: {
+  contents: { content: string }[];
+}): number {
+  const text = structuredData.contents.map((c) => c.content).join(" ");
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -113,6 +122,10 @@ export default function BlogIndex() {
                     })}
                   </time>
                 )}
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {getReadingTime(post.data.structuredData)} min read
+                </span>
               </div>
             </div>
           </Link>
