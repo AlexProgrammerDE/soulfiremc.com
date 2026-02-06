@@ -1,4 +1,4 @@
-import { BookOpen, PlayCircle, Server, Terminal } from "lucide-react";
+import { BookOpen, Heart, PlayCircle, Server, Terminal } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -85,7 +85,7 @@ export default async function DownloadPage() {
       <Suspense fallback={<DownloadSelectionSkeleton />}>
         <DownloadSelectionComponent clientVersion={clientVersion} />
       </Suspense>
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
@@ -170,6 +170,33 @@ export default async function DownloadPage() {
                 </Button>
               </div>
             ))}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Heart className="h-5 w-5 text-primary" />
+              Support the project
+            </CardTitle>
+            <CardDescription>
+              SoulFire is free and open source — donations help keep it that way.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              If SoulFire saves you time or you just want to say thanks, consider
+              buying the developer a coffee. Every contribution helps fund
+              hosting, development, and new features.
+            </p>
+            <Button asChild>
+              <a
+                href="https://ko-fi.com/alexprogrammerde"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Donate on Ko-fi
+              </a>
+            </Button>
           </CardContent>
         </Card>
       </div>

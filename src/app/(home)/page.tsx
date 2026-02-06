@@ -157,41 +157,133 @@ const features = [
   },
 ];
 
-const faqItems = [
+const githubLink = getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK");
+
+const faqItems: {
+  question: string;
+  answerHtml: string;
+  answerElement: React.ReactNode;
+}[] = [
   {
     question: "What is SoulFire?",
-    answer:
-      "SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling — they're virtually indistinguishable from real players. It's designed for stress testing servers, automating tasks, and development.",
+    answerHtml:
+      'SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling — they\'re virtually indistinguishable from real players. It\'s designed for stress testing servers, automating tasks, and development. <a href="https://soulfiremc.com/docs">Read the docs</a> to learn more.',
+    answerElement: (
+      <>
+        SoulFire is a Minecraft bot framework built on Fabric that runs real
+        client code. Bots use actual Minecraft physics, networking, and protocol
+        handling — they're virtually indistinguishable from real players. It's
+        designed for stress testing servers, automating tasks, and development.{" "}
+        <Link href="/docs" className="underline text-primary">
+          Read the docs
+        </Link>{" "}
+        to learn more.
+      </>
+    ),
   },
   {
     question: "Is SoulFire free?",
-    answer:
-      "Yes. SoulFire is fully open source under the AGPL-3.0 license. You can download it, use it, modify it, and contribute back to the project at no cost.",
+    answerHtml: `Yes. SoulFire is fully open source under the AGPL-3.0 license. You can <a href="https://soulfiremc.com/download">download it</a>, use it, modify it, and contribute back to the project at no cost. Check out the <a href="${githubLink}">GitHub repository</a>.`,
+    answerElement: (
+      <>
+        Yes. SoulFire is fully open source under the AGPL-3.0 license. You can{" "}
+        <Link href="/download" className="underline text-primary">
+          download it
+        </Link>
+        , use it, modify it, and contribute back to the project at no cost.
+        Check out the{" "}
+        <a
+          href={githubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline text-primary"
+        >
+          GitHub repository
+        </a>
+        .
+      </>
+    ),
   },
   {
     question: "What Minecraft versions does SoulFire support?",
-    answer:
-      "Every version ever released — from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support.",
+    answerHtml:
+      'Every version ever released — from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support. See the <a href="https://soulfiremc.com/docs/usage/versions">full version list</a>.',
+    answerElement: (
+      <>
+        Every version ever released — from Classic and Alpha through the latest
+        release, including Beta, Combat Snapshots, April Fools editions, and
+        Bedrock Edition. Version translation is handled automatically via
+        built-in protocol support. See the{" "}
+        <Link href="/docs/usage/versions" className="underline text-primary">
+          full version list
+        </Link>
+        .
+      </>
+    ),
   },
   {
     question: "Can servers detect SoulFire bots?",
-    answer:
+    answerHtml:
       "SoulFire bots run real Fabric client code, so they behave identically to real players at the protocol level. Standard anti-cheat and anti-bot plugins can't distinguish them by packet analysis alone. This makes SoulFire ideal for testing whether your server's defenses actually work.",
+    answerElement: (
+      <>
+        SoulFire bots run real Fabric client code, so they behave identically to
+        real players at the protocol level. Standard anti-cheat and anti-bot
+        plugins can't distinguish them by packet analysis alone. This makes
+        SoulFire ideal for testing whether your server's defenses actually work.
+      </>
+    ),
   },
   {
     question: "How do I install SoulFire?",
-    answer:
-      "Download the native installer for your platform (Windows, macOS, or Linux) from the download page. No Java installation required — everything is bundled. Just install and run.",
+    answerHtml:
+      '<a href="https://soulfiremc.com/download">Download</a> the native installer for your platform (Windows, macOS, or Linux). No Java installation required — everything is bundled. Just install and run. See the <a href="https://soulfiremc.com/docs/installation">installation guide</a> for a full walkthrough.',
+    answerElement: (
+      <>
+        <Link href="/download" className="underline text-primary">
+          Download
+        </Link>{" "}
+        the native installer for your platform (Windows, macOS, or Linux). No
+        Java installation required — everything is bundled. Just install and run.
+        See the{" "}
+        <Link href="/docs/installation" className="underline text-primary">
+          installation guide
+        </Link>{" "}
+        for a full walkthrough.
+      </>
+    ),
   },
   {
     question: "Does SoulFire support Bedrock Edition?",
-    answer:
-      "Yes. SoulFire can connect to Bedrock Edition servers via built-in protocol translation. Some features are still being added, but core functionality like joining, moving, and interacting works.",
+    answerHtml:
+      'Yes. SoulFire can connect to Bedrock Edition servers via built-in protocol translation. Some features are still being added, but core functionality like joining, moving, and interacting works. See <a href="https://soulfiremc.com/docs/usage/versions">supported versions</a> for details.',
+    answerElement: (
+      <>
+        Yes. SoulFire can connect to Bedrock Edition servers via built-in
+        protocol translation. Some features are still being added, but core
+        functionality like joining, moving, and interacting works. See{" "}
+        <Link href="/docs/usage/versions" className="underline text-primary">
+          supported versions
+        </Link>{" "}
+        for details.
+      </>
+    ),
   },
   {
     question: "Can I write custom plugins?",
-    answer:
-      "Yes. SoulFire plugins are Fabric mods with full access to the Minecraft API. You can create custom bot behaviors, automate complex tasks, or build testing scenarios tailored to your server.",
+    answerHtml:
+      'Yes. SoulFire plugins are Fabric mods with full access to the Minecraft API. You can create custom bot behaviors, automate complex tasks, or build testing scenarios tailored to your server. Learn how in the <a href="https://soulfiremc.com/docs/usage/plugins">plugin docs</a>.',
+    answerElement: (
+      <>
+        Yes. SoulFire plugins are Fabric mods with full access to the Minecraft
+        API. You can create custom bot behaviors, automate complex tasks, or
+        build testing scenarios tailored to your server. Learn how in the{" "}
+        <Link href="/docs/usage/plugins" className="underline text-primary">
+          plugin docs
+        </Link>
+        .
+      </>
+    ),
   },
 ];
 
@@ -242,7 +334,7 @@ export default function Page() {
       name: item.question,
       acceptedAnswer: {
         "@type": "Answer" as const,
-        text: item.answer,
+        text: item.answerHtml,
       },
     })),
   };
@@ -386,7 +478,12 @@ export default function Page() {
               Common questions about SoulFire
             </p>
           </div>
-          <HomeFaq items={faqItems} />
+          <HomeFaq
+            items={faqItems.map((item) => ({
+              question: item.question,
+              answer: item.answerElement,
+            }))}
+          />
         </div>
       </section>
 

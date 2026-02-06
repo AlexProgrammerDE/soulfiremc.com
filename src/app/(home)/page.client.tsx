@@ -228,7 +228,7 @@ export function TerminalAnimation() {
 export function HomeFaq({
   items,
 }: {
-  items: { question: string; answer: string }[];
+  items: { question: string; answer: React.ReactNode }[];
 }) {
   return (
     <Accordion type="single" collapsible className="w-full">
