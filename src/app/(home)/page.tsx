@@ -366,7 +366,7 @@ export default function Page() {
   };
 
   return (
-    <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex-1">
+    <div className="px-4 pt-4 pb-6 w-full max-w-[1400px] mx-auto flex-1 md:pb-12">
       <JsonLd data={softwareJsonLd} />
       <JsonLd data={videoJsonLd} />
       <JsonLd data={faqJsonLd} />
