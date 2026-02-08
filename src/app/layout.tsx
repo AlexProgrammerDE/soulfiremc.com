@@ -96,7 +96,7 @@ export default async function RootLayout({
         <NuqsAdapter>
           <RootProvider>
             <JsonLd data={organizationJsonLd} />
-            <Banner id={"v2"}>SoulFire v2 is out now!</Banner>
+            {/* <Banner id={"v2"}>SoulFire v2 is out now!</Banner> */}
             {children}
             <CookieConsentBanner />
             <Toaster richColors />
