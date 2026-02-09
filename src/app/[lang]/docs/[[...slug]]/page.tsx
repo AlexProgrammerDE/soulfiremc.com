@@ -18,29 +18,34 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { i18n } from "@/lib/i18n";
 import { getPageImage, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
 export default async function Page(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ lang: string; slug?: string[] }>;
 }) {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const page = source.getPage(params.slug, params.lang);
   if (!page) notFound();
 
   const MDX = page.data.body;
 
   // Build breadcrumb trail
+  const langPrefix = params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
   const breadcrumbItems: Array<{ name: string; url: string }> = [
-    { name: "Home", url: "https://soulfiremc.com" },
-    { name: "Docs", url: "https://soulfiremc.com/docs" },
+    { name: "Home", url: `https://soulfiremc.com${langPrefix}` },
+    { name: "Docs", url: `https://soulfiremc.com${langPrefix}/docs` },
   ];
 
   if (params.slug) {
-    let currentPath = "/docs";
+    let currentPath = `${langPrefix}/docs`;
     for (let i = 0; i < params.slug.length; i++) {
       currentPath += `/${params.slug[i]}`;
-      const currentPage = source.getPage(params.slug.slice(0, i + 1));
+      const currentPage = source.getPage(
+        params.slug.slice(0, i + 1),
+        params.lang,
+      );
       if (currentPage) {
         breadcrumbItems.push({
           name: currentPage.data.title,
@@ -137,13 +142,17 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ lang: string; slug?: string[] }>;
 }): Promise<Metadata> {
   const params = await props.params;
-  const page = source.getPage(params.slug);
+  const page = source.getPage(params.slug, params.lang);
   if (!page) notFound();
 
   const image = getPageImage(page).url;
+  const slugPath = params.slug ? params.slug.join("/") : "";
+  const enUrl = slugPath ? `/docs/${slugPath}` : "/docs";
+  const deUrl = slugPath ? `/de/docs/${slugPath}` : "/de/docs";
+
   return {
     title: page.data.title,
     description: page.data.description,
@@ -153,6 +162,13 @@ export async function generateMetadata(props: {
     twitter: {
       card: "summary_large_image",
       images: image,
+    },
+    alternates: {
+      canonical: "./",
+      languages: {
+        en: enUrl,
+        de: deUrl,
+      },
     },
   };
 }

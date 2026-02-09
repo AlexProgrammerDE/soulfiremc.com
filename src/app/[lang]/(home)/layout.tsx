@@ -1,11 +1,20 @@
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import type { ReactNode } from "react";
-import { baseOptions } from "@/app/layout.config";
+import { baseOptions } from "@/app/[lang]/layout.config";
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default async function Layout({
+  params,
+  children,
+}: {
+  params: Promise<{ lang: string }>;
+  children: ReactNode;
+}) {
+  const { lang } = await params;
+  const options = baseOptions(lang);
+
   return (
     <HomeLayout
-      {...baseOptions}
+      {...options}
       links={[
         {
           type: "main",
@@ -37,7 +46,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           url: "/get-proxies",
           description: "Get Proxies for SoulFire",
         },
-        ...(baseOptions.links || []),
+        ...(options.links || []),
       ]}
     >
       {children}
