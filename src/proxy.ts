@@ -5,7 +5,5 @@ export default createI18nMiddleware(i18n);
 
 export const config = {
   // Matcher ignoring API routes, static assets, OG image routes, LLM routes, sitemap, robots
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|logo.png|nyan-cat.webp|RELAY-KAWND|va|docs-og|blog-og|llms|sitemap|robots).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|RELAY-KAWND|va|docs-og|blog-og|.*\\..*).*)"],
 };
