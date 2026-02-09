@@ -13,7 +13,6 @@ import type {
   BreadcrumbList,
   FAQPage,
   SoftwareApplication,
-  VideoObject,
   WithContext,
 } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
@@ -339,19 +338,6 @@ export default function Page() {
     })),
   };
 
-  const videoJsonLd: WithContext<VideoObject> = {
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    name: "SoulFire Demo Video",
-    description:
-      "Demonstration of SoulFire Minecraft bot tool features and capabilities",
-    thumbnailUrl: "https://soulfiremc.com/logo.png",
-    uploadDate: "2024-01-01T00:00:00Z",
-    contentUrl: "https://www.youtube.com/watch?v=BD-xE8vbHtQ",
-    embedUrl: "https://www.youtube.com/embed/BD-xE8vbHtQ",
-    duration: "PT5M",
-  };
-
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -368,7 +354,6 @@ export default function Page() {
   return (
     <div className="px-4 pt-4 pb-6 w-full max-w-[1400px] mx-auto flex-1 md:pb-12">
       <JsonLd data={softwareJsonLd} />
-      <JsonLd data={videoJsonLd} />
       <JsonLd data={faqJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
       {/* Hero Section */}
