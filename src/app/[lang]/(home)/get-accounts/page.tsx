@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import type { ItemList, WithContext } from "schema-dts";
+import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import {
   DiscordMemberBadge,
@@ -11,11 +11,11 @@ import { GetAccountsClient, type Provider } from "./page.client";
 export const metadata: Metadata = {
   title: "Get Accounts",
   description:
-    "Buy cheap Minecraft accounts for bot testing — compare MFA, token, and cookie accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
+    "Buy cheap Minecraft accounts for bot testing — compare MFA and NFA accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
 };
 
 const PROVIDERS: Provider[] = [
-  // Token/Cookie Accounts (Temporary)
+  // NFA Accounts (Temporary)
   {
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
@@ -25,7 +25,7 @@ const PROVIDERS: Provider[] = [
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.gg/ravealts2",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "10-15¢",
     priceValue: 0.1,
     couponCode: "SOULFIRE",
@@ -37,8 +37,8 @@ const PROVIDERS: Provider[] = [
     url: "https://discord.gg/logs",
     testimonial:
       "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 50 accounts.",
-    badges: ["free", "instant-delivery"],
-    category: "token-accounts",
+    badges: ["free", "instant-delivery", "soulfire-compatible"],
+    category: "nfa-accounts",
     price: "Free",
     priceValue: 0,
   },
@@ -50,7 +50,7 @@ const PROVIDERS: Provider[] = [
     url: "https://discord.gg/nicealts",
     websiteUrl: "https://status.nicealts.com",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "5-10¢",
     priceValue: 0.05,
   },
@@ -63,7 +63,7 @@ const PROVIDERS: Provider[] = [
     websiteUrl: "https://zzxgp.me",
     discordUrl: "https://discord.gg/gycmTvrfnj",
     badges: ["instant-delivery", "bulk-discount"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "5-12¢",
     priceValue: 0.05,
   },
@@ -74,7 +74,7 @@ const PROVIDERS: Provider[] = [
       "High quality cookie and token accounts at competitive prices. Reliable delivery through their dedicated platform.",
     url: "https://discord.gg/rmxayvwc5K",
     badges: ["high-quality", "instant-delivery"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "12¢",
     priceValue: 0.12,
   },
@@ -87,7 +87,7 @@ const PROVIDERS: Provider[] = [
     websiteUrl: "https://mogalts.win",
     discordUrl: "https://discord.gg/jkNaVRWRTm",
     badges: ["instant-delivery", "bulk-discount"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "5¢",
     priceValue: 0.05,
   },
@@ -100,7 +100,7 @@ const PROVIDERS: Provider[] = [
     websiteUrl: "https://localts.store",
     discordUrl: "https://discord.gg/B4xkxHwmd4",
     badges: ["high-quality", "lifetime-warranty"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "25¢",
     priceValue: 0.25,
   },
@@ -111,7 +111,7 @@ const PROVIDERS: Provider[] = [
       "Specializes in unbanned accounts. Good option if you need accounts without existing bans.",
     url: "https://discord.gg/teMqsB3PYG",
     badges: ["instant-delivery"],
-    category: "token-accounts",
+    category: "nfa-accounts",
     price: "5¢",
     priceValue: 0.05,
   },
@@ -191,6 +191,72 @@ const PROVIDERS: Provider[] = [
   },
 ];
 
+const faqItems: {
+  question: string;
+  answerHtml: string;
+  answerElement: React.ReactNode;
+}[] = [
+  {
+    question: "What are MFA accounts?",
+    answerHtml:
+      "MFA (Multi-Factor Authentication) accounts are permanent Minecraft accounts with full access. You can change the email, password, and username. They're more secure and stable, which makes them pricier.",
+    answerElement: (
+      <>
+        MFA (Multi-Factor Authentication) accounts are permanent Minecraft
+        accounts with full access. You can change the email, password, and
+        username. They're more secure and stable, which makes them pricier.
+      </>
+    ),
+  },
+  {
+    question: "What are NFA accounts?",
+    answerHtml:
+      "NFA (Non-Full Access) accounts are temporary accounts that may stop working over time. They're cheaper but come with a higher risk of losing access.",
+    answerElement: (
+      <>
+        NFA (Non-Full Access) accounts are temporary accounts that may stop
+        working over time. They're cheaper but come with a higher risk of losing
+        access.
+      </>
+    ),
+  },
+  {
+    question: "Which account type works with SoulFire?",
+    answerHtml:
+      "MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire supports refresh token auth but does not support cookie/access token auth.",
+    answerElement: (
+      <>
+        MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire
+        supports refresh token auth but does not support cookie/access token
+        auth.
+      </>
+    ),
+  },
+  {
+    question: "Are these providers affiliated with SoulFire?",
+    answerHtml:
+      "No. This is a community-curated list. We recommend doing your own research before purchasing. Some providers offer coupon codes for SoulFire users.",
+    answerElement: (
+      <>
+        No. This is a community-curated list. We recommend doing your own
+        research before purchasing. Some providers offer coupon codes for
+        SoulFire users.
+      </>
+    ),
+  },
+  {
+    question: 'What does the "Free" badge mean?',
+    answerHtml:
+      "Providers with the Free badge offer accounts at no cost. These are typically temporary tokens with daily limits.",
+    answerElement: (
+      <>
+        Providers with the Free badge offer accounts at no cost. These are
+        typically temporary tokens with daily limits.
+      </>
+    ),
+  },
+];
+
 function DiscordBadgeWrapper({ url }: { url: string }) {
   if (!url.includes("discord.gg")) return null;
 
@@ -211,6 +277,19 @@ export default function GetAccountsPage() {
     }
   }
 
+  const faqJsonLd: WithContext<FAQPage> = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question" as const,
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer" as const,
+        text: item.answerHtml,
+      },
+    })),
+  };
+
   const itemListJsonLd: WithContext<ItemList> = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -230,10 +309,15 @@ export default function GetAccountsPage() {
   return (
     <>
       <JsonLd data={itemListJsonLd} />
+      <JsonLd data={faqJsonLd} />
       <Suspense>
         <GetAccountsClient
           providers={PROVIDERS}
           discordBadges={discordBadges}
+          faqItems={faqItems.map((item) => ({
+            question: item.question,
+            answer: item.answerElement,
+          }))}
         />
       </Suspense>
     </>

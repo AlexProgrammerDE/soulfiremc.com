@@ -18,6 +18,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -253,7 +259,18 @@ function ProviderCard({ provider }: { provider: Provider }) {
   );
 }
 
-export function GetProxiesClient({ providers }: { providers: Provider[] }) {
+type FaqItem = {
+  question: string;
+  answer: React.ReactNode;
+};
+
+export function GetProxiesClient({
+  providers,
+  faqItems,
+}: {
+  providers: Provider[];
+  faqItems: FaqItem[];
+}) {
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
@@ -359,6 +376,26 @@ export function GetProxiesClient({ providers }: { providers: Provider[] }) {
             ))}
           </div>
         )}
+      </div>
+
+      {/* FAQ Section */}
+      <div className="max-w-3xl mx-auto w-full space-y-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+          <p className="text-sm text-muted-foreground">
+            Common questions about proxies for SoulFire
+          </p>
+        </div>
+        <Accordion type="single" collapsible className="w-full">
+          {faqItems.map((item, i) => (
+            <AccordionItem key={item.question} value={`faq-${i}`}>
+              <AccordionTrigger>{item.question}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                {item.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
 
       <div className="border-t pt-6 max-w-5xl mx-auto text-center space-y-2">

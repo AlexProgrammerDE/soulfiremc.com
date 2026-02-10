@@ -19,6 +19,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -37,7 +43,7 @@ type Badge =
   | "bulk-discount"
   | "soulfire-compatible";
 
-type Category = "token-accounts" | "mfa-accounts";
+type Category = "nfa-accounts" | "mfa-accounts";
 
 type SortOption = "default" | "price-asc" | "price-desc";
 
@@ -56,9 +62,15 @@ export type Provider = {
   couponDiscount?: string;
 };
 
+type FaqItem = {
+  question: string;
+  answer: React.ReactNode;
+};
+
 type Props = {
   providers: Provider[];
   discordBadges: Record<string, React.ReactNode>;
+  faqItems: FaqItem[];
 };
 
 const BADGE_CONFIG: Record<
@@ -118,8 +130,8 @@ const CATEGORY_CONFIG: Record<
   Category,
   { label: string; description: string }
 > = {
-  "token-accounts": {
-    label: "Token/Cookie Accounts",
+  "nfa-accounts": {
+    label: "NFA Accounts",
     description: "Temporary accounts - budget to premium tiers",
   },
   "mfa-accounts": {
@@ -152,7 +164,7 @@ const FILTER_BADGES: Badge[] = [
   "bulk-discount",
 ];
 
-const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "token-accounts"];
+const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "nfa-accounts"];
 
 const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"];
 
@@ -273,7 +285,7 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
   );
 }
 
-export function GetAccountsClient({ providers, discordBadges }: Props) {
+export function GetAccountsClient({ providers, discordBadges, faqItems }: Props) {
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -308,8 +320,8 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
     });
   }, [providers, badges, category]);
 
-  const tokenProviders = sortProviders(
-    filteredProviders.filter((p) => p.category === "token-accounts"),
+  const nfaProviders = sortProviders(
+    filteredProviders.filter((p) => p.category === "nfa-accounts"),
     sort,
   );
   const mfaProviders = sortProviders(
@@ -473,24 +485,25 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
             </div>
           )}
 
-          {/* Token/Cookie Accounts Section */}
-          {tokenProviders.length > 0 && (
+          {/* NFA Accounts Section */}
+          {nfaProviders.length > 0 && (
             <div className="max-w-5xl mx-auto w-full space-y-4">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold">
-                  Token/Cookie Accounts (Temporary)
+                  NFA Accounts (Temporary)
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Temporary accounts ranging from budget tokens to premium
-                  cookies. Prices shown are per account.
+                  Temporary accounts that may stop working over time. Prices
+                  shown are per account.
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-500">
-                  <strong>Note:</strong> SoulFire does not currently support
-                  token/cookie accounts. Only MFA accounts are supported.
+                  <strong>Note:</strong> SoulFire does not support
+                  cookie/access token auth. However, SoulFire does support
+                  refresh token auth.
                 </p>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {tokenProviders.map((provider, index) => (
+                {nfaProviders.map((provider, index) => (
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
@@ -504,6 +517,26 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
           )}
         </>
       )}
+
+      {/* FAQ Section */}
+      <div className="max-w-3xl mx-auto w-full space-y-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+          <p className="text-sm text-muted-foreground">
+            Common questions about Minecraft accounts
+          </p>
+        </div>
+        <Accordion type="single" collapsible className="w-full">
+          {faqItems.map((item, i) => (
+            <AccordionItem key={item.question} value={`faq-${i}`}>
+              <AccordionTrigger>{item.question}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                {item.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
 
       <div className="border-t pt-6 max-w-5xl mx-auto text-center space-y-2">
         <p className="text-sm text-muted-foreground">

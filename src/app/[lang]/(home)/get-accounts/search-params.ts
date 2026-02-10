@@ -6,7 +6,7 @@ import {
   type SearchParams,
 } from "nuqs/server";
 
-export const CATEGORIES = ["token-accounts", "mfa-accounts"] as const;
+export const CATEGORIES = ["nfa-accounts", "mfa-accounts"] as const;
 
 export const BADGES = [
   "free",
