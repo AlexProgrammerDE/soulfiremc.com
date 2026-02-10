@@ -3,6 +3,8 @@ import Link from "next/link";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { GetProxiesClient, type Provider } from "./page.client";
+import { cacheLife } from 'next/cache';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: "Get Proxies",
@@ -203,7 +205,10 @@ const faqItems: {
   },
 ];
 
-export default function GetProxiesPage() {
+export default async function GetProxiesPage() {
+  "use cache";
+  cacheLife("hours");
+
   const faqJsonLd: WithContext<FAQPage> = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -237,13 +242,15 @@ export default function GetProxiesPage() {
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <GetProxiesClient
-        providers={PROVIDERS}
-        faqItems={faqItems.map((item) => ({
-          question: item.question,
-          answer: item.answerElement,
-        }))}
-      />
+      <Suspense>
+        <GetProxiesClient
+          providers={PROVIDERS}
+          faqItems={faqItems.map((item) => ({
+            question: item.question,
+            answer: item.answerElement,
+          }))}
+        />
+      </Suspense>
     </>
   );
 }
