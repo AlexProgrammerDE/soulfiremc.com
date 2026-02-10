@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
@@ -138,23 +139,32 @@ const faqItems: {
   {
     question: "Why do I need proxies for SoulFire?",
     answerHtml:
-      "When running multiple bots, servers may block your IP. Proxies give each bot a different IP address, avoiding rate limits and IP bans.",
+      'When running multiple bots, servers may block your IP. Proxies give each bot a different IP address, avoiding rate limits and IP bans. Learn more in the <a href="https://soulfiremc.com/docs/usage/proxies">Proxy Guide</a>.',
     answerElement: (
       <>
         When running multiple bots, servers may block your IP. Proxies give each
-        bot a different IP address, avoiding rate limits and IP bans.
+        bot a different IP address, avoiding rate limits and IP bans. Learn more
+        in the{" "}
+        <Link href="/docs/usage/proxies" className="underline text-primary">
+          Proxy Guide
+        </Link>
+        .
       </>
     ),
   },
   {
     question: "What type of proxy should I use?",
     answerHtml:
-      "Residential proxies are the hardest to detect but cost more. Datacenter proxies are faster and cheaper but easier to block. ISP proxies offer a middle ground.",
+      'Residential proxies are the hardest to detect but cost more. Datacenter proxies are faster and cheaper but easier to block. ISP proxies offer a middle ground. See the <a href="https://soulfiremc.com/docs/usage/proxies">Proxy Guide</a> for recommendations.',
     answerElement: (
       <>
         Residential proxies are the hardest to detect but cost more. Datacenter
         proxies are faster and cheaper but easier to block. ISP proxies offer a
-        middle ground.
+        middle ground. See the{" "}
+        <Link href="/docs/usage/proxies" className="underline text-primary">
+          Proxy Guide
+        </Link>{" "}
+        for recommendations.
       </>
     ),
   },

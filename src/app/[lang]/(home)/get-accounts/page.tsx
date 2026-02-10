@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
@@ -199,36 +200,49 @@ const faqItems: {
   {
     question: "What are MFA accounts?",
     answerHtml:
-      "MFA (Multi-Factor Authentication) accounts are permanent Minecraft accounts with full access. You can change the email, password, and username. They're more secure and stable, which makes them pricier.",
+      'MFA (Multi-Factor Authentication) accounts are permanent Minecraft accounts with full access. You can change the email, password, and username. They\'re more secure and stable, which makes them pricier. Learn more in the <a href="https://soulfiremc.com/docs/usage/accounts">Account Guide</a>.',
     answerElement: (
       <>
         MFA (Multi-Factor Authentication) accounts are permanent Minecraft
         accounts with full access. You can change the email, password, and
         username. They're more secure and stable, which makes them pricier.
+        Learn more in the{" "}
+        <Link href="/docs/usage/accounts" className="underline text-primary">
+          Account Guide
+        </Link>
+        .
       </>
     ),
   },
   {
     question: "What are NFA accounts?",
     answerHtml:
-      "NFA (Non-Full Access) accounts are temporary accounts that may stop working over time. They're cheaper but come with a higher risk of losing access.",
+      'NFA (Non-Full Access) accounts are temporary accounts that may stop working over time. They\'re cheaper but come with a higher risk of losing access. See the <a href="https://soulfiremc.com/docs/usage/accounts">Account Guide</a> for details on supported account types.',
     answerElement: (
       <>
         NFA (Non-Full Access) accounts are temporary accounts that may stop
         working over time. They're cheaper but come with a higher risk of losing
-        access.
+        access. See the{" "}
+        <Link href="/docs/usage/accounts" className="underline text-primary">
+          Account Guide
+        </Link>{" "}
+        for details on supported account types.
       </>
     ),
   },
   {
     question: "Which account type works with SoulFire?",
     answerHtml:
-      "MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire supports refresh token auth but does not support cookie/access token auth.",
+      'MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire supports refresh token auth but does not support cookie/access token auth. Read the <a href="https://soulfiremc.com/docs/usage/accounts">Account Guide</a> for setup instructions.',
     answerElement: (
       <>
         MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire
         supports refresh token auth but does not support cookie/access token
-        auth.
+        auth. Read the{" "}
+        <Link href="/docs/usage/accounts" className="underline text-primary">
+          Account Guide
+        </Link>{" "}
+        for setup instructions.
       </>
     ),
   },
