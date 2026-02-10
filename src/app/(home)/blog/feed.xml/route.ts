@@ -1,12 +1,7 @@
-import type { NextRequest } from "next/server";
 import { blogSource } from "@/lib/source";
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ lang: string }> },
-) {
-  const { lang } = await params;
-  const posts = blogSource.getPages(lang).sort((a, b) => {
+export async function GET() {
+  const posts = blogSource.getPages().sort((a, b) => {
     const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
     const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
     return dateB - dateA;

@@ -7,7 +7,6 @@ import { notFound } from "next/navigation";
 import type { BlogPosting, BreadcrumbList, WithContext } from "schema-dts";
 import { ShareButton } from "@/components/blog/share-button";
 import { JsonLd } from "@/components/json-ld";
-import { i18n } from "@/lib/i18n";
 import { blogSource } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -22,13 +21,12 @@ function getReadingTime(structuredData: {
 function getRelatedPosts(
   currentSlug: string,
   currentTags: string[] | undefined,
-  lang: string,
   limit = 3,
 ) {
   if (!currentTags || currentTags.length === 0) return [];
 
   return blogSource
-    .getPages(lang)
+    .getPages()
     .filter((p) => p.slugs[0] !== currentSlug)
     .map((p) => {
       const shared = p.data.tags?.filter((t) => currentTags.includes(t)) ?? [];
@@ -41,19 +39,15 @@ function getRelatedPosts(
 }
 
 export default async function BlogPost(props: {
-  params: Promise<{ lang: string; slug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
   const params = await props.params;
-  const page = blogSource.getPage([params.slug], params.lang);
+  const page = blogSource.getPage([params.slug]);
   if (!page) notFound();
 
   const MDX = page.data.body;
   const readingTime = getReadingTime(page.data.structuredData);
-  const relatedPosts = getRelatedPosts(
-    params.slug,
-    page.data.tags,
-    params.lang,
-  );
+  const relatedPosts = getRelatedPosts(params.slug, page.data.tags);
   const lastModified = page.data.lastModified
     ? new Date(page.data.lastModified)
     : undefined;
@@ -94,8 +88,6 @@ export default async function BlogPost(props: {
     keywords: page.data.tags?.join(", "),
   };
 
-  const langPrefix =
-    params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -104,13 +96,13 @@ export default async function BlogPost(props: {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: `https://soulfiremc.com${langPrefix}`,
+        item: "https://soulfiremc.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Blog",
-        item: `https://soulfiremc.com${langPrefix}/blog`,
+        item: "https://soulfiremc.com/blog",
       },
       {
         "@type": "ListItem",
@@ -264,15 +256,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ lang: string; slug: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
-  const page = blogSource.getPage([params.slug], params.lang);
+  const page = blogSource.getPage([params.slug]);
   if (!page) notFound();
 
   const ogImage = `/blog-og/${params.slug}/image.png`;
-  const enUrl = `/blog/${params.slug}`;
-  const deUrl = `/de/blog/${params.slug}`;
 
   return {
     title: page.data.title,
@@ -300,10 +290,6 @@ export async function generateMetadata(props: {
     },
     alternates: {
       canonical: "./",
-      languages: {
-        en: enUrl,
-        de: deUrl,
-      },
     },
   };
 }

@@ -20,11 +20,8 @@ export const metadata: Metadata = {
     "Latest updates, tutorials, and insights about Minecraft bot testing, server stress testing, and SoulFire development.",
 };
 
-export default async function BlogIndex(props: {
-  params: Promise<{ lang: string }>;
-}) {
-  const { lang } = await props.params;
-  const posts = blogSource.getPages(lang).sort((a, b) => {
+export default function BlogIndex() {
+  const posts = blogSource.getPages().sort((a, b) => {
     const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
     const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
     return dateB - dateA;
