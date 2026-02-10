@@ -9,6 +9,7 @@ import {
 export const CATEGORIES = ["token-accounts", "mfa-accounts"] as const;
 
 export const BADGES = [
+  "free",
   "high-quality",
   "instant-delivery",
   "lifetime-warranty",

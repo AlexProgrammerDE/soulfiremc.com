@@ -8,6 +8,7 @@ import {
   Check,
   ExternalLink,
   Filter,
+  Gift,
   Globe,
   Package,
   Shield,
@@ -29,6 +30,7 @@ import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
 type Badge =
+  | "free"
   | "high-quality"
   | "instant-delivery"
   | "lifetime-warranty"
@@ -68,6 +70,13 @@ const BADGE_CONFIG: Record<
     icon: React.ReactNode;
   }
 > = {
+  free: {
+    label: "Free",
+    className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    description:
+      "Accounts are available completely for free - no purchase required.",
+    icon: <Gift className="h-3 w-3" />,
+  },
   "soulfire-compatible": {
     label: "SoulFire Compatible",
     className: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
@@ -135,6 +144,7 @@ const SORT_CONFIG: Record<
 };
 
 const FILTER_BADGES: Badge[] = [
+  "free",
   "soulfire-compatible",
   "high-quality",
   "instant-delivery",
@@ -239,10 +249,11 @@ function ProviderCard({
                 </a>
               </Button>
             )}
-            {provider.discordUrl && (
+            {(provider.discordUrl ||
+              provider.url.includes("discord.gg")) && (
               <Button asChild variant="secondary">
                 <a
-                  href={provider.discordUrl}
+                  href={provider.discordUrl ?? provider.url}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
                 >

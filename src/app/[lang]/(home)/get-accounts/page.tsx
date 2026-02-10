@@ -32,6 +32,17 @@ const PROVIDERS: Provider[] = [
     couponDiscount: "10% off",
   },
   {
+    name: "mori's alternative world",
+    logo: "/accounts/mori.png",
+    url: "https://discord.gg/logs",
+    testimonial:
+      "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 50 accounts.",
+    badges: ["free", "instant-delivery"],
+    category: "token-accounts",
+    price: "Free",
+    priceValue: 0,
+  },
+  {
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
     testimonial:
