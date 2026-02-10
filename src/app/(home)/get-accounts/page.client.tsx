@@ -238,7 +238,7 @@ function ProviderCard({
               discount={provider.couponDiscount}
             />
           )}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button asChild>
               <a href={provider.url} target="_blank" rel="noopener nofollow">
                 Get Accounts
