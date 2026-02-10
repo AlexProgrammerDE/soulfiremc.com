@@ -1,5 +1,6 @@
 "use client";
 
+import { SiDiscord } from "@icons-pack/react-simple-icons";
 import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
@@ -7,6 +8,7 @@ import {
   Check,
   ExternalLink,
   Filter,
+  Globe,
   Package,
   Shield,
   Star,
@@ -43,6 +45,7 @@ export type Provider = {
   testimonial: string;
   url: string;
   websiteUrl?: string;
+  discordUrl?: string;
   badges: Badge[];
   category: Category;
   price: string;
@@ -232,7 +235,19 @@ function ProviderCard({
                   rel="noopener noreferrer nofollow"
                 >
                   Website
-                  <ExternalLink className="ml-2 h-4 w-4" />
+                  <Globe className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {provider.discordUrl && (
+              <Button asChild variant="secondary">
+                <a
+                  href={provider.discordUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                >
+                  Discord
+                  <SiDiscord className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             )}
@@ -443,7 +458,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
-                    discordBadge={discordBadges[provider.url]}
+                    discordBadge={discordBadges[provider.discordUrl ?? provider.url]}
                   />
                 ))}
               </div>
@@ -471,7 +486,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
-                    discordBadge={discordBadges[provider.url]}
+                    discordBadge={discordBadges[provider.discordUrl ?? provider.url]}
                   />
                 ))}
               </div>

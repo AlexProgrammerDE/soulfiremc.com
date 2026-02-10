@@ -21,8 +21,9 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/ravealts.gif",
     testimonial:
       "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
-    url: "https://discord.gg/ravealts",
+    url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
+    discordUrl: "https://discord.gg/ravealts2",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
     category: "token-accounts",
     price: "10-15¢",
@@ -36,6 +37,7 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Offers multiple tiers from budget tokens to high-quality cookies. Responsive support and reliable delivery across all price points.",
     url: "https://discord.gg/nicealts",
+    websiteUrl: "https://status.nicealts.com",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
     category: "token-accounts",
     price: "5-10¢",
@@ -46,7 +48,9 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/zzxgp.png",
     testimonial:
       "Versatile shop offering multiple tiers from budget tokens to premium cookies. Good entry point for new users with competitive pricing.",
-    url: "https://discord.gg/gycmTvrfnj",
+    url: "https://zzxgp.me",
+    websiteUrl: "https://zzxgp.me",
+    discordUrl: "https://discord.gg/gycmTvrfnj",
     badges: ["instant-delivery", "bulk-discount"],
     category: "token-accounts",
     price: "5-12¢",
@@ -68,7 +72,9 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/mogalts.png",
     testimonial:
       "Low-cost token accounts for budget-conscious users. Basic accounts at competitive prices.",
-    url: "https://discord.gg/PeThFREW4y",
+    url: "https://mogalts.win",
+    websiteUrl: "https://mogalts.win",
+    discordUrl: "https://discord.gg/jkNaVRWRTm",
     badges: ["instant-delivery", "bulk-discount"],
     category: "token-accounts",
     price: "5¢",
@@ -79,7 +85,9 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/luma.png",
     testimonial:
       "Premium tier accounts with emphasis on quality over quantity. Higher price point but accounts known to last longer.",
-    url: "https://discord.gg/B4xkxHwmd4",
+    url: "https://localts.store",
+    websiteUrl: "https://localts.store",
+    discordUrl: "https://discord.gg/B4xkxHwmd4",
     badges: ["high-quality", "lifetime-warranty"],
     category: "token-accounts",
     price: "25¢",
@@ -102,8 +110,9 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/ravealts.gif",
     testimonial:
       "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
-    url: "https://discord.gg/ravealts",
+    url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
+    discordUrl: "https://discord.gg/ravealts2",
     badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$5.67",
@@ -128,6 +137,7 @@ const PROVIDERS: Provider[] = [
     testimonial:
       "Also offers permanent MFA accounts in addition to their popular token/cookie selection. Trusted provider with responsive support.",
     url: "https://discord.gg/nicealts",
+    websiteUrl: "https://status.nicealts.com",
     badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$5.00",
@@ -149,7 +159,9 @@ const PROVIDERS: Provider[] = [
     logo: "/accounts/zzxgp.png",
     testimonial:
       "Budget MFA accounts at competitive prices. Note: accounts are likely Hypixel banned and may have higher pullback rates.",
-    url: "https://discord.gg/gycmTvrfnj",
+    url: "https://zzxgp.me",
+    websiteUrl: "https://zzxgp.me",
+    discordUrl: "https://discord.gg/gycmTvrfnj",
     badges: ["instant-delivery", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$4.50",
@@ -182,8 +194,9 @@ export default function GetAccountsPage() {
   // Pre-render Discord badges for each unique Discord URL
   const discordBadges: Record<string, React.ReactNode> = {};
   for (const provider of PROVIDERS) {
-    if (provider.url.includes("discord.gg") && !discordBadges[provider.url]) {
-      discordBadges[provider.url] = <DiscordBadgeWrapper url={provider.url} />;
+    const discordLink = provider.discordUrl ?? provider.url;
+    if (discordLink.includes("discord.gg") && !discordBadges[discordLink]) {
+      discordBadges[discordLink] = <DiscordBadgeWrapper url={discordLink} />;
     }
   }
 
