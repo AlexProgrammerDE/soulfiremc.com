@@ -19,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
+import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
   Accordion,
   AccordionContent,
@@ -32,6 +33,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import type { DiscordInviteResponse } from "@/lib/discord";
 import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
@@ -50,6 +52,7 @@ type SortOption = "default" | "price-asc" | "price-desc";
 export type Provider = {
   name: string;
   logo?: string;
+  logoUnoptimized?: boolean;
   testimonial: string;
   url: string;
   websiteUrl?: string;
@@ -60,6 +63,7 @@ export type Provider = {
   priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
+  discordInvite: DiscordInviteResponse | null;
 };
 
 type FaqItem = {
@@ -69,7 +73,6 @@ type FaqItem = {
 
 type Props = {
   providers: Provider[];
-  discordBadges: Record<string, React.ReactNode>;
   faqItems: FaqItem[];
 };
 
@@ -192,6 +195,7 @@ function ProviderLogo({ provider }: { provider: Provider }) {
     return (
       <Image
         src={provider.logo}
+        unoptimized={provider.logoUnoptimized}
         alt={`${provider.name} logo`}
         fill
         className="object-contain p-2"
@@ -205,13 +209,7 @@ function ProviderLogo({ provider }: { provider: Provider }) {
   );
 }
 
-function ProviderCard({
-  provider,
-  discordBadge,
-}: {
-  provider: Provider;
-  discordBadge?: React.ReactNode;
-}) {
+function ProviderCard({ provider }: { provider: Provider }) {
   return (
     <Card className="transition-all duration-300 hover:shadow-lg">
       <div className="flex flex-col sm:flex-row gap-4 p-6">
@@ -224,7 +222,7 @@ function ProviderCard({
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
               {provider.price}
             </span>
-            {discordBadge}
+            <DiscordMemberBadge info={provider.discordInvite} />
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
                 <ProviderBadge key={badge} badge={badge} />
@@ -285,11 +283,8 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
   );
 }
 
-export function GetAccountsClient({
-  providers,
-  discordBadges,
-  faqItems,
-}: Props) {
+export function GetAccountsClient(props: Props) {
+  const { providers, faqItems } = props;
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -480,9 +475,6 @@ export function GetAccountsClient({
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
-                    discordBadge={
-                      discordBadges[provider.discordUrl ?? provider.url]
-                    }
                   />
                 ))}
               </div>
@@ -510,9 +502,6 @@ export function GetAccountsClient({
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
-                    discordBadge={
-                      discordBadges[provider.discordUrl ?? provider.url]
-                    }
                   />
                 ))}
               </div>

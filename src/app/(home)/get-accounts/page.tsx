@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
-import {
-  DiscordMemberBadge,
-  DiscordMemberBadgeSkeleton,
-} from "./discord-badge";
+import { extractInviteCode, fetchDiscordInvite } from "@/lib/discord";
 import { GetAccountsClient, type Provider } from "./page.client";
+import { cacheLife } from 'next/cache';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: "Get Accounts",
@@ -15,11 +13,12 @@ export const metadata: Metadata = {
     "Buy cheap Minecraft accounts for bot testing — compare MFA and NFA accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
 };
 
-const PROVIDERS: Provider[] = [
+const PROVIDERS: Omit<Provider, "discordInvite">[] = [
   // NFA Accounts (Temporary)
   {
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
+    logoUnoptimized: true,
     testimonial:
       "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
     url: "https://dash.ravealts.com",
@@ -271,25 +270,9 @@ const faqItems: {
   },
 ];
 
-function DiscordBadgeWrapper({ url }: { url: string }) {
-  if (!url.includes("discord.gg")) return null;
-
-  return (
-    <Suspense fallback={<DiscordMemberBadgeSkeleton />}>
-      <DiscordMemberBadge url={url} />
-    </Suspense>
-  );
-}
-
-export default function GetAccountsPage() {
-  // Pre-render Discord badges for each unique Discord URL
-  const discordBadges: Record<string, React.ReactNode> = {};
-  for (const provider of PROVIDERS) {
-    const discordLink = provider.discordUrl ?? provider.url;
-    if (discordLink.includes("discord.gg") && !discordBadges[discordLink]) {
-      discordBadges[discordLink] = <DiscordBadgeWrapper url={discordLink} />;
-    }
-  }
+export default async function GetAccountsPage() {
+  "use cache";
+  cacheLife("hours");
 
   const faqJsonLd: WithContext<FAQPage> = {
     "@context": "https://schema.org",
@@ -326,8 +309,19 @@ export default function GetAccountsPage() {
       <JsonLd data={faqJsonLd} />
       <Suspense>
         <GetAccountsClient
-          providers={PROVIDERS}
-          discordBadges={discordBadges}
+          providers={
+            await Promise.all(
+              PROVIDERS.map(async (provider) => {
+                const discordLink = provider.discordUrl ?? provider.url;
+                return {
+                  ...provider,
+                  discordInvite: discordLink.includes("discord.gg")
+                    ? await fetchDiscordInvite(extractInviteCode(discordLink))
+                    : null,
+                };
+              }),
+            )
+          }
           faqItems={faqItems.map((item) => ({
             question: item.question,
             answer: item.answerElement,

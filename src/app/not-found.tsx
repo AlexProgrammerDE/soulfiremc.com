@@ -10,6 +10,7 @@ export default function RootComponent() {
         <div className="mx-4">
           <Image
             src="/nyan-cat.webp"
+            unoptimized
             alt="Nyan Cat"
             width={500}
             height={500}

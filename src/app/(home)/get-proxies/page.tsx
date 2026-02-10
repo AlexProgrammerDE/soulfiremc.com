@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { GetProxiesClient, type Provider } from "./page.client";
@@ -238,15 +237,13 @@ export default function GetProxiesPage() {
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <Suspense>
-        <GetProxiesClient
-          providers={PROVIDERS}
-          faqItems={faqItems.map((item) => ({
-            question: item.question,
-            answer: item.answerElement,
-          }))}
-        />
-      </Suspense>
+      <GetProxiesClient
+        providers={PROVIDERS}
+        faqItems={faqItems.map((item) => ({
+          question: item.question,
+          answer: item.answerElement,
+        }))}
+      />
     </>
   );
 }
