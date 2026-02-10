@@ -231,7 +231,7 @@ function ProviderCard({
               <a
                 href={provider.url}
                 target="_blank"
-                rel="noopener noreferrer nofollow"
+                rel="noopener nofollow"
               >
                 Get Accounts
                 <ExternalLink className="ml-2 h-4 w-4" />
@@ -242,7 +242,7 @@ function ProviderCard({
                 <a
                   href={provider.websiteUrl}
                   target="_blank"
-                  rel="noopener noreferrer nofollow"
+                  rel="noopener nofollow"
                 >
                   Website
                   <Globe className="ml-2 h-4 w-4" />
@@ -255,7 +255,7 @@ function ProviderCard({
                 <a
                   href={provider.discordUrl ?? provider.url}
                   target="_blank"
-                  rel="noopener noreferrer nofollow"
+                  rel="noopener nofollow"
                 >
                   Discord
                   <SiDiscord className="ml-2 h-4 w-4" />
@@ -512,7 +512,7 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
           <a
             href="https://alts.watchdog.gay"
             target="_blank"
-            rel="noopener noreferrer nofollow"
+            rel="noopener nofollow"
             className="underline hover:text-foreground"
           >
             alts.watchdog.gay
