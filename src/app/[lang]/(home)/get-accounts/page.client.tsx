@@ -228,11 +228,7 @@ function ProviderCard({
           )}
           <div className="flex gap-2">
             <Button asChild>
-              <a
-                href={provider.url}
-                target="_blank"
-                rel="noopener nofollow"
-              >
+              <a href={provider.url} target="_blank" rel="noopener nofollow">
                 Get Accounts
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
@@ -249,8 +245,7 @@ function ProviderCard({
                 </a>
               </Button>
             )}
-            {(provider.discordUrl ||
-              provider.url.includes("discord.gg")) && (
+            {(provider.discordUrl || provider.url.includes("discord.gg")) && (
               <Button asChild variant="secondary">
                 <a
                   href={provider.discordUrl ?? provider.url}
@@ -469,7 +464,9 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
-                    discordBadge={discordBadges[provider.discordUrl ?? provider.url]}
+                    discordBadge={
+                      discordBadges[provider.discordUrl ?? provider.url]
+                    }
                   />
                 ))}
               </div>
@@ -497,7 +494,9 @@ export function GetAccountsClient({ providers, discordBadges }: Props) {
                   <ProviderCard
                     key={`${provider.name}-${index}`}
                     provider={provider}
-                    discordBadge={discordBadges[provider.discordUrl ?? provider.url]}
+                    discordBadge={
+                      discordBadges[provider.discordUrl ?? provider.url]
+                    }
                   />
                 ))}
               </div>

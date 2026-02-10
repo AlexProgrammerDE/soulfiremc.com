@@ -1,7 +1,7 @@
+import { defineI18nUI } from "fumadocs-ui/i18n";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import { RootProvider } from "fumadocs-ui/provider/next";
-import { defineI18nUI } from "fumadocs-ui/i18n";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { Organization, WithContext } from "schema-dts";

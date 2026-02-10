@@ -49,7 +49,11 @@ export default async function BlogPost(props: {
 
   const MDX = page.data.body;
   const readingTime = getReadingTime(page.data.structuredData);
-  const relatedPosts = getRelatedPosts(params.slug, page.data.tags, params.lang);
+  const relatedPosts = getRelatedPosts(
+    params.slug,
+    page.data.tags,
+    params.lang,
+  );
   const lastModified = page.data.lastModified
     ? new Date(page.data.lastModified)
     : undefined;
@@ -90,7 +94,8 @@ export default async function BlogPost(props: {
     keywords: page.data.tags?.join(", "),
   };
 
-  const langPrefix = params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
+  const langPrefix =
+    params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

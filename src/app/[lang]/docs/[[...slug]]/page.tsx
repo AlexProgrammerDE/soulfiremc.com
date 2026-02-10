@@ -32,7 +32,8 @@ export default async function Page(props: {
   const MDX = page.data.body;
 
   // Build breadcrumb trail
-  const langPrefix = params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
+  const langPrefix =
+    params.lang === i18n.defaultLanguage ? "" : `/${params.lang}`;
   const breadcrumbItems: Array<{ name: string; url: string }> = [
     { name: "Home", url: `https://soulfiremc.com${langPrefix}` },
     { name: "Docs", url: `https://soulfiremc.com${langPrefix}/docs` },

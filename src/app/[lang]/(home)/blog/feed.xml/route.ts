@@ -6,13 +6,11 @@ export async function GET(
   { params }: { params: Promise<{ lang: string }> },
 ) {
   const { lang } = await params;
-  const posts = blogSource
-    .getPages(lang)
-    .sort((a, b) => {
-      const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
-      const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
-      return dateB - dateA;
-    });
+  const posts = blogSource.getPages(lang).sort((a, b) => {
+    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return dateB - dateA;
+  });
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://soulfiremc.com";
 

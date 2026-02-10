@@ -166,7 +166,7 @@ const faqItems: {
   {
     question: "What is SoulFire?",
     answerHtml:
-      'SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling — they\'re virtually indistinguishable from real players. It\'s designed for stress testing servers, automating tasks, and development. <a href="https://soulfiremc.com/docs">Read the docs</a> to learn more.',
+      "SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling — they're virtually indistinguishable from real players. It's designed for stress testing servers, automating tasks, and development. <a href=\"https://soulfiremc.com/docs\">Read the docs</a> to learn more.",
     answerElement: (
       <>
         SoulFire is a Minecraft bot framework built on Fabric that runs real
@@ -243,8 +243,8 @@ const faqItems: {
           Download
         </Link>{" "}
         the native installer for your platform (Windows, macOS, or Linux). No
-        Java installation required — everything is bundled. Just install and run.
-        See the{" "}
+        Java installation required — everything is bundled. Just install and
+        run. See the{" "}
         <Link href="/docs/installation" className="underline text-primary">
           installation guide
         </Link>{" "}
