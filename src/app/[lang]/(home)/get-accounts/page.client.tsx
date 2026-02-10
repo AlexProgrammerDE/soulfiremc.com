@@ -285,7 +285,11 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
   );
 }
 
-export function GetAccountsClient({ providers, discordBadges, faqItems }: Props) {
+export function GetAccountsClient({
+  providers,
+  discordBadges,
+  faqItems,
+}: Props) {
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -497,9 +501,8 @@ export function GetAccountsClient({ providers, discordBadges, faqItems }: Props)
                   shown are per account.
                 </p>
                 <p className="text-sm text-yellow-600 dark:text-yellow-500">
-                  <strong>Note:</strong> SoulFire does not support
-                  cookie/access token auth. However, SoulFire does support
-                  refresh token auth.
+                  <strong>Note:</strong> SoulFire does not support cookie/access
+                  token auth. However, SoulFire does support refresh token auth.
                 </p>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
