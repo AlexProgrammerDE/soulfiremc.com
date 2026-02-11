@@ -36,7 +36,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     logo: "/accounts/mori.png",
     url: "https://discord.gg/logs",
     testimonial:
-      "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 50 accounts.",
+      "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 75 accounts.",
     badges: ["free", "instant-delivery", "soulfire-compatible"],
     category: "nfa-accounts",
     price: "Free",
