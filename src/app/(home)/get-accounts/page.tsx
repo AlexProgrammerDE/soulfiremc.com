@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 export const metadata: Metadata = {
   title: "Get Accounts",
   description:
-    "Buy cheap Minecraft accounts for bot testing — compare MFA and NFA accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
+    "Buy cheap Minecraft accounts for bot testing. Compare MFA and NFA accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
 };
 
 const PROVIDERS: Omit<Provider, "discordInvite">[] = [
@@ -46,7 +46,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
     testimonial:
-      "Offers multiple tiers from budget tokens to high-quality cookies. Responsive support and reliable delivery across all price points.",
+      "Multiple tiers from budget tokens to high-quality cookies. Responsive support.",
     url: "https://discord.gg/nicealts",
     websiteUrl: "https://status.nicealts.com",
     badges: ["high-quality", "instant-delivery", "bulk-discount"],
@@ -58,7 +58,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
     testimonial:
-      "Versatile shop offering multiple tiers from budget tokens to premium cookies. Good entry point for new users with competitive pricing.",
+      "Multiple tiers from budget tokens to premium cookies. Good entry point for new users.",
     url: "https://zzxgp.me",
     websiteUrl: "https://zzxgp.me",
     discordUrl: "https://discord.gg/gycmTvrfnj",
@@ -71,7 +71,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "YYY",
     logo: "/accounts/yyy.png",
     testimonial:
-      "High quality cookie and token accounts at competitive prices. Reliable delivery through their dedicated platform.",
+      "Cookie and token accounts with their own delivery platform.",
     url: "https://discord.gg/rmxayvwc5K",
     badges: ["high-quality", "instant-delivery"],
     category: "nfa-accounts",
@@ -82,7 +82,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Mog Alts",
     logo: "/accounts/mogalts.png",
     testimonial:
-      "Low-cost token accounts for budget-conscious users. Basic accounts at competitive prices.",
+      "Cheap token accounts starting at 5¢. No frills, just alts.",
     url: "https://mogalts.win",
     websiteUrl: "https://mogalts.win",
     discordUrl: "https://discord.gg/jkNaVRWRTm",
@@ -95,7 +95,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Localts",
     logo: "/accounts/luma.png",
     testimonial:
-      "Premium tier accounts with emphasis on quality over quantity. Higher price point but accounts known to last longer.",
+      "Higher price point, but accounts are known to last longer. Quality over quantity.",
     url: "https://localts.store",
     websiteUrl: "https://localts.store",
     discordUrl: "https://discord.gg/B4xkxHwmd4",
@@ -108,7 +108,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Less | Unbanned",
     logo: "/accounts/lessunbanned.png",
     testimonial:
-      "Specializes in unbanned accounts. Good option if you need accounts without existing bans.",
+      "Sells unbanned accounts specifically. Useful if you need clean accounts with no existing bans.",
     url: "https://discord.gg/teMqsB3PYG",
     badges: ["instant-delivery"],
     category: "nfa-accounts",
@@ -120,7 +120,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
     testimonial:
-      "Trusted MFA provider offering permanent accounts with full access and info change capabilities.",
+      "Permanent accounts with full access. You can change the email, password, and username.",
     url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.gg/ravealts2",
@@ -135,7 +135,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Luma MFA",
     logo: "/accounts/luma.png",
     testimonial:
-      "Permanent Minecraft accounts with full access. Reliable option for mains or long-term alts.",
+      "Full access accounts that work well as mains or long-term alts.",
     url: "https://discord.gg/5Wc4tA2ypY",
     badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
@@ -146,7 +146,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
     testimonial:
-      "Also offers permanent MFA accounts in addition to their popular token/cookie selection. Trusted provider with responsive support.",
+      "Also sells permanent MFA accounts alongside their token/cookie selection. Known for responsive support.",
     url: "https://discord.gg/nicealts",
     websiteUrl: "https://status.nicealts.com",
     badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
@@ -158,7 +158,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Aqua MFA",
     logo: "/accounts/aquamfa.png",
     testimonial:
-      "Budget MFA accounts at low prices. Note: accounts may be sourced from public breaches with higher pullback rates.",
+      "Cheap MFA accounts. Note: may be sourced from public breaches, so expect higher pullback rates.",
     url: "https://discord.gg/87XFhsS35V",
     badges: ["instant-delivery", "soulfire-compatible"],
     category: "mfa-accounts",
@@ -169,7 +169,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
     testimonial:
-      "Budget MFA accounts at competitive prices. Note: accounts are likely Hypixel banned and may have higher pullback rates.",
+      "Cheap MFA accounts. Note: likely Hypixel banned and may have higher pullback rates.",
     url: "https://zzxgp.me",
     websiteUrl: "https://zzxgp.me",
     discordUrl: "https://discord.gg/gycmTvrfnj",
@@ -182,7 +182,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Brano",
     logo: "/accounts/brano.png",
     testimonial:
-      "Specializes in premium OG usernames, Minecon capes, and rare collectible accounts. Higher price point for exclusive items.",
+      "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
     url: "https://discord.gg/EsbhHkm9e4",
     badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",

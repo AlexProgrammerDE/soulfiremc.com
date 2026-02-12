@@ -9,7 +9,7 @@ import { Suspense } from 'react';
 export const metadata: Metadata = {
   title: "Get Proxies",
   description:
-    "Best proxy providers for Minecraft bot testing — compare residential, datacenter, ISP, and mobile proxies. Free tiers available, with coupon codes and bulk pricing from top providers.",
+    "Best proxy providers for Minecraft bot testing. Compare residential, datacenter, ISP, and mobile proxies. Free tiers available, with coupon codes and bulk pricing from top providers.",
 };
 
 const PROVIDERS: Provider[] = [

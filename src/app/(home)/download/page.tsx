@@ -179,7 +179,7 @@ export default async function DownloadPage() {
               Support the project
             </CardTitle>
             <CardDescription>
-              SoulFire is free and open source — donations help keep it that
+              SoulFire is free and open source. Donations help keep it that
               way.
             </CardDescription>
           </CardHeader>

@@ -55,7 +55,7 @@ const features = [
     Icon: Rocket,
     name: "Easy to use",
     description:
-      "Native installers for Windows, macOS, and Linux. No Java installation required—just download, install, and start botting.",
+      "Native installers for Windows, macOS, and Linux. No Java required. Just download, install, and start botting.",
     href: "/docs/installation",
     cta: "Install now",
     className: "col-span-3 lg:col-span-1",
@@ -72,7 +72,7 @@ const features = [
     Icon: Zap,
     name: "High performance",
     description:
-      "Built on Fabric with official Minecraft client code. Bots use real physics, real networking, and are virtually indistinguishable from real players.",
+      "Built on Fabric with official Minecraft client code. Bots use real physics and real networking. Servers can't tell them apart from real players.",
     href: "/docs",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
@@ -116,7 +116,7 @@ const features = [
     Icon: Box,
     name: "Every version supported",
     description:
-      "Connect to any Minecraft version ever released—Classic, Alpha, Beta und up to latest release, including Bedrock Edition and April Fools snapshots.",
+      "Connect to any Minecraft version ever released: Classic, Alpha, Beta, up to the latest release, including Bedrock Edition and April Fools snapshots.",
     href: "/docs/usage/versions",
     cta: "See all versions",
     className: "col-span-3 lg:col-span-1",
@@ -135,7 +135,7 @@ const features = [
   },
   {
     Icon: AppWindow,
-    name: "Powerful plugin system",
+    name: "Plugin system",
     description:
       "15+ built-in plugins including Kill Aura, Auto Eat, Auto Armor, AI Chat Bot, and more. Create custom plugins as Fabric mods with full Minecraft API access.",
     href: "/docs/usage/plugins",
@@ -166,13 +166,13 @@ const faqItems: {
   {
     question: "What is SoulFire?",
     answerHtml:
-      "SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling — they're virtually indistinguishable from real players. It's designed for stress testing servers, automating tasks, and development. <a href=\"https://soulfiremc.com/docs\">Read the docs</a> to learn more.",
+      "SoulFire is a Minecraft bot framework built on Fabric that runs real client code. Bots use actual Minecraft physics, networking, and protocol handling, so servers can't tell them apart from real players. It's built for stress testing servers, automating tasks, and development. <a href=\"https://soulfiremc.com/docs\">Read the docs</a> to learn more.",
     answerElement: (
       <>
         SoulFire is a Minecraft bot framework built on Fabric that runs real
         client code. Bots use actual Minecraft physics, networking, and protocol
-        handling — they're virtually indistinguishable from real players. It's
-        designed for stress testing servers, automating tasks, and development.{" "}
+        handling, so servers can't tell them apart from real players. It's built
+        for stress testing servers, automating tasks, and development.{" "}
         <Link href="/docs" className="underline text-primary">
           Read the docs
         </Link>{" "}
@@ -206,10 +206,10 @@ const faqItems: {
   {
     question: "What Minecraft versions does SoulFire support?",
     answerHtml:
-      'Every version ever released — from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support. See the <a href="https://soulfiremc.com/docs/usage/versions">full version list</a>.',
+      'Every version ever released, from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support. See the <a href="https://soulfiremc.com/docs/usage/versions">full version list</a>.',
     answerElement: (
       <>
-        Every version ever released — from Classic and Alpha through the latest
+        Every version ever released, from Classic and Alpha through the latest
         release, including Beta, Combat Snapshots, April Fools editions, and
         Bedrock Edition. Version translation is handled automatically via
         built-in protocol support. See the{" "}
@@ -236,14 +236,14 @@ const faqItems: {
   {
     question: "How do I install SoulFire?",
     answerHtml:
-      '<a href="https://soulfiremc.com/download">Download</a> the native installer for your platform (Windows, macOS, or Linux). No Java installation required — everything is bundled. Just install and run. See the <a href="https://soulfiremc.com/docs/installation">installation guide</a> for a full walkthrough.',
+      '<a href="https://soulfiremc.com/download">Download</a> the native installer for your platform (Windows, macOS, or Linux). No Java required, everything is bundled. Just install and run. See the <a href="https://soulfiremc.com/docs/installation">installation guide</a> for a full walkthrough.',
     answerElement: (
       <>
         <Link href="/download" className="underline text-primary">
           Download
         </Link>{" "}
         the native installer for your platform (Windows, macOS, or Linux). No
-        Java installation required — everything is bundled. Just install and
+        Java required, everything is bundled. Just install and
         run. See the{" "}
         <Link href="/docs/installation" className="underline text-primary">
           installation guide
@@ -313,9 +313,9 @@ export default function Page() {
       ratingCount: "1000",
     },
     featureList: [
-      "High performance bot framework",
+      "High-performance bot framework",
       "Multi-version support (Classic to latest)",
-      "Powerful plugin system",
+      "Plugin system",
       "Open source",
       "Cross-platform support",
       "CLI and GUI modes",
@@ -370,7 +370,7 @@ export default function Page() {
                   </AnimatedShinyText>
                 </div>
                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                  The most powerful bot tool, undetectable and fast.
+                  The best Minecraft bot tool, undetectable and fast.
                 </h1>
                 <div className="flex flex-col gap-4 sm:flex-row">
                   <Link href="/download">
@@ -429,8 +429,7 @@ export default function Page() {
           support,{" "}
           <span className="text-primary font-semibold">plugin system</span>, and{" "}
           <span className="text-primary font-semibold">open source</span>.
-          SoulFire is the most advanced Minecraft bot framework, built for speed
-          and scale.
+          SoulFire is a Minecraft bot framework built for speed and scale.
         </p>
       </section>
 
@@ -439,7 +438,7 @@ export default function Page() {
       <section className="py-16" id="features">
         <div className="flex flex-col space-y-4 mb-12">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-            Powerful Features
+            Features
           </h2>
           <p className="max-w-[700px] text-muted-foreground md:text-lg">
             Everything you need to test and automate your Minecraft servers
