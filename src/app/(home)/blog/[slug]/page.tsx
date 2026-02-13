@@ -38,9 +38,9 @@ function getRelatedPosts(
     .map((p) => p.page);
 }
 
-export default async function BlogPost(props: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function BlogPost(props: PageProps<"/blog/[slug]">) {
+  "use cache";
+
   const params = await props.params;
   const page = blogSource.getPage([params.slug]);
   if (!page) notFound();
