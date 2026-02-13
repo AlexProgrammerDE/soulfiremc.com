@@ -85,7 +85,7 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
       "Cheap token accounts starting at 5¢. No frills, just alts.",
     url: "https://mogalts.win",
     websiteUrl: "https://mogalts.win",
-    discordUrl: "https://discord.gg/jkNaVRWRTm",
+    discordUrl: "https://discord.gg/mogalts",
     badges: ["instant-delivery", "bulk-discount"],
     category: "nfa-accounts",
     price: "5¢",
