@@ -114,14 +114,6 @@ const config: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/RELAY-KAWND/static/:path*",
-        destination: "https://eu-assets.i.posthog.com/static/:path*",
-      },
-      {
-        source: "/RELAY-KAWND/:path*",
-        destination: "https://eu.i.posthog.com/:path*",
-      },
-      {
         source: "/va/:match*",
         destination: "/_vercel/insights/:match*",
       },
