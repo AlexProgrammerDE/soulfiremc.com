@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 import { blogSource, source } from "@/lib/source";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  "use cache";
+
   return [
     ...(process.env.SITEMAP_PAGES as string).split("|").map(
       (page) =>
