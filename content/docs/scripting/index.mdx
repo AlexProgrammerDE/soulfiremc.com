@@ -1,0 +1,129 @@
+---
+title: Scripting
+description: Automate your bots with SoulFire's visual node-based scripting system. Build complex behaviors without writing a single line of code.
+---
+
+import { Workflow, Blocks, Zap, Bug } from 'lucide-react';
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="info">
+  SoulFire's scripting system is a **visual node-based editor**, similar to Unreal Engine Blueprints or Blender's Geometry Nodes, but designed for Minecraft bots. No programming experience required.
+</Callout>
+
+## What is visual scripting?
+
+Instead of writing code, you build bot behaviors by connecting **nodes** in a visual graph.
+Each node performs a specific action, whether that's listening for events, making decisions, controlling bots, or processing data.
+You connect nodes together by dragging edges between their ports, and SoulFire handles the rest.
+
+The script editor is built right into the SoulFire client. Open any instance, go to the **Scripts** tab, and start building.
+
+### How it works
+
+1. **Triggers** start your script when something happens: a chat message arrives, a bot joins, a timer fires
+2. **Data flows** along the edges between nodes, carrying values like messages, positions, or bot references
+3. **Logic nodes** make decisions: check conditions, branch execution, loop over items
+4. **Action nodes** control your bots: send chat messages, pathfind to coordinates, attack entities, place blocks
+5. **The engine runs reactively**: scripts don't loop continuously, they respond to events as they happen
+
+### Key features
+
+- **70+ built-in nodes** across 12 categories, from basic math to AI chat completions
+- **9 event triggers** that respond to chat messages, deaths, damage, ticks, timers, and more
+- **Real-time execution logs** so you can watch your script run node by node with live output
+- **Node debugging** to inspect values flowing through any connection
+- **AI/LLM integration** with built-in nodes for OpenAI chat completions
+- **HTTP requests** to call external APIs and webhooks from your scripts
+- **Persistent state** to store data per-script or per-bot across sessions
+- **Import/Export** to share scripts as JSON files
+- **Keyboard shortcuts** with 20+ shortcuts for power users (Shift+A to quick-add, Ctrl+G to group, M to mute)
+
+## Quick start: your first script
+
+Here's how to build a simple auto-greeter that welcomes players when your bot joins a server:
+
+1. Open the SoulFire client and navigate to your instance
+2. Go to the **Scripts** tab and click **Create Script**
+3. Give it a name like "Auto Greeter"
+4. In the editor, press **Shift+A** to open the quick-add menu
+5. Search for **On Join** and place it on the canvas (this is your trigger)
+6. Press **Shift+A** again and add a **Send Chat** action node
+7. Connect the **exec** output port of "On Join" to the **exec** input port of "Send Chat"
+8. In the Send Chat node's settings, type your welcome message (e.g., `Hello everyone!`)
+9. Click **Save**, then hit the **Play** button to activate your script
+
+That's it. When your bot joins a server, it will automatically send the greeting. You can watch it happen in real-time in the **Execution Log** panel at the bottom of the editor.
+
+## Core concepts
+
+### Nodes
+
+Nodes are the building blocks of your scripts. Each node has:
+
+- **Input ports** on the left side to receive data or execution signals
+- **Output ports** on the right side to send data or execution signals
+- A **category color**: orange for triggers, green for actions, blue for logic, purple for flow control, etc.
+
+### Edges
+
+Edges are the connections between nodes. There are two types:
+
+- **Execution edges** control the order that nodes run (like a program's control flow)
+- **Data edges** carry values between nodes (numbers, strings, bots, lists, etc.)
+
+### Ports
+
+Ports are the connection points on nodes. Each port has a type:
+
+| Port Type | Description | Example |
+|-----------|-------------|---------|
+| Exec | Controls execution order | "Run this node next" |
+| Number | Numeric values | Health, coordinates, counts |
+| String | Text values | Chat messages, player names |
+| Boolean | True/false values | Condition results |
+| Bot | Bot references | Which bot to control |
+| List | Collections of values | All connected bots |
+| Block | Minecraft block types | Stone, dirt, diamond ore |
+| Entity | Entity references | Players, mobs |
+| Item | Item types | Diamond sword, golden apple |
+| Vector3 | 3D coordinates | Positions in the world |
+
+### Triggers
+
+Triggers are special nodes that start your script's execution. A script does nothing until a trigger fires. You can have multiple triggers in one script, and each one starts its own independent execution chain.
+
+### Execution model
+
+SoulFire scripts are **reactive**, not imperative. Instead of running in a loop, scripts wait for triggers to fire and then execute the connected node chain. This means:
+
+- Scripts use minimal resources when idle
+- Multiple trigger events can run in parallel (up to 8 concurrent branches)
+- Each trigger invocation gets its own isolated state
+- Errors in one execution don't affect others
+
+## Learn more
+
+<Cards>
+  <Card
+    icon={<Blocks/>}
+    title="Node Reference"
+    href="/docs/scripting/node-reference"
+  >
+    Browse all 70+ nodes organized by category.
+  </Card>
+  <Card
+    icon={<Zap/>}
+    title="Triggers"
+    href="/docs/scripting/triggers"
+  >
+    Deep dive into the 9 event triggers.
+  </Card>
+  <Card
+    icon={<Workflow/>}
+    title="Examples"
+    href="/docs/scripting/examples"
+  >
+    Step-by-step workflow examples.
+  </Card>
+</Cards>

@@ -166,6 +166,13 @@
     }
   }
 
+  --animate-edge-flow: edge-flow 0.8s linear infinite;
+  @keyframes edge-flow {
+    to {
+      stroke-dashoffset: -10;
+    }
+  }
+
   --animate-meteor: meteor 5s linear infinite;
   @keyframes meteor {
     0% {

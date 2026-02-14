@@ -2,9 +2,13 @@ import { SiGithub } from "@icons-pack/react-simple-icons";
 import {
   AppWindow,
   ArrowRight,
+  Blocks,
   Box,
+  Brain,
+  Bug,
   CloudDownload,
   Download,
+  MousePointerClick,
   Rocket,
   Zap,
 } from "lucide-react";
@@ -27,7 +31,12 @@ import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
-import { HeroBackground, HomeFaq, TerminalAnimation } from "./page.client";
+import {
+  HeroBackground,
+  HomeFaq,
+  ScriptingAnimation,
+  TerminalAnimation,
+} from "./page.client";
 
 const plugins = [
   "Kill Aura",
@@ -284,6 +293,24 @@ const faqItems: {
       </>
     ),
   },
+  {
+    question: "Can I automate bots without writing code?",
+    answerHtml:
+      'Yes. SoulFire includes a visual scripting system with 70+ drag-and-drop nodes. Build automation workflows by connecting triggers, actions, and logic nodes, no programming required. The built-in script editor supports real-time debugging, AI/LLM integration, and more. See the <a href="https://soulfiremc.com/docs/scripting">scripting docs</a> to get started.',
+    answerElement: (
+      <>
+        Yes. SoulFire includes a visual scripting system with 70+
+        drag-and-drop nodes. Build automation workflows by connecting triggers,
+        actions, and logic nodes, no programming required. The built-in script
+        editor supports real-time debugging, AI/LLM integration, and more. See
+        the{" "}
+        <Link href="/docs/scripting" className="underline text-primary">
+          scripting docs
+        </Link>{" "}
+        to get started.
+      </>
+    ),
+  },
 ];
 
 export default function Page() {
@@ -315,6 +342,7 @@ export default function Page() {
     featureList: [
       "High-performance bot framework",
       "Multi-version support (Classic to latest)",
+      "Visual scripting system with 70+ nodes",
       "Plugin system",
       "Open source",
       "Cross-platform support",
@@ -468,6 +496,77 @@ export default function Page() {
               answer: item.answerElement,
             }))}
           />
+        </div>
+      </section>
+
+      {/* Visual Scripting Section */}
+      <section className="py-16">
+        <div className="w-full max-w-4xl mx-auto">
+          <div className="flex flex-col space-y-4 mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+              Visual Scripting, No Code Required
+            </h2>
+            <p className="max-w-[700px] text-muted-foreground md:text-lg">
+              Build complex bot behaviors by connecting nodes in a visual
+              editor. Drag and drop from 70+ built-in nodes across 12
+              categories including triggers, actions, flow control, AI, and more.
+            </p>
+          </div>
+          <ScriptingAnimation />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8">
+            <div className="flex items-center gap-3 rounded-lg border bg-card p-3 sm:p-4">
+              <Blocks className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-orange-500" />
+              <div>
+                <div className="font-semibold text-sm sm:text-base">
+                  70+ Nodes
+                </div>
+                <div className="text-[11px] sm:text-xs text-muted-foreground">
+                  12 categories
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 rounded-lg border bg-card p-3 sm:p-4">
+              <MousePointerClick className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-blue-500" />
+              <div>
+                <div className="font-semibold text-sm sm:text-base">
+                  No Code
+                </div>
+                <div className="text-[11px] sm:text-xs text-muted-foreground">
+                  Drag & drop
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 rounded-lg border bg-card p-3 sm:p-4">
+              <Bug className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-purple-500" />
+              <div>
+                <div className="font-semibold text-sm sm:text-base">
+                  Live Debug
+                </div>
+                <div className="text-[11px] sm:text-xs text-muted-foreground">
+                  Real-time logs
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 rounded-lg border bg-card p-3 sm:p-4">
+              <Brain className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 text-cyan-500" />
+              <div>
+                <div className="font-semibold text-sm sm:text-base">
+                  AI Built-in
+                </div>
+                <div className="text-[11px] sm:text-xs text-muted-foreground">
+                  LLM integration
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex mt-8">
+            <Link href="/docs/scripting">
+              <Button variant="outline" className="gap-2">
+                Explore scripting docs
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,198 @@
+---
+title: Node Reference
+description: Complete catalog of all 70+ built-in scripting nodes in SoulFire, organized by category.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+This page lists every built-in node available in the SoulFire script editor, organized by category.
+
+<Callout type="info">
+  You can browse all nodes directly in the editor by pressing **Shift+A** or opening the **Node Palette** sidebar on the left.
+</Callout>
+
+## Triggers
+
+Trigger nodes start your script's execution. They fire when specific events happen and pass relevant data to downstream nodes.
+
+| Node | Description | Outputs |
+|------|-------------|---------|
+| On Tick | Fires every game tick (20 times per second), per bot | `bot`, `tickCount` |
+| On Chat | Fires when a bot receives a chat message | `bot`, `message`, `messagePlainText`, `timestamp` |
+| On Death | Fires when a bot dies | `bot`, `shouldRespawn` |
+| On Damage | Fires when a bot takes damage | `bot`, `amount`, `previousHealth`, `newHealth` |
+| On Join | Fires once when a bot joins the world | `bot`, `botName` |
+| On Bot Init | Fires when a bot initializes its connection | `bot`, `botName` |
+| On Interval | Fires on a repeating timer (configurable interval) | `executionCount` |
+| On Script Init | Fires once when the script is activated | `timestamp` |
+| On Script End | Fires when the script is deactivated | `timestamp` |
+
+For a detailed breakdown of each trigger, see the [Triggers](/docs/scripting/triggers) page.
+
+## Actions
+
+Action nodes control your bots and interact with the Minecraft world.
+
+| Node | Description | Key Inputs |
+|------|-------------|------------|
+| Send Chat | Sends a chat message or command | `bot`, `message` |
+| Pathfind To | Navigates a bot to a target position | `bot`, `x`, `y`, `z` |
+| Jump | Makes a bot jump | `bot` |
+| Attack | Attacks a target entity | `bot`, `entity` |
+| Use Item | Uses the item in the bot's hand | `bot`, `hand` |
+| Sneak | Toggles sneaking on or off | `bot`, `enabled` |
+| Sprint | Toggles sprinting on or off | `bot`, `enabled` |
+| Break Block | Mines a block at the given position | `bot`, `x`, `y`, `z` |
+| Place Block | Places a block at the given position | `bot`, `x`, `y`, `z` |
+| Select Slot | Changes the bot's selected hotbar slot | `bot`, `slot` |
+| Look At | Points the bot's view at a position | `bot`, `x`, `y`, `z` |
+| Wait | Pauses execution for a specified duration | `durationMs` |
+
+## Data Queries
+
+Data query nodes read information from the world, bots, and entities.
+
+| Node | Description | Key Inputs | Outputs |
+|------|-------------|------------|---------|
+| Get Bots | Returns all connected bots | (none) | `bots` (list) |
+| Get Block | Gets block info at a position | `bot`, `x`, `y`, `z` | `blockType`, `isSolid`, `isAir` |
+| Find Entity | Finds the nearest entity of a type | `bot`, `entityType` | `entity`, `distance` |
+| Find Block | Finds the nearest block of a type | `bot`, `blockType`, `searchRadius` | `x`, `y`, `z`, `distance` |
+| Get Position | Gets a bot's current position | `bot` | `x`, `y`, `z` |
+| Get Health | Gets a bot's health and hunger | `bot` | `health`, `hunger` |
+| Get Inventory | Gets a bot's inventory contents | `bot` | `items` (list) |
+| Get Gamemode | Gets a bot's current gamemode | `bot` | `gamemode` |
+| Get Biome | Gets the biome at the bot's position | `bot` | `biome` |
+| Get Dimension | Gets the bot's current dimension | `bot` | `dimension` |
+
+## Flow Control
+
+Flow control nodes manage the execution path of your script.
+
+| Node | Description | Notes |
+|------|-------------|-------|
+| Branch | Routes execution based on a boolean condition | `true` and `false` output paths |
+| For Each Bot | Iterates over all connected bots | Runs the body once per bot |
+| For Each | Iterates over any list | Runs the body once per item |
+| Loop | Repeats execution a set number of times | Configurable iteration count |
+| Switch | Routes execution based on matching a value | Multiple case outputs |
+| Sequence | Runs multiple output paths one after another | Ordered execution |
+| Gate | Only passes execution when a condition is true | Conditional pass-through |
+| Debounce | Ignores rapid repeated executions | Configurable cooldown period |
+| Rate Limit | Throttles execution to a maximum rate | Configurable rate |
+
+## Math & Logic
+
+Nodes for mathematical operations and logical comparisons.
+
+### Math
+
+| Node | Description |
+|------|-------------|
+| Add | Adds two numbers |
+| Multiply | Multiplies two numbers |
+| Divide | Divides two numbers |
+| Modulo | Returns the remainder of division |
+| Formula | Evaluates a math expression string |
+| Random | Generates a random number in a range |
+| Clamp | Constrains a number between min and max |
+| Lerp | Linearly interpolates between two values |
+| Distance | Calculates distance between two 3D points |
+
+### Logic
+
+| Node | Description |
+|------|-------------|
+| Compare | Compares two values (equals, greater than, less than, etc.) |
+| And | Returns true if both inputs are true |
+| Or | Returns true if either input is true |
+| Not | Inverts a boolean value |
+| Xor | Returns true if exactly one input is true |
+
+## String Operations
+
+Nodes for working with text.
+
+| Node | Description |
+|------|-------------|
+| Concat | Joins two or more strings together |
+| Replace | Replaces occurrences of a substring |
+| Split | Splits a string into a list by delimiter |
+| Substring | Extracts a portion of a string |
+| Contains | Checks if a string contains a substring |
+| Starts With | Checks if a string starts with a prefix |
+| Ends With | Checks if a string ends with a suffix |
+| Format | Formats a string with placeholders |
+| Regex Match | Tests a string against a regular expression |
+| Regex Replace | Replaces matches of a regular expression |
+
+## List Operations
+
+Nodes for working with collections.
+
+| Node | Description |
+|------|-------------|
+| Length | Returns the number of items in a list |
+| Get At | Gets an item at a specific index |
+| First | Gets the first item in a list |
+| Last | Gets the last item in a list |
+| Contains | Checks if a list contains a value |
+| Join To String | Joins list items into a single string with a separator |
+| Range | Creates a list of numbers from start to end |
+
+## JSON
+
+Nodes for parsing and building JSON data.
+
+| Node | Description |
+|------|-------------|
+| Parse | Parses a JSON string into a value |
+| Stringify | Converts a value into a JSON string |
+| Get | Reads a field from a JSON object by key |
+| Set | Sets a field on a JSON object |
+| Array | Creates a JSON array from inputs |
+| Object | Creates a JSON object from key-value pairs |
+
+## Network & Integration
+
+Nodes for communicating with external services.
+
+| Node | Description | Key Inputs |
+|------|-------------|------------|
+| Web Fetch | Makes HTTP requests (GET, POST, etc.) | `url`, `method`, `headers`, `body` |
+| Discord Webhook | Sends a message to a Discord webhook | `webhookUrl`, `content`, `username` |
+
+## AI / LLM
+
+Nodes for integrating large language models into your scripts.
+
+| Node | Description | Key Inputs |
+|------|-------------|------------|
+| LLM Chat | Sends a prompt to an OpenAI-compatible API and returns the response | `systemPrompt`, `userMessage`, `model`, `temperature`, `maxTokens` |
+
+<Callout type="info">
+  The LLM Chat node requires an OpenAI API key configured in your instance settings. It supports any OpenAI-compatible API endpoint.
+</Callout>
+
+## Encoding
+
+Nodes for encoding, hashing, and encryption.
+
+| Node | Description |
+|------|-------------|
+| Hash | Computes a hash (MD5, SHA-256, etc.) of a string |
+| Base64 Encode | Encodes a string to Base64 |
+| Base64 Decode | Decodes a Base64 string |
+| Encrypt | Encrypts data with a key |
+| Decrypt | Decrypts data with a key |
+| Compress | Compresses data |
+
+## State Management
+
+Nodes for storing and retrieving persistent data.
+
+| Node | Description | Scope |
+|------|-------------|-------|
+| Cache | Stores a value in temporary per-script storage | Per script, session only |
+| Get Bot Variable | Reads a persistent variable for a specific bot | Per bot, persistent |
+| Set Bot Variable | Writes a persistent variable for a specific bot | Per bot, persistent |

@@ -3,7 +3,7 @@ title: Introduction
 description: SoulFire is an advanced Minecraft bot tool that sends bots to your server for testing, automation, and development purposes.
 ---
 
-import { DownloadIcon } from 'lucide-react';
+import { DownloadIcon, Workflow } from 'lucide-react';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
 
@@ -34,11 +34,15 @@ SoulFire 2.0 uses the actual Minecraft client code through Fabric, which provide
 
 * Pathfinding system to measure chunk loading and entity processing
 * Many [plugins](/docs/usage/plugins) to make your bots do useful things, such as kill aura, auto totem/armor/eat/jump and more
+* [Visual scripting system](/docs/scripting) with 70+ drag-and-drop nodes for building bot behaviors without writing code
 * Tools for advanced connections such as connecting to backend servers with proxy forwarding mode enabled (BungeeCord, Velocity, BungeeGuard)
 
 ## Getting started
 
 <Cards>
   <Card icon={<DownloadIcon/>} title="Install SoulFire" href="/docs/installation">
+  </Card>
+  <Card icon={<Workflow/>} title="Visual Scripting" href="/docs/scripting">
+    Build bot behaviors with drag-and-drop nodes.
   </Card>
 </Cards>

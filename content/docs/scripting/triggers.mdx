@@ -1,0 +1,184 @@
+---
+title: Triggers
+description: Detailed reference for all 9 scripting triggers in SoulFire, including when they fire, what data they provide, and how to use them effectively.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Triggers are the entry points to your scripts. They listen for specific events and kick off the execution of your node chain when those events occur. Every script needs at least one trigger, and you can use multiple triggers in the same script.
+
+## How triggers work
+
+When you activate a script, SoulFire registers listeners for each trigger node in your graph. When an event matches a trigger, the engine starts executing downstream nodes from that trigger's output ports.
+
+Key points:
+
+- Each trigger fires independently from the others
+- A single trigger can fire multiple times (e.g., On Chat fires for every message)
+- Multiple trigger invocations can run in parallel, up to 8 concurrent executions
+- Each invocation gets its own isolated execution context
+
+## Event triggers
+
+### On Tick
+
+Fires every game tick (approximately 20 times per second), once per bot.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `bot` | Bot | The bot this tick belongs to |
+| `tickCount` | Number | How many ticks have elapsed since the bot connected |
+
+<Callout type="warn">
+  **Use with care.** On Tick fires 20 times per second _per bot_. If you have 50 bots connected, that's 1,000 executions per second. Keep your On Tick scripts lightweight, or use a **Debounce** or **Rate Limit** node to reduce the frequency.
+</Callout>
+
+**Common uses:**
+- Checking conditions every frame (health below threshold, entity nearby)
+- Continuous movement or aiming updates
+- Monitoring game state changes
+
+### On Chat
+
+Fires when a bot receives a chat message from the server.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `bot` | Bot | The bot that received the message |
+| `message` | String | The formatted message (with color codes) |
+| `messagePlainText` | String | The message with formatting stripped |
+| `timestamp` | Number | When the message was received |
+
+**Common uses:**
+- Building chat command bots (check if the message starts with "!")
+- Auto-responding to specific keywords
+- Logging chat to an external service
+- AI chatbot conversations
+
+### On Death
+
+Fires when a bot dies.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `bot` | Bot | The bot that died |
+| `shouldRespawn` | Boolean | Whether the bot should auto-respawn |
+
+**Common uses:**
+- Auto-respawning after death
+- Sending a notification when a bot dies
+- Logging death events
+- Changing behavior after respawn
+
+### On Damage
+
+Fires when a bot takes damage from any source.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `bot` | Bot | The bot that took damage |
+| `amount` | Number | How much damage was dealt |
+| `previousHealth` | Number | Health before the damage |
+| `newHealth` | Number | Health after the damage |
+
+**Common uses:**
+- Fleeing when health gets low
+- Activating defensive behaviors (equipping a totem, eating food)
+- Tracking damage over time
+- Sending alerts on critical health
+
+### On Join
+
+Fires once when a bot finishes joining the world and is ready to interact.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `bot` | Bot | The bot that joined |
+| `botName` | String | The bot's display name |
+
+**Common uses:**
+- Sending a greeting message when joining
+- Starting pathfinding to a specific location
+- Equipping gear on join
+- Running initialization logic
+
+### On Bot Init
+
+Fires when a bot initializes its connection to the server, before the world is fully loaded.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `bot` | Bot | The bot being initialized |
+| `botName` | String | The bot's display name |
+
+**Common uses:**
+- Setting up initial state before the bot enters the world
+- Configuring bot-specific variables
+- Early connection logging
+
+<Callout type="info">
+  **On Bot Init vs On Join:** On Bot Init fires during the connection handshake, before the world loads. On Join fires after the bot is fully in the world and ready. For most use cases, you want **On Join**.
+</Callout>
+
+## Time-based triggers
+
+### On Interval
+
+Fires on a repeating timer with a configurable interval.
+
+| Input | Type | Default | Description |
+|-------|------|---------|-------------|
+| `intervalMs` | Number | 1000 | Milliseconds between each execution |
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `executionCount` | Number | How many times this interval has fired |
+
+**Common uses:**
+- Periodic status checks
+- Sending messages at regular intervals
+- Rotating through patrol waypoints
+- Polling an external API
+
+<Callout type="info">
+  The interval timer starts when the script is activated and stops when deactivated. Set `intervalMs` to a value that makes sense for your use case. 1000ms (1 second) is a good default.
+</Callout>
+
+## Lifecycle triggers
+
+### On Script Init
+
+Fires exactly once when the script is activated.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `timestamp` | Number | When the script was activated |
+
+**Common uses:**
+- One-time setup (fetching configuration, initializing state)
+- Sending a "script started" notification
+- Logging script activation
+
+### On Script End
+
+Fires when the script is being deactivated. This trigger runs **synchronously** with a 5-second timeout, so keep cleanup logic fast.
+
+| Output | Type | Description |
+|--------|------|-------------|
+| `timestamp` | Number | When the script deactivation started |
+
+**Common uses:**
+- Cleanup logic (resetting bot states, saving data)
+- Sending a "script stopped" notification
+- Graceful shutdown of ongoing operations
+
+<Callout type="warn">
+  On Script End has a **5-second timeout**. If your cleanup logic takes longer than that, it will be interrupted. Keep it simple.
+</Callout>
+
+## Tips
+
+- **Start simple.** If you're not sure which trigger to use, start with **On Join** (fires once per bot) or **On Interval** (fires on a timer). These are the easiest to reason about.
+- **Avoid heavy On Tick scripts.** The tick trigger is powerful but expensive. If you only need to check something every few seconds, use **On Interval** instead.
+- **Combine triggers.** A single script can have multiple triggers. For example, use On Join to send a greeting and On Chat to respond to commands, all in the same script.
+- **Use the execution log.** When debugging triggers, the log panel at the bottom of the editor shows exactly when each trigger fires and what data it provides.

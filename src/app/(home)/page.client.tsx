@@ -1,6 +1,6 @@
 "use client";
 
-import { TerminalIcon } from "lucide-react";
+import { TerminalIcon, Workflow } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import {
@@ -221,6 +221,389 @@ export function TerminalAnimation() {
           <code className="grid gap-1">{lines}</code>
         </div>
       </pre>
+    </div>
+  );
+}
+
+const scriptNodes = [
+  {
+    id: "trigger",
+    label: "On Chat",
+    sub: "Message received",
+    color: "#f97316",
+    x: 15,
+    y: 50,
+    w: 140,
+    h: 48,
+  },
+  {
+    id: "contains",
+    label: "Contains?",
+    sub: '"hello"',
+    color: "#3b82f6",
+    x: 200,
+    y: 50,
+    w: 140,
+    h: 48,
+  },
+  {
+    id: "branch",
+    label: "Branch",
+    sub: "if / else",
+    color: "#8b5cf6",
+    x: 385,
+    y: 50,
+    w: 105,
+    h: 48,
+  },
+  {
+    id: "sendChat",
+    label: "Send Chat",
+    sub: '"Welcome!"',
+    color: "#22c55e",
+    x: 555,
+    y: 20,
+    w: 148,
+    h: 48,
+  },
+  {
+    id: "aiChat",
+    label: "AI Reply",
+    sub: "LLM Chat",
+    color: "#06b6d4",
+    x: 448,
+    y: 162,
+    w: 130,
+    h: 48,
+  },
+  {
+    id: "sendReply",
+    label: "Send Reply",
+    sub: "to player",
+    color: "#22c55e",
+    x: 620,
+    y: 162,
+    w: 120,
+    h: 48,
+  },
+];
+
+const scriptEdges = [
+  { d: "M155,74 L200,74" },
+  { d: "M340,74 L385,74" },
+  {
+    d: "M490,62 C525,62 535,44 555,44",
+    label: "true",
+    lx: 518,
+    ly: 37,
+  },
+  {
+    d: "M490,86 C490,130 448,148 448,162",
+    label: "false",
+    lx: 496,
+    ly: 118,
+  },
+  { d: "M578,186 L620,186" },
+];
+
+const scriptPhases = [
+  // Path A: true path
+  { nodes: ["trigger"], ticks: 8 },
+  { nodes: ["contains"], ticks: 8 },
+  { nodes: ["branch"], ticks: 8 },
+  { nodes: ["sendChat"], ticks: 8 },
+  { nodes: [], ticks: 12 },
+  // Path B: false path (AI)
+  { nodes: ["trigger"], ticks: 8 },
+  { nodes: ["contains"], ticks: 8 },
+  { nodes: ["branch"], ticks: 8 },
+  { nodes: ["aiChat"], ticks: 8 },
+  { nodes: ["sendReply"], ticks: 8 },
+  { nodes: [], ticks: 12 },
+];
+
+const scriptTotalTicks = scriptPhases.reduce((sum, p) => sum + p.ticks, 0);
+
+const scriptLogs = [
+  {
+    phase: 0,
+    text: '\u25B6 On Chat - Bot_1 received "hello world"',
+    color: "text-orange-400",
+  },
+  {
+    phase: 1,
+    text: '\u2713 Contains? - "hello" found',
+    color: "text-blue-400",
+  },
+  {
+    phase: 2,
+    text: "\u21B3 Branch - true",
+    color: "text-purple-400",
+  },
+  {
+    phase: 3,
+    text: '\u2713 Send Chat - "Welcome!" sent',
+    color: "text-green-400",
+  },
+  {
+    phase: 5,
+    text: '\u25B6 On Chat - Bot_3 received "how are you?"',
+    color: "text-orange-400",
+  },
+  {
+    phase: 6,
+    text: "\u2713 Contains? - no match",
+    color: "text-blue-400",
+  },
+  {
+    phase: 7,
+    text: "\u21B3 Branch - false",
+    color: "text-purple-400",
+  },
+  {
+    phase: 8,
+    text: "\u2713 AI Reply - generating response\u2026",
+    color: "text-cyan-400",
+  },
+  {
+    phase: 9,
+    text: "\u2713 Send Reply - \"I'm doing great!\" sent",
+    color: "text-green-400",
+  },
+];
+
+export function ScriptingAnimation() {
+  const tickTime = 120;
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((prev) => (prev + 1) % scriptTotalTicks);
+    }, tickTime);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Determine current phase index
+  let phaseIndex = 0;
+  let remaining = tick;
+  for (let i = 0; i < scriptPhases.length; i++) {
+    if (remaining < scriptPhases[i].ticks) {
+      phaseIndex = i;
+      break;
+    }
+    remaining -= scriptPhases[i].ticks;
+  }
+
+  const activeNodeIds = new Set(scriptPhases[phaseIndex].nodes);
+  const isPathB = phaseIndex >= 5;
+
+  // Compute visible log lines
+  const visibleLogs = scriptLogs.filter((log) => {
+    if (isPathB) return log.phase >= 5 && log.phase <= phaseIndex;
+    return log.phase < 5 && log.phase <= phaseIndex;
+  });
+
+  return (
+    <div className="relative w-full max-w-4xl mx-auto">
+      <div className="overflow-hidden rounded-xl border shadow-lg bg-card">
+        {/* Header bar */}
+        <div className="flex flex-row items-center gap-2 border-b px-4 py-2 bg-muted/50">
+          <Workflow className="size-4" />
+          <span className="font-medium text-sm">SoulFire Script Editor</span>
+          <span className="text-xs text-muted-foreground ml-1 hidden sm:inline">
+            auto_reply.sf
+          </span>
+          <div className="grow" />
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-green-500/10 text-green-500 text-xs font-medium">
+            <div className="size-1.5 rounded-full bg-green-500 animate-pulse" />
+            Running
+          </div>
+          <div className="flex gap-1.5 ml-2">
+            <div className="size-3 rounded-full bg-red-500/80" />
+            <div className="size-3 rounded-full bg-yellow-500/80" />
+            <div className="size-3 rounded-full bg-green-500/80" />
+          </div>
+        </div>
+
+        {/* Node graph canvas */}
+        <svg
+          viewBox="0 0 760 225"
+          className="w-full h-auto"
+          style={{ minHeight: "180px" }}
+        >
+          <defs>
+            <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <pattern
+              id="canvasDots"
+              x="0"
+              y="0"
+              width="20"
+              height="20"
+              patternUnits="userSpaceOnUse"
+            >
+              <circle
+                cx="10"
+                cy="10"
+                r="0.8"
+                style={{ fill: "var(--muted-foreground)" }}
+                opacity="0.2"
+              />
+            </pattern>
+          </defs>
+
+          {/* Background dot grid */}
+          <rect
+            x="0"
+            y="0"
+            width="760"
+            height="225"
+            fill="url(#canvasDots)"
+          />
+
+          {/* Edges */}
+          {scriptEdges.map((edge, i) => (
+            <g key={`edge-${i}`}>
+              <path
+                d={edge.d}
+                fill="none"
+                style={{ stroke: "var(--muted-foreground)" }}
+                strokeWidth="1.5"
+                strokeOpacity="0.3"
+                strokeDasharray="6 4"
+                className="animate-edge-flow"
+              />
+              {edge.label && (
+                <text
+                  x={edge.lx}
+                  y={edge.ly}
+                  fontSize="9"
+                  fontFamily="var(--font-mono)"
+                  style={{ fill: "var(--muted-foreground)" }}
+                  opacity="0.6"
+                >
+                  {edge.label}
+                </text>
+              )}
+            </g>
+          ))}
+
+          {/* Nodes */}
+          {scriptNodes.map((node) => {
+            const isActive = activeNodeIds.has(node.id);
+            return (
+              <g key={node.id}>
+                {/* Glow background when active */}
+                {isActive && (
+                  <rect
+                    x={node.x - 4}
+                    y={node.y - 4}
+                    width={node.w + 8}
+                    height={node.h + 8}
+                    rx="12"
+                    fill={node.color}
+                    opacity="0.12"
+                    filter="url(#nodeGlow)"
+                  />
+                )}
+
+                {/* Node background */}
+                <rect
+                  x={node.x}
+                  y={node.y}
+                  width={node.w}
+                  height={node.h}
+                  rx="8"
+                  style={{
+                    fill: "var(--card)",
+                    stroke: isActive ? node.color : "var(--border)",
+                    strokeWidth: isActive ? 2 : 1,
+                    transition: "stroke 0.3s, stroke-width 0.3s",
+                  }}
+                />
+
+                {/* Category color strip */}
+                <rect
+                  x={node.x + 1}
+                  y={node.y + 6}
+                  width="3"
+                  height={node.h - 12}
+                  rx="1.5"
+                  fill={node.color}
+                />
+
+                {/* Label */}
+                <text
+                  x={node.x + 13}
+                  y={node.y + 21}
+                  fontSize="12.5"
+                  fontWeight="600"
+                  style={{ fill: "var(--card-foreground)" }}
+                >
+                  {node.label}
+                </text>
+
+                {/* Sublabel */}
+                <text
+                  x={node.x + 13}
+                  y={node.y + 36}
+                  fontSize="10"
+                  style={{ fill: "var(--muted-foreground)" }}
+                >
+                  {node.sub}
+                </text>
+
+                {/* Output port */}
+                <circle
+                  cx={node.x + node.w}
+                  cy={node.y + node.h / 2}
+                  r="3.5"
+                  fill={node.color}
+                  style={{
+                    opacity: isActive ? 1 : 0.4,
+                    transition: "opacity 0.3s",
+                  }}
+                />
+
+                {/* Input port (not on trigger) */}
+                {node.id !== "trigger" && (
+                  <circle
+                    cx={node.x}
+                    cy={node.y + node.h / 2}
+                    r="3.5"
+                    fill={node.color}
+                    style={{
+                      opacity: isActive ? 1 : 0.4,
+                      transition: "opacity 0.3s",
+                    }}
+                  />
+                )}
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* Execution log panel */}
+        <div className="border-t px-4 py-2 font-mono text-xs h-[88px] overflow-hidden bg-muted/30">
+          <div className="flex items-center gap-1.5 text-muted-foreground mb-1.5">
+            <span className="font-semibold text-[10px] uppercase tracking-wider">
+              Execution Log
+            </span>
+          </div>
+          <div className="space-y-0.5">
+            {visibleLogs.map((log) => (
+              <div key={log.phase} className={cn("truncate", log.color)}>
+                {log.text}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

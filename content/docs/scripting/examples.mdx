@@ -1,0 +1,207 @@
+---
+title: Examples
+description: Step-by-step scripting workflow examples for SoulFire, from simple greetings to AI-powered chatbots.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+These examples walk through common automation workflows you can build with SoulFire's scripting system. Each one describes the nodes you need, how to connect them, and what the result looks like.
+
+## Auto-greeter
+
+**Goal:** Send a welcome message when your bot joins a server.
+
+**Nodes:**
+1. **On Join** (trigger) - fires when the bot enters the world
+2. **Send Chat** (action) - sends a message in chat
+
+**Connections:**
+```
+[On Join] --exec--> [Send Chat]
+```
+
+**Setup:**
+1. Place an On Join trigger node
+2. Place a Send Chat action node
+3. Connect the exec output of On Join to the exec input of Send Chat
+4. Set the Send Chat message to something like `Hey everyone, I just joined!`
+5. Activate the script
+
+When any bot joins the server, it will automatically send the greeting. The On Join trigger also outputs the bot's name, so you could use a **Format** string node to personalize the message.
+
+---
+
+## Chat command bot
+
+**Goal:** Respond to players who type `!ping` in chat with "Pong!".
+
+**Nodes:**
+1. **On Chat** (trigger) - fires on every chat message
+2. **Contains** (string) - checks if the message contains "!ping"
+3. **Branch** (flow) - routes based on the result
+4. **Send Chat** (action) - sends the response
+
+**Connections:**
+```
+[On Chat] --exec--> [Contains] --exec--> [Branch]
+                                           |
+                                     true: [Send Chat]
+```
+
+**Setup:**
+1. Place an On Chat trigger
+2. Place a Contains node. Connect the `messagePlainText` output from On Chat to the `string` input of Contains. Set the search term to `!ping`
+3. Place a Branch node. Connect the `result` output from Contains to the `condition` input of Branch
+4. Place a Send Chat node on the "true" output of Branch. Set the message to `Pong!`
+5. Connect the `bot` output from On Chat to the `bot` input of Send Chat
+6. Activate the script
+
+Now whenever someone types `!ping` in chat, the bot responds with `Pong!`. You can extend this with multiple Branch/Contains checks for different commands.
+
+---
+
+## AI chatbot
+
+**Goal:** Use an LLM to generate responses to player messages.
+
+**Nodes:**
+1. **On Chat** (trigger) - fires on chat messages
+2. **Contains** (string) - checks if the message mentions the bot
+3. **Branch** (flow) - only responds to relevant messages
+4. **LLM Chat** (AI) - generates a response using OpenAI
+5. **Send Chat** (action) - sends the AI's response
+
+**Connections:**
+```
+[On Chat] --exec--> [Contains] --exec--> [Branch]
+                                           |
+                                     true: [LLM Chat] --exec--> [Send Chat]
+```
+
+**Setup:**
+1. Place an On Chat trigger
+2. Place a Contains node to check if `messagePlainText` contains your bot's name
+3. Place a Branch node on the result
+4. On the "true" path, place an LLM Chat node:
+   - Set the system prompt to something like `You are a friendly Minecraft bot. Keep responses short (under 100 characters) and casual.`
+   - Connect `messagePlainText` from On Chat to the `userMessage` input
+   - Make sure your OpenAI API key is configured in instance settings
+5. Place a Send Chat node. Connect the LLM Chat `response` output to the Send Chat `message` input
+6. Connect the `bot` from On Chat through to Send Chat
+7. Activate the script
+
+<Callout type="info">
+  Configure your OpenAI API key in the instance settings before using the LLM Chat node. The node supports any OpenAI-compatible endpoint, so you can also use local models.
+</Callout>
+
+---
+
+## Auto-respawn with Discord notification
+
+**Goal:** Automatically respawn after death and send a notification to Discord.
+
+**Nodes:**
+1. **On Death** (trigger) - fires when the bot dies
+2. **Wait** (action) - brief delay before respawning
+3. **Send Chat** (action) - sends `/respawn` or a death message
+4. **Discord Webhook** (network) - posts to a Discord channel
+
+**Connections:**
+```
+[On Death] --exec--> [Wait] --exec--> [Send Chat]
+              |
+              └--exec--> [Discord Webhook]
+```
+
+**Setup:**
+1. Place an On Death trigger
+2. Place a Wait node with a 2000ms delay (gives the death screen time to appear)
+3. Connect the Wait output to a Send Chat node (or use a respawn action if available)
+4. In parallel, connect On Death to a Discord Webhook node:
+   - Set the webhook URL to your Discord channel's webhook
+   - Use a Format node to build the message, e.g., `Bot died! Previous health: {previousHealth}`
+5. Activate the script
+
+The bot will respawn after 2 seconds and simultaneously notify your Discord channel about the death.
+
+---
+
+## Patrol bot
+
+**Goal:** Have a bot walk between waypoints on a loop.
+
+**Nodes:**
+1. **On Interval** (trigger) - fires every N seconds
+2. **Modulo** (math) - cycles through waypoint indices
+3. **Switch** (flow) - routes to different Pathfind nodes
+4. **Pathfind To** (action) - moves to each waypoint
+5. **Get Bots** (data) - gets a bot to move
+
+**Connections:**
+```
+[On Interval] --exec--> [Modulo] --data--> [Switch]
+                                              |
+                                  case 0: [Pathfind To (100, 64, 200)]
+                                  case 1: [Pathfind To (150, 64, 250)]
+                                  case 2: [Pathfind To (100, 64, 300)]
+```
+
+**Setup:**
+1. Place an On Interval trigger. Set the interval to 15000ms (15 seconds, enough time to walk between points)
+2. Place a Modulo node. Connect `executionCount` to one input, set the other to `3` (number of waypoints)
+3. Place a Switch node. Connect the Modulo result to its input
+4. For each case (0, 1, 2), place a Pathfind To node with different coordinates
+5. Use a Get Bots node and For Each Bot to apply this to all connected bots, or use a specific bot reference
+6. Activate the script
+
+The bot will cycle through the three waypoints every 15 seconds, walking to each one in order.
+
+---
+
+## Resource collector
+
+**Goal:** Find and mine a specific block type nearby.
+
+**Nodes:**
+1. **On Bot Init** (trigger) - starts when the bot connects
+2. **Find Block** (data) - locates the nearest target block
+3. **Branch** (flow) - checks if a block was found
+4. **Pathfind To** (action) - walks to the block
+5. **Break Block** (action) - mines the block
+6. **Wait** (action) - brief pause between attempts
+
+**Connections:**
+```
+[On Bot Init] --exec--> [Find Block] --exec--> [Branch]
+                              ^                    |
+                              |              found: [Pathfind To] --exec--> [Break Block] --exec--> [Wait]
+                              |                                                                        |
+                              └------------------------------------------------------------------------┘
+```
+
+**Setup:**
+1. Place an On Bot Init trigger
+2. Place a Find Block node. Set the block type to what you want to mine (e.g., `diamond_ore`) and a search radius (e.g., 32 blocks)
+3. Place a Branch node. Connect the "found" boolean output to its condition
+4. On the "true" path:
+   - Place a Pathfind To node. Connect the block's x, y, z to the pathfinding target
+   - Place a Break Block node. Connect the same coordinates
+   - Place a Wait node (2000ms to let the block break)
+5. Loop back: connect the Wait node's exec output back to the Find Block node's exec input (this creates a loop)
+6. Activate the script
+
+The bot will continuously search for the target block, walk to it, mine it, wait, and then search again.
+
+<Callout type="warn">
+  Make sure your loop has a reasonable Wait duration to avoid overwhelming the server. The break block action takes real game time, so 2-3 seconds is usually enough.
+</Callout>
+
+---
+
+## Tips for building scripts
+
+- **Start small.** Build one piece at a time and test as you go. Activate the script and watch the execution log to see if things work as expected.
+- **Use the execution log.** It shows you exactly which nodes fired, what data they produced, and any errors that occurred.
+- **Save often.** The editor tracks unsaved changes, but it's good practice to save after each working iteration.
+- **Group related nodes.** Select multiple nodes and press **Ctrl+G** to group them. This keeps complex scripts organized.
+- **Mute nodes for testing.** Press **M** on a selected node to mute it. Muted nodes are skipped during execution, which is useful for testing different parts of your script.
