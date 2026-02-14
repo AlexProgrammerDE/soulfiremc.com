@@ -706,7 +706,7 @@ export function ScriptingAnimation() {
         </svg>
 
         {/* Execution log panel */}
-        <div className="px-4 py-2 font-mono text-xs h-[88px] overflow-hidden bg-[#222232] border-t border-white/[0.06]">
+        <div className="px-4 py-2 font-mono text-xs h-[104px] overflow-hidden bg-[#222232] border-t border-white/[0.06]">
           <div className="flex items-center gap-1.5 mb-1.5">
             <span className="font-semibold text-[10px] uppercase tracking-wider text-white/40">
               Execution Log
