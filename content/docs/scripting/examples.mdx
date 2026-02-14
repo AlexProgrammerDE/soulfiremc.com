@@ -4,6 +4,7 @@ description: Step-by-step scripting workflow examples for SoulFire, from simple 
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+import { Mermaid } from '../../../src/components/mdx/mermaid';
 
 These examples walk through common automation workflows you can build with SoulFire's scripting system. Each one describes the nodes you need, how to connect them, and what the result looks like.
 
@@ -15,10 +16,10 @@ These examples walk through common automation workflows you can build with SoulF
 1. **On Join** (trigger) - fires when the bot enters the world
 2. **Send Chat** (action) - sends a message in chat
 
-**Connections:**
-```
-[On Join] --exec--> [Send Chat]
-```
+<Mermaid chart="
+graph LR
+    A[On Join] -->|exec| B[Send Chat]
+" />
 
 **Setup:**
 1. Place an On Join trigger node
@@ -41,12 +42,12 @@ When any bot joins the server, it will automatically send the greeting. The On J
 3. **Branch** (flow) - routes based on the result
 4. **Send Chat** (action) - sends the response
 
-**Connections:**
-```
-[On Chat] --exec--> [Contains] --exec--> [Branch]
-                                           |
-                                     true: [Send Chat]
-```
+<Mermaid chart="
+graph LR
+    A[On Chat] -->|exec| B[Contains?]
+    B -->|exec| C{Branch}
+    C -->|true| D[Send Chat]
+" />
 
 **Setup:**
 1. Place an On Chat trigger
@@ -71,12 +72,13 @@ Now whenever someone types `!ping` in chat, the bot responds with `Pong!`. You c
 4. **LLM Chat** (AI) - generates a response using OpenAI
 5. **Send Chat** (action) - sends the AI's response
 
-**Connections:**
-```
-[On Chat] --exec--> [Contains] --exec--> [Branch]
-                                           |
-                                     true: [LLM Chat] --exec--> [Send Chat]
-```
+<Mermaid chart="
+graph LR
+    A[On Chat] -->|exec| B[Contains?]
+    B -->|exec| C{Branch}
+    C -->|true| D[LLM Chat]
+    D -->|exec| E[Send Chat]
+" />
 
 **Setup:**
 1. Place an On Chat trigger
@@ -106,12 +108,12 @@ Now whenever someone types `!ping` in chat, the bot responds with `Pong!`. You c
 3. **Send Chat** (action) - sends `/respawn` or a death message
 4. **Discord Webhook** (network) - posts to a Discord channel
 
-**Connections:**
-```
-[On Death] --exec--> [Wait] --exec--> [Send Chat]
-              |
-              └--exec--> [Discord Webhook]
-```
+<Mermaid chart="
+graph LR
+    A[On Death] -->|exec| B[Wait 2s]
+    B -->|exec| C[Send Chat]
+    A -->|exec| D[Discord Webhook]
+" />
 
 **Setup:**
 1. Place an On Death trigger
@@ -137,14 +139,14 @@ The bot will respawn after 2 seconds and simultaneously notify your Discord chan
 4. **Pathfind To** (action) - moves to each waypoint
 5. **Get Bots** (data) - gets a bot to move
 
-**Connections:**
-```
-[On Interval] --exec--> [Modulo] --data--> [Switch]
-                                              |
-                                  case 0: [Pathfind To (100, 64, 200)]
-                                  case 1: [Pathfind To (150, 64, 250)]
-                                  case 2: [Pathfind To (100, 64, 300)]
-```
+<Mermaid chart="
+graph LR
+    A[On Interval] -->|exec| B[Modulo]
+    B -->|data| C{Switch}
+    C -->|case 0| D[Pathfind To\n100, 64, 200]
+    C -->|case 1| E[Pathfind To\n150, 64, 250]
+    C -->|case 2| F[Pathfind To\n100, 64, 300]
+" />
 
 **Setup:**
 1. Place an On Interval trigger. Set the interval to 15000ms (15 seconds, enough time to walk between points)
@@ -170,14 +172,15 @@ The bot will cycle through the three waypoints every 15 seconds, walking to each
 5. **Break Block** (action) - mines the block
 6. **Wait** (action) - brief pause between attempts
 
-**Connections:**
-```
-[On Bot Init] --exec--> [Find Block] --exec--> [Branch]
-                              ^                    |
-                              |              found: [Pathfind To] --exec--> [Break Block] --exec--> [Wait]
-                              |                                                                        |
-                              └------------------------------------------------------------------------┘
-```
+<Mermaid chart="
+graph LR
+    A[On Bot Init] -->|exec| B[Find Block]
+    B -->|exec| C{Branch}
+    C -->|found| D[Pathfind To]
+    D -->|exec| E[Break Block]
+    E -->|exec| F[Wait 2s]
+    F -->|exec| B
+" />
 
 **Setup:**
 1. Place an On Bot Init trigger

@@ -6,6 +6,7 @@ description: Automate your bots with SoulFire's visual node-based scripting syst
 import { Workflow, Blocks, Zap, Bug } from 'lucide-react';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
+import { Mermaid } from '../../../src/components/mdx/mermaid';
 
 <Callout type="info">
   SoulFire's scripting system is a **visual node-based editor**, similar to Unreal Engine Blueprints or Blender's Geometry Nodes, but designed for Minecraft bots. No programming experience required.
@@ -95,7 +96,18 @@ Triggers are special nodes that start your script's execution. A script does not
 
 ### Execution model
 
-SoulFire scripts are **reactive**, not imperative. Instead of running in a loop, scripts wait for triggers to fire and then execute the connected node chain. This means:
+SoulFire scripts are **reactive**, not imperative. Instead of running in a loop, scripts wait for triggers to fire and then execute the connected node chain.
+
+<Mermaid chart="
+graph LR
+    T[Trigger fires] --> E[Execute node chain]
+    E --> D{More nodes?}
+    D -->|Yes| E
+    D -->|No| W[Wait for next trigger]
+    W --> T
+" />
+
+This means:
 
 - Scripts use minimal resources when idle
 - Multiple trigger events can run in parallel (up to 8 concurrent branches)
