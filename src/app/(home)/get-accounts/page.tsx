@@ -4,8 +4,8 @@ import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
-import { PROVIDERS } from "@/lib/accounts-data";
-import { extractInviteCode, fetchDiscordInvite } from "@/lib/discord";
+import { extractDiscordInviteCode, PROVIDERS } from "@/lib/accounts-data";
+import { fetchDiscordInvite } from "@/lib/discord";
 import { GetAccountsClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -53,19 +53,12 @@ export default async function GetAccountsPage() {
       <JsonLd data={faqJsonLd} />
       <Suspense>
         <GetAccountsClient
-          providers={
-            await Promise.all(
-              PROVIDERS.map(async (provider) => {
-                const discordLink = provider.discordUrl ?? provider.url;
-                return {
-                  ...provider,
-                  discordInvite: discordLink.includes("discord.gg")
-                    ? await fetchDiscordInvite(extractInviteCode(discordLink))
-                    : null,
-                };
-              }),
-            )
-          }
+          discordInvites={Promise.all(
+            PROVIDERS.map((provider) => {
+              const discordCode = extractDiscordInviteCode(provider);
+              return discordCode ? fetchDiscordInvite(discordCode) : null;
+            }),
+          ).then()}
         />
       </Suspense>
     </>

@@ -8,7 +8,7 @@ import {
   Star,
   Zap,
 } from "lucide-react";
-import type { DiscordInviteResponse } from "@/lib/discord";
+import { extractInviteCode } from "@/lib/discord";
 
 export type Badge =
   | "free"
@@ -58,8 +58,14 @@ export type Provider = {
   priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
-  discordInvite: DiscordInviteResponse | null;
 };
+
+export function extractDiscordInviteCode(provider: Provider): string | null {
+  const discordLink = provider.discordUrl ?? provider.url;
+  return discordLink.includes("discord.gg")
+    ? extractInviteCode(discordLink)
+    : null;
+}
 
 export const BADGE_CONFIG: Record<
   Badge,
@@ -389,7 +395,7 @@ export function getShopBySlug(slug: string): Shop | undefined {
   return SHOPS.find((shop) => shop.slug === slug);
 }
 
-export const PROVIDERS: Omit<Provider, "discordInvite">[] = (
+export const PROVIDERS: Provider[] = (
   ["nfa-accounts", "mfa-accounts"] as const
 ).flatMap((category) =>
   SHOPS.flatMap((shop) => {

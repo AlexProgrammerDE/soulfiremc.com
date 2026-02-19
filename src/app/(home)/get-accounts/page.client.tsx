@@ -5,7 +5,7 @@ import { BookOpen, ExternalLink, Filter, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
-import { useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
@@ -26,18 +26,23 @@ import {
   type Badge,
   CATEGORY_CONFIG,
   type Category,
+  extractDiscordInviteCode,
   FILTER_BADGES,
   FILTER_CATEGORIES,
+  PROVIDERS,
   type Provider,
   SORT_CONFIG,
   SORT_OPTIONS,
   type SortOption,
 } from "@/lib/accounts-data";
+import type { DiscordInviteResponse } from "@/lib/discord";
 import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
+type DiscordInvites = Promise<(DiscordInviteResponse | null)[]>;
+
 type Props = {
-  providers: Provider[];
+  discordInvites: DiscordInvites;
 };
 
 function ProviderBadge({ badge }: { badge: Badge }) {
@@ -78,7 +83,19 @@ function ProviderLogo({ provider }: { provider: Provider }) {
   );
 }
 
-function ProviderCard({ provider }: { provider: Provider }) {
+function ProviderCard({
+  provider,
+  discordInvites,
+}: {
+  provider: Provider;
+  discordInvites: DiscordInvites;
+}) {
+  const resolvedDiscordInvites = use(discordInvites);
+  const discordInvite =
+    resolvedDiscordInvites.find(
+      (invite) => invite?.code === extractDiscordInviteCode(provider),
+    ) ?? null;
+
   return (
     <Card className="transition-all duration-300 hover:shadow-lg">
       <div className="flex flex-col sm:flex-row gap-4 p-6">
@@ -98,7 +115,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
               {provider.price}
             </span>
-            <DiscordMemberBadge info={provider.discordInvite} />
+            <DiscordMemberBadge info={discordInvite} />
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
                 <ProviderBadge key={badge} badge={badge} />
@@ -160,7 +177,7 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
 }
 
 export function GetAccountsClient(props: Props) {
-  const { providers } = props;
+  const providers = PROVIDERS;
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -193,7 +210,7 @@ export function GetAccountsClient(props: Props) {
         badges.every((filter) => provider.badges.includes(filter));
       return matchesCategory && matchesBadges;
     });
-  }, [providers, badges, category]);
+  }, [badges, category]);
 
   const nfaProviders = sortProviders(
     filteredProviders.filter((p) => p.category === "nfa-accounts"),
@@ -384,6 +401,7 @@ export function GetAccountsClient(props: Props) {
                       <ProviderCard
                         key={`${provider.name}-${index}`}
                         provider={provider}
+                        discordInvites={props.discordInvites}
                       />
                     ))}
                   </div>
@@ -412,6 +430,7 @@ export function GetAccountsClient(props: Props) {
                       <ProviderCard
                         key={`${provider.name}-${index}`}
                         provider={provider}
+                        discordInvites={props.discordInvites}
                       />
                     ))}
                   </div>
