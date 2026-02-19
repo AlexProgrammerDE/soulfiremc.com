@@ -2,18 +2,10 @@
 
 import { SiDiscord } from "@icons-pack/react-simple-icons";
 import {
-  ArrowDownNarrowWide,
-  ArrowUpNarrowWide,
   BookOpen,
-  Check,
   ExternalLink,
   Filter,
-  Gift,
   Globe,
-  Package,
-  Shield,
-  Star,
-  Zap,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,39 +25,20 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import type { DiscordInviteResponse } from "@/lib/discord";
+import {
+  type Badge,
+  BADGE_CONFIG,
+  type Category,
+  CATEGORY_CONFIG,
+  FILTER_BADGES,
+  FILTER_CATEGORIES,
+  type Provider,
+  SORT_CONFIG,
+  SORT_OPTIONS,
+  type SortOption,
+} from "@/lib/accounts-data";
 import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
-
-type Badge =
-  | "free"
-  | "high-quality"
-  | "instant-delivery"
-  | "lifetime-warranty"
-  | "12h-warranty"
-  | "bulk-discount"
-  | "soulfire-compatible";
-
-type Category = "nfa-accounts" | "mfa-accounts";
-
-type SortOption = "default" | "price-asc" | "price-desc";
-
-export type Provider = {
-  name: string;
-  logo?: string;
-  logoUnoptimized?: boolean;
-  testimonial: string;
-  url: string;
-  websiteUrl?: string;
-  discordUrl?: string;
-  badges: Badge[];
-  category: Category;
-  price: string;
-  priceValue: number;
-  couponCode?: string;
-  couponDiscount?: string;
-  discordInvite: DiscordInviteResponse | null;
-};
 
 type FaqItem = {
   question: string;
@@ -76,108 +49,6 @@ type Props = {
   providers: Provider[];
   faqItems: FaqItem[];
 };
-
-const BADGE_CONFIG: Record<
-  Badge,
-  {
-    label: string;
-    className: string;
-    description: string;
-    icon: React.ReactNode;
-  }
-> = {
-  free: {
-    label: "Free",
-    className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    description:
-      "Accounts are available completely for free - no purchase required.",
-    icon: <Gift className="h-3 w-3" />,
-  },
-  "soulfire-compatible": {
-    label: "SoulFire Compatible",
-    className: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
-    description:
-      "This account type is directly supported by SoulFire. You can use these accounts with SoulFire right away.",
-    icon: <Check className="h-3 w-3" />,
-  },
-  "high-quality": {
-    label: "High Quality",
-    className: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    description:
-      "Premium accounts with high reliability and low ban rates. Best for demanding use cases.",
-    icon: <Star className="h-3 w-3" />,
-  },
-  "instant-delivery": {
-    label: "Instant Delivery",
-    className: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-    description:
-      "Accounts are delivered automatically and instantly after purchase - no waiting required.",
-    icon: <Zap className="h-3 w-3" />,
-  },
-  "lifetime-warranty": {
-    label: "Lifetime Warranty",
-    className: "bg-green-500/10 text-green-600 dark:text-green-400",
-    description:
-      "Accounts come with lifetime warranty - get a replacement if your account stops working.",
-    icon: <Shield className="h-3 w-3" />,
-  },
-  "12h-warranty": {
-    label: "12 Hour Warranty",
-    className: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
-    description:
-      "Accounts come with a 12 hour warranty - get a replacement if your account stops working within 12 hours of purchase.",
-    icon: <Shield className="h-3 w-3" />,
-  },
-  "bulk-discount": {
-    label: "Bulk Discount",
-    className: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
-    description:
-      "Significant discounts available when purchasing accounts in bulk quantities.",
-    icon: <Package className="h-3 w-3" />,
-  },
-};
-
-const CATEGORY_CONFIG: Record<
-  Category,
-  { label: string; description: string }
-> = {
-  "nfa-accounts": {
-    label: "NFA Accounts",
-    description: "Temporary accounts - budget to premium tiers",
-  },
-  "mfa-accounts": {
-    label: "MFA Accounts",
-    description: "Full access permanent accounts you own forever",
-  },
-};
-
-const SORT_CONFIG: Record<
-  SortOption,
-  { label: string; icon?: React.ReactNode }
-> = {
-  default: { label: "Recommended" },
-  "price-asc": {
-    label: "Price: Low to High",
-    icon: <ArrowUpNarrowWide className="h-3 w-3" />,
-  },
-  "price-desc": {
-    label: "Price: High to Low",
-    icon: <ArrowDownNarrowWide className="h-3 w-3" />,
-  },
-};
-
-const FILTER_BADGES: Badge[] = [
-  "free",
-  "soulfire-compatible",
-  "high-quality",
-  "instant-delivery",
-  "lifetime-warranty",
-  "bulk-discount",
-];
-
-const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "nfa-accounts"];
-
-const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"];
 
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -558,7 +429,7 @@ export function GetAccountsClient(props: Props) {
         <p className="text-sm text-muted-foreground">
           Inaccurate information or broken links? Submit a pull request on{" "}
           <a
-            href="https://github.com/AlexProgrammerDE/soulfiremc.com/edit/main/src/app/(home)/get-accounts/page.tsx"
+            href="https://github.com/AlexProgrammerDE/soulfiremc.com/edit/main/src/lib/accounts-data.tsx"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-foreground"
