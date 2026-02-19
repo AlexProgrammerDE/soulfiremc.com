@@ -216,6 +216,8 @@ export const SHOPS: Shop[] = [
         ],
         price: "$5.00",
         priceValue: 4.5,
+        couponCode: "SOULFIRE",
+        couponDiscount: "5% off",
       },
     },
   },
