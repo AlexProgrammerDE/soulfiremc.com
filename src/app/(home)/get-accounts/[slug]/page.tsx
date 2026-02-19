@@ -1,4 +1,4 @@
-import { SiDiscord } from "@icons-pack/react-simple-icons";
+import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
 import { ArrowLeft, ChevronRight, ExternalLink, Globe } from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
@@ -214,6 +214,18 @@ export default async function AccountProviderPage(props: {
                 >
                   Discord
                   <SiDiscord className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {shop.trustpilotUrl && (
+              <Button asChild variant="secondary">
+                <a
+                  href={shop.trustpilotUrl}
+                  target="_blank"
+                  rel="noopener nofollow"
+                >
+                  Trustpilot
+                  <SiTrustpilot className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             )}

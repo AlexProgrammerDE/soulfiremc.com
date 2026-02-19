@@ -40,6 +40,7 @@ export type Shop = {
   url: string;
   websiteUrl?: string;
   discordUrl?: string;
+  trustpilotUrl?: string;
   listings: Partial<Record<Category, Listing>>;
 };
 
@@ -52,6 +53,7 @@ export type Provider = {
   url: string;
   websiteUrl?: string;
   discordUrl?: string;
+  trustpilotUrl?: string;
   badges: Badge[];
   category: Category;
   price: string;
@@ -184,6 +186,7 @@ export const SHOPS: Shop[] = [
     url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.gg/ravealts2",
+    trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
     listings: {
       "nfa-accounts": {
         testimonial:
@@ -410,6 +413,7 @@ export const PROVIDERS: Provider[] = (
         url: shop.url,
         websiteUrl: shop.websiteUrl,
         discordUrl: shop.discordUrl,
+        trustpilotUrl: shop.trustpilotUrl,
         category,
         ...listing,
       },

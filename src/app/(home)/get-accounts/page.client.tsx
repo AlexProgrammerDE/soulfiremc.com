@@ -1,6 +1,6 @@
 "use client";
 
-import { SiDiscord } from "@icons-pack/react-simple-icons";
+import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
 import { BookOpen, ExternalLink, Filter, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -157,6 +157,18 @@ function ProviderCard({
                 >
                   Discord
                   <SiDiscord className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {provider.trustpilotUrl && (
+              <Button asChild variant="secondary">
+                <a
+                  href={provider.trustpilotUrl}
+                  target="_blank"
+                  rel="noopener nofollow"
+                >
+                  Trustpilot
+                  <SiTrustpilot className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             )}
