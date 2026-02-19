@@ -97,12 +97,14 @@ function ProviderCard({ provider }: { provider: Provider }) {
         </div>
         <div className="flex-1 space-y-3">
           <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href={`/get-accounts/${provider.slug}`}
-              className="text-xl font-semibold hover:underline"
-            >
-              {provider.name}
-            </Link>
+            <h3 className="text-xl font-semibold">
+              <Link
+                href={`/get-accounts/${provider.slug}`}
+                className="hover:underline"
+              >
+                {provider.name}
+              </Link>
+            </h3>
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
               {provider.price}
             </span>

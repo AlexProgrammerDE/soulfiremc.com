@@ -9,7 +9,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import type { BreadcrumbList, Product, WithContext } from "schema-dts";
 import { cacheLife } from "next/cache";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
@@ -86,10 +85,6 @@ export default async function AccountProviderPage(props: {
     NonNullable<Shop["listings"][Category]>,
   ][];
 
-  const allBadges = [
-    ...new Set(categories.flatMap(([, listing]) => listing.badges)),
-  ];
-
   const discordLink = shop.discordUrl ?? shop.url;
   const hasDiscord = discordLink.includes("discord.gg");
   const discordInvite = hasDiscord
@@ -165,23 +160,7 @@ export default async function AccountProviderPage(props: {
         </div>
         <div className="space-y-3">
           <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
-          <div className="flex flex-wrap gap-2">
-            {allBadges.map((badge) => {
-              const config = BADGE_CONFIG[badge];
-              return (
-                <span
-                  key={badge}
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
-                >
-                  {config.icon}
-                  {config.label}
-                </span>
-              );
-            })}
-          </div>
-          <Suspense>
-            <DiscordMemberBadge info={discordInvite} />
-          </Suspense>
+          <DiscordMemberBadge info={discordInvite} />
         </div>
       </div>
 
