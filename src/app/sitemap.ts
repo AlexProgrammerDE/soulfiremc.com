@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ({
           url: `https://soulfiremc.com/get-accounts/${shop.slug}`,
           lastModified: new Date(),
-          changeFrequency: "weekly",
+          changeFrequency: "daily",
           priority: 0.6,
         }) satisfies MetadataRoute.Sitemap[number],
     ),
@@ -48,7 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ({
           url: `https://soulfiremc.com/get-proxies/${provider.slug}`,
           lastModified: new Date(),
-          changeFrequency: "weekly",
+          changeFrequency: "daily",
           priority: 0.6,
         }) satisfies MetadataRoute.Sitemap[number],
     ),
