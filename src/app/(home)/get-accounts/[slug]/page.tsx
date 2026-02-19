@@ -48,11 +48,21 @@ export async function generateMetadata(props: {
     firstListing?.testimonial ??
     `${shop.name} - Minecraft account provider. Compare prices and features.`;
 
+  const image = shop.logo
+    ? `https://soulfiremc.com${shop.logo}`
+    : "https://soulfiremc.com/logo.png";
+
   return {
     title: `${shop.name} - Minecraft Account Provider`,
     description,
     alternates: {
       canonical: "./",
+    },
+    openGraph: {
+      images: [image],
+    },
+    twitter: {
+      images: [image],
     },
   };
 }

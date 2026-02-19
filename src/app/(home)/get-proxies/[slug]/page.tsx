@@ -39,11 +39,21 @@ export async function generateMetadata(props: {
   const provider = getProviderBySlug(params.slug);
   if (!provider) notFound();
 
+  const image = provider.logo
+    ? `https://soulfiremc.com${provider.logo}`
+    : "https://soulfiremc.com/logo.png";
+
   return {
     title: `${provider.name} - Proxy Provider for SoulFire`,
     description: provider.testimonial,
     alternates: {
       canonical: "./",
+    },
+    openGraph: {
+      images: [image],
+    },
+    twitter: {
+      images: [image],
     },
   };
 }
