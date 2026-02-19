@@ -5,6 +5,7 @@ import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type { BreadcrumbList, Product, WithContext } from "schema-dts";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
@@ -25,7 +26,11 @@ import {
   SHOPS,
   type Shop,
 } from "@/lib/accounts-data";
-import { extractInviteCode, fetchDiscordInvite } from "@/lib/discord";
+import {
+  type DiscordInviteResponse,
+  extractInviteCode,
+  fetchDiscordInvite,
+} from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
 
 export function generateStaticParams() {
@@ -73,6 +78,15 @@ function ShopLogo({ shop }: { shop: Shop }) {
   );
 }
 
+async function DiscordMemberBadgeLoader({
+  discordInvite,
+}: {
+  discordInvite: Promise<DiscordInviteResponse | null>;
+}) {
+  const info = await discordInvite;
+  return <DiscordMemberBadge info={info} />;
+}
+
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
   return (
@@ -109,8 +123,8 @@ export default async function AccountProviderPage(props: {
 
   const discordLink = shop.discordUrl ?? shop.url;
   const hasDiscord = discordLink.includes("discord.gg");
-  const discordInvite = hasDiscord
-    ? await fetchDiscordInvite(extractInviteCode(discordLink))
+  const discordInvitePromise = hasDiscord
+    ? fetchDiscordInvite(extractInviteCode(discordLink))
     : null;
 
   const productJsonLd: WithContext<Product> = {
@@ -184,7 +198,15 @@ export default async function AccountProviderPage(props: {
         <div className="flex-1 space-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
-            <DiscordMemberBadge info={discordInvite} />
+            {discordInvitePromise ? (
+              <Suspense fallback={<DiscordMemberBadge info={null} />}>
+                <DiscordMemberBadgeLoader
+                  discordInvite={discordInvitePromise}
+                />
+              </Suspense>
+            ) : (
+              <DiscordMemberBadge info={null} />
+            )}
           </div>
           <div className="flex flex-wrap gap-3">
             <Button asChild>
