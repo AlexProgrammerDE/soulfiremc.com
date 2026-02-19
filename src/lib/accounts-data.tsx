@@ -114,7 +114,7 @@ export const BADGE_CONFIG: Record<
     icon: <Shield className="h-3 w-3" />,
   },
   "12h-warranty": {
-    label: "12 Hour Warranty",
+    label: "Fair Warranty",
     className: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
     description:
       "Accounts come with a 12 hour warranty - get a replacement if your account stops working within 12 hours of purchase.",
