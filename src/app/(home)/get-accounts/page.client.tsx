@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { useMemo, useState } from "react";
+import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
   Accordion,
@@ -35,14 +36,8 @@ import {
 import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
-type FaqItem = {
-  question: string;
-  answer: React.ReactNode;
-};
-
 type Props = {
   providers: Provider[];
-  faqItems: FaqItem[];
 };
 
 function ProviderBadge({ badge }: { badge: Badge }) {
@@ -165,7 +160,7 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
 }
 
 export function GetAccountsClient(props: Props) {
-  const { providers, faqItems } = props;
+  const { providers } = props;
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -342,16 +337,16 @@ export function GetAccountsClient(props: Props) {
           Filters
           {hasActiveFilters && (
             <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
-              {badges.length + (category ? 1 : 0) + (sort !== "default" ? 1 : 0)}
+              {badges.length +
+                (category ? 1 : 0) +
+                (sort !== "default" ? 1 : 0)}
             </span>
           )}
         </button>
 
         {/* Mobile filter panel */}
         {filtersOpen && (
-          <div className="lg:hidden rounded-lg border p-4">
-            {filterContent}
-          </div>
+          <div className="lg:hidden rounded-lg border p-4">{filterContent}</div>
         )}
 
         {/* Desktop sidebar */}
@@ -436,11 +431,11 @@ export function GetAccountsClient(props: Props) {
           </p>
         </div>
         <Accordion type="single" collapsible className="w-full">
-          {faqItems.map((item, i) => (
+          {accountFaqItems.map((item, i) => (
             <AccordionItem key={item.question} value={`faq-${i}`}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
-                {item.answer}
+                {item.answerElement}
               </AccordionContent>
             </AccordionItem>
           ))}

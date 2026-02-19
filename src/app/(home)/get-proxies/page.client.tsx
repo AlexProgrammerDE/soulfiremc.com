@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { useMemo, useState } from "react";
+import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import {
   Accordion,
   AccordionContent,
@@ -23,6 +24,7 @@ import {
   type Badge,
   FILTER_BADGES,
   type FilterableBadge,
+  PROVIDERS,
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
@@ -132,18 +134,8 @@ function ProviderCard({ provider }: { provider: Provider }) {
   );
 }
 
-type FaqItem = {
-  question: string;
-  answer: React.ReactNode;
-};
-
-export function GetProxiesClient({
-  providers,
-  faqItems,
-}: {
-  providers: Provider[];
-  faqItems: FaqItem[];
-}) {
+export function GetProxiesClient() {
+  const providers = PROVIDERS;
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
@@ -172,7 +164,7 @@ export function GetProxiesClient({
           );
 
     return [...sponsors, ...filtered];
-  }, [providers, badges]);
+  }, [badges]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -255,9 +247,7 @@ export function GetProxiesClient({
 
         {/* Mobile filter panel */}
         {filtersOpen && (
-          <div className="lg:hidden rounded-lg border p-4">
-            {filterContent}
-          </div>
+          <div className="lg:hidden rounded-lg border p-4">{filterContent}</div>
         )}
 
         {/* Desktop sidebar */}
@@ -295,11 +285,11 @@ export function GetProxiesClient({
           </p>
         </div>
         <Accordion type="single" collapsible className="w-full">
-          {faqItems.map((item, i) => (
+          {proxiesFaqItems.map((item, i) => (
             <AccordionItem key={item.question} value={`faq-${i}`}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
-                {item.answer}
+                {item.answerElement}
               </AccordionContent>
             </AccordionItem>
           ))}
