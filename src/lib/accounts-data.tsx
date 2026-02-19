@@ -293,6 +293,8 @@ export const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     category: "mfa-accounts",
     price: "$4.00-$5.50",
     priceValue: 4.0,
+    couponCode: "SOULFIRE",
+    couponDiscount: "5% off",
   },
   {
     name: "ZZXGP",
