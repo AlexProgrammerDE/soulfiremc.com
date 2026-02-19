@@ -1,7 +1,11 @@
+import { execFile } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { promisify } from "node:util";
 import { Client, GatewayIntentBits } from "discord.js";
+
+const execFileAsync = promisify(execFile);
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
@@ -33,6 +37,22 @@ async function downloadIcon(url: string, outputPath: string): Promise<void> {
   await writeFile(outputPath, Buffer.from(buffer));
 }
 
+async function optimizeGif(filePath: string): Promise<void> {
+  const tmpPath = `${filePath}.tmp.gif`;
+  await execFileAsync("ffmpeg", [
+    "-y",
+    "-i",
+    filePath,
+    "-filter_complex",
+    "[0:v] fps=15,scale=128:128:flags=lanczos,split [a][b];[a] palettegen=max_colors=128:stats_mode=diff [p];[b][p] paletteuse=dither=bayer:bayer_scale=3",
+    "-loop",
+    "0",
+    tmpPath,
+  ]);
+  const { rename } = await import("node:fs/promises");
+  await rename(tmpPath, filePath);
+}
+
 async function main() {
   // Ensure output directory exists
   if (!existsSync(OUTPUT_DIR)) {
@@ -53,16 +73,26 @@ async function main() {
       process.exit(1);
     }
 
-    const iconUrl = invite.guild.iconURL({ size: 256, extension: "png" });
+    const animated = invite.guild.icon?.startsWith("a_") ?? false;
+    const extension = animated ? "gif" : "png";
+    const iconUrl = invite.guild.iconURL({ size: 256, extension });
     if (!iconUrl) {
       console.error(`No icon found for guild ${invite.guild.name}`);
       process.exit(1);
     }
 
-    const outputPath = path.join(OUTPUT_DIR, `${outputName}.png`);
-    console.log(`Downloading icon for ${invite.guild.name}...`);
+    const outputPath = path.join(OUTPUT_DIR, `${outputName}.${extension}`);
+    console.log(
+      `Downloading ${animated ? "animated " : ""}icon for ${invite.guild.name}...`,
+    );
     await downloadIcon(iconUrl, outputPath);
     console.log(`Saved to ${outputPath}`);
+
+    if (animated) {
+      console.log("Optimizing GIF...");
+      await optimizeGif(outputPath);
+      console.log("GIF optimized");
+    }
   } catch (error) {
     console.error(`Error fetching ${inviteCode}:`, error);
     process.exit(1);
