@@ -1,12 +1,7 @@
 "use client";
 
 import { SiDiscord } from "@icons-pack/react-simple-icons";
-import {
-  BookOpen,
-  ExternalLink,
-  Filter,
-  Globe,
-} from "lucide-react";
+import { BookOpen, ExternalLink, Filter, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
@@ -26,10 +21,10 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import {
-  type Badge,
   BADGE_CONFIG,
-  type Category,
+  type Badge,
   CATEGORY_CONFIG,
+  type Category,
   FILTER_BADGES,
   FILTER_CATEGORIES,
   type Provider,

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
 import { PROVIDERS } from "@/lib/proxies-data";
 import { GetProxiesClient } from "./page.client";
-import { cacheLife } from 'next/cache';
-import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: "Get Proxies",

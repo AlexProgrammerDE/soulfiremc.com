@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Link from "next/link";
+import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
-import { extractInviteCode, fetchDiscordInvite } from "@/lib/discord";
 import { PROVIDERS } from "@/lib/accounts-data";
+import { extractInviteCode, fetchDiscordInvite } from "@/lib/discord";
 import { GetAccountsClient } from "./page.client";
-import { cacheLife } from 'next/cache';
-import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: "Get Accounts",

@@ -252,8 +252,7 @@ const faqItems: {
           Download
         </Link>{" "}
         the native installer for your platform (Windows, macOS, or Linux). No
-        Java required, everything is bundled. Just install and
-        run. See the{" "}
+        Java required, everything is bundled. Just install and run. See the{" "}
         <Link href="/docs/installation" className="underline text-primary">
           installation guide
         </Link>{" "}
@@ -299,11 +298,10 @@ const faqItems: {
       'Yes. SoulFire includes a visual scripting system with 70+ drag-and-drop nodes. Build automation workflows by connecting triggers, actions, and logic nodes, no programming required. The built-in script editor supports real-time debugging, AI/LLM integration, and more. See the <a href="https://soulfiremc.com/docs/scripting">scripting docs</a> to get started.',
     answerElement: (
       <>
-        Yes. SoulFire includes a visual scripting system with 70+
-        drag-and-drop nodes. Build automation workflows by connecting triggers,
-        actions, and logic nodes, no programming required. The built-in script
-        editor supports real-time debugging, AI/LLM integration, and more. See
-        the{" "}
+        Yes. SoulFire includes a visual scripting system with 70+ drag-and-drop
+        nodes. Build automation workflows by connecting triggers, actions, and
+        logic nodes, no programming required. The built-in script editor
+        supports real-time debugging, AI/LLM integration, and more. See the{" "}
         <Link href="/docs/scripting" className="underline text-primary">
           scripting docs
         </Link>{" "}
@@ -508,8 +506,8 @@ export default function Page() {
             </h2>
             <p className="max-w-[700px] text-muted-foreground md:text-lg">
               Build complex bot behaviors by connecting nodes in a visual
-              editor. Drag and drop from 70+ built-in nodes across 12
-              categories including triggers, actions, flow control, AI, and more.
+              editor. Drag and drop from 70+ built-in nodes across 12 categories
+              including triggers, actions, flow control, AI, and more.
             </p>
           </div>
           <ScriptingAnimation />

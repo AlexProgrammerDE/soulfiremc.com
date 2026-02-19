@@ -1,5 +1,3 @@
-import { cacheLife } from "next/cache";
-
 export type DiscordInviteResponse = {
   code: string;
   guild?: {
@@ -31,7 +29,7 @@ export async function fetchDiscordInvite(
       headers,
       next: {
         revalidate: 60 * 60,
-      }
+      },
     },
   );
 

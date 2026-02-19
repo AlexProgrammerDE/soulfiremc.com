@@ -161,7 +161,11 @@ export const FILTER_BADGES: Badge[] = [
 
 export const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "nfa-accounts"];
 
-export const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"];
+export const SORT_OPTIONS: SortOption[] = [
+  "default",
+  "price-asc",
+  "price-desc",
+];
 
 // Shop order is arranged to preserve the recommended sort order
 // within both NFA and MFA category sections when derived into PROVIDERS.
@@ -204,7 +208,12 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Full access accounts that work well as mains or long-term alts.",
-        badges: ["high-quality", "instant-delivery", "12h-warranty", "soulfire-compatible"],
+        badges: [
+          "high-quality",
+          "instant-delivery",
+          "12h-warranty",
+          "soulfire-compatible",
+        ],
         price: "$5.00",
         priceValue: 4.5,
       },
@@ -257,7 +266,11 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Cheap MFA accounts with instant delivery and lifetime warranty.",
-        badges: ["instant-delivery", "lifetime-warranty", "soulfire-compatible"],
+        badges: [
+          "instant-delivery",
+          "lifetime-warranty",
+          "soulfire-compatible",
+        ],
         price: "$4.00-$5.50",
         priceValue: 4.0,
         couponCode: "SOULFIRE",

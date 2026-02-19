@@ -247,11 +247,7 @@ function sHeight(n: SNode) {
   return ED_H + n.rows.length * ED_R + ED_P;
 }
 
-function sPortXY(
-  nodeId: string,
-  portName: string,
-  side: "left" | "right",
-) {
+function sPortXY(nodeId: string, portName: string, side: "left" | "right") {
   const n = sNodes.find((n) => n.id === nodeId)!;
   const ri = n.rows.findIndex(
     (r) => r.left?.name === portName || r.right?.name === portName,
@@ -362,12 +358,66 @@ type SEdge = {
 };
 
 const sEdges: SEdge[] = [
-  { id: "e1", from: "trigger", fp: "Out", fs: "right", to: "contains", tp: "In", ts: "left", type: "exec" },
-  { id: "e2", from: "trigger", fp: "Message", fs: "right", to: "contains", tp: "String", ts: "left", type: "data" },
-  { id: "e3", from: "contains", fp: "Out", fs: "right", to: "branch", tp: "In", ts: "left", type: "exec" },
-  { id: "e4", from: "contains", fp: "Result", fs: "right", to: "branch", tp: "Cond", ts: "left", type: "data" },
-  { id: "e5", from: "branch", fp: "True", fs: "right", to: "sendChat", tp: "In", ts: "left", type: "exec" },
-  { id: "e6", from: "branch", fp: "False", fs: "right", to: "aiChat", tp: "In", ts: "left", type: "exec" },
+  {
+    id: "e1",
+    from: "trigger",
+    fp: "Out",
+    fs: "right",
+    to: "contains",
+    tp: "In",
+    ts: "left",
+    type: "exec",
+  },
+  {
+    id: "e2",
+    from: "trigger",
+    fp: "Message",
+    fs: "right",
+    to: "contains",
+    tp: "String",
+    ts: "left",
+    type: "data",
+  },
+  {
+    id: "e3",
+    from: "contains",
+    fp: "Out",
+    fs: "right",
+    to: "branch",
+    tp: "In",
+    ts: "left",
+    type: "exec",
+  },
+  {
+    id: "e4",
+    from: "contains",
+    fp: "Result",
+    fs: "right",
+    to: "branch",
+    tp: "Cond",
+    ts: "left",
+    type: "data",
+  },
+  {
+    id: "e5",
+    from: "branch",
+    fp: "True",
+    fs: "right",
+    to: "sendChat",
+    tp: "In",
+    ts: "left",
+    type: "exec",
+  },
+  {
+    id: "e6",
+    from: "branch",
+    fp: "False",
+    fs: "right",
+    to: "aiChat",
+    tp: "In",
+    ts: "left",
+    type: "exec",
+  },
 ];
 
 const sEdgePaths = sEdges.map((e) => {
@@ -392,14 +442,42 @@ const sPhases = [
 const sTotalTicks = sPhases.reduce((s, p) => s + p.ticks, 0);
 
 const sLogs = [
-  { phase: 0, text: '\u25B6 On Chat - Bot_1 received "hello world"', color: "text-orange-400" },
-  { phase: 1, text: '\u2713 Contains? - "hello" found', color: "text-blue-400" },
-  { phase: 2, text: "\u21B3 Branch - condition: true", color: "text-purple-400" },
-  { phase: 3, text: '\u2713 Send Chat - "Welcome!" sent', color: "text-green-400" },
-  { phase: 5, text: '\u25B6 On Chat - Bot_3 received "how are you?"', color: "text-orange-400" },
+  {
+    phase: 0,
+    text: '\u25B6 On Chat - Bot_1 received "hello world"',
+    color: "text-orange-400",
+  },
+  {
+    phase: 1,
+    text: '\u2713 Contains? - "hello" found',
+    color: "text-blue-400",
+  },
+  {
+    phase: 2,
+    text: "\u21B3 Branch - condition: true",
+    color: "text-purple-400",
+  },
+  {
+    phase: 3,
+    text: '\u2713 Send Chat - "Welcome!" sent',
+    color: "text-green-400",
+  },
+  {
+    phase: 5,
+    text: '\u25B6 On Chat - Bot_3 received "how are you?"',
+    color: "text-orange-400",
+  },
   { phase: 6, text: "\u2713 Contains? - no match", color: "text-blue-400" },
-  { phase: 7, text: "\u21B3 Branch - condition: false", color: "text-purple-400" },
-  { phase: 8, text: "\u2713 AI Reply - generating response\u2026", color: "text-cyan-400" },
+  {
+    phase: 7,
+    text: "\u21B3 Branch - condition: false",
+    color: "text-purple-400",
+  },
+  {
+    phase: 8,
+    text: "\u2713 AI Reply - generating response\u2026",
+    color: "text-cyan-400",
+  },
 ];
 
 export function ScriptingAnimation() {
@@ -464,13 +542,7 @@ export function ScriptingAnimation() {
           style={{ minHeight: "180px", background: "#1e1e2e" }}
         >
           <defs>
-            <filter
-              id="sf-glow"
-              x="-50%"
-              y="-50%"
-              width="200%"
-              height="200%"
-            >
+            <filter id="sf-glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="4" result="b" />
               <feMerge>
                 <feMergeNode in="b" />
@@ -511,8 +583,7 @@ export function ScriptingAnimation() {
                 strokeWidth={active ? 2.5 : 1.5}
                 opacity={active ? 1 : 0.5}
                 style={{
-                  transition:
-                    "stroke 0.25s, stroke-width 0.25s, opacity 0.25s",
+                  transition: "stroke 0.25s, stroke-width 0.25s, opacity 0.25s",
                 }}
               />
             );
@@ -666,37 +737,38 @@ export function ScriptingAnimation() {
                       )}
 
                       {/* Input field */}
-                      {row.inputValue != null && (() => {
-                        const lw = row.left
-                          ? row.left.name.length * 6 + 14
-                          : 6;
-                        const rp = row.right ? 35 : 8;
-                        const fx = node.x + lw;
-                        const fw = node.w - lw - rp;
-                        return (
-                          <>
-                            <rect
-                              x={fx}
-                              y={cy - 7}
-                              width={fw}
-                              height={14}
-                              rx="2"
-                              fill="#1e1e2e"
-                              stroke="#3a3a4a"
-                              strokeWidth="0.5"
-                            />
-                            <text
-                              x={fx + 4}
-                              y={cy + 3}
-                              fontSize="8.5"
-                              fontFamily="monospace"
-                              fill="#e0c070"
-                            >
-                              {row.inputValue}
-                            </text>
-                          </>
-                        );
-                      })()}
+                      {row.inputValue != null &&
+                        (() => {
+                          const lw = row.left
+                            ? row.left.name.length * 6 + 14
+                            : 6;
+                          const rp = row.right ? 35 : 8;
+                          const fx = node.x + lw;
+                          const fw = node.w - lw - rp;
+                          return (
+                            <>
+                              <rect
+                                x={fx}
+                                y={cy - 7}
+                                width={fw}
+                                height={14}
+                                rx="2"
+                                fill="#1e1e2e"
+                                stroke="#3a3a4a"
+                                strokeWidth="0.5"
+                              />
+                              <text
+                                x={fx + 4}
+                                y={cy + 3}
+                                fontSize="8.5"
+                                fontFamily="monospace"
+                                fill="#e0c070"
+                              >
+                                {row.inputValue}
+                              </text>
+                            </>
+                          );
+                        })()}
                     </g>
                   );
                 })}

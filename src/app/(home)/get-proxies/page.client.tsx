@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  BookOpen,
-  ExternalLink,
-  Filter,
-} from "lucide-react";
+import { BookOpen, ExternalLink, Filter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
@@ -23,10 +19,10 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import {
-  type Badge,
   BADGE_CONFIG,
-  type FilterableBadge,
+  type Badge,
   FILTER_BADGES,
+  type FilterableBadge,
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
