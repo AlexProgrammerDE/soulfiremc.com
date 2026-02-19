@@ -165,7 +165,7 @@ export default async function ProxyProviderPage(props: {
 
       {/* Main content card */}
       <Card
-        className={`p-6 space-y-5 ${
+        className={`p-6 gap-5 ${
           theme ? `ring-2 ${theme.ring} ${theme.bg}` : ""
         }`}
       >

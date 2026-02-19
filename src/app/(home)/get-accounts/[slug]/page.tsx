@@ -228,7 +228,7 @@ export default async function AccountProviderPage(props: {
         {categories.map(([category, listing]) => {
           const catConfig = CATEGORY_CONFIG[category];
           return (
-            <Card key={category} className="p-6 space-y-4">
+            <Card key={category} className="p-6 gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-2xl font-semibold">{catConfig.label}</h2>
                 <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
