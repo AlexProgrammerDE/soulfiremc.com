@@ -212,3 +212,9 @@ When you import proxies, SoulFire can check if they are functional by attempting
 
 This setting (default: `10`) controls how many proxies can be checked simultaneously.
 Higher values will check proxies faster but may cause issues if you have limited bandwidth or resources.
+
+### Proxy check timeout
+
+This setting (default: `30`) controls how many seconds SoulFire waits for a proxy check response before considering a proxy as failed.
+Lower values will speed up proxy checking but may incorrectly mark slower proxies as invalid.
+Increase this value if you are using high-latency proxies or checking against distant servers.
