@@ -1,16 +1,11 @@
 import { SiDiscord } from "@icons-pack/react-simple-icons";
-import {
-  ArrowLeft,
-  ChevronRight,
-  ExternalLink,
-  Globe,
-} from "lucide-react";
+import { ArrowLeft, ChevronRight, ExternalLink, Globe } from "lucide-react";
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { BreadcrumbList, Product, WithContext } from "schema-dts";
-import { cacheLife } from "next/cache";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
 import { JsonLd } from "@/components/json-ld";
@@ -22,15 +17,16 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import {
-  type Badge,
   BADGE_CONFIG,
+  type Badge,
   CATEGORY_CONFIG,
   type Category,
-  type Shop,
-  SHOPS,
   getShopBySlug,
+  SHOPS,
+  type Shop,
 } from "@/lib/accounts-data";
 import { extractInviteCode, fetchDiscordInvite } from "@/lib/discord";
+import { imageMetadata } from "@/lib/metadata";
 
 export function generateStaticParams() {
   return SHOPS.map((shop) => ({ slug: shop.slug }));
@@ -48,22 +44,13 @@ export async function generateMetadata(props: {
     firstListing?.testimonial ??
     `${shop.name} - Minecraft account provider. Compare prices and features.`;
 
-  const image = shop.logo
-    ? `https://soulfiremc.com${shop.logo}`
-    : "https://soulfiremc.com/logo.png";
-
   return {
     title: `${shop.name} - Minecraft Account Provider`,
     description,
     alternates: {
       canonical: "./",
     },
-    openGraph: {
-      images: [image],
-    },
-    twitter: {
-      images: [image],
-    },
+    ...imageMetadata(shop.logo),
   };
 }
 
@@ -131,7 +118,8 @@ export default async function AccountProviderPage(props: {
     "@type": "Product",
     name: shop.name,
     description:
-      Object.values(shop.listings)[0]?.testimonial ?? `${shop.name} Minecraft accounts`,
+      Object.values(shop.listings)[0]?.testimonial ??
+      `${shop.name} Minecraft accounts`,
     image: shop.logo
       ? `https://soulfiremc.com${shop.logo}`
       : "https://soulfiremc.com/logo.png",

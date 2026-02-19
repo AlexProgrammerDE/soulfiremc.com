@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { JsonLd } from "@/components/json-ld";
 import { getRequiredEnv } from "@/lib/env";
+import { imageMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
 export const viewport: Viewport = {
@@ -31,18 +32,7 @@ export const metadata: Metadata = {
   other: {
     "msapplication-TileColor": "#3289BF",
   },
-  twitter: {
-    site: "https://soulfiremc.com",
-    card: "summary",
-    images: "/logo.png",
-  },
-  openGraph: {
-    // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
-    url: "./",
-    siteName: "SoulFire",
-    type: "website",
-    images: "/logo.png",
-  },
+  ...imageMetadata(),
   alternates: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     canonical: "./",
@@ -84,7 +74,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="qRgsfQEDB7kSuRdyL3PfiA" async></script>
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="qRgsfQEDB7kSuRdyL3PfiA"
+          async
+        ></script>
       </head>
       <body
         className={cn(

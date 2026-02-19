@@ -1,15 +1,10 @@
-import {
-  ArrowLeft,
-  ChevronRight,
-  ExternalLink,
-  Heart,
-} from "lucide-react";
+import { ArrowLeft, ChevronRight, ExternalLink, Heart } from "lucide-react";
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { BreadcrumbList, Product, WithContext } from "schema-dts";
-import { cacheLife } from "next/cache";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
@@ -19,13 +14,14 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { imageMetadata } from "@/lib/metadata";
 import {
-  type Badge,
   BADGE_CONFIG,
-  type Provider,
-  PROVIDERS,
-  SPONSOR_THEMES,
+  type Badge,
   getProviderBySlug,
+  PROVIDERS,
+  type Provider,
+  SPONSOR_THEMES,
 } from "@/lib/proxies-data";
 
 export function generateStaticParams() {
@@ -39,22 +35,13 @@ export async function generateMetadata(props: {
   const provider = getProviderBySlug(params.slug);
   if (!provider) notFound();
 
-  const image = provider.logo
-    ? `https://soulfiremc.com${provider.logo}`
-    : "https://soulfiremc.com/logo.png";
-
   return {
     title: `${provider.name} - Proxy Provider for SoulFire`,
     description: provider.testimonial,
     alternates: {
       canonical: "./",
     },
-    openGraph: {
-      images: [image],
-    },
-    twitter: {
-      images: [image],
-    },
+    ...imageMetadata(provider.logo),
   };
 }
 
