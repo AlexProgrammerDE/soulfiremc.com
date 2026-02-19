@@ -4,7 +4,7 @@ import { BookOpen, ExternalLink, Filter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -174,6 +174,46 @@ export function GetProxiesClient({
     return [...sponsors, ...filtered];
   }, [providers, badges]);
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const filterContent = (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Filter className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-medium">Filter by type</span>
+        {badges.length > 0 && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {FILTER_BADGES.map((badge) => {
+          const config = BADGE_CONFIG[badge];
+          const isActive = badges.includes(badge);
+          return (
+            <button
+              type="button"
+              key={badge}
+              onClick={() => toggleFilter(badge)}
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                isActive
+                  ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              }`}
+            >
+              {config.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
@@ -197,58 +237,53 @@ export function GetProxiesClient({
         </p>
       </div>
 
-      {/* Filter Section */}
-      <div className="max-w-5xl mx-auto w-full">
-        <div className="flex items-center gap-2 mb-3">
-          <Filter className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Filter by type:</span>
+      <div className="flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full">
+        {/* Mobile filter toggle */}
+        <button
+          type="button"
+          onClick={() => setFiltersOpen(!filtersOpen)}
+          className="lg:hidden inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors self-start"
+        >
+          <Filter className="h-4 w-4" />
+          Filters
           {badges.length > 0 && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
-            >
-              Clear filters
-            </button>
+            <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
+              {badges.length}
+            </span>
           )}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {FILTER_BADGES.map((badge) => {
-            const config = BADGE_CONFIG[badge];
-            const isActive = badges.includes(badge);
-            return (
-              <button
-                type="button"
-                key={badge}
-                onClick={() => toggleFilter(badge)}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-                  isActive
-                    ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
-              >
-                {config.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+        </button>
 
-      <div className="max-w-5xl mx-auto w-full">
-        {filteredProviders.length === 0 ? (
-          <Card className="p-8 text-center">
-            <p className="text-muted-foreground">
-              No providers match the selected filters. Try removing some
-              filters.
-            </p>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {filteredProviders.map((provider) => (
-              <ProviderCard key={provider.name} provider={provider} />
-            ))}
+        {/* Mobile filter panel */}
+        {filtersOpen && (
+          <div className="lg:hidden rounded-lg border p-4">
+            {filterContent}
           </div>
         )}
+
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:block lg:w-56 lg:shrink-0">
+          <div className="lg:sticky lg:top-20 lg:self-start">
+            {filterContent}
+          </div>
+        </aside>
+
+        {/* Main content */}
+        <div className="flex-1">
+          {filteredProviders.length === 0 ? (
+            <Card className="p-8 text-center">
+              <p className="text-muted-foreground">
+                No providers match the selected filters. Try removing some
+                filters.
+              </p>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+              {filteredProviders.map((provider) => (
+                <ProviderCard key={provider.name} provider={provider} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* FAQ Section */}

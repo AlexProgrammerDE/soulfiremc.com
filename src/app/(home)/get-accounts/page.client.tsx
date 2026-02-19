@@ -5,7 +5,7 @@ import { BookOpen, ExternalLink, Filter, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
   Accordion,
@@ -212,6 +212,102 @@ export function GetAccountsClient(props: Props) {
   const hasActiveFilters =
     badges.length > 0 || category !== null || sort !== "default";
 
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const filterContent = (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Filter className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-medium">Filters</span>
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      {/* Category Filter */}
+      <div className="space-y-2">
+        <span className="text-xs text-muted-foreground">Category:</span>
+        <div className="flex flex-wrap gap-2">
+          {FILTER_CATEGORIES.map((cat) => {
+            const config = CATEGORY_CONFIG[cat];
+            const isActive = category === cat;
+            return (
+              <button
+                type="button"
+                key={cat}
+                onClick={() => toggleCategory(cat)}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                  isActive
+                    ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Badge Filter */}
+      <div className="space-y-2">
+        <span className="text-xs text-muted-foreground">Features:</span>
+        <div className="flex flex-wrap gap-2">
+          {FILTER_BADGES.map((badge) => {
+            const config = BADGE_CONFIG[badge];
+            const isActive = badges.includes(badge);
+            return (
+              <button
+                type="button"
+                key={badge}
+                onClick={() => toggleBadge(badge)}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                  isActive
+                    ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Sort */}
+      <div className="space-y-2">
+        <span className="text-xs text-muted-foreground">Sort:</span>
+        <div className="flex flex-wrap gap-2">
+          {SORT_OPTIONS.map((option) => {
+            const config = SORT_CONFIG[option];
+            const isActive = sort === option;
+            return (
+              <button
+                type="button"
+                key={option}
+                onClick={() => setSort(option)}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+                  isActive
+                    ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                {config.icon}
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
@@ -235,161 +331,101 @@ export function GetAccountsClient(props: Props) {
         </p>
       </div>
 
-      {/* Filter Section */}
-      <div className="max-w-5xl mx-auto w-full space-y-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Filter className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Filters:</span>
+      <div className="flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full">
+        {/* Mobile filter toggle */}
+        <button
+          type="button"
+          onClick={() => setFiltersOpen(!filtersOpen)}
+          className="lg:hidden inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors self-start"
+        >
+          <Filter className="h-4 w-4" />
+          Filters
           {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
-            >
-              Clear filters
-            </button>
+            <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
+              {badges.length + (category ? 1 : 0) + (sort !== "default" ? 1 : 0)}
+            </span>
           )}
-        </div>
+        </button>
 
-        {/* Category Filter */}
-        <div className="space-y-2">
-          <span className="text-xs text-muted-foreground">Category:</span>
-          <div className="flex flex-wrap gap-2">
-            {FILTER_CATEGORIES.map((cat) => {
-              const config = CATEGORY_CONFIG[cat];
-              const isActive = category === cat;
-              return (
-                <button
-                  type="button"
-                  key={cat}
-                  onClick={() => toggleCategory(cat)}
-                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-                    isActive
-                      ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  {config.label}
-                </button>
-              );
-            })}
+        {/* Mobile filter panel */}
+        {filtersOpen && (
+          <div className="lg:hidden rounded-lg border p-4">
+            {filterContent}
           </div>
-        </div>
+        )}
 
-        {/* Badge Filter */}
-        <div className="space-y-2">
-          <span className="text-xs text-muted-foreground">Features:</span>
-          <div className="flex flex-wrap gap-2">
-            {FILTER_BADGES.map((badge) => {
-              const config = BADGE_CONFIG[badge];
-              const isActive = badges.includes(badge);
-              return (
-                <button
-                  type="button"
-                  key={badge}
-                  onClick={() => toggleBadge(badge)}
-                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-                    isActive
-                      ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  {config.label}
-                </button>
-              );
-            })}
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:block lg:w-56 lg:shrink-0">
+          <div className="lg:sticky lg:top-20 lg:self-start">
+            {filterContent}
           </div>
-        </div>
+        </aside>
 
-        {/* Sort */}
-        <div className="space-y-2">
-          <span className="text-xs text-muted-foreground">Sort:</span>
-          <div className="flex flex-wrap gap-2">
-            {SORT_OPTIONS.map((option) => {
-              const config = SORT_CONFIG[option];
-              const isActive = sort === option;
-              return (
-                <button
-                  type="button"
-                  key={option}
-                  onClick={() => setSort(option)}
-                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-                    isActive
-                      ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  {config.icon}
-                  {config.label}
-                </button>
-              );
-            })}
-          </div>
+        {/* Main content */}
+        <div className="flex-1 space-y-10">
+          {filteredProviders.length === 0 ? (
+            <Card className="p-8 text-center">
+              <p className="text-muted-foreground">
+                No providers match the selected filters. Try removing some
+                filters.
+              </p>
+            </Card>
+          ) : (
+            <>
+              {/* MFA Accounts Section */}
+              {mfaProviders.length > 0 && (
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <h2 className="text-2xl font-semibold">
+                      MFA Accounts (Permanent)
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      Full access accounts you own forever. Change email,
+                      password, and username as you want.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    {mfaProviders.map((provider, index) => (
+                      <ProviderCard
+                        key={`${provider.name}-${index}`}
+                        provider={provider}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* NFA Accounts Section */}
+              {nfaProviders.length > 0 && (
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <h2 className="text-2xl font-semibold">
+                      NFA Accounts (Temporary)
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      Temporary accounts that may stop working over time. Prices
+                      shown are per account.
+                    </p>
+                    <p className="text-sm text-yellow-600 dark:text-yellow-500">
+                      <strong>Note:</strong> SoulFire does not support
+                      cookie/access token auth. However, SoulFire does support
+                      refresh token auth.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    {nfaProviders.map((provider, index) => (
+                      <ProviderCard
+                        key={`${provider.name}-${index}`}
+                        provider={provider}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
-
-      {filteredProviders.length === 0 ? (
-        <div className="max-w-5xl mx-auto w-full">
-          <Card className="p-8 text-center">
-            <p className="text-muted-foreground">
-              No providers match the selected filters. Try removing some
-              filters.
-            </p>
-          </Card>
-        </div>
-      ) : (
-        <>
-          {/* MFA Accounts Section */}
-          {mfaProviders.length > 0 && (
-            <div className="max-w-5xl mx-auto w-full space-y-4">
-              <div className="space-y-1">
-                <h2 className="text-2xl font-semibold">
-                  MFA Accounts (Permanent)
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Full access accounts you own forever. Change email, password,
-                  and username as you want.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {mfaProviders.map((provider, index) => (
-                  <ProviderCard
-                    key={`${provider.name}-${index}`}
-                    provider={provider}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* NFA Accounts Section */}
-          {nfaProviders.length > 0 && (
-            <div className="max-w-5xl mx-auto w-full space-y-4">
-              <div className="space-y-1">
-                <h2 className="text-2xl font-semibold">
-                  NFA Accounts (Temporary)
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Temporary accounts that may stop working over time. Prices
-                  shown are per account.
-                </p>
-                <p className="text-sm text-yellow-600 dark:text-yellow-500">
-                  <strong>Note:</strong> SoulFire does not support cookie/access
-                  token auth. However, SoulFire does support refresh token auth.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {nfaProviders.map((provider, index) => (
-                  <ProviderCard
-                    key={`${provider.name}-${index}`}
-                    provider={provider}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </>
-      )}
 
       {/* FAQ Section */}
       <div className="max-w-3xl mx-auto w-full space-y-4">
