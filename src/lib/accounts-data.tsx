@@ -23,6 +23,25 @@ export type Category = "nfa-accounts" | "mfa-accounts";
 
 export type SortOption = "default" | "price-asc" | "price-desc";
 
+export type Listing = {
+  testimonial: string;
+  badges: Badge[];
+  price: string;
+  priceValue: number;
+  couponCode?: string;
+  couponDiscount?: string;
+};
+
+export type Shop = {
+  name: string;
+  logo?: string;
+  logoUnoptimized?: boolean;
+  url: string;
+  websiteUrl?: string;
+  discordUrl?: string;
+  listings: Partial<Record<Category, Listing>>;
+};
+
 export type Provider = {
   name: string;
   logo?: string;
@@ -142,182 +161,219 @@ export const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "nfa-accounts"];
 
 export const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"];
 
-export const PROVIDERS: Omit<Provider, "discordInvite">[] = [
-  // NFA Accounts (Temporary)
+// Shop order is arranged to preserve the recommended sort order
+// within both NFA and MFA category sections when derived into PROVIDERS.
+const SHOPS: Shop[] = [
   {
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
     logoUnoptimized: true,
-    testimonial:
-      "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
     url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.gg/ravealts2",
-    badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "nfa-accounts",
-    price: "10-15¢",
-    priceValue: 0.1,
-    couponCode: "SOULFIRE",
-    couponDiscount: "10% off",
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
+        badges: ["high-quality", "instant-delivery", "bulk-discount"],
+        price: "10-15¢",
+        priceValue: 0.1,
+        couponCode: "SOULFIRE",
+        couponDiscount: "10% off",
+      },
+      "mfa-accounts": {
+        testimonial:
+          "Permanent accounts with full access. You can change the email, password, and username.",
+        badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
+        price: "$5.67",
+        priceValue: 5.67,
+        couponCode: "SOULFIRE",
+        couponDiscount: "10% off",
+      },
+    },
+  },
+  {
+    name: "Luma MFA",
+    logo: "/accounts/luma.png",
+    url: "https://discord.gg/5Wc4tA2ypY",
+    listings: {
+      "mfa-accounts": {
+        testimonial:
+          "Full access accounts that work well as mains or long-term alts.",
+        badges: ["high-quality", "instant-delivery", "12h-warranty", "soulfire-compatible"],
+        price: "$5.00",
+        priceValue: 4.5,
+      },
+    },
   },
   {
     name: "mori's alternative world",
     logo: "/accounts/mori.png",
     url: "https://discord.gg/logs",
-    testimonial:
-      "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 75 accounts.",
-    badges: ["free", "instant-delivery", "soulfire-compatible"],
-    category: "nfa-accounts",
-    price: "Free",
-    priceValue: 0,
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 75 accounts.",
+        badges: ["free", "instant-delivery", "soulfire-compatible"],
+        price: "Free",
+        priceValue: 0,
+      },
+    },
   },
   {
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
-    testimonial:
-      "Multiple tiers from budget tokens to high-quality cookies. Responsive support.",
     url: "https://discord.gg/nicealts",
     websiteUrl: "https://status.nicealts.com",
-    badges: ["high-quality", "instant-delivery", "bulk-discount"],
-    category: "nfa-accounts",
-    price: "5-10¢",
-    priceValue: 0.05,
-  },
-  {
-    name: "ZZXGP",
-    logo: "/accounts/zzxgp.png",
-    testimonial:
-      "Multiple tiers from budget tokens to premium cookies. Good entry point for new users.",
-    url: "https://zzxgp.me",
-    websiteUrl: "https://zzxgp.me",
-    discordUrl: "https://discord.gg/gycmTvrfnj",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "nfa-accounts",
-    price: "5-12¢",
-    priceValue: 0.05,
-  },
-  {
-    name: "YYY",
-    logo: "/accounts/yyy.png",
-    testimonial:
-      "Cookie and token accounts with their own delivery platform.",
-    url: "https://discord.gg/rmxayvwc5K",
-    badges: ["high-quality", "instant-delivery"],
-    category: "nfa-accounts",
-    price: "12¢",
-    priceValue: 0.12,
-  },
-  {
-    name: "Mog Alts",
-    logo: "/accounts/mogalts.png",
-    testimonial:
-      "Cheap token accounts starting at 5¢. No frills, just alts.",
-    url: "https://mogalts.win",
-    websiteUrl: "https://mogalts.win",
-    discordUrl: "https://discord.gg/mogalts",
-    badges: ["instant-delivery", "bulk-discount"],
-    category: "nfa-accounts",
-    price: "5¢",
-    priceValue: 0.05,
-  },
-  {
-    name: "Localts",
-    logo: "/accounts/luma.png",
-    testimonial:
-      "Higher price point, but accounts are known to last longer. Quality over quantity.",
-    url: "https://localts.store",
-    websiteUrl: "https://localts.store",
-    discordUrl: "https://discord.gg/B4xkxHwmd4",
-    badges: ["high-quality", "lifetime-warranty"],
-    category: "nfa-accounts",
-    price: "25¢",
-    priceValue: 0.25,
-  },
-  {
-    name: "Less | Unbanned",
-    logo: "/accounts/lessunbanned.png",
-    testimonial:
-      "Sells unbanned accounts specifically. Useful if you need clean accounts with no existing bans.",
-    url: "https://discord.gg/teMqsB3PYG",
-    badges: ["instant-delivery"],
-    category: "nfa-accounts",
-    price: "5¢",
-    priceValue: 0.05,
-  },
-  // MFA (Permanent Full Access) Accounts
-  {
-    name: "Ravealts",
-    logo: "/accounts/ravealts.gif",
-    testimonial:
-      "Permanent accounts with full access. You can change the email, password, and username.",
-    url: "https://dash.ravealts.com",
-    websiteUrl: "https://ravealts.com",
-    discordUrl: "https://discord.gg/ravealts2",
-    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
-    category: "mfa-accounts",
-    price: "$5.67",
-    priceValue: 5.67,
-    couponCode: "SOULFIRE",
-    couponDiscount: "10% off",
-  },
-  {
-    name: "Luma MFA",
-    logo: "/accounts/luma.png",
-    testimonial:
-      "Full access accounts that work well as mains or long-term alts.",
-    url: "https://discord.gg/5Wc4tA2ypY",
-    badges: ["high-quality", "instant-delivery", "12h-warranty", "soulfire-compatible"],
-    category: "mfa-accounts",
-    price: "$5.00",
-    priceValue: 4.5,
-  },
-  {
-    name: "Nicealts",
-    logo: "/accounts/nicealts.png",
-    testimonial:
-      "Also sells permanent MFA accounts alongside their token/cookie selection. Known for responsive support.",
-    url: "https://discord.gg/nicealts",
-    websiteUrl: "https://status.nicealts.com",
-    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
-    category: "mfa-accounts",
-    price: "$5.00",
-    priceValue: 5.0,
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Multiple tiers from budget tokens to high-quality cookies. Responsive support.",
+        badges: ["high-quality", "instant-delivery", "bulk-discount"],
+        price: "5-10¢",
+        priceValue: 0.05,
+      },
+      "mfa-accounts": {
+        testimonial:
+          "Also sells permanent MFA accounts alongside their token/cookie selection. Known for responsive support.",
+        badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
+        price: "$5.00",
+        priceValue: 5.0,
+      },
+    },
   },
   {
     name: "Aqua MFA",
     logo: "/accounts/aquamfa.png",
-    testimonial:
-      "Cheap MFA accounts with instant delivery and lifetime warranty.",
     url: "https://discord.gg/87XFhsS35V",
-    badges: ["instant-delivery", "lifetime-warranty", "soulfire-compatible"],
-    category: "mfa-accounts",
-    price: "$4.00-$5.50",
-    priceValue: 4.0,
-    couponCode: "SOULFIRE",
-    couponDiscount: "5% off",
+    listings: {
+      "mfa-accounts": {
+        testimonial:
+          "Cheap MFA accounts with instant delivery and lifetime warranty.",
+        badges: ["instant-delivery", "lifetime-warranty", "soulfire-compatible"],
+        price: "$4.00-$5.50",
+        priceValue: 4.0,
+        couponCode: "SOULFIRE",
+        couponDiscount: "5% off",
+      },
+    },
   },
   {
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
-    testimonial:
-      "Cheap MFA accounts. Note: likely Hypixel banned and may have higher pullback rates.",
     url: "https://zzxgp.me",
     websiteUrl: "https://zzxgp.me",
     discordUrl: "https://discord.gg/gycmTvrfnj",
-    badges: ["instant-delivery", "soulfire-compatible"],
-    category: "mfa-accounts",
-    price: "$4.50",
-    priceValue: 4.5,
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Multiple tiers from budget tokens to premium cookies. Good entry point for new users.",
+        badges: ["instant-delivery", "bulk-discount"],
+        price: "5-12¢",
+        priceValue: 0.05,
+      },
+      "mfa-accounts": {
+        testimonial:
+          "Cheap MFA accounts. Note: likely Hypixel banned and may have higher pullback rates.",
+        badges: ["instant-delivery", "soulfire-compatible"],
+        price: "$4.50",
+        priceValue: 4.5,
+      },
+    },
+  },
+  {
+    name: "YYY",
+    logo: "/accounts/yyy.png",
+    url: "https://discord.gg/rmxayvwc5K",
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Cookie and token accounts with their own delivery platform.",
+        badges: ["high-quality", "instant-delivery"],
+        price: "12¢",
+        priceValue: 0.12,
+      },
+    },
+  },
+  {
+    name: "Mog Alts",
+    logo: "/accounts/mogalts.png",
+    url: "https://mogalts.win",
+    websiteUrl: "https://mogalts.win",
+    discordUrl: "https://discord.gg/mogalts",
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Cheap token accounts starting at 5¢. No frills, just alts.",
+        badges: ["instant-delivery", "bulk-discount"],
+        price: "5¢",
+        priceValue: 0.05,
+      },
+    },
+  },
+  {
+    name: "Localts",
+    logo: "/accounts/luma.png",
+    url: "https://localts.store",
+    websiteUrl: "https://localts.store",
+    discordUrl: "https://discord.gg/B4xkxHwmd4",
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Higher price point, but accounts are known to last longer. Quality over quantity.",
+        badges: ["high-quality", "lifetime-warranty"],
+        price: "25¢",
+        priceValue: 0.25,
+      },
+    },
+  },
+  {
+    name: "Less | Unbanned",
+    logo: "/accounts/lessunbanned.png",
+    url: "https://discord.gg/teMqsB3PYG",
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Sells unbanned accounts specifically. Useful if you need clean accounts with no existing bans.",
+        badges: ["instant-delivery"],
+        price: "5¢",
+        priceValue: 0.05,
+      },
+    },
   },
   {
     name: "Brano",
     logo: "/accounts/brano.png",
-    testimonial:
-      "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
     url: "https://discord.gg/EsbhHkm9e4",
-    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
-    category: "mfa-accounts",
-    price: "$50.00+",
-    priceValue: 50.0,
+    listings: {
+      "mfa-accounts": {
+        testimonial:
+          "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
+        badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
+        price: "$50.00+",
+        priceValue: 50.0,
+      },
+    },
   },
 ];
+
+export const PROVIDERS: Omit<Provider, "discordInvite">[] = (
+  ["nfa-accounts", "mfa-accounts"] as const
+).flatMap((category) =>
+  SHOPS.flatMap((shop) => {
+    const listing = shop.listings[category];
+    if (!listing) return [];
+    return [
+      {
+        name: shop.name,
+        logo: shop.logo,
+        logoUnoptimized: shop.logoUnoptimized,
+        url: shop.url,
+        websiteUrl: shop.websiteUrl,
+        discordUrl: shop.discordUrl,
+        category,
+        ...listing,
+      },
+    ];
+  }),
+);
