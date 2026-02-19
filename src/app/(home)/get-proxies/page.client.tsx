@@ -4,7 +4,7 @@ import { BookOpen, ExternalLink, Filter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import {
   Accordion,
@@ -134,7 +134,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
   );
 }
 
-export function GetProxiesClient() {
+function MainContent() {
   const providers = PROVIDERS;
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
@@ -207,6 +207,55 @@ export function GetProxiesClient() {
   );
 
   return (
+    <div className="flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full">
+      {/* Mobile filter toggle */}
+      <button
+        type="button"
+        onClick={() => setFiltersOpen(!filtersOpen)}
+        className="lg:hidden inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors self-start"
+      >
+        <Filter className="h-4 w-4" />
+        Filters
+        {badges.length > 0 && (
+          <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
+            {badges.length}
+          </span>
+        )}
+      </button>
+
+      {/* Mobile filter panel */}
+      {filtersOpen && (
+        <div className="lg:hidden rounded-lg border p-4">{filterContent}</div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:block lg:w-56 lg:shrink-0">
+        <div className="lg:sticky lg:top-20 lg:self-start">{filterContent}</div>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex-1">
+        {filteredProviders.length === 0 ? (
+          <Card className="p-8 text-center">
+            <p className="text-muted-foreground">
+              No providers match the selected filters. Try removing some
+              filters.
+            </p>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            {filteredProviders.map((provider) => (
+              <ProviderCard key={provider.name} provider={provider} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function GetProxiesClient() {
+  return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -229,52 +278,9 @@ export function GetProxiesClient() {
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full">
-        {/* Mobile filter toggle */}
-        <button
-          type="button"
-          onClick={() => setFiltersOpen(!filtersOpen)}
-          className="lg:hidden inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors self-start"
-        >
-          <Filter className="h-4 w-4" />
-          Filters
-          {badges.length > 0 && (
-            <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
-              {badges.length}
-            </span>
-          )}
-        </button>
-
-        {/* Mobile filter panel */}
-        {filtersOpen && (
-          <div className="lg:hidden rounded-lg border p-4">{filterContent}</div>
-        )}
-
-        {/* Desktop sidebar */}
-        <aside className="hidden lg:block lg:w-56 lg:shrink-0">
-          <div className="lg:sticky lg:top-20 lg:self-start">
-            {filterContent}
-          </div>
-        </aside>
-
-        {/* Main content */}
-        <div className="flex-1">
-          {filteredProviders.length === 0 ? (
-            <Card className="p-8 text-center">
-              <p className="text-muted-foreground">
-                No providers match the selected filters. Try removing some
-                filters.
-              </p>
-            </Card>
-          ) : (
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-              {filteredProviders.map((provider) => (
-                <ProviderCard key={provider.name} provider={provider} />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      <Suspense>
+        <MainContent />
+      </Suspense>
 
       {/* FAQ Section */}
       <div className="max-w-3xl mx-auto w-full space-y-4">

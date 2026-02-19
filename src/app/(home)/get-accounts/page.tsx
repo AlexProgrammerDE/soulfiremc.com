@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
@@ -51,16 +50,14 @@ export default async function GetAccountsPage() {
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <Suspense>
-        <GetAccountsClient
-          discordInvites={Promise.all(
-            PROVIDERS.map((provider) => {
-              const discordCode = extractDiscordInviteCode(provider);
-              return discordCode ? fetchDiscordInvite(discordCode) : null;
-            }),
-          ).then()}
-        />
-      </Suspense>
+      <GetAccountsClient
+        discordInvites={Promise.all(
+          PROVIDERS.map((provider) => {
+            const discordCode = extractDiscordInviteCode(provider);
+            return discordCode ? fetchDiscordInvite(discordCode) : null;
+          }),
+        ).then()}
+      />
     </>
   );
 }

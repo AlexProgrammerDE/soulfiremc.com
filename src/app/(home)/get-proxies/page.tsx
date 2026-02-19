@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import { Suspense } from "react";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import { JsonLd } from "@/components/json-ld";
@@ -50,9 +49,7 @@ export default async function GetProxiesPage() {
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <Suspense>
-        <GetProxiesClient />
-      </Suspense>
+      <GetProxiesClient />
     </>
   );
 }
