@@ -13,6 +13,7 @@ export const BADGES = [
   "high-quality",
   "instant-delivery",
   "lifetime-warranty",
+  "12h-warranty",
   "bulk-discount",
   "soulfire-compatible",
 ] as const;

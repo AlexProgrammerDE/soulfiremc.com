@@ -137,9 +137,9 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     testimonial:
       "Full access accounts that work well as mains or long-term alts.",
     url: "https://discord.gg/5Wc4tA2ypY",
-    badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
+    badges: ["high-quality", "instant-delivery", "12h-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
-    price: "$4.50",
+    price: "$5.00",
     priceValue: 4.5,
   },
   {
@@ -158,9 +158,9 @@ const PROVIDERS: Omit<Provider, "discordInvite">[] = [
     name: "Aqua MFA",
     logo: "/accounts/aquamfa.png",
     testimonial:
-      "Cheap MFA accounts. Note: may be sourced from public breaches, so expect higher pullback rates.",
+      "Cheap MFA accounts with instant delivery and lifetime warranty.",
     url: "https://discord.gg/87XFhsS35V",
-    badges: ["instant-delivery", "soulfire-compatible"],
+    badges: ["instant-delivery", "lifetime-warranty", "soulfire-compatible"],
     category: "mfa-accounts",
     price: "$4.00-$5.50",
     priceValue: 4.0,
