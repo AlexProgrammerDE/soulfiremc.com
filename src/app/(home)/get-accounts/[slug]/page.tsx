@@ -17,6 +17,12 @@ import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+  type Badge,
   BADGE_CONFIG,
   CATEGORY_CONFIG,
   type Category,
@@ -67,6 +73,25 @@ function ShopLogo({ shop }: { shop: Shop }) {
     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5 text-4xl font-bold text-primary">
       {shop.name.charAt(0).toUpperCase()}
     </div>
+  );
+}
+
+function ProviderBadge({ badge }: { badge: Badge }) {
+  const config = BADGE_CONFIG[badge];
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <span
+          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
+        >
+          {config.icon}
+          {config.label}
+        </span>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-64 text-sm">
+        <p>{config.description}</p>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 
@@ -133,7 +158,7 @@ export default async function AccountProviderPage(props: {
   };
 
   return (
-    <main className="px-4 py-12 w-full max-w-4xl mx-auto space-y-8">
+    <main className="px-4 py-12 w-full max-w-5xl mx-auto space-y-8">
       <JsonLd data={productJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 
@@ -158,90 +183,78 @@ export default async function AccountProviderPage(props: {
         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
           <ShopLogo shop={shop} />
         </div>
-        <div className="space-y-3">
-          <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
-          <DiscordMemberBadge info={discordInvite} />
+        <div className="flex-1 space-y-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
+            <DiscordMemberBadge info={discordInvite} />
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild>
+              <a href={shop.url} target="_blank" rel="noopener nofollow">
+                Get Accounts
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            {shop.websiteUrl && (
+              <Button asChild variant="secondary">
+                <a
+                  href={shop.websiteUrl}
+                  target="_blank"
+                  rel="noopener nofollow"
+                >
+                  Website
+                  <Globe className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {hasDiscord && (
+              <Button asChild variant="secondary">
+                <a
+                  href={shop.discordUrl ?? shop.url}
+                  target="_blank"
+                  rel="noopener nofollow"
+                >
+                  Discord
+                  <SiDiscord className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Category Sections */}
-      {categories.map(([category, listing]) => {
-        const catConfig = CATEGORY_CONFIG[category];
-        return (
-          <Card key={category} className="p-6 space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <h2 className="text-2xl font-semibold">{catConfig.label}</h2>
-              <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
-                {listing.price}
-              </span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {catConfig.description}
-            </p>
-            <p className="text-muted-foreground">{listing.testimonial}</p>
-
-            {/* Badges with full descriptions */}
-            <div className="space-y-3">
-              {listing.badges.map((badge) => {
-                const config = BADGE_CONFIG[badge];
-                return (
-                  <div key={badge} className="flex items-start gap-3">
-                    <span
-                      className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
-                    >
-                      {config.icon}
-                      {config.label}
-                    </span>
-                    <p className="text-sm text-muted-foreground">
-                      {config.description}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {listing.couponCode && (
-              <CouponCode
-                code={listing.couponCode}
-                discount={listing.couponDiscount}
-              />
-            )}
-          </Card>
-        );
-      })}
-
-      {/* Links */}
-      <div className="flex flex-wrap gap-3">
-        <Button asChild>
-          <a href={shop.url} target="_blank" rel="noopener nofollow">
-            Get Accounts
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </a>
-        </Button>
-        {shop.websiteUrl && (
-          <Button asChild variant="secondary">
-            <a
-              href={shop.websiteUrl}
-              target="_blank"
-              rel="noopener nofollow"
-            >
-              Website
-              <Globe className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
-        )}
-        {hasDiscord && (
-          <Button asChild variant="secondary">
-            <a
-              href={shop.discordUrl ?? shop.url}
-              target="_blank"
-              rel="noopener nofollow"
-            >
-              Discord
-              <SiDiscord className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
-        )}
+      {/* Category Cards */}
+      <div
+        className={`grid gap-6 ${categories.length > 1 ? "md:grid-cols-2" : "grid-cols-1"}`}
+      >
+        {categories.map(([category, listing]) => {
+          const catConfig = CATEGORY_CONFIG[category];
+          return (
+            <Card key={category} className="p-6 space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="text-2xl font-semibold">{catConfig.label}</h2>
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
+                  {listing.price}
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {catConfig.description}
+              </p>
+              <p className="text-muted-foreground">{listing.testimonial}</p>
+              <div className="flex flex-wrap gap-2">
+                {listing.badges.map((badge) => (
+                  <ProviderBadge key={badge} badge={badge} />
+                ))}
+              </div>
+              {listing.couponCode && (
+                <CouponCode
+                  code={listing.couponCode}
+                  discount={listing.couponDiscount}
+                />
+              )}
+            </Card>
+          );
+        })}
       </div>
 
       {/* Back link */}

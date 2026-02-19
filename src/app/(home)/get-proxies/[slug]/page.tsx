@@ -15,6 +15,12 @@ import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+  type Badge,
   BADGE_CONFIG,
   type Provider,
   PROVIDERS,
@@ -57,6 +63,31 @@ function ProviderLogo({ provider }: { provider: Provider }) {
     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5 text-4xl font-bold text-primary">
       {provider.name.charAt(0).toUpperCase()}
     </div>
+  );
+}
+
+function ProviderBadge({
+  badge,
+  classNameOverride,
+}: {
+  badge: Badge;
+  classNameOverride?: string;
+}) {
+  const config = BADGE_CONFIG[badge];
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <span
+          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${classNameOverride ?? config.className}`}
+        >
+          {config.icon}
+          {config.label}
+        </span>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-64 text-sm">
+        <p>{config.description}</p>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 
@@ -115,7 +146,7 @@ export default async function ProxyProviderPage(props: {
   };
 
   return (
-    <main className="px-4 py-12 w-full max-w-4xl mx-auto space-y-8">
+    <main className="px-4 py-12 w-full max-w-5xl mx-auto space-y-8">
       <JsonLd data={productJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 
@@ -135,83 +166,70 @@ export default async function ProxyProviderPage(props: {
         <span className="text-foreground truncate">{provider.name}</span>
       </nav>
 
-      {/* Hero */}
-      <div className="flex flex-col sm:flex-row gap-6 items-start">
-        <div
-          className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted ${
-            theme ? `ring-2 ${theme.ring}` : ""
-          }`}
-        >
-          <ProviderLogo provider={provider} />
-        </div>
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-4xl font-bold tracking-tight">
-              {provider.name}
-            </h1>
-            {provider.sponsor && (
-              <span
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium ${
-                  theme?.badge ?? "bg-pink-500/10 text-pink-600 dark:text-pink-400"
-                }`}
-              >
-                <Heart className="h-3.5 w-3.5 fill-current" />
-                Sponsor
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Description */}
+      {/* Main content card */}
       <Card
-        className={`p-6 space-y-4 ${
+        className={`p-6 space-y-5 ${
           theme ? `ring-2 ${theme.ring} ${theme.bg}` : ""
         }`}
       >
-        <p className="text-lg text-muted-foreground">{provider.testimonial}</p>
-
-        {/* Badges with full descriptions */}
-        <div className="space-y-3">
-          {provider.badges
-            .filter((b) => b !== "sponsor")
-            .map((badge) => {
-              const config = BADGE_CONFIG[badge];
-              return (
-                <div key={badge} className="flex items-start gap-3">
-                  <span
-                    className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
-                  >
-                    {config.icon}
-                    {config.label}
-                  </span>
-                  <p className="text-sm text-muted-foreground">
-                    {config.description}
-                  </p>
-                </div>
-              );
-            })}
+        <div className="flex flex-col sm:flex-row gap-6">
+          <div
+            className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted ${
+              theme ? `ring-2 ${theme.ring}` : ""
+            }`}
+          >
+            <ProviderLogo provider={provider} />
+          </div>
+          <div className="flex-1 space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-4xl font-bold tracking-tight">
+                {provider.name}
+              </h1>
+              {provider.sponsor && (
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium ${
+                    theme?.badge ??
+                    "bg-pink-500/10 text-pink-600 dark:text-pink-400"
+                  }`}
+                >
+                  <Heart className="h-3.5 w-3.5 fill-current" />
+                  Sponsor
+                </span>
+              )}
+            </div>
+            <p className="text-lg text-muted-foreground">
+              {provider.testimonial}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {provider.badges.map((badge) => (
+                <ProviderBadge
+                  key={badge}
+                  badge={badge}
+                  classNameOverride={
+                    badge === "sponsor" ? theme?.badge : undefined
+                  }
+                />
+              ))}
+            </div>
+            {provider.couponCode && (
+              <CouponCode
+                code={provider.couponCode}
+                discount={provider.couponDiscount}
+              />
+            )}
+            <Button asChild size="lg">
+              <a
+                href={provider.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                Get Proxies from {provider.name}
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+          </div>
         </div>
-
-        {provider.couponCode && (
-          <CouponCode
-            code={provider.couponCode}
-            discount={provider.couponDiscount}
-          />
-        )}
       </Card>
-
-      {/* CTA */}
-      <Button asChild size="lg">
-        <a
-          href={provider.url}
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-        >
-          Get Proxies from {provider.name}
-          <ExternalLink className="ml-2 h-4 w-4" />
-        </a>
-      </Button>
 
       {/* Back link */}
       <Link
