@@ -33,6 +33,7 @@ export type Listing = {
 };
 
 export type Shop = {
+  slug: string;
   name: string;
   logo?: string;
   logoUnoptimized?: boolean;
@@ -43,6 +44,7 @@ export type Shop = {
 };
 
 export type Provider = {
+  slug: string;
   name: string;
   logo?: string;
   logoUnoptimized?: boolean;
@@ -163,8 +165,9 @@ export const SORT_OPTIONS: SortOption[] = ["default", "price-asc", "price-desc"]
 
 // Shop order is arranged to preserve the recommended sort order
 // within both NFA and MFA category sections when derived into PROVIDERS.
-const SHOPS: Shop[] = [
+export const SHOPS: Shop[] = [
   {
+    slug: "ravealts",
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
     logoUnoptimized: true,
@@ -193,6 +196,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "luma-mfa",
     name: "Luma MFA",
     logo: "/accounts/luma.png",
     url: "https://discord.gg/5Wc4tA2ypY",
@@ -207,6 +211,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "mori",
     name: "mori's alternative world",
     logo: "/accounts/mori.png",
     url: "https://discord.gg/logs",
@@ -221,6 +226,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "nicealts",
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
     url: "https://discord.gg/nicealts",
@@ -243,6 +249,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "aqua-mfa",
     name: "Aqua MFA",
     logo: "/accounts/aquamfa.png",
     url: "https://discord.gg/87XFhsS35V",
@@ -259,6 +266,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "zzxgp",
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
     url: "https://zzxgp.me",
@@ -282,6 +290,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "yyy",
     name: "YYY",
     logo: "/accounts/yyy.png",
     url: "https://discord.gg/rmxayvwc5K",
@@ -296,6 +305,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "mog-alts",
     name: "Mog Alts",
     logo: "/accounts/mogalts.png",
     url: "https://mogalts.win",
@@ -312,6 +322,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "localts",
     name: "Localts",
     logo: "/accounts/luma.png",
     url: "https://localts.store",
@@ -328,6 +339,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "less-unbanned",
     name: "Less | Unbanned",
     logo: "/accounts/lessunbanned.png",
     url: "https://discord.gg/teMqsB3PYG",
@@ -342,6 +354,7 @@ const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "brano",
     name: "Brano",
     logo: "/accounts/brano.png",
     url: "https://discord.gg/EsbhHkm9e4",
@@ -357,6 +370,10 @@ const SHOPS: Shop[] = [
   },
 ];
 
+export function getShopBySlug(slug: string): Shop | undefined {
+  return SHOPS.find((shop) => shop.slug === slug);
+}
+
 export const PROVIDERS: Omit<Provider, "discordInvite">[] = (
   ["nfa-accounts", "mfa-accounts"] as const
 ).flatMap((category) =>
@@ -365,6 +382,7 @@ export const PROVIDERS: Omit<Provider, "discordInvite">[] = (
     if (!listing) return [];
     return [
       {
+        slug: shop.slug,
         name: shop.name,
         logo: shop.logo,
         logoUnoptimized: shop.logoUnoptimized,

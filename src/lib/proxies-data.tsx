@@ -30,6 +30,7 @@ export type SponsorTheme = {
 };
 
 export type Provider = {
+  slug: string;
   name: string;
   logo?: string;
   testimonial: string;
@@ -135,6 +136,10 @@ export const BADGE_CONFIG: Record<
   },
 };
 
+export function getProviderBySlug(slug: string): Provider | undefined {
+  return PROVIDERS.find((provider) => provider.slug === slug);
+}
+
 export const FILTER_BADGES: FilterableBadge[] = [
   "residential",
   "datacenter",
@@ -150,6 +155,7 @@ export const FILTER_BADGES: FilterableBadge[] = [
 export const PROVIDERS: Provider[] = [
   // Sponsor always first
   {
+    slug: "thordata",
     name: "Thordata",
     logo: "/providers/thordata.png",
     testimonial:
@@ -162,6 +168,7 @@ export const PROVIDERS: Provider[] = [
     couponDiscount: "20% off",
   },
   {
+    slug: "proxy-seller",
     name: "Proxy-Seller",
     logo: "/providers/proxyseller.svg",
     testimonial:
@@ -183,6 +190,7 @@ export const PROVIDERS: Provider[] = [
   },
   // Higher recommends
   {
+    slug: "webshare",
     name: "Webshare",
     logo: "/providers/webshare.svg",
     testimonial:
@@ -191,6 +199,7 @@ export const PROVIDERS: Provider[] = [
     badges: ["free-tier", "residential", "datacenter", "budget-friendly"],
   },
   {
+    slug: "proxyscrape",
     name: "ProxyScrape",
     logo: "/providers/proxyscrape.svg",
     testimonial:
@@ -200,6 +209,7 @@ export const PROVIDERS: Provider[] = [
   },
   // User recommendation
   {
+    slug: "pyproxy",
     name: "PYPROXY",
     logo: "/providers/pyproxy.png",
     testimonial:
@@ -210,6 +220,7 @@ export const PROVIDERS: Provider[] = [
     couponDiscount: "10% off",
   },
   {
+    slug: "plainproxies",
     name: "PlainProxies",
     logo: "/providers/plainproxies.png",
     testimonial:
@@ -219,6 +230,7 @@ export const PROVIDERS: Provider[] = [
   },
   // Enterprise tier
   {
+    slug: "bright-data",
     name: "Bright Data",
     logo: "/providers/brightdata.png",
     testimonial:
@@ -233,6 +245,7 @@ export const PROVIDERS: Provider[] = [
     ],
   },
   {
+    slug: "oxylabs",
     name: "Oxylabs",
     logo: "/providers/oxylabs.png",
     testimonial:
@@ -242,6 +255,7 @@ export const PROVIDERS: Provider[] = [
   },
   // Mid tier
   {
+    slug: "decodo",
     name: "Decodo (formerly Smartproxy)",
     logo: "/providers/decodo.svg",
     testimonial:
@@ -250,6 +264,7 @@ export const PROVIDERS: Provider[] = [
     badges: ["high-quality", "residential", "datacenter"],
   },
   {
+    slug: "iproyal",
     name: "IPRoyal",
     logo: "/providers/iproyal.svg",
     testimonial:
@@ -258,6 +273,7 @@ export const PROVIDERS: Provider[] = [
     badges: ["budget-friendly", "residential", "datacenter", "isp"],
   },
   {
+    slug: "netnut",
     name: "NetNut",
     logo: "/providers/netnut.svg",
     testimonial:

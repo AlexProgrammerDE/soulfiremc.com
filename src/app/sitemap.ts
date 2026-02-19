@@ -1,4 +1,6 @@
 import type { MetadataRoute } from "next";
+import { SHOPS } from "@/lib/accounts-data";
+import { PROVIDERS as PROXY_PROVIDERS } from "@/lib/proxies-data";
 import { blogSource, source } from "@/lib/source";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -32,5 +34,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.6,
       } satisfies MetadataRoute.Sitemap[number];
     }),
+    ...SHOPS.map(
+      (shop) =>
+        ({
+          url: `https://soulfiremc.com/get-accounts/${shop.slug}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.6,
+        }) satisfies MetadataRoute.Sitemap[number],
+    ),
+    ...PROXY_PROVIDERS.map(
+      (provider) =>
+        ({
+          url: `https://soulfiremc.com/get-proxies/${provider.slug}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.6,
+        }) satisfies MetadataRoute.Sitemap[number],
+    ),
   ];
 }

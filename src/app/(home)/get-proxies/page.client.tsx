@@ -93,7 +93,12 @@ function ProviderCard({ provider }: { provider: Provider }) {
         </div>
         <div className="flex-1 space-y-3">
           <div className="flex flex-wrap items-center gap-3">
-            <h3 className="text-xl font-semibold">{provider.name}</h3>
+            <Link
+              href={`/get-proxies/${provider.slug}`}
+              className="text-xl font-semibold hover:underline"
+            >
+              {provider.name}
+            </Link>
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
                 <ProviderBadge
