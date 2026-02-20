@@ -32,6 +32,7 @@ import {
   fetchDiscordInvite,
 } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
+import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
   return SHOPS.map((shop) => ({ slug: shop.slug }));
@@ -93,7 +94,7 @@ function ProviderBadge({ badge }: { badge: Badge }) {
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
+          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", config.className)}
         >
           {config.icon}
           {config.label}
@@ -257,7 +258,7 @@ export default async function AccountProviderPage(props: {
 
       {/* Category Cards */}
       <div
-        className={`grid gap-6 ${categories.length > 1 ? "md:grid-cols-2" : "grid-cols-1"}`}
+        className={cn("grid gap-6", categories.length > 1 ? "md:grid-cols-2" : "grid-cols-1")}
       >
         {categories.map(([category, listing]) => {
           const catConfig = CATEGORY_CONFIG[category];

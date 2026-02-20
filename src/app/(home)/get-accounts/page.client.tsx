@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, use, useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
@@ -51,7 +52,7 @@ function ProviderBadge({ badge }: { badge: Badge }) {
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${config.className}`}
+          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", config.className)}
         >
           {config.icon}
           {config.label}
@@ -266,11 +267,11 @@ function MainContent(props: Props) {
                 type="button"
                 key={cat}
                 onClick={() => toggleCategory(cat)}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all ${
+                className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                   isActive
                     ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
+                )}
               >
                 {config.label}
               </button>
@@ -291,11 +292,11 @@ function MainContent(props: Props) {
                 type="button"
                 key={badge}
                 onClick={() => toggleBadge(badge)}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all ${
+                className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                   isActive
-                    ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
+                    ? cn(config.className, "ring-2 ring-offset-2 ring-offset-background ring-current")
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
+                )}
               >
                 {config.label}
               </button>
@@ -316,11 +317,11 @@ function MainContent(props: Props) {
                 type="button"
                 key={option}
                 onClick={() => setSort(option)}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all ${
+                className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                   isActive
                     ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
+                )}
               >
                 {config.icon}
                 {config.label}

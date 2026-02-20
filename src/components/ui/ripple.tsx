@@ -33,7 +33,7 @@ export const Ripple = ({
         return (
           <div
             key={i}
-            className={`animate-ripple absolute rounded-full border bg-foreground/25 shadow-xl`}
+            className="animate-ripple absolute rounded-full border bg-foreground/25 shadow-xl"
             style={
               {
                 width: `${size}px`,

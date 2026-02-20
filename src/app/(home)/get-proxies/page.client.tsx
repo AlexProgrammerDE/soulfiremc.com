@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import {
   Accordion,
@@ -43,7 +44,7 @@ function ProviderBadge({
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={`inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${classNameOverride ?? config.className}`}
+          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", classNameOverride ?? config.className)}
         >
           {config.icon}
           {config.label}
@@ -81,9 +82,9 @@ function ProviderCard({ provider }: { provider: Provider }) {
 
   return (
     <Card
-      className={`transition-all duration-300 hover:shadow-lg ${
-        theme ? `ring-2 ${theme.ring} ${theme.bg}` : ""
-      }`}
+      className={cn("transition-all duration-300 hover:shadow-lg",
+        theme && ["ring-2", theme.ring, theme.bg]
+      )}
     >
       <div className="flex flex-col sm:flex-row gap-4 p-6">
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
@@ -192,11 +193,11 @@ function MainContent() {
               type="button"
               key={badge}
               onClick={() => toggleFilter(badge)}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all ${
+              className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                 isActive
-                  ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
+                  ? cn(config.className, "ring-2 ring-offset-2 ring-offset-background ring-current")
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
-              }`}
+              )}
             >
               {config.label}
             </button>
