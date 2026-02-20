@@ -1,11 +1,19 @@
 "use client";
 
 import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
-import { BookOpen, ExternalLink, Filter, Globe } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  ExternalLink,
+  Filter,
+  Globe,
+  ImageIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, use, useMemo, useState } from "react";
+import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
 import { cn } from "@/lib/utils";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
@@ -113,8 +121,17 @@ function ProviderCard({
                 {provider.name}
               </Link>
             </h3>
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
+            {provider.startDate && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Calendar className="h-3 w-3" />
+                Since {provider.startDate}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
               {provider.price}
+              {provider.priceDetails && (
+                <PriceInfoBadge details={provider.priceDetails} />
+              )}
             </span>
             <DiscordMemberBadge info={discordInvite} />
             <div className="flex flex-wrap gap-2">
@@ -124,6 +141,15 @@ function ProviderCard({
             </div>
           </div>
           <p className="text-muted-foreground">{provider.testimonial}</p>
+          {provider.gallery && provider.gallery.length > 0 && (
+            <Link
+              href={`/get-accounts/${provider.slug}`}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ImageIcon className="h-3 w-3" />
+              {provider.gallery.length} photo{provider.gallery.length !== 1 && "s"}
+            </Link>
+          )}
           {provider.couponCode && (
             <CouponCode
               code={provider.couponCode}

@@ -1,10 +1,24 @@
-import { ArrowLeft, ChevronRight, ExternalLink, Heart } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  ChevronRight,
+  ExternalLink,
+  Heart,
+} from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { BreadcrumbList, Product, WithContext } from "schema-dts";
+import type {
+  BreadcrumbList,
+  ImageObject,
+  Product,
+  Review,
+  WithContext,
+} from "schema-dts";
+import { GallerySection } from "@/app/(home)/components/gallery-section";
+import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
@@ -116,6 +130,27 @@ export default async function ProxyProviderPage(props: {
       name: provider.name,
     },
     category: "Proxy Service",
+    ...(provider.startDate && { dateCreated: provider.startDate }),
+    ...(provider.testimonials &&
+      provider.testimonials.length > 0 && {
+        review: provider.testimonials.map(
+          (t): Review => ({
+            "@type": "Review",
+            reviewBody: t.quote,
+            author: { "@type": "Person", name: t.author },
+          }),
+        ),
+      }),
+    ...(provider.gallery &&
+      provider.gallery.length > 0 && {
+        image: provider.gallery.map(
+          (img): ImageObject => ({
+            "@type": "ImageObject",
+            url: `https://soulfiremc.com${img.src}`,
+            name: img.alt,
+          }),
+        ),
+      }),
   };
 
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
@@ -183,6 +218,12 @@ export default async function ProxyProviderPage(props: {
               <h1 className="text-4xl font-bold tracking-tight">
                 {provider.name}
               </h1>
+              {provider.startDate && (
+                <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Since {provider.startDate}
+                </span>
+              )}
               {provider.sponsor && (
                 <span
                   className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium",
@@ -228,6 +269,16 @@ export default async function ProxyProviderPage(props: {
           </div>
         </div>
       </Card>
+
+      {/* Testimonials */}
+      {provider.testimonials && provider.testimonials.length > 0 && (
+        <TestimonialsSection testimonials={provider.testimonials} />
+      )}
+
+      {/* Gallery */}
+      {provider.gallery && provider.gallery.length > 0 && (
+        <GallerySection images={provider.gallery} />
+      )}
 
       {/* Back link */}
       <Link

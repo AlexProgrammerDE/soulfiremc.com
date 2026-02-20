@@ -1,12 +1,27 @@
 import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
-import { ArrowLeft, ChevronRight, ExternalLink, Globe } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  ChevronRight,
+  ExternalLink,
+  Globe,
+} from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import type { BreadcrumbList, Product, WithContext } from "schema-dts";
+import type {
+  BreadcrumbList,
+  ImageObject,
+  Product,
+  Review,
+  WithContext,
+} from "schema-dts";
+import { GallerySection } from "@/app/(home)/components/gallery-section";
+import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
+import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
 import { JsonLd } from "@/components/json-ld";
@@ -143,6 +158,27 @@ export default async function AccountProviderPage(props: {
       name: shop.name,
     },
     category: "Minecraft Accounts",
+    ...(shop.startDate && { dateCreated: shop.startDate }),
+    ...(shop.testimonials &&
+      shop.testimonials.length > 0 && {
+        review: shop.testimonials.map(
+          (t): Review => ({
+            "@type": "Review",
+            reviewBody: t.quote,
+            author: { "@type": "Person", name: t.author },
+          }),
+        ),
+      }),
+    ...(shop.gallery &&
+      shop.gallery.length > 0 && {
+        image: shop.gallery.map(
+          (img): ImageObject => ({
+            "@type": "ImageObject",
+            url: `https://soulfiremc.com${img.src}`,
+            name: img.alt,
+          }),
+        ),
+      }),
   };
 
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
@@ -199,6 +235,12 @@ export default async function AccountProviderPage(props: {
         <div className="flex-1 space-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
+            {shop.startDate && (
+              <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                <Calendar className="h-3.5 w-3.5" />
+                Since {shop.startDate}
+              </span>
+            )}
             {discordInvitePromise ? (
               <Suspense fallback={<DiscordMemberBadge info={null} />}>
                 <DiscordMemberBadgeLoader
@@ -266,8 +308,11 @@ export default async function AccountProviderPage(props: {
             <Card key={category} className="p-6 gap-4">
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-2xl font-semibold">{catConfig.label}</h2>
-                <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
                   {listing.price}
+                  {listing.priceDetails && (
+                    <PriceInfoBadge details={listing.priceDetails} />
+                  )}
                 </span>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -289,6 +334,16 @@ export default async function AccountProviderPage(props: {
           );
         })}
       </div>
+
+      {/* Testimonials */}
+      {shop.testimonials && shop.testimonials.length > 0 && (
+        <TestimonialsSection testimonials={shop.testimonials} />
+      )}
+
+      {/* Gallery */}
+      {shop.gallery && shop.gallery.length > 0 && (
+        <GallerySection images={shop.gallery} />
+      )}
 
       {/* Back link */}
       <Link

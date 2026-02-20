@@ -40,6 +40,9 @@ export type Provider = {
   sponsorTheme?: string;
   couponCode?: string;
   couponDiscount?: string;
+  startDate?: string;
+  testimonials?: { quote: string; author: string }[];
+  gallery?: { src: string; alt: string }[];
 };
 
 export const SPONSOR_THEMES: Record<string, SponsorTheme> = {

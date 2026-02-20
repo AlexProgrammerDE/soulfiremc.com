@@ -30,6 +30,7 @@ export type Listing = {
   priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
+  priceDetails?: string;
 };
 
 export type Shop = {
@@ -41,6 +42,9 @@ export type Shop = {
   websiteUrl?: string;
   discordUrl?: string;
   trustpilotUrl?: string;
+  startDate?: string;
+  testimonials?: { quote: string; author: string }[];
+  gallery?: { src: string; alt: string }[];
   listings: Partial<Record<Category, Listing>>;
 };
 
@@ -54,12 +58,16 @@ export type Provider = {
   websiteUrl?: string;
   discordUrl?: string;
   trustpilotUrl?: string;
+  startDate?: string;
+  testimonials?: { quote: string; author: string }[];
+  gallery?: { src: string; alt: string }[];
   badges: Badge[];
   category: Category;
   price: string;
   priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
+  priceDetails?: string;
 };
 
 export function extractDiscordInviteCode(provider: Provider): string | null {
@@ -418,6 +426,9 @@ export const PROVIDERS: Provider[] = (
         websiteUrl: shop.websiteUrl,
         discordUrl: shop.discordUrl,
         trustpilotUrl: shop.trustpilotUrl,
+        startDate: shop.startDate,
+        testimonials: shop.testimonials,
+        gallery: shop.gallery,
         category,
         ...listing,
       },

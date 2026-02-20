@@ -1,6 +1,12 @@
 "use client";
 
-import { BookOpen, ExternalLink, Filter } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  ExternalLink,
+  Filter,
+  ImageIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
@@ -100,6 +106,12 @@ function ProviderCard({ provider }: { provider: Provider }) {
                 {provider.name}
               </Link>
             </h3>
+            {provider.startDate && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Calendar className="h-3 w-3" />
+                Since {provider.startDate}
+              </span>
+            )}
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
                 <ProviderBadge
@@ -113,6 +125,15 @@ function ProviderCard({ provider }: { provider: Provider }) {
             </div>
           </div>
           <p className="text-muted-foreground">{provider.testimonial}</p>
+          {provider.gallery && provider.gallery.length > 0 && (
+            <Link
+              href={`/get-proxies/${provider.slug}`}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ImageIcon className="h-3 w-3" />
+              {provider.gallery.length} photo{provider.gallery.length !== 1 && "s"}
+            </Link>
+          )}
           {provider.couponCode && (
             <CouponCode
               code={provider.couponCode}
