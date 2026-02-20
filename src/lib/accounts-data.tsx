@@ -378,6 +378,25 @@ export const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "skycron",
+    name: "Skycron",
+    logo: "/accounts/skycron.png",
+    url: "https://discord.gg/5sZNDb4UMy",
+    websiteUrl: "https://skycron-gen.sellhub.cx/product/Gen-access/",
+    discordUrl: "https://discord.gg/5sZNDb4UMy",
+    listings: {
+      "nfa-accounts": {
+        testimonial:
+          "Subscription-based NFA generator with infinite alts. Short cooldowns between generations (2 min banned, 4 min unbanned).",
+        badges: ["instant-delivery"],
+        price: "Subscription",
+        priceValue: 0,
+        couponCode: "SOULFIRE",
+        couponDiscount: "5% off",
+      },
+    },
+  },
+  {
     slug: "brano",
     name: "Brano",
     logo: "/accounts/brano.png",
