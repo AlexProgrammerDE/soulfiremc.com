@@ -192,7 +192,7 @@ function MainContent() {
               type="button"
               key={badge}
               onClick={() => toggleFilter(badge)}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all ${
                 isActive
                   ? `${config.className} ring-2 ring-offset-2 ring-offset-background ring-current`
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
