@@ -363,21 +363,6 @@ export const SHOPS: Shop[] = [
     },
   },
   {
-    slug: "less-unbanned",
-    name: "Less | Unbanned",
-    logo: "/accounts/lessunbanned.png",
-    url: "https://discord.gg/teMqsB3PYG",
-    listings: {
-      "nfa-accounts": {
-        testimonial:
-          "Sells unbanned accounts specifically. Useful if you need clean accounts with no existing bans.",
-        badges: ["instant-delivery"],
-        price: "5¢",
-        priceValue: 0.05,
-      },
-    },
-  },
-  {
     slug: "skycron",
     name: "Skycron",
     logo: "/accounts/skycron.png",
