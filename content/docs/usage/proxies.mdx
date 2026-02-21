@@ -69,6 +69,7 @@ Here's the format for HTTP proxies:
 ip:port <- no authentication
 ip:port:username <- username
 ip:port:username:password <- username & password
+username:password@ip:port <- username & password (alternative)
 ```
 
 Example:
@@ -77,6 +78,7 @@ Example:
 192.168.0.1:8080
 192.168.0.2:1080:root
 192.168.0.3:1090:root:PassW0rd
+root:PassW0rd@192.168.0.4:1090
 ```
 
 ### SOCKS4
@@ -86,6 +88,7 @@ Here's the format for SOCKS4 proxies:
 ```text
 ip:port <- no authentication
 ip:port:username <- username
+username@ip:port <- username (alternative)
 (socks4 doesn't support passwords)
 ```
 
@@ -94,6 +97,7 @@ Example:
 ```text
 192.168.0.1:8080
 192.168.0.2:1080:root
+root@192.168.0.3:1080
 ```
 
 ### SOCKS5
@@ -104,6 +108,7 @@ Here's the format for SOCKS5 proxies:
 ip:port <- no authentication
 ip:port:username <- username
 ip:port:username:password <- username & password
+username:password@ip:port <- username & password (alternative)
 ```
 
 Example:
@@ -112,6 +117,7 @@ Example:
 192.168.0.1:8080
 192.168.0.2:1080:root
 192.168.0.3:1090:root:PassW0rd
+root:PassW0rd@192.168.0.4:1090
 ```
 
 ### URI
