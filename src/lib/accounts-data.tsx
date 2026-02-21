@@ -267,13 +267,6 @@ export const SHOPS: Shop[] = [
         price: "5-10¢",
         priceValue: 0.05,
       },
-      "mfa-accounts": {
-        testimonial:
-          "Also sells permanent MFA accounts alongside their token/cookie selection. Known for responsive support.",
-        badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
-        price: "$5.00",
-        priceValue: 5.0,
-      },
     },
   },
   {
