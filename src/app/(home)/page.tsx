@@ -419,7 +419,7 @@ export default function Page() {
                       className="gap-2 h-14 px-8 text-lg font-semibold bg-background/80 backdrop-blur-sm border-2"
                     >
                       <SiGithub className="h-6 w-6" />
-                      GitHub
+                      Star on GitHub
                     </Button>
                   </a>
                 </div>
