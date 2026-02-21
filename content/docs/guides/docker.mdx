@@ -39,11 +39,6 @@ services:
   app:
     image: alexprogrammerde/soulfire
     restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:38765/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     volumes:
       - app_data:/soulfire/data
 
@@ -72,11 +67,6 @@ services:
   app:
     image: alexprogrammerde/soulfire
     restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:38765/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.soulfire.rule=Host(`${DOMAIN}`)"
@@ -124,11 +114,6 @@ services:
   app:
     image: alexprogrammerde/soulfire
     restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:38765/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     ports:
       - '38765:38765'
     volumes:
