@@ -1,7 +1,7 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { CircuitBoard, Coffee, Cpu, Download, Heart, Star } from "lucide-react";
+import { CircuitBoard, Coffee, Cpu, Download, Heart } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useQueryStates } from "nuqs";
@@ -370,7 +370,7 @@ function DownloadConfigurator(props: {
                   rel="noopener noreferrer"
                 >
                   <Coffee className="h-4 w-4" />
-                  Buy us a coffee on Ko-fi
+                  Buy me a coffee on Ko-fi
                 </a>
               </Button>
               <Button asChild variant="outline" className="w-full gap-2">
@@ -380,8 +380,7 @@ function DownloadConfigurator(props: {
                   rel="noopener noreferrer"
                 >
                   <SiGithub className="h-4 w-4" />
-                  <Star className="h-4 w-4" />
-                  Star us on GitHub
+                  Star on GitHub
                 </a>
               </Button>
             </div>
