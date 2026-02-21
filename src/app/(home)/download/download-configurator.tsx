@@ -1,6 +1,7 @@
 "use client";
 
-import { CircuitBoard, Cpu, Download } from "lucide-react";
+import { SiGithub } from "@icons-pack/react-simple-icons";
+import { CircuitBoard, Coffee, Cpu, Download, Heart, Star } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useQueryStates } from "nuqs";
@@ -13,6 +14,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Credenza,
+  CredenzaBody,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+} from "@/components/ui/credenza";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { createClientDownloads, type DownloadLinkMap } from "./download-data";
@@ -159,6 +170,7 @@ function DownloadConfigurator(props: {
   });
   const [isHydrated, setIsHydrated] = useState(false);
   const [hasAppliedOsDetection, setHasAppliedOsDetection] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
 
   // Apply OS and CPU detection on initial hydration if no explicit params were provided
   useEffect(() => {
@@ -292,30 +304,95 @@ function DownloadConfigurator(props: {
             ))}
           </div>
         </div>
-        <Button
-          size="lg"
-          className="w-full gap-2 text-xs sm:text-sm"
-          asChild
-          disabled={!downloadHref}
-        >
-          {downloadHref ? (
-            <a
-              href={downloadHref}
-              {...(isDirectGithubDownload
-                ? { download: "" }
-                : { target: "_blank", rel: "noopener noreferrer" })}
-            >
-              <Download className="h-5 w-5" />
-              Download
-            </a>
-          ) : (
-            <>
-              <Download className="h-5 w-5" />
-              Coming soon
-            </>
-          )}
-        </Button>
+        {downloadHref ? (
+          <Button
+            size="lg"
+            className="w-full gap-2 text-xs sm:text-sm"
+            onClick={() => {
+              setShowThankYou(true);
+              // Trigger the download programmatically
+              const link = document.createElement("a");
+              link.href = downloadHref;
+              if (isDirectGithubDownload) {
+                link.download = "";
+              } else {
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+              }
+              link.click();
+            }}
+          >
+            <Download className="h-5 w-5" />
+            Download
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            className="w-full gap-2 text-xs sm:text-sm"
+            disabled
+          >
+            <Download className="h-5 w-5" />
+            Coming soon
+          </Button>
+        )}
       </CardContent>
+      <Credenza open={showThankYou} onOpenChange={setShowThankYou}>
+        <CredenzaContent>
+          <CredenzaHeader>
+            <CredenzaTitle className="flex items-center gap-2">
+              <Heart className="h-5 w-5 text-red-500" />
+              Thank you for downloading!
+            </CredenzaTitle>
+            <CredenzaDescription>
+              Your download should start shortly. If it doesn&apos;t,{" "}
+              <a
+                href={downloadHref ?? "#"}
+                className="underline text-primary"
+                {...(isDirectGithubDownload
+                  ? { download: "" }
+                  : { target: "_blank", rel: "noopener noreferrer" })}
+              >
+                click here
+              </a>{" "}
+              to try again.
+            </CredenzaDescription>
+          </CredenzaHeader>
+          <CredenzaBody>
+            <p className="text-sm text-muted-foreground">
+              SoulFire is free, open-source, and community-driven. If you find
+              it useful, consider supporting the project:
+            </p>
+            <div className="mt-4 flex flex-col gap-3">
+              <Button asChild variant="outline" className="w-full gap-2">
+                <a
+                  href="https://ko-fi.com/alexprogrammerde"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Coffee className="h-4 w-4" />
+                  Buy us a coffee on Ko-fi
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="w-full gap-2">
+                <a
+                  href={process.env.NEXT_PUBLIC_GITHUB_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <SiGithub className="h-4 w-4" />
+                  <Star className="h-4 w-4" />
+                  Star us on GitHub
+                </a>
+              </Button>
+            </div>
+          </CredenzaBody>
+          <CredenzaFooter>
+            <CredenzaClose asChild>
+              <Button variant="secondary">Close</Button>
+            </CredenzaClose>
+          </CredenzaFooter>
+        </CredenzaContent>
+      </Credenza>
     </Card>
   );
 }
