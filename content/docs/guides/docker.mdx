@@ -37,7 +37,7 @@ TUNNEL_TOKEN=mytokengoeshere
 ```yaml filename="docker-compose.yml"
 services:
   app:
-    image: alexprogrammerde/soulfire
+    image: ghcr.io/alexprogrammerde/soulfire
     restart: always
     volumes:
       - app_data:/soulfire/data
@@ -65,7 +65,7 @@ EMAIL=your@email.com
 ```yaml filename="docker-compose.yml"
 services:
   app:
-    image: alexprogrammerde/soulfire
+    image: ghcr.io/alexprogrammerde/soulfire
     restart: always
     labels:
       - "traefik.enable=true"
@@ -112,7 +112,7 @@ It is recommended to setup SoulFire using HTTPS.
 ```yaml filename="docker-compose.yml"
 services:
   app:
-    image: alexprogrammerde/soulfire
+    image: ghcr.io/alexprogrammerde/soulfire
     restart: always
     ports:
       - '38765:38765'
