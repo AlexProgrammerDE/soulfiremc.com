@@ -210,18 +210,6 @@ export const PROVIDERS: Provider[] = [
     url: "https://proxyscrape.com/?ref=mge4mtc",
     badges: ["unlimited-bandwidth", "residential"],
   },
-  // User recommendation
-  {
-    slug: "pyproxy",
-    name: "PYPROXY",
-    logo: "/providers/pyproxy.png",
-    testimonial:
-      "90M+ residential IPs across 190+ countries with 99% availability. Offers residential, datacenter, and ISP proxies starting at $0.60/GB.",
-    url: "https://www.pyproxy.com/reg/?ref=1Pcpve",
-    badges: ["residential", "datacenter", "isp", "budget-friendly"],
-    couponCode: "SOULFIRE9",
-    couponDiscount: "10% off",
-  },
   {
     slug: "plainproxies",
     name: "PlainProxies",
