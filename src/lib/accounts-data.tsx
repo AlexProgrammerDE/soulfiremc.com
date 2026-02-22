@@ -195,19 +195,43 @@ export const SHOPS: Shop[] = [
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.gg/ravealts2",
     trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
+    testimonials: [
+      {
+        quote:
+          "Their alts are good quality and they have amazing support. Once I contacted support and they responded in less than a minute. Their services are really cheap. They are constantly running giveaways and ways to get free items. 10/10 would recommend!",
+        author: "mindcrafter",
+      },
+      {
+        quote:
+          "Great alts, and their best quality: their customer support, they were amazing at helping with very fast response time. I had an issue getting my 500 credits, but they helped me, and I got them.",
+        author: "stormcph",
+      },
+      {
+        quote:
+          "Ravealts offered me a great experience in buying alt accounts, their service is stupidly fast and their support is one of the best I've seen in years.",
+        author: "Miguel Lopez Falcon",
+      },
+      {
+        quote:
+          "Cookie alt has lasted me a whole month and I haven't gotten banned.",
+        author: "jhyjjgy",
+      },
+    ],
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Fresh cookie accounts with good quality. Partnered with Rise client and Mint MM. Previously known as Yolk.",
+          "Fresh cookie accounts with advanced precheck verification. Offers Hypixel accounts (unbanned and banned), cookie logs, session tokens, and DonutSMP accounts. Partnered with Rise Client and AutoMint MM. Also offers a Dispenser (gen) subscription for daily account generation at up to 80% savings with auto-refund on invalid accounts.",
         badges: ["high-quality", "instant-delivery", "bulk-discount"],
         price: "10-15¢",
         priceValue: 0.1,
         couponCode: "SOULFIRE",
         couponDiscount: "10% off",
+        priceDetails:
+          "Individual accounts from 10-15¢. Dispenser keys available for daily generation: $14.99/mo (1 month), $10/mo (3 months), $8.33/mo (6 months), $5.83/mo (1 year). Invalid accounts are auto-refunded.",
       },
       "mfa-accounts": {
         testimonial:
-          "Permanent accounts with full access. You can change the email, password, and username.",
+          "Permanent full access accounts — change email, password and username. Includes Microsoft/Xbox accounts with Game Pass and Bedrock access. Every account is verified before delivery via advanced precheck. Multiple payment methods including crypto, card, Klarna, Amazon Pay and Cash App.",
         badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
         price: "$5.67",
         priceValue: 5.67,
