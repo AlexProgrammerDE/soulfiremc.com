@@ -37,6 +37,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           url: "/get-proxies",
           description: "Get Proxies for SoulFire",
         },
+        {
+          type: "main",
+          text: "Resources",
+          url: "/resources",
+          description: "SoulFire plugins and scripts",
+        },
         ...(baseOptions.links || []),
       ]}
     >
