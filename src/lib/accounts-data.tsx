@@ -412,15 +412,38 @@ export const SHOPS: Shop[] = [
     url: "https://discord.gg/5sZNDb4UMy",
     websiteUrl: "https://skycron-gen.sellhub.cx/product/Gen-access/",
     discordUrl: "https://discord.gg/5sZNDb4UMy",
+    startDate: "Feb 2026",
+    testimonials: [
+      {
+        quote:
+          "This is just so good man because you literally get free alts, I spent $20 on lifetime and never need to buy an alt again. W service!",
+        author: "Jet",
+      },
+      {
+        quote: "Best Gen and good quality products. Best Gen.",
+        author: "CraftyJuli",
+      },
+      {
+        quote: "Very responsive support and good quality products.",
+        author: "thecrocraft",
+      },
+      {
+        quote:
+          "Best alt Shop/Gen, first customer, would never buy somewhere else. Skycron on top.",
+        author: "Cupcake",
+      },
+    ],
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Subscription-based NFA generator with infinite alts. Short cooldowns between generations (2 min banned, 4 min unbanned).",
+          "Subscription-based NFA generator with a web dashboard. Generates Hypixel unbanned, DonutSMP unbanned, Nitro and banned alts. Short cooldowns between generations (2 min banned, 4 min unbanned). 543+ total accounts in stock with 139 Hypixel unbanned available.",
         badges: ["instant-delivery"],
         price: "Subscription",
         priceValue: 0,
         couponCode: "SOULFIRE",
         couponDiscount: "5% off",
+        priceDetails:
+          "One-time subscription key gives lifetime access to the generator dashboard. Generate one account at a time with short cooldowns (2 min banned, 4 min unbanned).",
       },
     },
   },
