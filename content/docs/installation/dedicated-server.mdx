@@ -65,7 +65,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
     Once connected to your server, run the following command:
 
     ```bash
-    curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+    wget -qO /tmp/sf-setup.sh https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh && sudo bash /tmp/sf-setup.sh
     ```
 
     The interactive setup will guide you through:
@@ -80,7 +80,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
     After installation, re-run the same command to open the management menu:
 
     ```bash
-    curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+    wget -qO /tmp/sf-setup.sh https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh && sudo bash /tmp/sf-setup.sh
     ```
 
     Select **Attach to SoulFire console**, then run:
@@ -108,7 +108,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
 Re-run the setup script at any time to access the management menu:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+wget -qO /tmp/sf-setup.sh https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh && sudo bash /tmp/sf-setup.sh
 ```
 
 From the menu you can:
