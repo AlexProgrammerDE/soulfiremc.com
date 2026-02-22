@@ -245,10 +245,11 @@ export const SHOPS: Shop[] = [
     name: "Luma MFA",
     logo: "/accounts/luma.png",
     url: "https://discord.gg/5Wc4tA2ypY",
+    startDate: "Nov 2025",
     listings: {
       "mfa-accounts": {
         testimonial:
-          "Full access accounts that work well as mains or long-term alts.",
+          "Full access accounts that work well as mains or long-term alts. Over 100 accounts sold since launch.",
         badges: [
           "high-quality",
           "instant-delivery",
