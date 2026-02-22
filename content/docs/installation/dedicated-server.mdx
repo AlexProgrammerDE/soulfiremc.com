@@ -1,0 +1,114 @@
+---
+title: Installation on a Dedicated Server (Docker)
+description: Learn how to deploy SoulFire on a remote server using our automated setup script.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Before installing, we recommend you to read the [main installation page](/docs/installation).
+
+## Automated Setup
+
+This guide walks you through deploying a SoulFire Dedicated Server on a remote Linux server.
+Our interactive setup script handles Docker installation, SSL configuration, and deployment automatically.
+
+<Steps>
+  <Step>
+    ### Get a server
+
+    You need a Linux server (VPS) with at least **2 GB RAM** and a public IP address.
+    Any major Linux distribution works (Ubuntu, Debian, Fedora, Arch, etc.).
+
+    <Callout type="info">
+      Get **20€ in free credits** on [Hetzner Cloud](https://hetzner.cloud/?ref=HWdu4W4iHCgA) — this also supports SoulFire development!
+    </Callout>
+
+    When creating your server, choose any Linux image (Ubuntu is a safe default).
+    Take note of the server's **public IP address** — you'll need it in the next step.
+  </Step>
+
+  <Step>
+    ### Connect via SSH
+
+    SSH (Secure Shell) lets you run commands on your server remotely.
+    Open a terminal on your local machine and connect:
+
+    ```bash
+    ssh root@your-server-ip
+    ```
+
+    Replace `your-server-ip` with the IP address from the previous step.
+    You'll be prompted for the password you set when creating the server (or it was emailed to you).
+
+    On **Windows**, use PowerShell or Windows Terminal — both have SSH built in.
+    On **macOS/Linux**, your default terminal works out of the box.
+
+    <Callout type="info">
+      For better security, consider setting up [SSH key authentication](https://www.ssh.com/academy/ssh/key) instead of passwords.
+    </Callout>
+  </Step>
+
+  <Step>
+    ### Run the setup script
+
+    Once connected to your server, run the following command:
+
+    ```bash
+    curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+    ```
+
+    The interactive setup will guide you through:
+    - **System updates** and **Docker installation** (if needed)
+    - **SSL configuration** — choose between Cloudflared tunnel, Traefik with domain SSL, Traefik with IP SSL, or plain HTTP
+    - **Deploying SoulFire** via Docker Compose to `/opt/soulfire/`
+  </Step>
+
+  <Step>
+    ### Generate an access token
+
+    After installation, re-run the same command to open the management menu:
+
+    ```bash
+    curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+    ```
+
+    Select **Attach to SoulFire console**, then run:
+
+    ```bash
+    generate-token api
+    ```
+
+    Copy the generated token — you'll need it to connect the GUI client.
+  </Step>
+
+  <Step>
+    ### Connect the GUI client
+
+    Open SoulFire on your PC ([install it](/docs/installation) if you haven't) and enter:
+    - **Server URL**: The HTTPS URL you configured (e.g. `https://your-domain.com` or `https://your-server-ip`)
+    - **Access token**: The token from the previous step
+
+    That's it! You're now connected to your dedicated SoulFire server.
+  </Step>
+</Steps>
+
+## Managing your server
+
+Re-run the setup script at any time to access the management menu:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+```
+
+From the menu you can:
+- **Attach** to the SoulFire console to run commands
+- **View logs** of running containers
+- **Update** SoulFire to the latest version
+- **Reconfigure** SSL settings
+- **Uninstall** SoulFire completely
+
+## Further reading
+
+- [Docker guide](/docs/guides/docker) — manual Docker Compose setup, Pterodactyl/Pelican egg, and advanced HTTPS configuration
+- [Dedicated mode guide](/docs/guides/dedicated-mode) — running SoulFire without Docker (bare metal Java)
