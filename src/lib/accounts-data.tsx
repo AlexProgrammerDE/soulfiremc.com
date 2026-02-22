@@ -195,6 +195,7 @@ export const SHOPS: Shop[] = [
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.gg/ravealts2",
     trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
+    startDate: "Jul 2025",
     testimonials: [
       {
         quote:
