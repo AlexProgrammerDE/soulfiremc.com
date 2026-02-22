@@ -17,14 +17,24 @@ Our interactive setup script handles Docker installation, SSL configuration, and
   <Step>
     ### Get a server
 
-    You need a Linux server (VPS) with at least **2 GB RAM** and a public IP address.
-    Any major Linux distribution works (Ubuntu, Debian, Fedora, Arch, etc.).
+    You need a Linux server (VPS) with a public IP address.
+    Debian is the recommended distribution, but any major Linux distro works (Ubuntu, Fedora, Arch, etc.).
+
+    How much RAM you need depends on how many bots you plan to run:
+
+    | Bots       | RAM    | vCPU |
+    |------------|--------|------|
+    | 1–50       | 2 GB   | 1    |
+    | 50–200     | 4 GB   | 2    |
+    | 200–500    | 8 GB   | 2    |
+    | 500–1000   | 16 GB  | 4    |
+    | 1000+      | 32 GB+ | 4+   |
 
     <Callout type="info">
       Get **20€ in free credits** on [Hetzner Cloud](https://hetzner.cloud/?ref=HWdu4W4iHCgA) — this also supports SoulFire development!
     </Callout>
 
-    When creating your server, choose any Linux image (Ubuntu is a safe default).
+    When creating your server, choose the **Debian** image.
     Take note of the server's **public IP address** — you'll need it in the next step.
   </Step>
 
