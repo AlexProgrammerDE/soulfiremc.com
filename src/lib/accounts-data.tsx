@@ -243,13 +243,30 @@ export const SHOPS: Shop[] = [
     name: "mori's alternative world",
     logo: "/accounts/mori.png",
     url: "https://discord.gg/logs",
+    startDate: "Dec 2025",
+    gallery: [
+      {
+        src: "/accounts/gallery/mori-account-listing.png",
+        alt: "Account listing with Hypixel, DonutSMP and CubeCraft status checks",
+      },
+      {
+        src: "/accounts/gallery/mori-statistics.png",
+        alt: "Statistics showing 489+ alternatives, 174 Hypixel unbanned and 281 premium users",
+      },
+      {
+        src: "/accounts/gallery/mori-growth.png",
+        alt: "Discord growth chart showing steady member joins since launch",
+      },
+    ],
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Offers completely free temporary Minecraft tokens and credentials. Reliable instant delivery with a high daily cap of 75 accounts.",
+          "Completely free Minecraft accounts with automatic Hypixel, DonutSMP and CubeCraft status checks. Premium tier is also free. Sustained through occasional Linkvertise links instead of selling anything directly. High daily cap of 75 accounts with hourly restocks.",
         badges: ["free", "instant-delivery", "soulfire-compatible"],
         price: "Free",
         priceValue: 0,
+        priceDetails:
+          "Grab accounts from #alternatives for free. Optional premium channel (also free via a short Linkvertise link) gives 24h access to Hypixel ranked accounts and DonutSMP accounts with extra money/playtime.",
       },
     },
   },
