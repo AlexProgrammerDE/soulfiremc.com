@@ -3,6 +3,43 @@ title: Docker
 description: SoulFire + Docker = ❤️
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Automated setup script
+
+<Callout type="info">
+  The setup script automates everything on this page.
+  If you prefer manual setup, skip to the next section.
+</Callout>
+
+We provide an interactive setup script that handles Docker installation, SSL configuration, and SoulFire deployment automatically.
+
+### One-liner install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+```
+
+The script will:
+- Detect your Linux distribution and install Docker if needed
+- Guide you through SSL configuration (Cloudflared, Traefik with domain, Traefik with IP SSL, or HTTP)
+- Deploy SoulFire with Docker Compose to `/opt/soulfire/`
+
+### Managing an existing installation
+
+Re-run the same command to access the management menu:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/AlexProgrammerDE/SoulFire/main/scripts/soulfire-dedicated-setup.sh | sudo bash
+```
+
+From the management menu you can:
+- **Attach** to the SoulFire console (to run commands and generate access tokens)
+- **View logs** of running containers
+- **Update** SoulFire to the latest version
+- **Reconfigure** SSL settings
+- **Uninstall** SoulFire completely
+
 ## Docker Hub image
 
 Official Docker images are available on [Docker Hub](https://hub.docker.com/r/alexprogrammerde/soulfire).
@@ -87,6 +124,63 @@ services:
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "letsencrypt:/letsencrypt"
+
+volumes:
+  app_data:
+    driver: local
+  letsencrypt:
+    driver: local
+```
+
+### Traefik (IP SSL)
+
+<Callout type="warn">
+  IP SSL certificates from Let's Encrypt are short-lived (~6 days).
+  Traefik handles automatic renewal, but your containers must remain running.
+  Requires Traefik v3.6.7+.
+</Callout>
+
+If you don't have a domain, you can use [Let's Encrypt IP address certificates](https://letsencrypt.org/2025/01/16/6-day-and-ip-certs) with Traefik.
+This uses the TLS-ALPN-01 challenge on port 443 and does not require a domain name.
+
+```dotenv filename=".env"
+PUBLIC_IP=203.0.113.42
+EMAIL=your@email.com
+```
+
+```yaml filename="docker-compose.yml"
+services:
+  app:
+    image: ghcr.io/alexprogrammerde/soulfire
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.soulfire.rule=Host(`${PUBLIC_IP}`)"
+      - "traefik.http.services.soulfire.loadbalancer.server.port=38765"
+      - "traefik.http.routers.soulfire.entrypoints=websecure"
+      - "traefik.http.routers.soulfire.tls.certresolver=myresolver"
+    volumes:
+      - app_data:/soulfire/data
+
+  traefik:
+    image: traefik:v3
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.certificatesduration=160"
+      - "--certificatesresolvers.myresolver.acme.profile=shortlived"
+      - "--certificatesresolvers.myresolver.acme.disablecommonname=true"
     ports:
       - "80:80"
       - "443:443"
