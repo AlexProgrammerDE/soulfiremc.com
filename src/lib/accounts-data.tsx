@@ -221,18 +221,18 @@ export const SHOPS: Shop[] = [
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Fresh cookie accounts with advanced precheck verification. Offers Hypixel accounts (unbanned and banned), cookie logs, session tokens, and DonutSMP accounts. Partnered with Rise Client and AutoMint MM. Also offers a Dispenser (gen) subscription for daily account generation at up to 80% savings with auto-refund on invalid accounts.",
+          "Hypixel, DonutSMP, cookie logs, session tokens and more. All accounts are prechecked before delivery. Partnered with Rise Client and AutoMint MM. Also has a Dispenser (gen) subscription for daily bulk generation.",
         badges: ["high-quality", "instant-delivery", "bulk-discount"],
         price: "10-15¢",
         priceValue: 0.1,
         couponCode: "SOULFIRE",
         couponDiscount: "10% off",
         priceDetails:
-          "Individual accounts from 10-15¢. Dispenser keys available for daily generation: $14.99/mo (1 month), $10/mo (3 months), $8.33/mo (6 months), $5.83/mo (1 year). Invalid accounts are auto-refunded.",
+          "10-15¢ per account. Dispenser keys for daily generation: $14.99/mo, $10/mo (3mo), $8.33/mo (6mo), $5.83/mo (1yr). Invalid accounts auto-refunded.",
       },
       "mfa-accounts": {
         testimonial:
-          "Permanent full access accounts — change email, password and username. Includes Microsoft/Xbox accounts with Game Pass and Bedrock access. Every account is verified before delivery via advanced precheck. Multiple payment methods including crypto, card, Klarna, Amazon Pay and Cash App.",
+          "Permanent accounts with full access. Change email, password and username. Also sells Microsoft/Xbox accounts with Game Pass and Bedrock. Accepts crypto, card, Klarna and more.",
         badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
         price: "$5.67",
         priceValue: 5.67,
@@ -287,7 +287,7 @@ export const SHOPS: Shop[] = [
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Completely free Minecraft accounts with automatic Hypixel, DonutSMP and CubeCraft status checks. Premium tier is also free. Sustained through occasional Linkvertise links instead of selling anything directly. High daily cap of 75 accounts with hourly restocks.",
+          "Free accounts with Hypixel, DonutSMP and CubeCraft status checks. Premium tier also free. Nothing is sold, runs on occasional Linkvertise links. Up to 75 accounts per day with hourly restocks.",
         badges: ["free", "instant-delivery", "soulfire-compatible"],
         price: "Free",
         priceValue: 0,
@@ -437,14 +437,14 @@ export const SHOPS: Shop[] = [
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Subscription-based NFA generator with a web dashboard. Generates Hypixel unbanned, DonutSMP unbanned, Nitro and banned alts. Short cooldowns between generations (2 min banned, 4 min unbanned). 543+ total accounts in stock with 139 Hypixel unbanned available.",
+          "NFA generator with a web dashboard. Hypixel unbanned, DonutSMP unbanned, Nitro and banned alts. Short cooldowns (2 min banned, 4 min unbanned).",
         badges: ["instant-delivery"],
         price: "Subscription",
         priceValue: 0,
         couponCode: "SOULFIRE",
         couponDiscount: "5% off",
         priceDetails:
-          "One-time subscription key gives lifetime access to the generator dashboard. Generate one account at a time with short cooldowns (2 min banned, 4 min unbanned).",
+          "One-time key for lifetime dashboard access. One account at a time with short cooldowns (2 min banned, 4 min unbanned).",
       },
     },
   },
