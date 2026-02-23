@@ -1,0 +1,37 @@
+name: 'Database Migration'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: 'Run Database Migrations'
+
+    runs-on: ubuntu-24.04
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run migrations
+        run: |
+          pnpm drizzle-kit migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

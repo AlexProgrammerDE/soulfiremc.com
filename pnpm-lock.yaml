@@ -17,6 +17,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^1.0.2
         version: 1.0.2
+      '@next/env':
+        specifier: ^16.1.6
+        version: 16.1.6
       '@paper-design/shaders-react':
         specifier: ^0.0.71
         version: 0.0.71(@types/react@19.2.13)(react@19.2.4)
