@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1771882939163,
+      "when": 1771886488124,
       "tag": "0000_initial-schema",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1771886048710,
-      "tag": "0001_uuid-and-more-plugins",
       "breakpoints": true
     }
   ]
