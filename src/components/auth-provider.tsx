@@ -16,7 +16,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       replace={router.replace}
       onSessionChange={() => router.refresh()}
       Link={Link}
-      socialProviders={["discord", "github"]}
+      social={{ providers: ["discord", "github"] }}
       credentials={false}
       twoFactor={["totp"]}
       deleteUser
