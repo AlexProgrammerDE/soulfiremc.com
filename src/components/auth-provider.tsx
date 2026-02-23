@@ -17,16 +17,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       onSessionChange={() => router.refresh()}
       Link={Link}
       social={{ providers: [/* "google", */ "discord", "github"] }}
-      twoFactor={["totp"]}
+      emailOTP
+      emailVerification
+      changeEmail
       passkey
+      deleteUser={{
+        verification: true,
+      }}
+      credentials={{
+        forgotPassword: true,
+        username: true,
+      }}
+      signUp
+      nameRequired={false}
+      twoFactor={["otp", "totp"]}
       captcha={{
         provider: "cloudflare-turnstile",
         siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string,
       }}
       optimistic
-      deleteUser
-      changeEmail
       gravatar
+      localization={{
+        NAME: "Display Name",
+        NAME_DESCRIPTION: "Please enter a display name.",
+        NAME_PLACEHOLDER: "Display Name",
+      }}
     >
       {children}
     </AuthUIProvider>
