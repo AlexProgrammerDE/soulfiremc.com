@@ -1,5 +1,5 @@
 CREATE TABLE "upvote" (
-	"user_id" text NOT NULL,
+	"user_id" uuid NOT NULL,
 	"item_type" text NOT NULL,
 	"item_slug" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,

@@ -3,14 +3,14 @@ import {
   pgTable,
   primaryKey,
   text,
-  timestamp,
-} from "drizzle-orm/pg-core";
+  timestamp, uuid,
+} from 'drizzle-orm/pg-core';
 import { user } from '@/lib/db/auth-schema';
 
 export const upvote = pgTable(
   "upvote",
   {
-    userId: text("user_id")
+    userId: uuid("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     itemType: text("item_type", {
