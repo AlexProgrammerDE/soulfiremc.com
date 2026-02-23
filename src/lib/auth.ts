@@ -9,6 +9,7 @@ import {
 } from "better-auth/plugins";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import {nextCookies} from "better-auth/next-js";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -33,8 +34,8 @@ export const auth = betterAuth({
     captcha({
       provider: "cloudflare-turnstile",
       secretKey: process.env.TURNSTILE_SECRET_KEY ?? "",
-      endpoints: ["/sign-in/social"],
     }),
+    nextCookies()
   ],
   trustedOrigins: ["https://soulfiremc.com"],
 });

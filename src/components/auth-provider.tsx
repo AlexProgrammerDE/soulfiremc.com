@@ -19,6 +19,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       social={{ providers: ["discord", "github"] }}
       credentials={false}
       twoFactor={["totp"]}
+      captcha={{
+        provider: "cloudflare-turnstile",
+        siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string,
+      }}
+      optimistic
       deleteUser
       gravatar
     >
