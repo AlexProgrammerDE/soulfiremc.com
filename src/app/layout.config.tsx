@@ -13,7 +13,6 @@ export const baseOptions: BaseLayoutProps = {
       </>
     ),
     transparentMode: "top",
-    children: <UserNav />,
   },
   githubUrl: "https://github.com/AlexProgrammerDE/SoulFire",
   links: [
@@ -23,6 +22,11 @@ export const baseOptions: BaseLayoutProps = {
       text: "Discord",
       url: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
       external: true,
+    },
+    {
+      type: "custom",
+      secondary: true,
+      children: <UserNav />,
     },
   ],
 };
