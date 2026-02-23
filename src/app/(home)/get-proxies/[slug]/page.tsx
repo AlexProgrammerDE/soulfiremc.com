@@ -30,7 +30,6 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { imageMetadata } from "@/lib/metadata";
-import { cn } from "@/lib/utils";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -39,6 +38,7 @@ import {
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
+import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
   return PROVIDERS.map((provider) => ({ slug: provider.slug }));
@@ -91,7 +91,10 @@ function ProviderBadge({
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", classNameOverride ?? config.className)}
+          className={cn(
+            "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+            classNameOverride ?? config.className,
+          )}
         >
           {config.icon}
           {config.label}
@@ -202,14 +205,13 @@ export default async function ProxyProviderPage(props: {
 
       {/* Main content card */}
       <Card
-        className={cn("p-6 gap-5",
-          theme && ["ring-2", theme.ring, theme.bg]
-        )}
+        className={cn("p-6 gap-5", theme && ["ring-2", theme.ring, theme.bg])}
       >
         <div className="flex flex-col sm:flex-row gap-6">
           <div
-            className={cn("relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted",
-              theme && ["ring-2", theme.ring]
+            className={cn(
+              "relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted",
+              theme && ["ring-2", theme.ring],
             )}
           >
             <ProviderLogo provider={provider} />
@@ -227,9 +229,10 @@ export default async function ProxyProviderPage(props: {
               )}
               {provider.sponsor && (
                 <span
-                  className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium",
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium",
                     theme?.badge ??
-                    "bg-pink-500/10 text-pink-600 dark:text-pink-400"
+                      "bg-pink-500/10 text-pink-600 dark:text-pink-400",
                   )}
                 >
                   <Heart className="h-3.5 w-3.5 fill-current" />

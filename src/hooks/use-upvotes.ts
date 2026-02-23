@@ -53,7 +53,7 @@ export function useUpvotes(itemType: ItemType, slugs: string[]) {
     return () => {
       cancelled = true;
     };
-  }, [itemType, slugsKey]);
+  }, [itemType, slugsKey, slugs.length]);
 
   const toggleUpvote = useCallback(
     async (slug: string) => {

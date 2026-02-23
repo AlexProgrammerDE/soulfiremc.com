@@ -17,12 +17,12 @@ export const auth = betterAuth({
   }),
   socialProviders: {
     discord: {
-      clientId: process.env.DISCORD_CLIENT_ID!,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+      clientId: process.env.DISCORD_CLIENT_ID ?? "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",
     },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      clientId: process.env.GITHUB_CLIENT_ID ?? "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
     },
   },
   plugins: [
@@ -32,7 +32,7 @@ export const auth = betterAuth({
     haveIBeenPwned(),
     captcha({
       provider: "cloudflare-turnstile",
-      secretKey: process.env.TURNSTILE_SECRET_KEY!,
+      secretKey: process.env.TURNSTILE_SECRET_KEY ?? "",
       endpoints: ["/sign-in/social"],
     }),
   ],

@@ -11,9 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
-import { UpvoteButton } from "@/components/upvote-button";
-import { useUpvotes } from "@/hooks/use-upvotes";
-import { cn } from "@/lib/utils";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import {
   Accordion,
@@ -28,6 +25,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { UpvoteButton } from "@/components/upvote-button";
+import { useUpvotes } from "@/hooks/use-upvotes";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -37,6 +36,7 @@ import {
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
+import { cn } from "@/lib/utils";
 import { CouponCode } from "./coupon-code";
 import { proxiesSearchParams } from "./search-params";
 
@@ -52,7 +52,10 @@ function ProviderBadge({
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", classNameOverride ?? config.className)}
+          className={cn(
+            "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+            classNameOverride ?? config.className,
+          )}
         >
           {config.icon}
           {config.label}
@@ -94,7 +97,9 @@ function ProviderCard({
   upvoteCount: number;
   isUpvoted: boolean;
   upvoteLoading: boolean;
-  onToggleUpvote: (slug: string) => Promise<{ error: "unauthorized" | null } | undefined>;
+  onToggleUpvote: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | null } | undefined>;
 }) {
   const theme = provider.sponsorTheme
     ? SPONSOR_THEMES[provider.sponsorTheme]
@@ -102,8 +107,9 @@ function ProviderCard({
 
   return (
     <Card
-      className={cn("transition-all duration-300 hover:shadow-lg",
-        theme && ["ring-2", theme.ring, theme.bg]
+      className={cn(
+        "transition-all duration-300 hover:shadow-lg",
+        theme && ["ring-2", theme.ring, theme.bg],
       )}
     >
       <div className="flex flex-col sm:flex-row gap-4 p-6">
@@ -145,7 +151,8 @@ function ProviderCard({
               className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               <ImageIcon className="h-3 w-3" />
-              {provider.gallery.length} photo{provider.gallery.length !== 1 && "s"}
+              {provider.gallery.length} photo
+              {provider.gallery.length !== 1 && "s"}
             </Link>
           )}
           {provider.couponCode && (
@@ -181,10 +188,7 @@ function ProviderCard({
 
 function MainContent() {
   const providers = PROVIDERS;
-  const slugs = useMemo(
-    () => providers.map((p) => p.slug),
-    [providers],
-  );
+  const slugs = useMemo(() => providers.map((p) => p.slug), []);
   const {
     counts,
     userUpvotes,
@@ -247,10 +251,14 @@ function MainContent() {
               type="button"
               key={badge}
               onClick={() => toggleFilter(badge)}
-              className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                 isActive
-                  ? cn(config.className, "ring-2 ring-offset-2 ring-offset-background ring-current")
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  ? cn(
+                      config.className,
+                      "ring-2 ring-offset-2 ring-offset-background ring-current",
+                    )
+                  : "bg-muted text-muted-foreground hover:bg-muted/80",
               )}
             >
               {config.label}

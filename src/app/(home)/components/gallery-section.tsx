@@ -19,7 +19,9 @@ export function GallerySection({
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const prev = () =>
-    setOpenIndex((i) => (i !== null ? (i - 1 + images.length) % images.length : null));
+    setOpenIndex((i) =>
+      i !== null ? (i - 1 + images.length) % images.length : null,
+    );
   const next = () =>
     setOpenIndex((i) => (i !== null ? (i + 1) % images.length : null));
 

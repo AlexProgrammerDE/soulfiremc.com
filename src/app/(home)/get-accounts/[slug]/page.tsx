@@ -24,8 +24,8 @@ import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
 import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
-import { JsonLd } from "@/components/json-ld";
 import { DetailUpvote } from "@/components/detail-upvote";
+import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -110,7 +110,10 @@ function ProviderBadge({ badge }: { badge: Badge }) {
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", config.className)}
+          className={cn(
+            "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+            config.className,
+          )}
         >
           {config.icon}
           {config.label}
@@ -302,7 +305,10 @@ export default async function AccountProviderPage(props: {
 
       {/* Category Cards */}
       <div
-        className={cn("grid gap-6", categories.length > 1 ? "md:grid-cols-2" : "grid-cols-1")}
+        className={cn(
+          "grid gap-6",
+          categories.length > 1 ? "md:grid-cols-2" : "grid-cols-1",
+        )}
       >
         {categories.map(([category, listing]) => {
           const catConfig = CATEGORY_CONFIG[category];

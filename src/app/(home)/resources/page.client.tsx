@@ -15,8 +15,6 @@ import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
-import { UpvoteButton } from "@/components/upvote-button";
-import { useUpvotes } from "@/hooks/use-upvotes";
 import {
   Accordion,
   AccordionContent,
@@ -30,6 +28,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { UpvoteButton } from "@/components/upvote-button";
+import { useUpvotes } from "@/hooks/use-upvotes";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -94,7 +94,9 @@ function ResourceCard({
   upvoteCount: number;
   isUpvoted: boolean;
   upvoteLoading: boolean;
-  onToggleUpvote: (slug: string) => Promise<{ error: "unauthorized" | null } | undefined>;
+  onToggleUpvote: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | null } | undefined>;
 }) {
   return (
     <Card className="transition-all duration-300 hover:shadow-lg">
@@ -183,10 +185,7 @@ function ResourceCard({
 
 function MainContent() {
   const resources = RESOURCES;
-  const slugs = useMemo(
-    () => resources.map((r) => r.slug),
-    [resources],
-  );
+  const slugs = useMemo(() => resources.map((r) => r.slug), []);
   const {
     counts,
     userUpvotes,

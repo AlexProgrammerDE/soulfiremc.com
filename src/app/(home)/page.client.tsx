@@ -7,6 +7,7 @@ import {
   type ReactElement,
   type RefObject,
   useEffect,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -248,7 +249,10 @@ function sHeight(n: SNode) {
 }
 
 function sPortXY(nodeId: string, portName: string, side: "left" | "right") {
-  const n = sNodes.find((n) => n.id === nodeId)!;
+  const n = sNodes.find((candidate) => candidate.id === nodeId);
+  if (!n) {
+    return { x: 0, y: 0 };
+  }
   const ri = n.rows.findIndex(
     (r) => r.left?.name === portName || r.right?.name === portName,
   );
@@ -483,6 +487,9 @@ const sLogs = [
 export function ScriptingAnimation() {
   const tickTime = 120;
   const [tick, setTick] = useState(0);
+  const svgIdPrefix = useId().replaceAll(":", "");
+  const glowId = `${svgIdPrefix}-sf-glow`;
+  const dotsId = `${svgIdPrefix}-sf-dots`;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -541,8 +548,9 @@ export function ScriptingAnimation() {
           className="w-full h-auto"
           style={{ minHeight: "180px", background: "#1e1e2e" }}
         >
+          <title>SoulFire script execution graph</title>
           <defs>
-            <filter id="sf-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <filter id={glowId} x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="4" result="b" />
               <feMerge>
                 <feMergeNode in="b" />
@@ -550,7 +558,7 @@ export function ScriptingAnimation() {
               </feMerge>
             </filter>
             <pattern
-              id="sf-dots"
+              id={dotsId}
               x="0"
               y="0"
               width="20"
@@ -561,7 +569,7 @@ export function ScriptingAnimation() {
             </pattern>
           </defs>
 
-          <rect width="790" height="250" fill="url(#sf-dots)" />
+          <rect width="790" height="250" fill={`url(#${dotsId})`} />
 
           {/* Edges (bezier curves) */}
           {sEdgePaths.map((e) => {
@@ -605,7 +613,7 @@ export function ScriptingAnimation() {
                     rx="9"
                     fill={node.color}
                     opacity="0.12"
-                    filter="url(#sf-glow)"
+                    filter={`url(#${glowId})`}
                   />
                 )}
 
@@ -667,8 +675,9 @@ export function ScriptingAnimation() {
                 {/* Port rows */}
                 {node.rows.map((row, ri) => {
                   const cy = node.y + ED_H + ri * ED_R + ED_R / 2;
+                  const rowKey = `${node.id}-${row.left?.name ?? "none"}-${row.right?.name ?? "none"}-${row.inputValue ?? "none"}`;
                   return (
-                    <g key={ri}>
+                    <g key={rowKey}>
                       {/* Left port */}
                       {row.left && (
                         <>

@@ -14,9 +14,6 @@ import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, use, useMemo, useState } from "react";
 import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
-import { UpvoteButton } from "@/components/upvote-button";
-import { useUpvotes } from "@/hooks/use-upvotes";
-import { cn } from "@/lib/utils";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
@@ -32,6 +29,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { UpvoteButton } from "@/components/upvote-button";
+import { useUpvotes } from "@/hooks/use-upvotes";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -47,6 +46,7 @@ import {
   type SortOption,
 } from "@/lib/accounts-data";
 import type { DiscordInviteResponse } from "@/lib/discord";
+import { cn } from "@/lib/utils";
 import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
@@ -62,7 +62,10 @@ function ProviderBadge({ badge }: { badge: Badge }) {
     <HoverCard>
       <HoverCardTrigger asChild>
         <span
-          className={cn("inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", config.className)}
+          className={cn(
+            "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+            config.className,
+          )}
         >
           {config.icon}
           {config.label}
@@ -107,7 +110,9 @@ function ProviderCard({
   upvoteCount: number;
   isUpvoted: boolean;
   upvoteLoading: boolean;
-  onToggleUpvote: (slug: string) => Promise<{ error: "unauthorized" | null } | undefined>;
+  onToggleUpvote: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | null } | undefined>;
 }) {
   const resolvedDiscordInvites = use(discordInvites);
   const discordInvite =
@@ -157,7 +162,8 @@ function ProviderCard({
               className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               <ImageIcon className="h-3 w-3" />
-              {provider.gallery.length} photo{provider.gallery.length !== 1 && "s"}
+              {provider.gallery.length} photo
+              {provider.gallery.length !== 1 && "s"}
             </Link>
           )}
           {provider.couponCode && (
@@ -234,10 +240,7 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
 
 function MainContent(props: Props) {
   const providers = PROVIDERS;
-  const slugs = useMemo(
-    () => [...new Set(providers.map((p) => p.slug))],
-    [providers],
-  );
+  const slugs = useMemo(() => [...new Set(providers.map((p) => p.slug))], []);
   const {
     counts,
     userUpvotes,
@@ -320,10 +323,11 @@ function MainContent(props: Props) {
                 type="button"
                 key={cat}
                 onClick={() => toggleCategory(cat)}
-                className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                   isActive
                     ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
                 )}
               >
                 {config.label}
@@ -345,10 +349,14 @@ function MainContent(props: Props) {
                 type="button"
                 key={badge}
                 onClick={() => toggleBadge(badge)}
-                className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                   isActive
-                    ? cn(config.className, "ring-2 ring-offset-2 ring-offset-background ring-current")
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    ? cn(
+                        config.className,
+                        "ring-2 ring-offset-2 ring-offset-background ring-current",
+                      )
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
                 )}
               >
                 {config.label}
@@ -370,10 +378,11 @@ function MainContent(props: Props) {
                 type="button"
                 key={option}
                 onClick={() => setSort(option)}
-                className={cn("inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
                   isActive
                     ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
                 )}
               >
                 {config.icon}
