@@ -14,6 +14,8 @@ import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, use, useMemo, useState } from "react";
 import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
+import { UpvoteButton } from "@/components/upvote-button";
+import { useUpvotes } from "@/hooks/use-upvotes";
 import { cn } from "@/lib/utils";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
@@ -95,9 +97,17 @@ function ProviderLogo({ provider }: { provider: Provider }) {
 function ProviderCard({
   provider,
   discordInvites,
+  upvoteCount,
+  isUpvoted,
+  upvoteLoading,
+  onToggleUpvote,
 }: {
   provider: Provider;
   discordInvites: DiscordInvites;
+  upvoteCount: number;
+  isUpvoted: boolean;
+  upvoteLoading: boolean;
+  onToggleUpvote: (slug: string) => Promise<{ error: "unauthorized" | null } | undefined>;
 }) {
   const resolvedDiscordInvites = use(discordInvites);
   const discordInvite =
@@ -199,6 +209,13 @@ function ProviderCard({
                 </a>
               </Button>
             )}
+            <UpvoteButton
+              slug={provider.slug}
+              count={upvoteCount}
+              isUpvoted={isUpvoted}
+              loading={upvoteLoading}
+              onToggle={onToggleUpvote}
+            />
           </div>
         </div>
       </div>
@@ -217,6 +234,16 @@ function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
 
 function MainContent(props: Props) {
   const providers = PROVIDERS;
+  const slugs = useMemo(
+    () => [...new Set(providers.map((p) => p.slug))],
+    [providers],
+  );
+  const {
+    counts,
+    userUpvotes,
+    loading: upvoteLoading,
+    toggleUpvote,
+  } = useUpvotes("account", slugs);
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -415,6 +442,10 @@ function MainContent(props: Props) {
                       key={`${provider.name}-${index}`}
                       provider={provider}
                       discordInvites={props.discordInvites}
+                      upvoteCount={counts[provider.slug] ?? 0}
+                      isUpvoted={userUpvotes.has(provider.slug)}
+                      upvoteLoading={upvoteLoading}
+                      onToggleUpvote={toggleUpvote}
                     />
                   ))}
                 </div>
@@ -444,6 +475,10 @@ function MainContent(props: Props) {
                       key={`${provider.name}-${index}`}
                       provider={provider}
                       discordInvites={props.discordInvites}
+                      upvoteCount={counts[provider.slug] ?? 0}
+                      isUpvoted={userUpvotes.has(provider.slug)}
+                      upvoteLoading={upvoteLoading}
+                      onToggleUpvote={toggleUpvote}
                     />
                   ))}
                 </div>

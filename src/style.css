@@ -4,6 +4,8 @@
 @import "fumadocs-ui/css/preset.css";
 @import "shadcn/tailwind.css";
 
+@source "../node_modules/@daveyplate/better-auth-ui/dist";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

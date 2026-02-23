@@ -25,6 +25,7 @@ import { TestimonialsSection } from "@/app/(home)/components/testimonials-sectio
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
 import { JsonLd } from "@/components/json-ld";
+import { DetailUpvote } from "@/components/detail-upvote";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -294,6 +295,7 @@ export default async function AccountProviderPage(props: {
                 </a>
               </Button>
             )}
+            <DetailUpvote itemType="account" slug={shop.slug} />
           </div>
         </div>
       </div>

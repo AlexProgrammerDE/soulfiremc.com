@@ -15,6 +15,8 @@ import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
+import { UpvoteButton } from "@/components/upvote-button";
+import { useUpvotes } from "@/hooks/use-upvotes";
 import {
   Accordion,
   AccordionContent,
@@ -81,7 +83,19 @@ function ResourceLogo({ resource }: { resource: Resource }) {
   );
 }
 
-function ResourceCard({ resource }: { resource: Resource }) {
+function ResourceCard({
+  resource,
+  upvoteCount,
+  isUpvoted,
+  upvoteLoading,
+  onToggleUpvote,
+}: {
+  resource: Resource;
+  upvoteCount: number;
+  isUpvoted: boolean;
+  upvoteLoading: boolean;
+  onToggleUpvote: (slug: string) => Promise<{ error: "unauthorized" | null } | undefined>;
+}) {
   return (
     <Card className="transition-all duration-300 hover:shadow-lg">
       <div className="flex flex-col sm:flex-row gap-4 p-6">
@@ -153,6 +167,13 @@ function ResourceCard({ resource }: { resource: Resource }) {
                 </a>
               </Button>
             )}
+            <UpvoteButton
+              slug={resource.slug}
+              count={upvoteCount}
+              isUpvoted={isUpvoted}
+              loading={upvoteLoading}
+              onToggle={onToggleUpvote}
+            />
           </div>
         </div>
       </div>
@@ -162,6 +183,16 @@ function ResourceCard({ resource }: { resource: Resource }) {
 
 function MainContent() {
   const resources = RESOURCES;
+  const slugs = useMemo(
+    () => resources.map((r) => r.slug),
+    [resources],
+  );
+  const {
+    counts,
+    userUpvotes,
+    loading: upvoteLoading,
+    toggleUpvote,
+  } = useUpvotes("resource", slugs);
   const [{ category, tags }, setParams] = useQueryStates(
     resourcesSearchParams,
     {
@@ -317,7 +348,14 @@ function MainContent() {
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {filteredResources.map((resource) => (
-              <ResourceCard key={resource.slug} resource={resource} />
+              <ResourceCard
+                key={resource.slug}
+                resource={resource}
+                upvoteCount={counts[resource.slug] ?? 0}
+                isUpvoted={userUpvotes.has(resource.slug)}
+                upvoteLoading={upvoteLoading}
+                onToggleUpvote={toggleUpvote}
+              />
             ))}
           </div>
         )}

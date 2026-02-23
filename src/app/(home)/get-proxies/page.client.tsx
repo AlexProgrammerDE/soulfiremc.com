@@ -11,6 +11,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
+import { UpvoteButton } from "@/components/upvote-button";
+import { useUpvotes } from "@/hooks/use-upvotes";
 import { cn } from "@/lib/utils";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import {
@@ -81,7 +83,19 @@ function ProviderLogo({ provider }: { provider: Provider }) {
   );
 }
 
-function ProviderCard({ provider }: { provider: Provider }) {
+function ProviderCard({
+  provider,
+  upvoteCount,
+  isUpvoted,
+  upvoteLoading,
+  onToggleUpvote,
+}: {
+  provider: Provider;
+  upvoteCount: number;
+  isUpvoted: boolean;
+  upvoteLoading: boolean;
+  onToggleUpvote: (slug: string) => Promise<{ error: "unauthorized" | null } | undefined>;
+}) {
   const theme = provider.sponsorTheme
     ? SPONSOR_THEMES[provider.sponsorTheme]
     : undefined;
@@ -140,16 +154,25 @@ function ProviderCard({ provider }: { provider: Provider }) {
               discount={provider.couponDiscount}
             />
           )}
-          <Button asChild>
-            <a
-              href={provider.url}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-            >
-              Get Proxies
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild>
+              <a
+                href={provider.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                Get Proxies
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
+            <UpvoteButton
+              slug={provider.slug}
+              count={upvoteCount}
+              isUpvoted={isUpvoted}
+              loading={upvoteLoading}
+              onToggle={onToggleUpvote}
+            />
+          </div>
         </div>
       </div>
     </Card>
@@ -158,6 +181,16 @@ function ProviderCard({ provider }: { provider: Provider }) {
 
 function MainContent() {
   const providers = PROVIDERS;
+  const slugs = useMemo(
+    () => providers.map((p) => p.slug),
+    [providers],
+  );
+  const {
+    counts,
+    userUpvotes,
+    loading: upvoteLoading,
+    toggleUpvote,
+  } = useUpvotes("proxy", slugs);
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
@@ -267,7 +300,14 @@ function MainContent() {
         ) : (
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {filteredProviders.map((provider) => (
-              <ProviderCard key={provider.name} provider={provider} />
+              <ProviderCard
+                key={provider.name}
+                provider={provider}
+                upvoteCount={counts[provider.slug] ?? 0}
+                isUpvoted={userUpvotes.has(provider.slug)}
+                upvoteLoading={upvoteLoading}
+                onToggleUpvote={toggleUpvote}
+              />
             ))}
           </div>
         )}

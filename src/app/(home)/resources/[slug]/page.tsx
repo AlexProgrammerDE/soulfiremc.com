@@ -19,6 +19,7 @@ import type {
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
 import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
+import { DetailUpvote } from "@/components/detail-upvote";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -227,6 +228,7 @@ export default async function ResourceDetailPage(props: {
                   </a>
                 </Button>
               )}
+              <DetailUpvote itemType="resource" slug={resource.slug} />
             </div>
           </div>
         </div>

@@ -20,6 +20,7 @@ import type {
 import { GallerySection } from "@/app/(home)/components/gallery-section";
 import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
+import { DetailUpvote } from "@/components/detail-upvote";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -256,16 +257,19 @@ export default async function ProxyProviderPage(props: {
                 discount={provider.couponDiscount}
               />
             )}
-            <Button asChild size="lg">
-              <a
-                href={provider.url}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-              >
-                Get Proxies from {provider.name}
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild size="lg">
+                <a
+                  href={provider.url}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                >
+                  Get Proxies from {provider.name}
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+              <DetailUpvote itemType="proxy" slug={provider.slug} />
+            </div>
           </div>
         </div>
       </Card>
