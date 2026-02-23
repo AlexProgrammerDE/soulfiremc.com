@@ -8,13 +8,17 @@ import {
   username,
 } from "better-auth/plugins";
 import { db } from "@/lib/db";
+import * as generatedAuthSchema from "@/lib/db/auth-schema";
 import * as schema from "@/lib/db/schema";
 import {nextCookies} from "better-auth/next-js";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema,
+    schema: {
+      ...schema,
+      ...generatedAuthSchema,
+    },
   }),
   socialProviders: {
     discord: {
