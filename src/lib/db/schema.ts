@@ -5,6 +5,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { user } from '@/lib/db/auth-schema';
 
 export const upvote = pgTable(
   "upvote",
