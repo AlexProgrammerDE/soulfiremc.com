@@ -1,4 +1,4 @@
-import { SiDiscord } from "@icons-pack/react-simple-icons";
+import { SiDiscord, SiGithub } from "@icons-pack/react-simple-icons";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import Image from "next/image";
 import { UserNav } from "@/components/user-nav";
@@ -14,13 +14,20 @@ export const baseOptions: BaseLayoutProps = {
     ),
     transparentMode: "top",
   },
-  githubUrl: "https://github.com/AlexProgrammerDE/SoulFire",
   links: [
     {
       type: "icon",
       icon: <SiDiscord />,
       text: "Discord",
       url: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
+      external: true,
+    },
+    {
+      type: "icon",
+      icon: <SiGithub />,
+      text: "GitHub",
+      label: "GitHub",
+      url: "https://github.com/AlexProgrammerDE/SoulFire",
       external: true,
     },
     {
