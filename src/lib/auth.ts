@@ -9,6 +9,7 @@ import {
   haveIBeenPwned,
   jwt,
   lastLoginMethod,
+  openAPI,
   twoFactor,
   username,
 } from "better-auth/plugins";
@@ -17,6 +18,12 @@ import { db } from "@/lib/db";
 import * as generatedAuthSchema from "@/lib/db/auth-schema";
 import * as schema from "@/lib/db/schema";
 import { authNotifications } from "./auth-notifications";
+
+function emailToUniqueUsername(email: string): string {
+  const prefix = email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "");
+  const suffix = Math.random().toString(36).substring(2, 8);
+  return `${prefix}_${suffix}`;
+}
 
 export const auth = betterAuth({
   appName: "SoulFire",
@@ -32,6 +39,7 @@ export const auth = betterAuth({
   advanced: {
     database: {
       generateId: "uuid",
+      experimentalJoins: true,
     },
   },
   account: {
@@ -39,7 +47,33 @@ export const auth = betterAuth({
       enabled: true,
     },
   },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          const customTypedUser = user as unknown as typeof user & {
+            username?: string;
+            displayUsername?: string;
+          };
+          const uniqueUsername = emailToUniqueUsername(user.email);
+
+          return {
+            data: {
+              ...user,
+              username: customTypedUser.username ?? uniqueUsername,
+              displayUsername:
+                customTypedUser.displayUsername ?? uniqueUsername,
+            },
+          };
+        },
+      },
+    },
+  },
   socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    },
     discord: {
       clientId: process.env.DISCORD_CLIENT_ID ?? "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",
@@ -98,6 +132,7 @@ export const auth = betterAuth({
     passkey(),
     admin(),
     jwt(),
+    openAPI(),
     lastLoginMethod(),
     haveIBeenPwned({
       customPasswordCompromisedMessage: "Please choose a more secure password.",

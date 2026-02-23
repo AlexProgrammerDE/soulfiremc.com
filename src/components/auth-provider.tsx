@@ -16,7 +16,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       replace={router.replace}
       onSessionChange={() => router.refresh()}
       Link={Link}
-      social={{ providers: ["discord", "github"] }}
+      social={{ providers: ["google", "discord", "github"] }}
       twoFactor={["totp"]}
       passkey
       captcha={{
