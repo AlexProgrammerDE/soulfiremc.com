@@ -17,14 +17,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       onSessionChange={() => router.refresh()}
       Link={Link}
       social={{ providers: ["discord", "github"] }}
-      credentials={false}
       twoFactor={["totp"]}
+      passkey
       captcha={{
         provider: "cloudflare-turnstile",
         siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string,
       }}
       optimistic
       deleteUser
+      changeEmail
       gravatar
     >
       {children}
