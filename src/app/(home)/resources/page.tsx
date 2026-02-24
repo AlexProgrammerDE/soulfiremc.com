@@ -4,6 +4,7 @@ import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
 import { JsonLd } from "@/components/json-ld";
 import { RESOURCES } from "@/lib/resources-data";
+import { getUpvoteCounts } from "@/lib/upvotes";
 import { ResourcesClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -49,7 +50,12 @@ export default async function ResourcesPage() {
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <ResourcesClient />
+      <ResourcesClient
+        initialCounts={await getUpvoteCounts(
+          "resource",
+          RESOURCES.map((r) => r.slug),
+        )}
+      />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
 import { extractDiscordInviteCode, PROVIDERS } from "@/lib/accounts-data";
 import { fetchDiscordInvite } from "@/lib/discord";
+import { getUpvoteCounts } from "@/lib/upvotes";
 import { GetAccountsClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -57,6 +58,10 @@ export default async function GetAccountsPage() {
             return discordCode ? fetchDiscordInvite(discordCode) : null;
           }),
         ).then()}
+        initialCounts={await getUpvoteCounts(
+          "account",
+          [...new Set(PROVIDERS.map((p) => p.slug))],
+        )}
       />
     </>
   );

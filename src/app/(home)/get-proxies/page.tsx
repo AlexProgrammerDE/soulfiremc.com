@@ -4,6 +4,7 @@ import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import { JsonLd } from "@/components/json-ld";
 import { PROVIDERS } from "@/lib/proxies-data";
+import { getUpvoteCounts } from "@/lib/upvotes";
 import { GetProxiesClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -49,7 +50,12 @@ export default async function GetProxiesPage() {
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <GetProxiesClient />
+      <GetProxiesClient
+        initialCounts={await getUpvoteCounts(
+          "proxy",
+          PROVIDERS.map((p) => p.slug),
+        )}
+      />
     </>
   );
 }

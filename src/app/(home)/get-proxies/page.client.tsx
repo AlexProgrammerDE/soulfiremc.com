@@ -186,7 +186,9 @@ function ProviderCard({
   );
 }
 
-function MainContent() {
+function MainContent({
+  initialCounts,
+}: { initialCounts: Record<string, number> }) {
   const providers = PROVIDERS;
   const slugs = useMemo(() => providers.map((p) => p.slug), []);
   const {
@@ -194,7 +196,7 @@ function MainContent() {
     userUpvotes,
     loading: upvoteLoading,
     toggleUpvote,
-  } = useUpvotes("proxy", slugs);
+  } = useUpvotes("proxy", slugs, initialCounts);
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
@@ -329,7 +331,9 @@ function MainContent() {
   );
 }
 
-export function GetProxiesClient() {
+export function GetProxiesClient({
+  initialCounts,
+}: { initialCounts: Record<string, number> }) {
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
@@ -354,7 +358,7 @@ export function GetProxiesClient() {
       </div>
 
       <Suspense>
-        <MainContent />
+        <MainContent initialCounts={initialCounts} />
       </Suspense>
 
       {/* FAQ Section */}

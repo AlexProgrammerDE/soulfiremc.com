@@ -10,11 +10,15 @@ type UpvoteState = {
   loading: boolean;
 };
 
-export function useUpvotes(itemType: ItemType, slugs: string[]) {
+export function useUpvotes(
+  itemType: ItemType,
+  slugs: string[],
+  initialCounts?: Record<string, number>,
+) {
   const slugsKey = useMemo(() => slugs.join(","), [slugs]);
 
   const [state, setState] = useState<UpvoteState>({
-    counts: {},
+    counts: initialCounts ?? {},
     userUpvotes: new Set(),
     loading: true,
   });

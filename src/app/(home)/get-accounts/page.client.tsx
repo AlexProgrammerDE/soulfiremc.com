@@ -54,6 +54,7 @@ type DiscordInvites = Promise<(DiscordInviteResponse | null)[]>;
 
 type Props = {
   discordInvites: DiscordInvites;
+  initialCounts: Record<string, number>;
 };
 
 function ProviderBadge({ badge }: { badge: Badge }) {
@@ -254,7 +255,7 @@ function MainContent(props: Props) {
     userUpvotes,
     loading: upvoteLoading,
     toggleUpvote,
-  } = useUpvotes("account", slugs);
+  } = useUpvotes("account", slugs, props.initialCounts);
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -535,7 +536,10 @@ export function GetAccountsClient(props: Props) {
       </div>
 
       <Suspense>
-        <MainContent discordInvites={props.discordInvites} />
+        <MainContent
+          discordInvites={props.discordInvites}
+          initialCounts={props.initialCounts}
+        />
       </Suspense>
 
       {/* FAQ Section */}
