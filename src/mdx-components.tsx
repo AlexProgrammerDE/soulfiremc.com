@@ -4,6 +4,7 @@ import { ImageZoom } from "fumadocs-ui/components/image-zoom";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 import { Mermaid } from "@/components/mdx/mermaid";
+import { DonutCalculator } from "@/components/mdx/donut-calculator";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -16,6 +17,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       </CodeBlock>
     ),
     Mermaid,
+    DonutCalculator,
     ...components,
   };
 }
