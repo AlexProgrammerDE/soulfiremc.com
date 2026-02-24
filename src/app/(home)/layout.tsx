@@ -1,7 +1,8 @@
 import { HomeLayout } from "fumadocs-ui/layouts/home";
-import type { ReactNode } from "react";
+import { type ReactNode, Suspense } from "react";
 import Link from "next/link";
 import { baseOptions } from "@/app/layout.config";
+import { CopyrightYear } from "@/components/copyright-year";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -50,7 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       {children}
       <footer className="border-t py-6 text-sm text-fd-muted-foreground">
         <div className="mx-auto flex w-full max-w-[var(--fd-layout-width)] flex-col items-center gap-2 px-4 sm:flex-row sm:justify-between">
-          <p>&copy; {new Date().getFullYear()} SoulFire</p>
+          <p>&copy; <Suspense><CopyrightYear /></Suspense> SoulFire</p>
           <nav className="flex gap-4">
             <Link href="/privacy-policy" className="hover:text-fd-foreground">
               Privacy Policy
