@@ -3,9 +3,10 @@ import {
   pgTable,
   primaryKey,
   text,
-  timestamp, uuid,
-} from 'drizzle-orm/pg-core';
-import { user } from '@/lib/db/auth-schema';
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
+import { user } from "@/lib/db/auth-schema";
 
 export const upvote = pgTable(
   "upvote",

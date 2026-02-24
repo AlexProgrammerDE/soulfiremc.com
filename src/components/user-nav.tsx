@@ -1,14 +1,7 @@
-'use client';
+"use client";
 
-import { SignedIn, SignedOut, UserButton } from '@daveyplate/better-auth-ui';
-import { LogIn } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { UserButton } from "@daveyplate/better-auth-ui";
 
 export function UserNav() {
-  return (
-    <>
-      <UserButton size="icon" />
-    </>
-  );
+  return <UserButton size="icon" />;
 }

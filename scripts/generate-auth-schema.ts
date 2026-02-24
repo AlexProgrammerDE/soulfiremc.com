@@ -4,13 +4,7 @@ import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const OUTPUT_PATH = join(
-  process.cwd(),
-  "src",
-  "lib",
-  "db",
-  "auth-schema.ts",
-);
+const OUTPUT_PATH = join(process.cwd(), "src", "lib", "db", "auth-schema.ts");
 
 async function generateAuthSchema() {
   console.log("Generating better-auth schema...");
