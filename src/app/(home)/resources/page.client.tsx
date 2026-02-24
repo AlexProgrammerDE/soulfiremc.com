@@ -218,7 +218,7 @@ function MainContent() {
     tags.length + (category !== null && category !== undefined ? 1 : 0);
 
   const filteredResources = useMemo(() => {
-    return resources.filter((resource) => {
+    const filtered = resources.filter((resource) => {
       if (category && resource.category !== category) return false;
       if (
         tags.length > 0 &&
@@ -227,7 +227,12 @@ function MainContent() {
         return false;
       return true;
     });
-  }, [category, tags]);
+
+    // Sort by most upvoted
+    return [...filtered].sort(
+      (a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0),
+    );
+  }, [category, tags, counts]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 

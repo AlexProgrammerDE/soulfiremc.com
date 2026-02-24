@@ -222,8 +222,13 @@ function MainContent() {
             badges.every((filter) => provider.badges.includes(filter)),
           );
 
-    return [...sponsors, ...filtered];
-  }, [badges]);
+    // Sort non-sponsors by most upvoted
+    const sorted = [...filtered].sort(
+      (a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0),
+    );
+
+    return [...sponsors, ...sorted];
+  }, [badges, counts]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 

@@ -6,6 +6,7 @@ import {
   Package,
   Shield,
   Star,
+  ThumbsUp,
   Zap,
 } from "lucide-react";
 import { extractInviteCode } from "@/lib/discord";
@@ -155,7 +156,10 @@ export const SORT_CONFIG: Record<
   SortOption,
   { label: string; icon?: React.ReactNode }
 > = {
-  default: { label: "Recommended" },
+  default: {
+    label: "Most Upvoted",
+    icon: <ThumbsUp className="h-3 w-3" />,
+  },
   "price-asc": {
     label: "Price: Low to High",
     icon: <ArrowUpNarrowWide className="h-3 w-3" />,

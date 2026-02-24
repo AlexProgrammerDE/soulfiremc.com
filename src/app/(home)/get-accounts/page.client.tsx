@@ -229,8 +229,16 @@ function ProviderCard({
   );
 }
 
-function sortProviders(providers: Provider[], sort: SortOption): Provider[] {
-  if (sort === "default") return providers;
+function sortProviders(
+  providers: Provider[],
+  sort: SortOption,
+  counts: Record<string, number>,
+): Provider[] {
+  if (sort === "default") {
+    return [...providers].sort(
+      (a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0),
+    );
+  }
   return [...providers].sort((a, b) =>
     sort === "price-asc"
       ? a.priceValue - b.priceValue
@@ -284,10 +292,12 @@ function MainContent(props: Props) {
   const nfaProviders = sortProviders(
     filteredProviders.filter((p) => p.category === "nfa-accounts"),
     sort,
+    counts,
   );
   const mfaProviders = sortProviders(
     filteredProviders.filter((p) => p.category === "mfa-accounts"),
     sort,
+    counts,
   );
 
   const hasActiveFilters =
