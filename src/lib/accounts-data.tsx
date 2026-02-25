@@ -1,7 +1,6 @@
 import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
-  Check,
   Gift,
   Package,
   Shield,
@@ -17,8 +16,7 @@ export type Badge =
   | "instant-delivery"
   | "lifetime-warranty"
   | "12h-warranty"
-  | "bulk-discount"
-  | "soulfire-compatible";
+  | "bulk-discount";
 
 export type Category = "nfa-accounts" | "mfa-accounts";
 
@@ -94,13 +92,6 @@ export const BADGE_CONFIG: Record<
       "Accounts are available completely for free - no purchase required.",
     icon: <Gift className="h-3 w-3" />,
   },
-  "soulfire-compatible": {
-    label: "SoulFire Compatible",
-    className: "bg-teal-500/10 text-teal-600 dark:text-teal-400",
-    description:
-      "This account type is directly supported by SoulFire. You can use these accounts with SoulFire right away.",
-    icon: <Check className="h-3 w-3" />,
-  },
   "high-quality": {
     label: "High Quality",
     className: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
@@ -172,7 +163,6 @@ export const SORT_CONFIG: Record<
 
 export const FILTER_BADGES: Badge[] = [
   "free",
-  "soulfire-compatible",
   "high-quality",
   "instant-delivery",
   "lifetime-warranty",
@@ -237,7 +227,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Permanent accounts with full access. Change email, password and username. Also sells Microsoft/Xbox accounts with Game Pass and Bedrock. Accepts crypto, card, Klarna and more.",
-        badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
+        badges: ["high-quality", "lifetime-warranty"],
         price: "$5.67",
         priceValue: 5.67,
         couponCode: "SOULFIRE",
@@ -259,7 +249,6 @@ export const SHOPS: Shop[] = [
           "high-quality",
           "instant-delivery",
           "12h-warranty",
-          "soulfire-compatible",
         ],
         price: "$5.00",
         priceValue: 4.5,
@@ -292,7 +281,7 @@ export const SHOPS: Shop[] = [
       "nfa-accounts": {
         testimonial:
           "Free accounts with Hypixel, DonutSMP and CubeCraft status checks. Premium tier also free. Nothing is sold, runs on occasional Linkvertise links. Up to 75 accounts per day with hourly restocks.",
-        badges: ["free", "instant-delivery", "soulfire-compatible"],
+        badges: ["free", "instant-delivery"],
         price: "Free",
         priceValue: 0,
         priceDetails:
@@ -328,7 +317,6 @@ export const SHOPS: Shop[] = [
         badges: [
           "instant-delivery",
           "lifetime-warranty",
-          "soulfire-compatible",
         ],
         price: "$4.00-$5.50",
         priceValue: 4.0,
@@ -355,7 +343,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Cheap MFA accounts. Note: likely Hypixel banned and may have higher pullback rates.",
-        badges: ["instant-delivery", "soulfire-compatible"],
+        badges: ["instant-delivery"],
         price: "$4.50",
         priceValue: 4.5,
       },
@@ -461,7 +449,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
-        badges: ["high-quality", "lifetime-warranty", "soulfire-compatible"],
+        badges: ["high-quality", "lifetime-warranty"],
         price: "$50.00+",
         priceValue: 50.0,
       },

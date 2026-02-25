@@ -38,6 +38,7 @@ If you need Minecraft accounts for bot testing, check out our [Get Accounts](/ge
 ## Account types
 
 SoulFire supports Microsoft Java, Microsoft Bedrock, and Offline accounts.
+It also supports importing accounts via refresh tokens, browser cookies, and raw access tokens.
 
 If no account is selected, SoulFire will generate offline accounts based on the configured name format.
 
@@ -72,6 +73,37 @@ email3:password3
 ### Microsoft Bedrock Device Code
 
 This is a special login type where SoulFire will generate a device code for you to log in with on a Microsoft login page.
+
+### Microsoft Java Refresh Token
+
+Import accounts using Microsoft refresh tokens. This is commonly used with NFA accounts purchased from account providers.
+The refresh token allows SoulFire to obtain new access tokens automatically, so these accounts stay logged in long-term.
+
+```text
+refresh_token_here
+refresh_token_here2
+refresh_token_here3
+```
+
+### Microsoft Java Cookies
+
+Import accounts using browser cookies from `login.live.com`. SoulFire accepts three cookie formats:
+
+- **Netscape cookie jar** (tab-separated, exported from browsers or curl)
+- **Cookie Editor JSON** (array of objects with domain/name/value, from the Cookie Editor browser extension)
+- **Raw cookie header** (semicolon-separated name=value pairs)
+
+SoulFire will exchange the cookies for a full authentication chain, so the account can be refreshed automatically.
+
+### Microsoft Java Access Token
+
+Import accounts using a raw Minecraft access token (JWT). This is useful for short-lived accounts where you only have the token itself.
+
+```text
+eyJhbGciOiJIUzI1NiJ9...
+```
+
+Note that access token accounts cannot be refreshed. Once the token expires, you will need to import a new one.
 
 ### Offline
 

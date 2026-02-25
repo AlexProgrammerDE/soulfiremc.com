@@ -41,12 +41,11 @@ export const accountFaqItems: {
   {
     question: "Which account type works with SoulFire?",
     answerHtml:
-      'MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire supports refresh token auth but does not support cookie/access token auth. Read the <a href="https://soulfiremc.com/docs/usage/accounts">Account Guide</a> for setup instructions.',
+      'MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire supports refresh token, cookie, and access token auth. Read the <a href="https://soulfiremc.com/docs/usage/accounts">Account Guide</a> for setup instructions.',
     answerElement: (
       <>
         MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire
-        supports refresh token auth but does not support cookie/access token
-        auth. Read the{" "}
+        supports refresh token, cookie, and access token auth. Read the{" "}
         <Link href="/docs/usage/accounts" className="underline text-primary">
           Account Guide
         </Link>{" "}

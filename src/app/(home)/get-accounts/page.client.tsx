@@ -484,9 +484,8 @@ function MainContent(props: Props) {
                     shown are per account.
                   </p>
                   <p className="text-sm text-yellow-600 dark:text-yellow-500">
-                    <strong>Note:</strong> SoulFire does not support
-                    cookie/access token auth. However, SoulFire does support
-                    refresh token auth.
+                    <strong>Note:</strong> SoulFire supports refresh token,
+                    cookie, and access token auth for NFA accounts.
                   </p>
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">

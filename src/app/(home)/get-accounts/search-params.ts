@@ -15,7 +15,6 @@ export const BADGES = [
   "lifetime-warranty",
   "12h-warranty",
   "bulk-discount",
-  "soulfire-compatible",
 ] as const;
 
 export const SORT_OPTIONS = ["default", "price-asc", "price-desc"] as const;
