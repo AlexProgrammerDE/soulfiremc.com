@@ -3,6 +3,7 @@ import {
   ArrowUpNarrowWide,
   Gift,
   Package,
+  Plug,
   Shield,
   Star,
   ThumbsUp,
@@ -10,13 +11,15 @@ import {
 } from "lucide-react";
 import { extractInviteCode } from "@/lib/discord";
 
-export type Badge =
+export type FilterableBadge =
   | "free"
   | "high-quality"
   | "instant-delivery"
   | "lifetime-warranty"
   | "12h-warranty"
   | "bulk-discount";
+
+export type Badge = FilterableBadge | "official-integration";
 
 export type Category = "nfa-accounts" | "mfa-accounts";
 
@@ -127,6 +130,13 @@ export const BADGE_CONFIG: Record<
       "Significant discounts available when purchasing accounts in bulk quantities.",
     icon: <Package className="h-3 w-3" />,
   },
+  "official-integration": {
+    label: "Official Integration",
+    className: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
+    description:
+      "This provider is officially integrated into the SoulFire client. You can purchase and import accounts directly from within the app.",
+    icon: <Plug className="h-3 w-3" />,
+  },
 };
 
 export const CATEGORY_CONFIG: Record<
@@ -161,7 +171,7 @@ export const SORT_CONFIG: Record<
   },
 };
 
-export const FILTER_BADGES: Badge[] = [
+export const FILTER_BADGES: FilterableBadge[] = [
   "free",
   "high-quality",
   "instant-delivery",
@@ -216,7 +226,12 @@ export const SHOPS: Shop[] = [
       "nfa-accounts": {
         testimonial:
           "Hypixel, DonutSMP, cookie logs, session tokens and more. All accounts are prechecked before delivery. Partnered with Rise Client and AutoMint MM. Also has a Dispenser (gen) subscription for daily bulk generation.",
-        badges: ["high-quality", "instant-delivery", "bulk-discount"],
+        badges: [
+          "official-integration",
+          "high-quality",
+          "instant-delivery",
+          "bulk-discount",
+        ],
         price: "10-15¢",
         priceValue: 0.1,
         couponCode: "SOULFIRE",
@@ -227,7 +242,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Permanent accounts with full access. Change email, password and username. Also sells Microsoft/Xbox accounts with Game Pass and Bedrock. Accepts crypto, card, Klarna and more.",
-        badges: ["high-quality", "lifetime-warranty"],
+        badges: ["official-integration", "high-quality", "lifetime-warranty"],
         price: "$5.67",
         priceValue: 5.67,
         couponCode: "SOULFIRE",
@@ -245,11 +260,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Full access accounts that work well as mains or long-term alts. Over 100 accounts sold since launch.",
-        badges: [
-          "high-quality",
-          "instant-delivery",
-          "12h-warranty",
-        ],
+        badges: ["high-quality", "instant-delivery", "12h-warranty"],
         price: "$5.00",
         priceValue: 4.5,
         couponCode: "SOULFIRE",
@@ -314,10 +325,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Cheap MFA accounts with instant delivery and lifetime warranty.",
-        badges: [
-          "instant-delivery",
-          "lifetime-warranty",
-        ],
+        badges: ["instant-delivery", "lifetime-warranty"],
         price: "$4.00-$5.50",
         priceValue: 4.0,
         couponCode: "SOULFIRE",

@@ -39,6 +39,7 @@ import {
   extractDiscordInviteCode,
   FILTER_BADGES,
   FILTER_CATEGORIES,
+  type FilterableBadge,
   PROVIDERS,
   type Provider,
   SORT_CONFIG,
@@ -261,7 +262,7 @@ function MainContent(props: Props) {
     { shallow: false },
   );
 
-  const toggleBadge = (badge: Badge) => {
+  const toggleBadge = (badge: FilterableBadge) => {
     const newBadges = badges.includes(badge)
       ? badges.filter((b) => b !== badge)
       : [...badges, badge];
