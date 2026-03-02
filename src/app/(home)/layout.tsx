@@ -65,6 +65,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             <Link href="/cookie-policy" className="hover:text-fd-foreground">
               Cookie Policy
             </Link>
+            <Link href="/imprint" className="hover:text-fd-foreground">
+              Imprint
+            </Link>
           </nav>
         </div>
       </footer>
