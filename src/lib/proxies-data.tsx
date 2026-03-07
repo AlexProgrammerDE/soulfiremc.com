@@ -5,6 +5,7 @@ import {
   Heart,
   Home,
   Infinity as InfinityIcon,
+  Network,
   Smartphone,
   Star,
   Wifi,
@@ -21,7 +22,7 @@ export type FilterableBadge =
   | "enterprise"
   | "high-quality";
 
-export type Badge = FilterableBadge | "sponsor";
+export type Badge = FilterableBadge | "sponsor" | "bedrock-udp";
 
 export type SponsorTheme = {
   ring: string;
@@ -109,6 +110,13 @@ export const BADGE_CONFIG: Record<
       "This provider sponsors SoulFire monthly, helping fund the development of the project.",
     icon: <Heart className="h-3 w-3 fill-current" />,
   },
+  "bedrock-udp": {
+    label: "Bedrock / UDP",
+    className: "bg-sky-500/10 text-sky-600 dark:text-sky-400",
+    description:
+      "This provider offers UDP-capable proxies, which are required for Minecraft Bedrock connections through SOCKS5.",
+    icon: <Network className="h-3 w-3" />,
+  },
   "budget-friendly": {
     label: "Budget Friendly",
     className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
@@ -164,7 +172,14 @@ export const PROVIDERS: Provider[] = [
     testimonial:
       "60M+ residential IPs across 190+ countries with 99.9% uptime. Offers residential, mobile, datacenter, and static ISP proxies.",
     url: "https://affiliate.thordata.com/soulfire",
-    badges: ["sponsor", "high-quality", "residential", "mobile", "isp"],
+    badges: [
+      "sponsor",
+      "bedrock-udp",
+      "high-quality",
+      "residential",
+      "mobile",
+      "isp",
+    ],
     sponsor: true,
     sponsorTheme: "pink",
     couponCode: "THORDATA",
@@ -179,6 +194,7 @@ export const PROVIDERS: Provider[] = [
     url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
     badges: [
       "sponsor",
+      "bedrock-udp",
       "budget-friendly",
       "datacenter",
       "isp",
@@ -208,7 +224,7 @@ export const PROVIDERS: Provider[] = [
     testimonial:
       "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume bot testing.",
     url: "https://proxyscrape.com/?ref=mge4mtc",
-    badges: ["unlimited-bandwidth", "residential"],
+    badges: ["bedrock-udp", "unlimited-bandwidth", "residential"],
   },
   {
     slug: "plainproxies",
@@ -217,7 +233,13 @@ export const PROVIDERS: Provider[] = [
     testimonial:
       "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
     url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
-    badges: ["unlimited-bandwidth", "residential", "datacenter", "isp"],
+    badges: [
+      "bedrock-udp",
+      "unlimited-bandwidth",
+      "residential",
+      "datacenter",
+      "isp",
+    ],
   },
   // Enterprise tier
   {
@@ -228,6 +250,7 @@ export const PROVIDERS: Provider[] = [
       "Market leader with 770K+ datacenter IPs and massive residential network. ISO 27001 & SOC 2 certified with 99.99% uptime.",
     url: "https://get.brightdata.com/soulfire",
     badges: [
+      "bedrock-udp",
       "enterprise",
       "high-quality",
       "residential",
@@ -242,7 +265,13 @@ export const PROVIDERS: Provider[] = [
     testimonial:
       "175M+ residential IPs across 195+ countries. Largest proxy network globally with 99.95% success rate and 0.6s avg response time.",
     url: "https://oxylabs.go2cloud.org/aff_c?offer_id=7&aff_id=1896&url_id=144",
-    badges: ["enterprise", "high-quality", "residential", "datacenter"],
+    badges: [
+      "bedrock-udp",
+      "enterprise",
+      "high-quality",
+      "residential",
+      "datacenter",
+    ],
   },
   // Mid tier
   {
@@ -252,7 +281,7 @@ export const PROVIDERS: Provider[] = [
     testimonial:
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
     url: "https://visit.decodo.com/K0rr7e",
-    badges: ["high-quality", "residential", "datacenter"],
+    badges: ["bedrock-udp", "high-quality", "residential", "datacenter"],
   },
   {
     slug: "iproyal",
@@ -261,7 +290,13 @@ export const PROVIDERS: Provider[] = [
     testimonial:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
     url: "https://iproyal.com/?r=soulfire",
-    badges: ["budget-friendly", "residential", "datacenter", "isp"],
+    badges: [
+      "bedrock-udp",
+      "budget-friendly",
+      "residential",
+      "datacenter",
+      "isp",
+    ],
   },
   {
     slug: "netnut",
