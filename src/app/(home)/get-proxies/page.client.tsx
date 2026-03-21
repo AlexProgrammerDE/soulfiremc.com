@@ -188,7 +188,9 @@ function ProviderCard({
 
 function MainContent({
   initialCounts,
-}: { initialCounts: Record<string, number> }) {
+}: {
+  initialCounts: Record<string, number>;
+}) {
   const providers = PROVIDERS;
   const slugs = useMemo(() => providers.map((p) => p.slug), []);
   const {
@@ -333,7 +335,9 @@ function MainContent({
 
 export function GetProxiesClient({
   initialCounts,
-}: { initialCounts: Record<string, number> }) {
+}: {
+  initialCounts: Record<string, number>;
+}) {
   return (
     <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">

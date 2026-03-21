@@ -51,10 +51,12 @@ export default async function GetProxiesPage() {
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
       <GetProxiesClient
-        initialCounts={await getUpvoteCounts(
-          "proxy",
-          PROVIDERS.map((p) => p.slug),
-        )}
+        initialCounts={
+          await getUpvoteCounts(
+            "proxy",
+            PROVIDERS.map((p) => p.slug),
+          )
+        }
       />
     </>
   );

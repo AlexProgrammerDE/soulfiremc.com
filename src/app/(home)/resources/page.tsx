@@ -51,10 +51,12 @@ export default async function ResourcesPage() {
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
       <ResourcesClient
-        initialCounts={await getUpvoteCounts(
-          "resource",
-          RESOURCES.map((r) => r.slug),
-        )}
+        initialCounts={
+          await getUpvoteCounts(
+            "resource",
+            RESOURCES.map((r) => r.slug),
+          )
+        }
       />
     </>
   );

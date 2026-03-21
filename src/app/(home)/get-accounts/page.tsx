@@ -58,10 +58,11 @@ export default async function GetAccountsPage() {
             return discordCode ? fetchDiscordInvite(discordCode) : null;
           }),
         ).then()}
-        initialCounts={await getUpvoteCounts(
-          "account",
-          [...new Set(PROVIDERS.map((p) => p.slug))],
-        )}
+        initialCounts={
+          await getUpvoteCounts("account", [
+            ...new Set(PROVIDERS.map((p) => p.slug)),
+          ])
+        }
       />
     </>
   );

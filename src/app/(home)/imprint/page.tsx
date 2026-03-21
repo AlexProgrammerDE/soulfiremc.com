@@ -70,8 +70,8 @@ export default function Imprint() {
         >
           https://ec.europa.eu/consumers/odr/
         </a>
-        . We are neither willing nor obliged to participate in dispute resolution
-        proceedings before a consumer arbitration board.
+        . We are neither willing nor obliged to participate in dispute
+        resolution proceedings before a consumer arbitration board.
       </p>
 
       <h2>Related Legal Documents</h2>

@@ -15,9 +15,9 @@ export default function CookiePolicy() {
       </p>
 
       <p>
-        This Cookie Policy explains how SoulFire (&quot;we,&quot; &quot;us,&quot;
-        or &quot;our&quot;) uses cookies and similar tracking technologies on{" "}
-        <a href="https://soulfiremc.com">soulfiremc.com</a>.
+        This Cookie Policy explains how SoulFire (&quot;we,&quot;
+        &quot;us,&quot; or &quot;our&quot;) uses cookies and similar tracking
+        technologies on <a href="https://soulfiremc.com">soulfiremc.com</a>.
       </p>
       <p>
         This cookie policy is based on the{" "}
@@ -105,9 +105,7 @@ export default function CookiePolicy() {
               <code>better-auth.session_token</code>
             </td>
             <td>SoulFire (better-auth)</td>
-            <td>
-              Maintains your authenticated session after signing in
-            </td>
+            <td>Maintains your authenticated session after signing in</td>
             <td>Session / up to 7 days</td>
           </tr>
           <tr>
@@ -115,9 +113,7 @@ export default function CookiePolicy() {
               <code>discord_oauth_state</code>
             </td>
             <td>SoulFire</td>
-            <td>
-              CSRF protection during Discord OAuth linked roles flow
-            </td>
+            <td>CSRF protection during Discord OAuth linked roles flow</td>
             <td>Short-lived (minutes)</td>
           </tr>
           <tr>
@@ -200,9 +196,7 @@ export default function CookiePolicy() {
                 Ahrefs
               </a>
             </td>
-            <td>
-              SEO analytics and website performance monitoring
-            </td>
+            <td>SEO analytics and website performance monitoring</td>
             <td>Session / persistent</td>
           </tr>
         </tbody>
@@ -305,8 +299,8 @@ export default function CookiePolicy() {
         <li>Block all cookies entirely</li>
       </ul>
       <p>
-        Please note that blocking strictly necessary cookies may prevent you from
-        signing in or using core features of the website.
+        Please note that blocking strictly necessary cookies may prevent you
+        from signing in or using core features of the website.
       </p>
       <p>
         For instructions on managing cookies in your browser, visit your
@@ -366,9 +360,7 @@ export default function CookiePolicy() {
       <ul>
         <li>
           <strong>Email:</strong>{" "}
-          <a href="mailto:support@soulfiremc.com">
-            support@soulfiremc.com
-          </a>
+          <a href="mailto:support@soulfiremc.com">support@soulfiremc.com</a>
         </li>
         <li>
           <strong>GitHub:</strong>{" "}

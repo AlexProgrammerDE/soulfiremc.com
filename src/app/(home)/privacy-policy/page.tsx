@@ -113,8 +113,7 @@ export default function PrivacyPolicy() {
           >
             Resend
           </a>{" "}
-          from{" "}
-          <code>auth@transactional.soulfiremc.com</code>.
+          from <code>auth@transactional.soulfiremc.com</code>.
         </li>
         <li>
           <strong>Protect our Services</strong> &mdash; we use{" "}
@@ -162,8 +161,9 @@ export default function PrivacyPolicy() {
 
       <h2>3. When and With Whom Do We Share Your Information?</h2>
       <p>
-        We do not sell your personal information. We may share your data with the
-        following third-party service providers who process it on our behalf:
+        We do not sell your personal information. We may share your data with
+        the following third-party service providers who process it on our
+        behalf:
       </p>
       <table>
         <thead>
@@ -309,19 +309,24 @@ export default function PrivacyPolicy() {
 
       <h2>4. Do We Use Cookies and Tracking Technologies?</h2>
       <p>
-        Yes. We use cookies and similar tracking technologies to access and store
-        information. For details on what cookies we use and how you can manage
-        them, please see our <Link href="/cookie-policy">Cookie Policy</Link>.
+        Yes. We use cookies and similar tracking technologies to access and
+        store information. For details on what cookies we use and how you can
+        manage them, please see our{" "}
+        <Link href="/cookie-policy">Cookie Policy</Link>.
       </p>
 
       <h2>5. How Long Do We Keep Your Information?</h2>
       <p>
         We keep your personal information for as long as your account is active
         or as needed to provide you our Services. When you delete your account,
-        we will delete or anonymize your personal information within a reasonable
-        time, except where retention is required by law.
+        we will delete or anonymize your personal information within a
+        reasonable time, except where retention is required by law.
       </p>
-      <p>Session records (including IP address and user agent) are retained for the duration of the session and may be retained for a reasonable period after expiration for security and debugging purposes.</p>
+      <p>
+        Session records (including IP address and user agent) are retained for
+        the duration of the session and may be retained for a reasonable period
+        after expiration for security and debugging purposes.
+      </p>
 
       <h2>6. How Do We Keep Your Information Safe?</h2>
       <p>
@@ -331,9 +336,7 @@ export default function PrivacyPolicy() {
       <ul>
         <li>Passwords are hashed before storage (never stored in plaintext)</li>
         <li>Row-Level Security (RLS) is enabled on all database tables</li>
-        <li>
-          HTTPS is enforced across the entire website
-        </li>
+        <li>HTTPS is enforced across the entire website</li>
         <li>Content Security Policy (CSP) headers restrict script execution</li>
         <li>
           Security headers (X-Frame-Options, X-Content-Type-Options) are set
@@ -378,10 +381,7 @@ export default function PrivacyPolicy() {
       </ul>
       <p>
         To exercise any of these rights, contact us at{" "}
-        <a href="mailto:support@soulfiremc.com">
-          support@soulfiremc.com
-        </a>
-        .
+        <a href="mailto:support@soulfiremc.com">support@soulfiremc.com</a>.
       </p>
 
       <h2>8. Do We Collect Information from Minors?</h2>
@@ -409,9 +409,7 @@ export default function PrivacyPolicy() {
       <ul>
         <li>
           <strong>Email:</strong>{" "}
-          <a href="mailto:support@soulfiremc.com">
-            support@soulfiremc.com
-          </a>
+          <a href="mailto:support@soulfiremc.com">support@soulfiremc.com</a>
         </li>
         <li>
           <strong>GitHub:</strong>{" "}

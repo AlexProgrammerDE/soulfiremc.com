@@ -52,8 +52,8 @@ export default function TermsOfService() {
       </p>
       <p>
         We reserve the right to update these Terms at any time. Continued use of
-        the Service after changes constitutes acceptance of the revised Terms. We
-        will update the &quot;Last updated&quot; date at the top of this page
+        the Service after changes constitutes acceptance of the revised Terms.
+        We will update the &quot;Last updated&quot; date at the top of this page
         when changes are made.
       </p>
 
@@ -98,12 +98,8 @@ export default function TermsOfService() {
       <p>You agree not to use the Service to:</p>
       <ul>
         <li>Violate any applicable law or regulation</li>
-        <li>
-          Infringe the intellectual property or privacy rights of others
-        </li>
-        <li>
-          Transmit any malware, viruses, or other harmful code
-        </li>
+        <li>Infringe the intellectual property or privacy rights of others</li>
+        <li>Transmit any malware, viruses, or other harmful code</li>
         <li>
           Attempt to gain unauthorized access to the Service or its related
           systems
@@ -112,18 +108,12 @@ export default function TermsOfService() {
           Scrape, crawl, or use automated means to access the Service without
           our express permission
         </li>
-        <li>
-          Harass, abuse, or threaten other users
-        </li>
+        <li>Harass, abuse, or threaten other users</li>
         <li>
           Impersonate any person or entity, or misrepresent your affiliation
         </li>
-        <li>
-          Interfere with or disrupt the Service or servers
-        </li>
-        <li>
-          Create multiple accounts to circumvent bans or restrictions
-        </li>
+        <li>Interfere with or disrupt the Service or servers</li>
+        <li>Create multiple accounts to circumvent bans or restrictions</li>
       </ul>
 
       <h2>5. Intellectual Property</h2>
@@ -142,9 +132,10 @@ export default function TermsOfService() {
       <h2>6. User-Generated Content</h2>
       <p>
         When you submit content to the Service (such as documentation feedback
-        or upvotes), you retain ownership of your content. By submitting content,
-        you grant us a non-exclusive, worldwide, royalty-free license to use,
-        display, and distribute your content in connection with the Service.
+        or upvotes), you retain ownership of your content. By submitting
+        content, you grant us a non-exclusive, worldwide, royalty-free license
+        to use, display, and distribute your content in connection with the
+        Service.
       </p>
       <p>
         We reserve the right to remove any user-generated content at our
@@ -165,17 +156,17 @@ export default function TermsOfService() {
       </ul>
       <p>
         We are not responsible for the content, privacy practices, or terms of
-        any third-party services. Your use of third-party services is governed by
-        their respective terms and policies.
+        any third-party services. Your use of third-party services is governed
+        by their respective terms and policies.
       </p>
 
       <h2>8. Privacy</h2>
       <p>
         Your use of the Service is also governed by our{" "}
-        <Link href="/privacy-policy">Privacy Policy</Link>, which describes how we
-        collect, use, and protect your personal information, and our{" "}
-        <Link href="/cookie-policy">Cookie Policy</Link>, which describes how we use
-        cookies and similar technologies.
+        <Link href="/privacy-policy">Privacy Policy</Link>, which describes how
+        we collect, use, and protect your personal information, and our{" "}
+        <Link href="/cookie-policy">Cookie Policy</Link>, which describes how we
+        use cookies and similar technologies.
       </p>
 
       <h2>9. Disclaimer of Warranties</h2>
@@ -186,8 +177,8 @@ export default function TermsOfService() {
         PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
       </p>
       <p>
-        We do not warrant that the Service will be uninterrupted, error-free,
-        or secure. We do not warrant the accuracy or completeness of any
+        We do not warrant that the Service will be uninterrupted, error-free, or
+        secure. We do not warrant the accuracy or completeness of any
         information provided through the Service.
       </p>
 
@@ -215,8 +206,8 @@ export default function TermsOfService() {
       <h2>11. Account Termination</h2>
       <p>
         You may delete your account at any time from your{" "}
-        <Link href="/account/settings">account settings</Link>. Upon deletion, your
-        personal data will be removed in accordance with our{" "}
+        <Link href="/account/settings">account settings</Link>. Upon deletion,
+        your personal data will be removed in accordance with our{" "}
         <Link href="/privacy-policy">Privacy Policy</Link>.
       </p>
       <p>
@@ -251,15 +242,11 @@ export default function TermsOfService() {
       </p>
 
       <h2>15. Contact Us</h2>
-      <p>
-        If you have any questions about these Terms, please contact us at:
-      </p>
+      <p>If you have any questions about these Terms, please contact us at:</p>
       <ul>
         <li>
           <strong>Email:</strong>{" "}
-          <a href="mailto:support@soulfiremc.com">
-            support@soulfiremc.com
-          </a>
+          <a href="mailto:support@soulfiremc.com">support@soulfiremc.com</a>
         </li>
         <li>
           <strong>GitHub:</strong>{" "}
