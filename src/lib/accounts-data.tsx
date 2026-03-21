@@ -225,7 +225,7 @@ export const SHOPS: Shop[] = [
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Hypixel, DonutSMP, cookie logs, session tokens and more. All accounts are prechecked before delivery. Partnered with Rise Client and AutoMint MM. Also has a Dispenser (gen) subscription for daily bulk generation.",
+          "Credit-based dashboard with instant delivery, live validation, API access, and public credit packs. Also sells Dispenser keys for automated bulk generation.",
         badges: [
           "official-integration",
           "high-quality",
@@ -237,7 +237,7 @@ export const SHOPS: Shop[] = [
         couponCode: "SOULFIRE",
         couponDiscount: "10% off",
         priceDetails:
-          "10-15¢ per account. Dispenser keys for daily generation: $14.99/mo, $10/mo (3mo), $8.33/mo (6mo), $5.83/mo (1yr). Invalid accounts auto-refunded.",
+          "Public checkout currently sells 500 credits for $4.99, 1000 for $8.99, 2000 for $15.99, plus a $5 VIP key. Dispenser keys are $19.99 (1 month), $44.99 (3 months), $69.99 (6 months), and $99.99 (1 year). Invalid accounts are auto-refunded when precheck fails.",
       },
       "mfa-accounts": {
         testimonial:
@@ -338,22 +338,26 @@ export const SHOPS: Shop[] = [
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
     url: "https://zzxgp.me",
-    websiteUrl: "https://zzxgp.me",
+    websiteUrl: "https://shop.zzxgp.me",
     discordUrl: "https://discord.gg/gycmTvrfnj",
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Multiple tiers from budget tokens to premium cookies. Good entry point for new users.",
-        badges: ["instant-delivery", "bulk-discount"],
-        price: "5-12¢",
-        priceValue: 0.05,
+          "Public website now sells Discord bot token packs rather than listing individual alts directly. Landing page advertises instant delivery, crypto payments, and premium stock redeemed through the server bot.",
+        badges: ["instant-delivery"],
+        price: "1¢/token",
+        priceValue: 0.01,
+        priceDetails:
+          "Current public shop lists 100 tokens for $1, 200 for $2, and 500 for $5. Terms advertise replacements for invalid or banned-on-delivery alts, with 10 minute NFA warranty and 1-2 hour MC token warranties.",
       },
       "mfa-accounts": {
         testimonial:
-          "Cheap MFA accounts. Note: likely Hypixel banned and may have higher pullback rates.",
+          "Public WooCommerce shop currently lists a dedicated MFA SKU (`mfa 1+ no ban check`) at $4.50.",
         badges: ["instant-delivery"],
         price: "$4.50",
         priceValue: 4.5,
+        priceDetails:
+          "Current public sale price is $4.50, down from $5. Terms say invalid or banned-on-delivery alts are replaced if stock is available, and XGP alts have a 24 hour warranty.",
       },
     },
   },
@@ -382,10 +386,12 @@ export const SHOPS: Shop[] = [
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Cheap token accounts starting at 5¢. No frills, just alts.",
+          "Credit-based storefront with Discord redemption, live stock, 24/7 support, and card plus crypto payments.",
         badges: ["instant-delivery", "bulk-discount"],
-        price: "5¢",
-        priceValue: 0.05,
+        price: "0.80-1.29¢/credit",
+        priceValue: 0.008,
+        priceDetails:
+          "Current public tiers are 100 credits for $1.29, 200 for $2.09, 500 for $4.79, 1K for $8.79, and 2.5K for $19.99. Site advertises instant delivery, Discord redemption, Apple Pay/Google Pay, and BTC/LTC.",
       },
     },
   },
@@ -399,10 +405,12 @@ export const SHOPS: Shop[] = [
     listings: {
       "nfa-accounts": {
         testimonial:
-          "Higher price point, but accounts are known to last longer. Quality over quantity.",
-        badges: ["high-quality", "lifetime-warranty"],
-        price: "25¢",
+          "Cookie NFAs with multiple Hypixel tiers, random rank options, and no-VPN-detection variants on higher levels.",
+        badges: ["high-quality", "instant-delivery"],
+        price: "25¢+",
         priceValue: 0.25,
+        priceDetails:
+          "Current public store starts at 25¢ for Hypixel Level 1-9 and Gamepass NFAs, then 40¢ for Level 10+, 55¢ for Bedwars 8+, 67¢ for Level 21+, 70¢ for random rank, $3.50 for MVP+, and $4.50 for Level 70+. Terms advertise replacements within 24 hours.",
       },
       "mfa-accounts": {
         testimonial:
