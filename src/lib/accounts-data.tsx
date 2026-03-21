@@ -392,10 +392,10 @@ export const SHOPS: Shop[] = [
   {
     slug: "localts",
     name: "Localts",
-    logo: "/accounts/luma.png",
+    logo: "/accounts/localts.png",
     url: "https://localts.store",
-    websiteUrl: "https://localts.store",
-    discordUrl: "https://discord.gg/B4xkxHwmd4",
+    websiteUrl: "https://localts.info",
+    discordUrl: "https://discord.gg/Q8HEd6S8ud",
     listings: {
       "nfa-accounts": {
         testimonial:
