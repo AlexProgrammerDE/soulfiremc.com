@@ -1,4 +1,7 @@
 const DISCORD_API_BASE = "https://discord.com/api/v10";
+const DISCORD_INVITE_URL_PATTERN =
+  /(?:discord\.gg\/|discord\.com\/invite\/)([a-zA-Z0-9-]+)/i;
+const RAW_DISCORD_INVITE_CODE_PATTERN = /^[a-zA-Z0-9-]+$/;
 
 export type DiscordOAuthTokens = {
   access_token: string;
@@ -90,9 +93,72 @@ export type DiscordInviteResponse = {
   approximate_presence_count?: number;
 };
 
+function isRedirectStatus(status: number): boolean {
+  return status >= 300 && status < 400;
+}
+
+function normalizeInviteUrl(url: string): string | null {
+  try {
+    return new URL(url).toString();
+  } catch {
+    return null;
+  }
+}
+
+export async function resolveDiscordInviteCode(
+  inviteUrlOrCode: string,
+  maxRedirects = 5,
+): Promise<string | null> {
+  const directCode = extractInviteCode(inviteUrlOrCode);
+  if (
+    directCode !== inviteUrlOrCode ||
+    RAW_DISCORD_INVITE_CODE_PATTERN.test(inviteUrlOrCode)
+  ) {
+    return directCode;
+  }
+
+  let currentUrl = normalizeInviteUrl(inviteUrlOrCode);
+  if (!currentUrl) {
+    return null;
+  }
+
+  for (let step = 0; step < maxRedirects; step++) {
+    const resolvedCode = extractInviteCode(currentUrl);
+    if (resolvedCode !== currentUrl) {
+      return resolvedCode;
+    }
+
+    const response: Response | null = await fetch(currentUrl, {
+      redirect: "manual",
+      next: {
+        revalidate: 60 * 60,
+      },
+    }).catch(() => null);
+
+    if (!response || !isRedirectStatus(response.status)) {
+      return null;
+    }
+
+    const location: string | null = response.headers.get("location");
+    if (!location) {
+      return null;
+    }
+
+    currentUrl = new URL(location, currentUrl).toString();
+  }
+
+  const finalCode = extractInviteCode(currentUrl);
+  return finalCode !== currentUrl ? finalCode : null;
+}
+
 export async function fetchDiscordInvite(
-  inviteCode: string,
+  inviteUrlOrCode: string,
 ): Promise<DiscordInviteResponse | null> {
+  const inviteCode = await resolveDiscordInviteCode(inviteUrlOrCode);
+  if (!inviteCode) {
+    return null;
+  }
+
   const token = process.env.DISCORD_BOT_TOKEN;
 
   const headers: HeadersInit = {
@@ -125,8 +191,6 @@ export async function fetchDiscordInvite(
  * Supports formats: discord.gg/CODE, discord.com/invite/CODE
  */
 export function extractInviteCode(url: string): string {
-  const match = url.match(
-    /(?:discord\.gg|discord\.com\/invite)\/([a-zA-Z0-9]+)/,
-  );
+  const match = url.match(DISCORD_INVITE_URL_PATTERN);
   return match?.[1] ?? url;
 }

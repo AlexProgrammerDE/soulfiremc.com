@@ -38,15 +38,13 @@ import {
   type Badge,
   CATEGORY_CONFIG,
   type Category,
+  getDiscordInviteUrl,
   getShopBySlug,
+  PROVIDER_THEMES,
   SHOPS,
   type Shop,
 } from "@/lib/accounts-data";
-import {
-  type DiscordInviteResponse,
-  extractInviteCode,
-  fetchDiscordInvite,
-} from "@/lib/discord";
+import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
@@ -104,7 +102,13 @@ async function DiscordMemberBadgeLoader({
   return <DiscordMemberBadge info={info} />;
 }
 
-function ProviderBadge({ badge }: { badge: Badge }) {
+function ProviderBadge({
+  badge,
+  classNameOverride,
+}: {
+  badge: Badge;
+  classNameOverride?: string;
+}) {
   const config = BADGE_CONFIG[badge];
   return (
     <HoverCard>
@@ -112,7 +116,7 @@ function ProviderBadge({ badge }: { badge: Badge }) {
         <span
           className={cn(
             "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
-            config.className,
+            classNameOverride ?? config.className,
           )}
         >
           {config.icon}
@@ -123,6 +127,19 @@ function ProviderBadge({ badge }: { badge: Badge }) {
         <p>{config.description}</p>
       </HoverCardContent>
     </HoverCard>
+  );
+}
+
+function ProviderThemeDecoration() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      <div className="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-rose-500/18 blur-3xl dark:bg-rose-400/18" />
+      <div className="absolute -bottom-10 left-6 h-28 w-28 rounded-full bg-orange-400/18 blur-2xl dark:bg-orange-300/12" />
+      <div className="absolute inset-y-0 right-14 w-px bg-gradient-to-b from-transparent via-rose-500/20 to-transparent" />
+    </div>
   );
 }
 
@@ -140,11 +157,15 @@ export default async function AccountProviderPage(props: {
     Category,
     NonNullable<Shop["listings"][Category]>,
   ][];
+  const theme = shop.theme ? PROVIDER_THEMES[shop.theme] : undefined;
+  const hasAffiliate = categories.some(([, listing]) =>
+    listing.badges.includes("affiliate"),
+  );
 
-  const discordLink = shop.discordUrl ?? shop.url;
-  const hasDiscord = discordLink.includes("discord.gg");
-  const discordInvitePromise = hasDiscord
-    ? fetchDiscordInvite(extractInviteCode(discordLink))
+  const discordInviteUrl = getDiscordInviteUrl(shop);
+  const hasDiscord = Boolean(discordInviteUrl);
+  const discordInvitePromise = discordInviteUrl
+    ? fetchDiscordInvite(discordInviteUrl)
     : null;
 
   const productJsonLd: WithContext<Product> = {
@@ -232,76 +253,193 @@ export default async function AccountProviderPage(props: {
       </nav>
 
       {/* Hero */}
-      <div className="flex flex-col sm:flex-row gap-6 items-start">
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
-          <ShopLogo shop={shop} />
-        </div>
-        <div className="flex-1 space-y-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
-            {shop.startDate && (
-              <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
-                <Calendar className="h-3.5 w-3.5" />
-                Since {shop.startDate}
-              </span>
-            )}
-            {discordInvitePromise ? (
-              <Suspense fallback={<DiscordMemberBadge info={null} />}>
-                <DiscordMemberBadgeLoader
-                  discordInvite={discordInvitePromise}
-                />
-              </Suspense>
-            ) : (
-              <DiscordMemberBadge info={null} />
-            )}
+      {theme ? (
+        <Card
+          className={cn(
+            "relative overflow-hidden p-6 gap-5 ring-2 shadow-[0_24px_70px_-44px_rgba(244,63,94,0.55)]",
+            theme.ring,
+            theme.bg,
+          )}
+        >
+          <ProviderThemeDecoration />
+          <div className="relative flex flex-col gap-6 sm:flex-row">
+            <div
+              className={cn(
+                "relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted",
+                theme.logo,
+              )}
+            >
+              <ShopLogo shop={shop} />
+            </div>
+            <div className="flex-1 space-y-4">
+              {hasAffiliate && (
+                <div
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/75 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5",
+                    theme.accentText,
+                  )}
+                >
+                  SoulFire Affiliate
+                </div>
+              )}
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-4xl font-bold tracking-tight">
+                  {shop.name}
+                </h1>
+                {shop.startDate && (
+                  <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    Since {shop.startDate}
+                  </span>
+                )}
+                {discordInvitePromise ? (
+                  <Suspense fallback={<DiscordMemberBadge info={null} />}>
+                    <DiscordMemberBadgeLoader
+                      discordInvite={discordInvitePromise}
+                    />
+                  </Suspense>
+                ) : (
+                  <DiscordMemberBadge info={null} />
+                )}
+              </div>
+              {hasAffiliate && (
+                <p className="max-w-2xl text-sm text-muted-foreground">
+                  Buy with the RaveAlts code or link below and you directly help
+                  support SoulFire.
+                </p>
+              )}
+              <div className="flex flex-wrap gap-3">
+                <Button asChild className={theme.primaryButton}>
+                  <a href={shop.url} target="_blank" rel="noopener nofollow">
+                    Get Accounts
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+                {shop.websiteUrl && (
+                  <Button
+                    asChild
+                    variant="secondary"
+                    className={theme.secondaryButton}
+                  >
+                    <a
+                      href={shop.websiteUrl}
+                      target="_blank"
+                      rel="noopener nofollow"
+                    >
+                      Website
+                      <Globe className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                )}
+                {hasDiscord && (
+                  <Button
+                    asChild
+                    variant="secondary"
+                    className={theme.secondaryButton}
+                  >
+                    <a
+                      href={shop.discordUrl ?? shop.url}
+                      target="_blank"
+                      rel="noopener nofollow"
+                    >
+                      Discord
+                      <SiDiscord className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                )}
+                {shop.trustpilotUrl && (
+                  <Button
+                    asChild
+                    variant="secondary"
+                    className={theme.secondaryButton}
+                  >
+                    <a
+                      href={shop.trustpilotUrl}
+                      target="_blank"
+                      rel="noopener nofollow"
+                    >
+                      Trustpilot
+                      <SiTrustpilot className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                )}
+                <DetailUpvote itemType="account" slug={shop.slug} />
+              </div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Button asChild>
-              <a href={shop.url} target="_blank" rel="noopener nofollow">
-                Get Accounts
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            {shop.websiteUrl && (
-              <Button asChild variant="secondary">
-                <a
-                  href={shop.websiteUrl}
-                  target="_blank"
-                  rel="noopener nofollow"
-                >
-                  Website
-                  <Globe className="ml-2 h-4 w-4" />
+        </Card>
+      ) : (
+        <div className="flex flex-col items-start gap-6 sm:flex-row">
+          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
+            <ShopLogo shop={shop} />
+          </div>
+          <div className="flex-1 space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-4xl font-bold tracking-tight">{shop.name}</h1>
+              {shop.startDate && (
+                <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Since {shop.startDate}
+                </span>
+              )}
+              {discordInvitePromise ? (
+                <Suspense fallback={<DiscordMemberBadge info={null} />}>
+                  <DiscordMemberBadgeLoader
+                    discordInvite={discordInvitePromise}
+                  />
+                </Suspense>
+              ) : (
+                <DiscordMemberBadge info={null} />
+              )}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild>
+                <a href={shop.url} target="_blank" rel="noopener nofollow">
+                  Get Accounts
+                  <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-            )}
-            {hasDiscord && (
-              <Button asChild variant="secondary">
-                <a
-                  href={shop.discordUrl ?? shop.url}
-                  target="_blank"
-                  rel="noopener nofollow"
-                >
-                  Discord
-                  <SiDiscord className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-            )}
-            {shop.trustpilotUrl && (
-              <Button asChild variant="secondary">
-                <a
-                  href={shop.trustpilotUrl}
-                  target="_blank"
-                  rel="noopener nofollow"
-                >
-                  Trustpilot
-                  <SiTrustpilot className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-            )}
-            <DetailUpvote itemType="account" slug={shop.slug} />
+              {shop.websiteUrl && (
+                <Button asChild variant="secondary">
+                  <a
+                    href={shop.websiteUrl}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
+                    Website
+                    <Globe className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              )}
+              {hasDiscord && (
+                <Button asChild variant="secondary">
+                  <a
+                    href={shop.discordUrl ?? shop.url}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
+                    Discord
+                    <SiDiscord className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              )}
+              {shop.trustpilotUrl && (
+                <Button asChild variant="secondary">
+                  <a
+                    href={shop.trustpilotUrl}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
+                    Trustpilot
+                    <SiTrustpilot className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              )}
+              <DetailUpvote itemType="account" slug={shop.slug} />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Category Cards */}
       <div
@@ -313,10 +451,21 @@ export default async function AccountProviderPage(props: {
         {categories.map(([category, listing]) => {
           const catConfig = CATEGORY_CONFIG[category];
           return (
-            <Card key={category} className="p-6 gap-4">
+            <Card
+              key={category}
+              className={cn(
+                "p-6 gap-4",
+                theme && ["relative overflow-hidden border", theme.panel],
+              )}
+            >
               <div className="flex flex-wrap items-center gap-3">
                 <h2 className="text-2xl font-semibold">{catConfig.label}</h2>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary",
+                    theme?.price,
+                  )}
+                >
                   {listing.price}
                   {listing.priceDetails && (
                     <PriceInfoBadge details={listing.priceDetails} />
@@ -329,7 +478,13 @@ export default async function AccountProviderPage(props: {
               <p className="text-muted-foreground">{listing.testimonial}</p>
               <div className="flex flex-wrap gap-2">
                 {listing.badges.map((badge) => (
-                  <ProviderBadge key={badge} badge={badge} />
+                  <ProviderBadge
+                    key={badge}
+                    badge={badge}
+                    classNameOverride={
+                      badge === "affiliate" ? theme?.badge : undefined
+                    }
+                  />
                 ))}
               </div>
               {listing.couponCode && (

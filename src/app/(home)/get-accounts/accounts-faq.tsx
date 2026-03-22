@@ -56,12 +56,12 @@ export const accountFaqItems: {
   {
     question: "Are these providers affiliated with SoulFire?",
     answerHtml:
-      "No. This is a community-curated list. We recommend doing your own research before purchasing. Some providers offer coupon codes for SoulFire users.",
+      "This is still a community-curated list and SoulFire does not own or operate these providers. Some listings may have official integrations or affiliate codes and links, and those are labeled clearly on the page.",
     answerElement: (
       <>
-        No. This is a community-curated list. We recommend doing your own
-        research before purchasing. Some providers offer coupon codes for
-        SoulFire users.
+        This is still a community-curated list and SoulFire does not own or
+        operate these providers. Some listings may have official integrations or
+        affiliate codes and links, and those are labeled clearly on the page.
       </>
     ),
   },

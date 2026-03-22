@@ -36,10 +36,11 @@ import {
   type Badge,
   CATEGORY_CONFIG,
   type Category,
-  extractDiscordInviteCode,
   FILTER_BADGES,
   FILTER_CATEGORIES,
   type FilterableBadge,
+  getDiscordInviteUrl,
+  PROVIDER_THEMES,
   PROVIDERS,
   type Provider,
   SORT_CONFIG,
@@ -51,14 +52,20 @@ import { cn } from "@/lib/utils";
 import { CouponCode } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
-type DiscordInvites = Promise<(DiscordInviteResponse | null)[]>;
+type DiscordInvites = Promise<Record<string, DiscordInviteResponse | null>>;
 
 type Props = {
   discordInvites: DiscordInvites;
   initialCounts: Record<string, number>;
 };
 
-function ProviderBadge({ badge }: { badge: Badge }) {
+function ProviderBadge({
+  badge,
+  classNameOverride,
+}: {
+  badge: Badge;
+  classNameOverride?: string;
+}) {
   const config = BADGE_CONFIG[badge];
   return (
     <HoverCard>
@@ -66,7 +73,7 @@ function ProviderBadge({ badge }: { badge: Badge }) {
         <span
           className={cn(
             "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
-            config.className,
+            classNameOverride ?? config.className,
           )}
         >
           {config.icon}
@@ -77,6 +84,19 @@ function ProviderBadge({ badge }: { badge: Badge }) {
         <p>{config.description}</p>
       </HoverCardContent>
     </HoverCard>
+  );
+}
+
+function ProviderThemeDecoration() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-rose-500/18 blur-3xl dark:bg-rose-400/18" />
+      <div className="absolute -bottom-8 left-0 h-24 w-24 rounded-full bg-orange-400/18 blur-2xl dark:bg-orange-300/12" />
+      <div className="absolute right-10 top-0 h-full w-px bg-gradient-to-b from-transparent via-rose-500/20 to-transparent" />
+    </div>
   );
 }
 
@@ -117,18 +137,42 @@ function ProviderCard({
   ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
 }) {
   const resolvedDiscordInvites = use(discordInvites);
-  const discordInvite =
-    resolvedDiscordInvites.find(
-      (invite) => invite?.code === extractDiscordInviteCode(provider),
-    ) ?? null;
+  const discordInvite = resolvedDiscordInvites[provider.slug] ?? null;
+  const discordInviteUrl = getDiscordInviteUrl(provider);
+  const theme = provider.theme ? PROVIDER_THEMES[provider.theme] : undefined;
 
   return (
-    <Card className="transition-all duration-300 hover:shadow-lg">
-      <div className="flex flex-col sm:flex-row gap-4 p-6">
-        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
+    <Card
+      className={cn(
+        "relative overflow-hidden transition-all duration-300 hover:shadow-lg",
+        theme && [
+          "ring-2 shadow-[0_20px_60px_-40px_rgba(244,63,94,0.55)]",
+          theme.ring,
+          theme.bg,
+        ],
+      )}
+    >
+      {theme && <ProviderThemeDecoration />}
+      <div className="relative flex flex-col gap-4 p-6 sm:flex-row">
+        <div
+          className={cn(
+            "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted",
+            theme?.logo,
+          )}
+        >
           <ProviderLogo provider={provider} />
         </div>
         <div className="flex-1 space-y-3">
+          {theme && provider.badges.includes("affiliate") && (
+            <div
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/75 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5",
+                theme.accentText,
+              )}
+            >
+              SoulFire Affiliate
+            </div>
+          )}
           <div className="flex flex-wrap items-center gap-3">
             <h3 className="text-xl font-semibold">
               <Link
@@ -144,7 +188,12 @@ function ProviderCard({
                 Since {provider.startDate}
               </span>
             )}
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-sm font-medium text-primary",
+                theme?.price,
+              )}
+            >
               {provider.price}
               {provider.priceDetails && (
                 <PriceInfoBadge details={provider.priceDetails} />
@@ -153,7 +202,13 @@ function ProviderCard({
             <DiscordMemberBadge info={discordInvite} />
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
-                <ProviderBadge key={badge} badge={badge} />
+                <ProviderBadge
+                  key={badge}
+                  badge={badge}
+                  classNameOverride={
+                    badge === "affiliate" ? theme?.badge : undefined
+                  }
+                />
               ))}
             </div>
           </div>
@@ -175,14 +230,18 @@ function ProviderCard({
             />
           )}
           <div className="flex flex-wrap gap-2">
-            <Button asChild>
+            <Button asChild className={theme?.primaryButton}>
               <a href={provider.url} target="_blank" rel="noopener nofollow">
                 Get Accounts
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
             </Button>
             {provider.websiteUrl && (
-              <Button asChild variant="secondary">
+              <Button
+                asChild
+                variant="secondary"
+                className={theme?.secondaryButton}
+              >
                 <a
                   href={provider.websiteUrl}
                   target="_blank"
@@ -193,10 +252,14 @@ function ProviderCard({
                 </a>
               </Button>
             )}
-            {(provider.discordUrl || provider.url.includes("discord.gg")) && (
-              <Button asChild variant="secondary">
+            {discordInviteUrl && (
+              <Button
+                asChild
+                variant="secondary"
+                className={theme?.secondaryButton}
+              >
                 <a
-                  href={provider.discordUrl ?? provider.url}
+                  href={discordInviteUrl}
                   target="_blank"
                   rel="noopener nofollow"
                 >
@@ -206,7 +269,11 @@ function ProviderCard({
               </Button>
             )}
             {provider.trustpilotUrl && (
-              <Button asChild variant="secondary">
+              <Button
+                asChild
+                variant="secondary"
+                className={theme?.secondaryButton}
+              >
                 <a
                   href={provider.trustpilotUrl}
                   target="_blank"
@@ -576,8 +643,11 @@ export function GetAccountsClient(props: Props) {
           . Rankings based on community feedback and value.
         </p>
         <p className="text-sm text-muted-foreground">
-          <strong>Disclaimer:</strong> We are not affiliated with any of these
-          providers. Always do your own research before making purchases.
+          <strong>Disclaimer:</strong> SoulFire does not own or operate these
+          providers. Some listings may include affiliate codes or links marked
+          with an Affiliate badge, and using them helps support SoulFire at no
+          extra cost to you. Always do your own research before making
+          purchases.
         </p>
         <p className="text-sm text-muted-foreground">
           Inaccurate information or broken links? Submit a pull request on{" "}

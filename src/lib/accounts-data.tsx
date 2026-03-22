@@ -2,6 +2,7 @@ import {
   ArrowDownNarrowWide,
   ArrowUpNarrowWide,
   Gift,
+  Handshake,
   Package,
   Plug,
   Shield,
@@ -9,7 +10,6 @@ import {
   ThumbsUp,
   Zap,
 } from "lucide-react";
-import { extractInviteCode } from "@/lib/discord";
 
 export type FilterableBadge =
   | "free"
@@ -19,7 +19,19 @@ export type FilterableBadge =
   | "12h-warranty"
   | "bulk-discount";
 
-export type Badge = FilterableBadge | "official-integration";
+export type Badge = FilterableBadge | "official-integration" | "affiliate";
+
+export type ProviderTheme = {
+  ring: string;
+  bg: string;
+  badge: string;
+  logo: string;
+  panel: string;
+  price: string;
+  primaryButton: string;
+  secondaryButton: string;
+  accentText: string;
+};
 
 export type Category = "nfa-accounts" | "mfa-accounts";
 
@@ -40,6 +52,7 @@ export type Shop = {
   name: string;
   logo?: string;
   logoUnoptimized?: boolean;
+  theme?: string;
   url: string;
   websiteUrl?: string;
   discordUrl?: string;
@@ -55,6 +68,7 @@ export type Provider = {
   name: string;
   logo?: string;
   logoUnoptimized?: boolean;
+  theme?: string;
   testimonial: string;
   url: string;
   websiteUrl?: string;
@@ -72,12 +86,33 @@ export type Provider = {
   priceDetails?: string;
 };
 
-export function extractDiscordInviteCode(provider: Provider): string | null {
+export function getDiscordInviteUrl(
+  provider: Pick<Provider, "discordUrl" | "url">,
+): string | null {
   const discordLink = provider.discordUrl ?? provider.url;
-  return discordLink.includes("discord.gg")
-    ? extractInviteCode(discordLink)
+  return /(discord\.gg|discord\.com\/invite)/i.test(discordLink) ||
+    provider.discordUrl
+    ? discordLink
     : null;
 }
+
+export const PROVIDER_THEMES: Record<string, ProviderTheme> = {
+  rave: {
+    ring: "ring-rose-500/35 dark:ring-rose-400/25",
+    bg: "border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-background to-orange-500/10 dark:from-rose-500/15 dark:via-card dark:to-orange-500/10",
+    badge:
+      "border border-rose-500/20 bg-rose-500/12 text-rose-700 dark:text-rose-300",
+    logo: "ring-2 ring-rose-500/25 bg-white/85 shadow-[0_14px_40px_-24px_rgba(244,63,94,0.9)] dark:bg-white/8",
+    panel: "border-rose-500/15 bg-white/70 backdrop-blur-sm dark:bg-white/5",
+    price:
+      "border border-rose-500/20 bg-white/85 text-rose-700 shadow-sm shadow-rose-500/10 dark:bg-white/10 dark:text-rose-200",
+    primaryButton:
+      "bg-rose-600 text-white shadow-sm shadow-rose-500/30 hover:bg-rose-500 dark:bg-rose-500 dark:hover:bg-rose-400",
+    secondaryButton:
+      "border border-rose-500/15 bg-white/75 text-rose-700 hover:bg-rose-500/10 dark:bg-white/8 dark:text-rose-200 dark:hover:bg-white/12",
+    accentText: "text-rose-700 dark:text-rose-200",
+  },
+};
 
 export const BADGE_CONFIG: Record<
   Badge,
@@ -137,6 +172,13 @@ export const BADGE_CONFIG: Record<
       "This provider is officially integrated into the SoulFire client. You can purchase and import accounts directly from within the app.",
     icon: <Plug className="h-3 w-3" />,
   },
+  affiliate: {
+    label: "Affiliate",
+    className: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+    description:
+      "Buying with this provider's code or link supports SoulFire at no extra cost to you.",
+    icon: <Handshake className="h-3 w-3" />,
+  },
 };
 
 export const CATEGORY_CONFIG: Record<
@@ -195,9 +237,10 @@ export const SHOPS: Shop[] = [
     name: "Ravealts",
     logo: "/accounts/ravealts.gif",
     logoUnoptimized: true,
+    theme: "rave",
     url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
-    discordUrl: "https://discord.gg/ravealts2",
+    discordUrl: "https://discord.ravealts.com/",
     trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
     startDate: "Jul 2025",
     testimonials: [
@@ -227,6 +270,7 @@ export const SHOPS: Shop[] = [
         testimonial:
           "Credit-based dashboard with instant delivery, live validation, API access, and public credit packs. Also sells Dispenser keys for automated bulk generation.",
         badges: [
+          "affiliate",
           "official-integration",
           "high-quality",
           "instant-delivery",
@@ -242,7 +286,12 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Permanent accounts with full access. Change email, password and username. Also sells Microsoft/Xbox accounts with Game Pass and Bedrock. Accepts crypto, card, Klarna and more.",
-        badges: ["official-integration", "high-quality", "lifetime-warranty"],
+        badges: [
+          "affiliate",
+          "official-integration",
+          "high-quality",
+          "lifetime-warranty",
+        ],
         price: "$5.67",
         priceValue: 5.67,
         couponCode: "SOULFIRE",
@@ -529,6 +578,7 @@ export const PROVIDERS: Provider[] = (
         name: shop.name,
         logo: shop.logo,
         logoUnoptimized: shop.logoUnoptimized,
+        theme: shop.theme,
         url: shop.url,
         websiteUrl: shop.websiteUrl,
         discordUrl: shop.discordUrl,

@@ -3,7 +3,7 @@ import { cacheLife } from "next/cache";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
-import { extractDiscordInviteCode, PROVIDERS } from "@/lib/accounts-data";
+import { getDiscordInviteUrl, PROVIDERS } from "@/lib/accounts-data";
 import { fetchDiscordInvite } from "@/lib/discord";
 import { getUpvoteCounts } from "@/lib/upvotes";
 import { GetAccountsClient } from "./page.client";
@@ -17,6 +17,19 @@ export const metadata: Metadata = {
 export default async function GetAccountsPage() {
   "use cache";
   cacheLife("hours");
+
+  const providersBySlug = [
+    ...new Map(PROVIDERS.map((provider) => [provider.slug, provider])).values(),
+  ];
+  const discordInvites = Promise.all(
+    providersBySlug.map(async (provider) => {
+      const discordInviteUrl = getDiscordInviteUrl(provider);
+      return [
+        provider.slug,
+        discordInviteUrl ? await fetchDiscordInvite(discordInviteUrl) : null,
+      ] as const;
+    }),
+  ).then((entries) => Object.fromEntries(entries));
 
   const faqJsonLd: WithContext<FAQPage> = {
     "@context": "https://schema.org",
@@ -52,12 +65,7 @@ export default async function GetAccountsPage() {
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
       <GetAccountsClient
-        discordInvites={Promise.all(
-          PROVIDERS.map((provider) => {
-            const discordCode = extractDiscordInviteCode(provider);
-            return discordCode ? fetchDiscordInvite(discordCode) : null;
-          }),
-        ).then()}
+        discordInvites={discordInvites}
         initialCounts={
           await getUpvoteCounts("account", [
             ...new Set(PROVIDERS.map((p) => p.slug)),
