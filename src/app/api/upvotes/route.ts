@@ -3,6 +3,12 @@ import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { upvote } from "@/lib/db/schema";
+import {
+  getExpectedTurnstileHostname,
+  getTurnstileRemoteIp,
+  UPVOTE_TURNSTILE_ACTION,
+  validateTurnstileToken,
+} from "@/lib/turnstile";
 
 const VALID_TYPES = ["account", "proxy", "resource"] as const;
 type ItemType = (typeof VALID_TYPES)[number];
@@ -72,11 +78,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
-  const { itemType, itemSlug } = body;
+  let body: unknown;
+
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Invalid parameters" }, { status: 400 });
+  }
+
+  const { itemType, itemSlug, turnstileToken } = body as Record<
+    string,
+    unknown
+  >;
 
   if (
-    !itemType ||
+    typeof itemType !== "string" ||
     !isValidType(itemType) ||
     typeof itemSlug !== "string" ||
     !itemSlug
@@ -107,6 +127,23 @@ export async function POST(request: NextRequest) {
         ),
       );
     return NextResponse.json({ upvoted: false });
+  }
+
+  const turnstileValidation = await validateTurnstileToken({
+    token: typeof turnstileToken === "string" ? turnstileToken : "",
+    remoteIp: getTurnstileRemoteIp(request.headers),
+    expectedAction: UPVOTE_TURNSTILE_ACTION,
+    expectedHostname: getExpectedTurnstileHostname(request.nextUrl.hostname),
+  });
+
+  if (!turnstileValidation.success) {
+    return NextResponse.json(
+      {
+        error: "Turnstile verification failed",
+        errorCodes: turnstileValidation.errorCodes,
+      },
+      { status: 403 },
+    );
   }
 
   await db.insert(upvote).values({

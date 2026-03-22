@@ -99,7 +99,7 @@ function ProviderCard({
   upvoteLoading: boolean;
   onToggleUpvote: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | null } | undefined>;
+  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
 }) {
   const theme = provider.sponsorTheme
     ? SPONSOR_THEMES[provider.sponsorTheme]

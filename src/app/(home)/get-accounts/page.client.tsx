@@ -114,7 +114,7 @@ function ProviderCard({
   upvoteLoading: boolean;
   onToggleUpvote: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | null } | undefined>;
+  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
 }) {
   const resolvedDiscordInvites = use(discordInvites);
   const discordInvite =

@@ -96,7 +96,7 @@ function ResourceCard({
   upvoteLoading: boolean;
   onToggleUpvote: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | null } | undefined>;
+  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
 }) {
   return (
     <Card className="transition-all duration-300 hover:shadow-lg">

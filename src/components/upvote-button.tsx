@@ -13,7 +13,7 @@ type Props = {
   loading: boolean;
   onToggle: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | null } | undefined>;
+  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
 };
 
 export function UpvoteButton({
@@ -34,6 +34,14 @@ export function UpvoteButton({
           label: "Sign In",
           onClick: () => router.push("/auth/sign-in"),
         },
+      });
+      return;
+    }
+
+    if (result?.error === "verification") {
+      toast("Verification failed", {
+        description:
+          "Cloudflare Turnstile could not verify this upvote. Please try again.",
       });
     }
   };

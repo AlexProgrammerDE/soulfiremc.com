@@ -124,7 +124,17 @@ export default function PrivacyPolicy() {
           >
             Cloudflare Turnstile
           </a>{" "}
-          CAPTCHA to prevent automated abuse, and we check passwords against the{" "}
+          CAPTCHA, including invisible Turnstile challenges for actions such as
+          upvotes, to prevent automated abuse. For more information, see
+          Cloudflare&apos;s{" "}
+          <a
+            href="https://www.cloudflare.com/trust-hub/turnstile-privacy-addendum/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Turnstile Privacy Addendum
+          </a>
+          . We also check passwords against the{" "}
           <a
             href="https://haveibeenpwned.com/"
             target="_blank"
