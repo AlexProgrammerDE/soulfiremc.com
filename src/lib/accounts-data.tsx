@@ -496,21 +496,21 @@ export const SHOPS: Shop[] = [
       },
     },
   },
-  {
-    slug: "brano",
-    name: "Brano",
-    logo: "/accounts/brano.png",
-    url: "https://discord.gg/EsbhHkm9e4",
-    listings: {
-      "mfa-accounts": {
-        testimonial:
-          "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
-        badges: ["high-quality", "lifetime-warranty"],
-        price: "$50.00+",
-        priceValue: 50.0,
-      },
-    },
-  },
+  // {
+  //   slug: "brano",
+  //   name: "Brano",
+  //   logo: "/accounts/brano.png",
+  //   url: "https://discord.gg/EsbhHkm9e4",
+  //   listings: {
+  //     "mfa-accounts": {
+  //       testimonial:
+  //         "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
+  //       badges: ["high-quality", "lifetime-warranty"],
+  //       price: "$50.00+",
+  //       priceValue: 50.0,
+  //     },
+  //   },
+  // },
 ];
 
 export function getShopBySlug(slug: string): Shop | undefined {
