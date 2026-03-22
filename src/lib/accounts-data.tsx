@@ -45,7 +45,7 @@ export type Shop = {
   discordUrl?: string;
   trustpilotUrl?: string;
   startDate?: string;
-  testimonials?: { quote: string; author: string }[];
+  testimonials?: { quote: string; author: string; authorNote?: string }[];
   gallery?: { src: string; alt: string }[];
   listings: Partial<Record<Category, Listing>>;
 };
@@ -61,7 +61,7 @@ export type Provider = {
   discordUrl?: string;
   trustpilotUrl?: string;
   startDate?: string;
-  testimonials?: { quote: string; author: string }[];
+  testimonials?: { quote: string; author: string; authorNote?: string }[];
   gallery?: { src: string; alt: string }[];
   badges: Badge[];
   category: Category;
@@ -323,6 +323,31 @@ export const SHOPS: Shop[] = [
     logo: "/accounts/aquamfa.png",
     url: "https://discord.gg/87XFhsS35V",
     startDate: "Aug 2025",
+    testimonials: [
+      {
+        quote: "Held $6 LTC in a middleman trade for an MFA.",
+        author: "chorb",
+        authorNote: "Luna Pixel Studios (BetterMC)",
+      },
+      {
+        quote: "Quick responses and very helpful.",
+        author: "ldklol",
+      },
+      {
+        quote:
+          "Bought an MFA, and he even reserved it for me while I exchanged real quick.",
+        author: "JagHack",
+      },
+      {
+        quote: "Quick, cheap, and even put it on hold for me.",
+        author: "ghost",
+      },
+      {
+        quote:
+          "Made the process smooth, put the account on hold while I sorted crypto, and helped secure it afterward.",
+        author: "Almost",
+      },
+    ],
     listings: {
       "mfa-accounts": {
         testimonial:
