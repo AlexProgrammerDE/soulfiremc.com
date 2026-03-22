@@ -321,11 +321,12 @@ export const SHOPS: Shop[] = [
     name: "Aqua MFA",
     logo: "/accounts/aquamfa.png",
     url: "https://discord.gg/87XFhsS35V",
+    startDate: "Aug 2025",
     listings: {
       "mfa-accounts": {
         testimonial:
           "Cheap MFA accounts with instant delivery and lifetime warranty.",
-        badges: ["instant-delivery", "lifetime-warranty"],
+        badges: ["high-quality", "instant-delivery", "lifetime-warranty"],
         price: "$4.00-$5.50",
         priceValue: 4.0,
         couponCode: "SOULFIRE",
