@@ -138,7 +138,6 @@ function ProviderThemeDecoration() {
     >
       <div className="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-rose-500/18 blur-3xl dark:bg-rose-400/18" />
       <div className="absolute -bottom-10 left-6 h-28 w-28 rounded-full bg-orange-400/18 blur-2xl dark:bg-orange-300/12" />
-      <div className="absolute inset-y-0 right-14 w-px bg-gradient-to-b from-transparent via-rose-500/20 to-transparent" />
     </div>
   );
 }
@@ -279,7 +278,7 @@ export default async function AccountProviderPage(props: {
                     theme.accentText,
                   )}
                 >
-                  SoulFire Affiliate
+                  Recommended
                 </div>
               )}
               <div className="flex flex-wrap items-center gap-3">

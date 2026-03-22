@@ -95,7 +95,6 @@ function ProviderThemeDecoration() {
     >
       <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-rose-500/18 blur-3xl dark:bg-rose-400/18" />
       <div className="absolute -bottom-8 left-0 h-24 w-24 rounded-full bg-orange-400/18 blur-2xl dark:bg-orange-300/12" />
-      <div className="absolute right-10 top-0 h-full w-px bg-gradient-to-b from-transparent via-rose-500/20 to-transparent" />
     </div>
   );
 }
@@ -170,7 +169,7 @@ function ProviderCard({
                 theme.accentText,
               )}
             >
-              SoulFire Affiliate
+              Recommended
             </div>
           )}
           <div className="flex flex-wrap items-center gap-3">
