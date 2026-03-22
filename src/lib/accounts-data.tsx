@@ -306,6 +306,7 @@ export const SHOPS: Shop[] = [
     logo: "/accounts/nicealts.png",
     url: "https://discord.gg/nicealts",
     websiteUrl: "https://status.nicealts.com",
+    startDate: "Mar 2025",
     listings: {
       "nfa-accounts": {
         testimonial:
@@ -341,6 +342,7 @@ export const SHOPS: Shop[] = [
     url: "https://zzxgp.me",
     websiteUrl: "https://shop.zzxgp.me",
     discordUrl: "https://discord.gg/gycmTvrfnj",
+    startDate: "Dec 2025",
     listings: {
       "nfa-accounts": {
         testimonial:
@@ -367,6 +369,7 @@ export const SHOPS: Shop[] = [
     name: "YYY",
     logo: "/accounts/yyy.png",
     url: "https://discord.gg/rmxayvwc5K",
+    startDate: "Apr 2025",
     listings: {
       "nfa-accounts": {
         testimonial:
@@ -384,6 +387,7 @@ export const SHOPS: Shop[] = [
     url: "https://mogalts.win",
     websiteUrl: "https://mogalts.win",
     discordUrl: "https://discord.gg/mogalts",
+    startDate: "Nov 2025",
     listings: {
       "nfa-accounts": {
         testimonial:
@@ -403,6 +407,7 @@ export const SHOPS: Shop[] = [
     url: "https://localts.store",
     websiteUrl: "https://localts.info",
     discordUrl: "https://discord.gg/Q8HEd6S8ud",
+    startDate: "Dec 2024",
     listings: {
       "nfa-accounts": {
         testimonial:
