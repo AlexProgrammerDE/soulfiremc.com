@@ -33,6 +33,13 @@ export type ProviderTheme = {
   accentText: string;
 };
 
+export type SocialPlatform = "youtube" | "tiktok" | "telegram" | "x";
+
+export type SocialLink = {
+  platform: SocialPlatform;
+  url: string;
+};
+
 export type Category = "nfa-accounts" | "mfa-accounts";
 
 export type SortOption = "default" | "price-asc" | "price-desc";
@@ -57,6 +64,7 @@ export type Shop = {
   websiteUrl?: string;
   discordUrl?: string;
   trustpilotUrl?: string;
+  socialLinks?: SocialLink[];
   startDate?: string;
   testimonials?: { quote: string; author: string; authorNote?: string }[];
   gallery?: { src: string; alt: string }[];
@@ -74,6 +82,7 @@ export type Provider = {
   websiteUrl?: string;
   discordUrl?: string;
   trustpilotUrl?: string;
+  socialLinks?: SocialLink[];
   startDate?: string;
   testimonials?: { quote: string; author: string; authorNote?: string }[];
   gallery?: { src: string; alt: string }[];
@@ -242,6 +251,12 @@ export const SHOPS: Shop[] = [
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.ravealts.com/",
     trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
+    socialLinks: [
+      { platform: "youtube", url: "https://www.youtube.com/@ravealts" },
+      { platform: "tiktok", url: "https://www.tiktok.com/@ravealts" },
+      { platform: "telegram", url: "https://t.me/ravealtsofficial" },
+      { platform: "x", url: "https://x.com/ravealts" },
+    ],
     startDate: "Jul 2025",
     testimonials: [
       {
@@ -583,6 +598,7 @@ export const PROVIDERS: Provider[] = (
         websiteUrl: shop.websiteUrl,
         discordUrl: shop.discordUrl,
         trustpilotUrl: shop.trustpilotUrl,
+        socialLinks: shop.socialLinks,
         startDate: shop.startDate,
         testimonials: shop.testimonials,
         gallery: shop.gallery,

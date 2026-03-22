@@ -1,4 +1,11 @@
-import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
+import {
+  SiDiscord,
+  SiTelegram,
+  SiTiktok,
+  SiTrustpilot,
+  SiX,
+  SiYoutube,
+} from "@icons-pack/react-simple-icons";
 import {
   ArrowLeft,
   Calendar,
@@ -43,6 +50,7 @@ import {
   PROVIDER_THEMES,
   SHOPS,
   type Shop,
+  type SocialLink,
 } from "@/lib/accounts-data";
 import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
@@ -139,6 +147,59 @@ function ProviderThemeDecoration() {
       <div className="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-rose-500/18 blur-3xl dark:bg-rose-400/18" />
       <div className="absolute -bottom-10 left-6 h-28 w-28 rounded-full bg-orange-400/18 blur-2xl dark:bg-orange-300/12" />
     </div>
+  );
+}
+
+function SocialLinkButtons({
+  socialLinks,
+  className,
+}: {
+  socialLinks?: SocialLink[];
+  className?: string;
+}) {
+  if (!socialLinks?.length) {
+    return null;
+  }
+
+  const icons = {
+    youtube: SiYoutube,
+    tiktok: SiTiktok,
+    telegram: SiTelegram,
+    x: SiX,
+  } as const;
+
+  const labels = {
+    youtube: "YouTube",
+    tiktok: "TikTok",
+    telegram: "Telegram",
+    x: "X",
+  } as const;
+
+  return (
+    <>
+      {socialLinks.map((socialLink) => {
+        const Icon = icons[socialLink.platform];
+        return (
+          <Button
+            key={`${socialLink.platform}-${socialLink.url}`}
+            asChild
+            variant="secondary"
+            size="icon-sm"
+            className={className}
+          >
+            <a
+              href={socialLink.url}
+              target="_blank"
+              rel="noopener nofollow"
+              aria-label={labels[socialLink.platform]}
+              title={labels[socialLink.platform]}
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          </Button>
+        );
+      })}
+    </>
   );
 }
 
@@ -346,6 +407,10 @@ export default async function AccountProviderPage(props: {
                     </a>
                   </Button>
                 )}
+                <SocialLinkButtons
+                  socialLinks={shop.socialLinks}
+                  className={theme.secondaryButton}
+                />
                 {shop.trustpilotUrl && (
                   <Button
                     asChild
@@ -413,7 +478,7 @@ export default async function AccountProviderPage(props: {
               {hasDiscord && (
                 <Button asChild variant="secondary">
                   <a
-                    href={shop.discordUrl ?? shop.url}
+                    href={discordInviteUrl ?? shop.url}
                     target="_blank"
                     rel="noopener nofollow"
                   >
@@ -422,6 +487,7 @@ export default async function AccountProviderPage(props: {
                   </a>
                 </Button>
               )}
+              <SocialLinkButtons socialLinks={shop.socialLinks} />
               {shop.trustpilotUrl && (
                 <Button asChild variant="secondary">
                   <a

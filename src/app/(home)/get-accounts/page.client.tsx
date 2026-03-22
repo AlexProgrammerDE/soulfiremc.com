@@ -1,6 +1,13 @@
 "use client";
 
-import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
+import {
+  SiDiscord,
+  SiTelegram,
+  SiTiktok,
+  SiTrustpilot,
+  SiX,
+  SiYoutube,
+} from "@icons-pack/react-simple-icons";
 import {
   BookOpen,
   Calendar,
@@ -45,6 +52,7 @@ import {
   type Provider,
   SORT_CONFIG,
   SORT_OPTIONS,
+  type SocialLink,
   type SortOption,
 } from "@/lib/accounts-data";
 import type { DiscordInviteResponse } from "@/lib/discord";
@@ -96,6 +104,59 @@ function ProviderThemeDecoration() {
       <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-rose-500/18 blur-3xl dark:bg-rose-400/18" />
       <div className="absolute -bottom-8 left-0 h-24 w-24 rounded-full bg-orange-400/18 blur-2xl dark:bg-orange-300/12" />
     </div>
+  );
+}
+
+function SocialLinkButtons({
+  socialLinks,
+  className,
+}: {
+  socialLinks?: SocialLink[];
+  className?: string;
+}) {
+  if (!socialLinks?.length) {
+    return null;
+  }
+
+  const icons = {
+    youtube: SiYoutube,
+    tiktok: SiTiktok,
+    telegram: SiTelegram,
+    x: SiX,
+  } as const;
+
+  const labels = {
+    youtube: "YouTube",
+    tiktok: "TikTok",
+    telegram: "Telegram",
+    x: "X",
+  } as const;
+
+  return (
+    <>
+      {socialLinks.map((socialLink) => {
+        const Icon = icons[socialLink.platform];
+        return (
+          <Button
+            key={`${socialLink.platform}-${socialLink.url}`}
+            asChild
+            variant="secondary"
+            size="icon-sm"
+            className={className}
+          >
+            <a
+              href={socialLink.url}
+              target="_blank"
+              rel="noopener nofollow"
+              aria-label={labels[socialLink.platform]}
+              title={labels[socialLink.platform]}
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          </Button>
+        );
+      })}
+    </>
   );
 }
 
@@ -283,6 +344,10 @@ function ProviderCard({
                 </a>
               </Button>
             )}
+            <SocialLinkButtons
+              socialLinks={provider.socialLinks}
+              className={theme?.secondaryButton}
+            />
             <UpvoteButton
               slug={provider.slug}
               count={upvoteCount}
