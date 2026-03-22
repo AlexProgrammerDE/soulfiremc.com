@@ -223,16 +223,6 @@ function ProviderCard({
           <ProviderLogo provider={provider} />
         </div>
         <div className="flex-1 space-y-3">
-          {theme && provider.badges.includes("affiliate") && (
-            <div
-              className={cn(
-                "inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/75 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5",
-                theme.accentText,
-              )}
-            >
-              Recommended
-            </div>
-          )}
           <div className="flex flex-wrap items-center gap-3">
             <h3 className="text-xl font-semibold">
               <Link

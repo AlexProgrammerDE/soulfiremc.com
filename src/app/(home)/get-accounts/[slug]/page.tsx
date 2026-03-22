@@ -332,16 +332,6 @@ export default async function AccountProviderPage(props: {
               <ShopLogo shop={shop} />
             </div>
             <div className="flex-1 space-y-4">
-              {hasAffiliate && (
-                <div
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/75 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5",
-                    theme.accentText,
-                  )}
-                >
-                  Recommended
-                </div>
-              )}
               <div className="flex flex-wrap items-center gap-3">
                 <h1 className="text-4xl font-bold tracking-tight">
                   {shop.name}
@@ -407,10 +397,6 @@ export default async function AccountProviderPage(props: {
                     </a>
                   </Button>
                 )}
-                <SocialLinkButtons
-                  socialLinks={shop.socialLinks}
-                  className={theme.secondaryButton}
-                />
                 {shop.trustpilotUrl && (
                   <Button
                     asChild
@@ -427,6 +413,10 @@ export default async function AccountProviderPage(props: {
                     </a>
                   </Button>
                 )}
+                <SocialLinkButtons
+                  socialLinks={shop.socialLinks}
+                  className={theme.secondaryButton}
+                />
                 <DetailUpvote itemType="account" slug={shop.slug} />
               </div>
             </div>
@@ -487,7 +477,6 @@ export default async function AccountProviderPage(props: {
                   </a>
                 </Button>
               )}
-              <SocialLinkButtons socialLinks={shop.socialLinks} />
               {shop.trustpilotUrl && (
                 <Button asChild variant="secondary">
                   <a
@@ -500,6 +489,7 @@ export default async function AccountProviderPage(props: {
                   </a>
                 </Button>
               )}
+              <SocialLinkButtons socialLinks={shop.socialLinks} />
               <DetailUpvote itemType="account" slug={shop.slug} />
             </div>
           </div>
