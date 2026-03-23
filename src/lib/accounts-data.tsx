@@ -523,7 +523,7 @@ export const SHOPS: Shop[] = [
     name: "Skycron",
     logo: "/accounts/skycron.png",
     url: "https://discord.gg/5sZNDb4UMy",
-    websiteUrl: "https://skycron-gen.sellhub.cx/product/Gen-access/",
+    websiteUrl: "https://www.skycron.xyz",
     discordUrl: "https://discord.gg/5sZNDb4UMy",
     startDate: "Feb 2026",
     testimonials: [
