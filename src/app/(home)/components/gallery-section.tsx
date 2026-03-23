@@ -1,11 +1,12 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -51,7 +52,10 @@ export function GallerySection({
         open={openIndex !== null}
         onOpenChange={(open) => !open && setOpenIndex(null)}
       >
-        <DialogContent className="max-w-(--fd-layout-width) p-2 sm:p-4">
+        <DialogContent
+          showCloseButton={false}
+          className="h-[92vh] max-h-[92vh] w-[min(96vw,1600px)] max-w-[min(96vw,1600px)] gap-0 overflow-hidden border-white/10 bg-black/90 p-3 shadow-2xl sm:p-4"
+        >
           <DialogTitle className="sr-only">
             {openIndex !== null ? images[openIndex].alt : "Gallery image"}
           </DialogTitle>
@@ -59,21 +63,31 @@ export function GallerySection({
             Image {openIndex !== null ? openIndex + 1 : 0} of {images.length}
           </DialogDescription>
           {openIndex !== null && (
-            <div className="relative aspect-video w-full">
+            <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg bg-black/40">
               <Image
                 src={images[openIndex].src}
                 alt={images[openIndex].alt}
                 fill
-                sizes="(max-width: 1024px) 100vw, 80vw"
+                sizes="96vw"
                 className="object-contain"
               />
+              <DialogClose asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-3 right-3 z-10 h-11 w-11 rounded-full border border-white/10 bg-black/65 text-white hover:bg-black/80 hover:text-white"
+                >
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Close gallery</span>
+                </Button>
+              </DialogClose>
               {images.length > 1 && (
                 <>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={prev}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background"
+                    className="absolute left-3 top-1/2 z-10 h-11 w-11 -translate-y-1/2 rounded-full border border-white/10 bg-black/65 text-white hover:bg-black/80 hover:text-white"
                   >
                     <ChevronLeft className="h-5 w-5" />
                     <span className="sr-only">Previous image</span>
@@ -82,13 +96,21 @@ export function GallerySection({
                     variant="ghost"
                     size="icon"
                     onClick={next}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background"
+                    className="absolute right-3 top-1/2 z-10 h-11 w-11 -translate-y-1/2 rounded-full border border-white/10 bg-black/65 text-white hover:bg-black/80 hover:text-white"
                   >
                     <ChevronRight className="h-5 w-5" />
                     <span className="sr-only">Next image</span>
                   </Button>
                 </>
               )}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 via-black/30 to-transparent p-3 sm:p-4">
+                <p className="max-w-[75%] text-sm text-white/80">
+                  {images[openIndex].alt}
+                </p>
+                <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1 text-xs font-medium text-white/75">
+                  {openIndex + 1} / {images.length}
+                </span>
+              </div>
             </div>
           )}
         </DialogContent>
