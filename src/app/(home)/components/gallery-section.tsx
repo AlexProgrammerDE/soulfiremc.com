@@ -54,7 +54,7 @@ export function GallerySection({
       >
         <DialogContent
           showCloseButton={false}
-          className="h-[92vh] max-h-[92vh] w-[min(96vw,1600px)] max-w-[min(96vw,1600px)] gap-0 overflow-hidden border-white/10 bg-black/90 p-3 shadow-2xl sm:p-4"
+          className="flex h-[calc(100vh-1rem)] max-h-[calc(100vh-1rem)] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] flex-col gap-0 overflow-hidden border-white/10 bg-black/90 p-2 shadow-2xl sm:h-[calc(100vh-3rem)] sm:max-h-[calc(100vh-3rem)] sm:w-[calc(100vw-3rem)] sm:max-w-[calc(100vw-3rem)] sm:p-4"
         >
           <DialogTitle className="sr-only">
             {openIndex !== null ? images[openIndex].alt : "Gallery image"}
