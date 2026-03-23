@@ -13,7 +13,7 @@ export default async function SettingsPage({
   const { path } = await params;
 
   return (
-    <main className="mx-auto max-w-3xl p-4 md:p-6">
+    <main className="mx-auto max-w-(--fd-layout-width) p-4 md:p-6">
       <AccountView path={path} />
     </main>
   );

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <main className="px-4 py-12 w-full max-w-[1400px] mx-auto prose">
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto prose">
       <h1>Privacy Policy</h1>
       <p>
         <strong>Last updated:</strong> February 25, 2026

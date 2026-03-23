@@ -422,7 +422,7 @@ function DownloadTip(props: { selection: DownloadSelection }) {
 export function DownloadSelectionSkeleton() {
   return (
     <>
-      <Card className="max-w-4xl mx-auto">
+      <Card className="max-w-(--fd-layout-width) mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl">Choose your build</CardTitle>
           <CardDescription>

@@ -529,7 +529,7 @@ function MainContent(props: Props) {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto w-full">
+    <div className="flex flex-col lg:flex-row gap-6 max-w-(--fd-layout-width) mx-auto w-full">
       {/* Mobile filter toggle */}
       <button
         type="button"
@@ -634,7 +634,7 @@ function MainContent(props: Props) {
 
 export function GetAccountsClient(props: Props) {
   return (
-    <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           Get Minecraft Accounts

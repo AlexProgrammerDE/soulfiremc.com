@@ -63,7 +63,7 @@ export default function BlogIndex() {
   };
 
   return (
-    <div className="container mx-auto py-12 px-4 max-w-7xl">
+    <div className="max-w-(--fd-layout-width) mx-auto py-12 px-4 max-w-(--fd-layout-width)">
       <JsonLd data={jsonLd} />
       <div className="mb-12">
         <h1 className="text-5xl font-bold mb-4">Blog</h1>

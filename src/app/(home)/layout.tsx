@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     >
       {children}
       <footer className="border-t py-6 text-sm text-fd-muted-foreground">
-        <div className="mx-auto flex w-full max-w-[var(--fd-layout-width)] flex-col items-center gap-2 px-4 sm:flex-row sm:justify-between">
+        <div className="mx-auto flex w-full max-w-(--fd-layout-width) flex-col items-center gap-2 px-4 sm:flex-row sm:justify-between">
           <p>
             &copy;{" "}
             <Suspense>

@@ -51,7 +51,7 @@ export function GallerySection({
         open={openIndex !== null}
         onOpenChange={(open) => !open && setOpenIndex(null)}
       >
-        <DialogContent className="max-w-4xl p-2 sm:p-4">
+        <DialogContent className="max-w-(--fd-layout-width) p-2 sm:p-4">
           <DialogTitle className="sr-only">
             {openIndex !== null ? images[openIndex].alt : "Gallery image"}
           </DialogTitle>

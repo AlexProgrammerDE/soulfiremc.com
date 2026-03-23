@@ -378,7 +378,7 @@ export default function Page() {
   };
 
   return (
-    <div className="px-4 pt-4 pb-6 w-full max-w-[1400px] mx-auto flex-1 md:pb-12">
+    <div className="px-4 pt-4 pb-6 w-full max-w-(--fd-layout-width) mx-auto flex-1 md:pb-12">
       <JsonLd data={softwareJsonLd} />
       <JsonLd data={faqJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
@@ -386,7 +386,7 @@ export default function Page() {
       <section className="py-4 md:py-8">
         <div className="relative flex min-h-[600px] border rounded-2xl overflow-hidden bg-background">
           <HeroBackground />
-          <div className="relative z-10 container px-4 md:px-6 py-12 md:py-16">
+          <div className="relative z-10 max-w-(--fd-layout-width) px-4 md:px-6 py-12 md:py-16">
             <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="space-y-6 text-left">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 border border-primary/30 backdrop-blur-sm shadow-sm">

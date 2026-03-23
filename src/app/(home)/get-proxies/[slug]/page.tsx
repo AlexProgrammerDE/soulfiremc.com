@@ -183,7 +183,7 @@ export default async function ProxyProviderPage(props: {
   };
 
   return (
-    <main className="px-4 py-12 w-full max-w-5xl mx-auto space-y-8">
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-8">
       <JsonLd data={productJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 

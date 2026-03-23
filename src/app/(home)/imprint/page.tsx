@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function Imprint() {
   return (
-    <main className="px-4 py-12 w-full max-w-[1400px] mx-auto prose">
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto prose">
       <h1>Imprint (Impressum)</h1>
       <p>
         <strong>Last updated:</strong> March 2, 2026

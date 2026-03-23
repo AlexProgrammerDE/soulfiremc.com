@@ -114,7 +114,7 @@ export default async function BlogPost(props: PageProps<"/blog/[slug]">) {
   };
 
   return (
-    <article className="container mx-auto py-12 px-4 max-w-4xl">
+    <article className="max-w-(--fd-layout-width) mx-auto py-12 px-4 max-w-(--fd-layout-width)">
       <JsonLd data={jsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function RootComponent() {
   return (
-    <main className="px-4 py-12 w-full max-w-[1400px] mx-auto flex my-auto">
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto flex my-auto">
       <div className="flex flex-col m-auto gap-4">
         <h1 className="text-3xl font-bold text-center">404 - Page not found</h1>
         <div className="mx-4">

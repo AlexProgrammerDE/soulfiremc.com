@@ -50,7 +50,7 @@ export default async function DownloadPage() {
   const releaseDate = clientRelease?.published_at ?? clientRelease?.created_at;
 
   return (
-    <main className="px-4 py-12 w-full max-w-[1400px] mx-auto space-y-10">
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
       <div className="space-y-6">
         <div className="space-y-4">
           <div className="space-y-2">
