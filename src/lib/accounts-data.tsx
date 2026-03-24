@@ -511,10 +511,10 @@ export const SHOPS: Shop[] = [
         testimonial:
           "Full-access accounts with instant delivery, 7+ day age, and OTP secret included. Ranked variants are available above the base tier.",
         badges: ["high-quality", "instant-delivery"],
-        price: "$6.79+",
-        priceValue: 6.79,
+        price: "$5.99+",
+        priceValue: 5.99,
         priceDetails:
-          "Base no-rank full access starts at $6.79. Fresh Hypixel stats is $7.49, ranked variants start at $8.49, and their Terms advertise replacements within 24 hours.",
+          "Base no-rank full access starts at $5.99. Fresh Hypixel stats is $7.49, ranked variants start at $8.49, and their Terms advertise replacements within 24 hours.",
       },
     },
   },
