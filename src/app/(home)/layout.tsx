@@ -3,6 +3,7 @@ import Link from "next/link";
 import { type ReactNode, Suspense } from "react";
 import { baseOptions } from "@/app/layout.config";
 import { CopyrightYear } from "@/components/copyright-year";
+import { UserNav } from "@/components/user-nav";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
@@ -46,6 +47,11 @@ export default function Layout({ children }: { children: ReactNode }) {
           description: "SoulFire plugins and scripts",
         },
         ...(baseOptions.links || []),
+        {
+          type: "custom",
+          secondary: true,
+          children: <UserNav />,
+        },
       ]}
     >
       {children}

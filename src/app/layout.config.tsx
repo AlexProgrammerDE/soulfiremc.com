@@ -1,7 +1,6 @@
 import { SiDiscord, SiGithub } from "@icons-pack/react-simple-icons";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 import Image from "next/image";
-import { UserNav } from "@/components/user-nav";
 import { getRequiredEnv } from "@/lib/env";
 
 export const baseOptions: BaseLayoutProps = {
@@ -29,11 +28,6 @@ export const baseOptions: BaseLayoutProps = {
       label: "GitHub",
       url: "https://github.com/AlexProgrammerDE/SoulFire",
       external: true,
-    },
-    {
-      type: "custom",
-      secondary: true,
-      children: <UserNav />,
     },
   ],
 };
