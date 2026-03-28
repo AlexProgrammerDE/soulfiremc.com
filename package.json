@@ -81,7 +81,7 @@
     "tailwindcss": "4.1.18",
     "tsx": "^4.21.0",
     "tw-animate-css": "^1.3.7",
-    "typescript": "5.9.3"
+    "typescript": "6.0.2"
   },
   "packageManager": "pnpm@10.28.2"
 }
