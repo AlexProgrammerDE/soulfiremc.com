@@ -1,210 +1,235 @@
 ---
 title: Examples
-description: Step-by-step scripting workflow examples for SoulFire, from simple greetings to AI-powered chatbots.
+description: Practical SoulFire scripting examples built with the current node set.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Mermaid } from '../../../src/components/mdx/mermaid';
 
-These examples walk through common automation workflows you can build with SoulFire's scripting system. Each one describes the nodes you need, how to connect them, and what the result looks like.
+These examples are written against the current SoulFire scripting implementation. They focus on the shape of the graph and the reason each node is there.
 
-## Auto-greeter
+## 1. Greet on join
 
-**Goal:** Send a welcome message when your bot joins a server.
+**Goal:** Send a message once a bot is fully ready in the world.
 
-**Nodes:**
-1. **On Join** (trigger) - fires when the bot enters the world
-2. **Send Chat** (action) - sends a message in chat
+**Use this when:** You want startup behavior and do not need early connection hooks.
 
 <Mermaid chart="
 graph LR
-    A[On Join] -->|exec| B[Send Chat]
+    A[On Join] --> B[Send Chat]
 " />
 
-**Setup:**
-1. Place an On Join trigger node
-2. Place a Send Chat action node
-3. Connect the exec output of On Join to the exec input of Send Chat
-4. Set the Send Chat message to something like `Hey everyone, I just joined!`
-5. Activate the script
+**Nodes**
 
-When any bot joins the server, it will automatically send the greeting. The On Join trigger also outputs the bot's name, so you could use a **Format** string node to personalize the message.
+- `On Join`
+- `Send Chat`
 
----
+**How to build it**
 
-## Chat command bot
+1. Add `On Join`.
+2. Add `Send Chat`.
+3. Connect `On Join.exec` to `Send Chat.exec`.
+4. Connect `On Join.bot` to `Send Chat.bot`.
+5. Set the message, for example `hello from SoulFire`.
 
-**Goal:** Respond to players who type `!ping` in chat with "Pong!".
+This is the simplest useful script in SoulFire, and it teaches the basic trigger -> action pattern.
 
-**Nodes:**
-1. **On Chat** (trigger) - fires on every chat message
-2. **Contains** (string) - checks if the message contains "!ping"
-3. **Branch** (flow) - routes based on the result
-4. **Send Chat** (action) - sends the response
+## 2. Simple chat command
+
+**Goal:** Reply with `pong` when chat contains `!ping`.
 
 <Mermaid chart="
 graph LR
-    A[On Chat] -->|exec| B[Contains?]
-    B -->|exec| C{Branch}
+    A[On Chat] --> C[Branch]
+    B[String Contains] --> C
     C -->|true| D[Send Chat]
 " />
 
-**Setup:**
-1. Place an On Chat trigger
-2. Place a Contains node. Connect the `messagePlainText` output from On Chat to the `string` input of Contains. Set the search term to `!ping`
-3. Place a Branch node. Connect the `result` output from Contains to the `condition` input of Branch
-4. Place a Send Chat node on the "true" output of Branch. Set the message to `Pong!`
-5. Connect the `bot` output from On Chat to the `bot` input of Send Chat
-6. Activate the script
+**Nodes**
 
-Now whenever someone types `!ping` in chat, the bot responds with `Pong!`. You can extend this with multiple Branch/Contains checks for different commands.
+- `On Chat`
+- `String Contains`
+- `Branch`
+- `Send Chat`
 
----
+**How to build it**
 
-## AI chatbot
+1. Add `On Chat`.
+2. Add `String Contains`.
+3. Connect `On Chat.messagePlainText` to the string input on `String Contains`.
+4. Set the search text on `String Contains` to `!ping`.
+5. Add `Branch` and connect the boolean result from `String Contains` to its condition.
+6. Connect `On Chat.exec` to `Branch.exec`.
+7. Add `Send Chat` on the `true` path.
+8. Connect `On Chat.bot` to `Send Chat.bot`.
+9. Set the message to `pong`.
 
-**Goal:** Use an LLM to generate responses to player messages.
+This pattern scales well. Add more checks or route into `Switch` if you want more commands.
 
-**Nodes:**
-1. **On Chat** (trigger) - fires on chat messages
-2. **Contains** (string) - checks if the message mentions the bot
-3. **Branch** (flow) - only responds to relevant messages
-4. **LLM Chat** (AI) - generates a response using OpenAI
-5. **Send Chat** (action) - sends the AI's response
+## 3. Poll all bots every few seconds
+
+**Goal:** Run the same check for every connected bot on a timer.
+
+This example exists because `On Interval` does not give you a bot directly.
 
 <Mermaid chart="
 graph LR
-    A[On Chat] -->|exec| B[Contains?]
-    B -->|exec| C{Branch}
-    C -->|true| D[LLM Chat]
-    D -->|exec| E[Send Chat]
+    A[On Interval] --> B[For Each Bot]
+    C[Get Bots] --> B
+    B --> D[Get Health]
+    D --> E[Print]
 " />
 
-**Setup:**
-1. Place an On Chat trigger
-2. Place a Contains node to check if `messagePlainText` contains your bot's name
-3. Place a Branch node on the result
-4. On the "true" path, place an LLM Chat node:
-   - Set the system prompt to something like `You are a friendly Minecraft bot. Keep responses short (under 100 characters) and casual.`
-   - Connect `messagePlainText` from On Chat to the `userMessage` input
-   - Make sure your OpenAI API key is configured in instance settings
-5. Place a Send Chat node. Connect the LLM Chat `response` output to the Send Chat `message` input
-6. Connect the `bot` from On Chat through to Send Chat
-7. Activate the script
+**Nodes**
+
+- `On Interval`
+- `Get Bots`
+- `For Each Bot`
+- `Get Health`
+- `Print`
+
+**How to build it**
+
+1. Add `On Interval` and set `intervalMs` to something reasonable like `5000`.
+2. Add `Get Bots`.
+3. Add `For Each Bot`.
+4. Connect `On Interval.exec` to `For Each Bot.exec`.
+5. Connect `Get Bots.bots` to the bot list input on `For Each Bot`.
+6. Inside the loop body, add `Get Health`.
+7. Connect the current bot from `For Each Bot` to `Get Health.bot`.
+8. Add `Print` to log the result if you want quick feedback while testing.
+
+Use this pattern any time you want periodic work across the whole instance.
+
+## 4. Auto-respawn and notify Discord
+
+**Goal:** Recover from death and send a webhook notification.
+
+<Mermaid chart="
+graph LR
+    A[On Death] --> B[Respawn]
+    A --> C[Discord Webhook]
+" />
+
+**Nodes**
+
+- `On Death`
+- `Respawn`
+- `Discord Webhook`
+- Optional: `Format`
+
+**How to build it**
+
+1. Add `On Death`.
+2. Add `Respawn` and connect `On Death.exec` to `Respawn.exec`.
+3. Connect `On Death.bot` to `Respawn.bot`.
+4. Add `Discord Webhook`.
+5. Connect `On Death.exec` to `Discord Webhook.exec`.
+6. If you want a richer message, use `Format` to include values such as `shouldRespawn`.
+
+If the server or game mode already handles respawns the way you want, you can drop the `Respawn` node and keep only the notification branch.
+
+## 5. Flee when hurt
+
+**Goal:** Move away from danger when a bot takes damage.
+
+<Mermaid chart="
+graph LR
+    A[On Damage] --> B[Pathfind Away From]
+    C[Get Position] --> B
+" />
+
+**Nodes**
+
+- `On Damage`
+- `Get Position`
+- `Pathfind Away From`
+- Optional: `Branch`
+
+**How to build it**
+
+1. Add `On Damage`.
+2. Add `Get Position` and connect `On Damage.bot` to it.
+3. Add `Pathfind Away From`.
+4. Connect `On Damage.exec` to `Pathfind Away From.exec`.
+5. Connect `On Damage.bot` to `Pathfind Away From.bot`.
+6. Feed the current position into `Pathfind Away From` as the point to move away from, or use another danger position if you already have one.
+7. Optionally gate the behavior behind a `Branch` that checks `newHealth`.
+
+This is a good first example of mixing a trigger, a data query, and an action.
+
+## 6. Mine a nearby target block
+
+**Goal:** Search for a block, walk to it, and break it.
+
+<Mermaid chart="
+graph LR
+    A[On Join] --> B[Branch]
+    C[Find Block] --> B
+    B -->|true| D[Pathfind To]
+    D --> E[Break Block]
+    E --> F[Wait]
+" />
+
+**Nodes**
+
+- `On Join`
+- `Find Block`
+- `Branch`
+- `Pathfind To`
+- `Break Block`
+- `Wait`
+
+**How to build it**
+
+1. Add `On Join`.
+2. Add `Find Block` and connect the joining bot to it.
+3. Configure the block ID and search range.
+4. Add `Branch` to check whether `Find Block` produced a valid result.
+5. On the success path, use `Pathfind To` with the target coordinates.
+6. Follow it with `Break Block`.
+7. Add `Wait` if you plan to loop or repeat this pattern.
+
+This is safer than putting a mining loop straight on a tick trigger.
+
+## 7. Build a small AI responder
+
+**Goal:** Send a chat message to an LLM and post the answer back in-game.
+
+<Mermaid chart="
+graph LR
+    A[On Chat] --> B[Branch]
+    C[String Contains] --> B
+    B -->|true| D[LLM Chat]
+    D -->|success| E[Send Chat]
+    D -->|error| F[Print]
+" />
+
+**Nodes**
+
+- `On Chat`
+- `String Contains`
+- `Branch`
+- `LLM Chat`
+- `Send Chat`
+- `Print`
+
+**How to build it**
+
+1. Use `String Contains` to decide which messages should reach the model.
+2. Connect the plain-text message to `LLM Chat.prompt`.
+3. Set a short system prompt.
+4. Connect `LLM Chat.response` to `Send Chat.message`.
+5. Connect the success path to `Send Chat`.
+6. Connect the error path to `Print` so failures are visible while testing.
 
 <Callout type="info">
-  Configure your OpenAI API key in the instance settings before using the LLM Chat node. The node supports any OpenAI-compatible endpoint, so you can also use local models.
+  `LLM Chat` uses the bot's AI settings. It also supports a per-node model override. If no override is set, the current implementation falls back to `gpt-4o-mini`.
 </Callout>
 
----
+## Debugging advice
 
-## Auto-respawn with Discord notification
-
-**Goal:** Automatically respawn after death and send a notification to Discord.
-
-**Nodes:**
-1. **On Death** (trigger) - fires when the bot dies
-2. **Wait** (action) - brief delay before respawning
-3. **Send Chat** (action) - sends `/respawn` or a death message
-4. **Discord Webhook** (network) - posts to a Discord channel
-
-<Mermaid chart="
-graph LR
-    A[On Death] -->|exec| B[Wait 2s]
-    B -->|exec| C[Send Chat]
-    A -->|exec| D[Discord Webhook]
-" />
-
-**Setup:**
-1. Place an On Death trigger
-2. Place a Wait node with a 2000ms delay (gives the death screen time to appear)
-3. Connect the Wait output to a Send Chat node (or use a respawn action if available)
-4. In parallel, connect On Death to a Discord Webhook node:
-   - Set the webhook URL to your Discord channel's webhook
-   - Use a Format node to build the message, e.g., `Bot died! Previous health: {previousHealth}`
-5. Activate the script
-
-The bot will respawn after 2 seconds and simultaneously notify your Discord channel about the death.
-
----
-
-## Patrol bot
-
-**Goal:** Have a bot walk between waypoints on a loop.
-
-**Nodes:**
-1. **On Interval** (trigger) - fires every N seconds
-2. **Modulo** (math) - cycles through waypoint indices
-3. **Switch** (flow) - routes to different Pathfind nodes
-4. **Pathfind To** (action) - moves to each waypoint
-5. **Get Bots** (data) - gets a bot to move
-
-<Mermaid chart="
-graph LR
-    A[On Interval] -->|exec| B[Modulo]
-    B -->|data| C{Switch}
-    C -->|case 0| D[Pathfind To\n100, 64, 200]
-    C -->|case 1| E[Pathfind To\n150, 64, 250]
-    C -->|case 2| F[Pathfind To\n100, 64, 300]
-" />
-
-**Setup:**
-1. Place an On Interval trigger. Set the interval to 15000ms (15 seconds, enough time to walk between points)
-2. Place a Modulo node. Connect `executionCount` to one input, set the other to `3` (number of waypoints)
-3. Place a Switch node. Connect the Modulo result to its input
-4. For each case (0, 1, 2), place a Pathfind To node with different coordinates
-5. Use a Get Bots node and For Each Bot to apply this to all connected bots, or use a specific bot reference
-6. Activate the script
-
-The bot will cycle through the three waypoints every 15 seconds, walking to each one in order.
-
----
-
-## Resource collector
-
-**Goal:** Find and mine a specific block type nearby.
-
-**Nodes:**
-1. **On Bot Init** (trigger) - starts when the bot connects
-2. **Find Block** (data) - locates the nearest target block
-3. **Branch** (flow) - checks if a block was found
-4. **Pathfind To** (action) - walks to the block
-5. **Break Block** (action) - mines the block
-6. **Wait** (action) - brief pause between attempts
-
-<Mermaid chart="
-graph LR
-    A[On Bot Init] -->|exec| B[Find Block]
-    B -->|exec| C{Branch}
-    C -->|found| D[Pathfind To]
-    D -->|exec| E[Break Block]
-    E -->|exec| F[Wait 2s]
-    F -->|exec| B
-" />
-
-**Setup:**
-1. Place an On Bot Init trigger
-2. Place a Find Block node. Set the block type to what you want to mine (e.g., `diamond_ore`) and a search radius (e.g., 32 blocks)
-3. Place a Branch node. Connect the "found" boolean output to its condition
-4. On the "true" path:
-   - Place a Pathfind To node. Connect the block's x, y, z to the pathfinding target
-   - Place a Break Block node. Connect the same coordinates
-   - Place a Wait node (2000ms to let the block break)
-5. Loop back: connect the Wait node's exec output back to the Find Block node's exec input (this creates a loop)
-6. Activate the script
-
-The bot will continuously search for the target block, walk to it, mine it, wait, and then search again.
-
-<Callout type="warn">
-  Make sure your loop has a reasonable Wait duration to avoid overwhelming the server. The break block action takes real game time, so 2-3 seconds is usually enough.
-</Callout>
-
----
-
-## Tips for building scripts
-
-- **Start small.** Build one piece at a time and test as you go. Activate the script and watch the execution log to see if things work as expected.
-- **Use the execution log.** It shows you exactly which nodes fired, what data they produced, and any errors that occurred.
-- **Save often.** The editor tracks unsaved changes, but it's good practice to save after each working iteration.
-- **Group related nodes.** Select multiple nodes and press **Ctrl+G** to group them. This keeps complex scripts organized.
-- **Mute nodes for testing.** Press **M** on a selected node to mute it. Muted nodes are skipped during execution, which is useful for testing different parts of your script.
+- Use `Print` often while building a script.
+- Keep your first version linear. Add loops and branches only after the happy path works.
+- Prefer `On Join` or `On Interval` while prototyping. They are easier to reason about than tick triggers.
+- Add `Wait`, `Debounce`, or `Rate Limit` before any repeated web or AI call.

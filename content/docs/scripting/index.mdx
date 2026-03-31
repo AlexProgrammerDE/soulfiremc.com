@@ -1,141 +1,178 @@
 ---
 title: Scripting
-description: Automate your bots with SoulFire's visual node-based scripting system. Build complex behaviors without writing a single line of code.
+description: Build visual automation for SoulFire bots with the current node-based scripting system.
 ---
 
-import { Workflow, Blocks, Zap, Bug } from 'lucide-react';
+import { Workflow, Blocks, Zap, BookOpen } from 'lucide-react';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Mermaid } from '../../../src/components/mdx/mermaid';
 
 <Callout type="info">
-  SoulFire's scripting system is a **visual node-based editor**, similar to Unreal Engine Blueprints or Blender's Geometry Nodes, but designed for Minecraft bots. No programming experience required.
+  SoulFire scripts are built in a visual editor. You connect nodes instead of writing code, but the system still follows a real execution model with triggers, data flow, and per-script limits.
 </Callout>
 
-## What is visual scripting?
+## What scripting is in SoulFire
 
-Instead of writing code, you build bot behaviors by connecting **nodes** in a visual graph.
-Each node performs a specific action, whether that's listening for events, making decisions, controlling bots, or processing data.
-You connect nodes together by dragging edges between their ports, and SoulFire handles the rest.
+A SoulFire script is a graph of connected nodes.
 
-The script editor is built right into the SoulFire client. Open any instance, go to the **Scripts** tab, and start building.
+- **Trigger nodes** start a run when something happens.
+- **Action nodes** tell bots to do work.
+- **Data nodes** read state from the world, the bot, or SoulFire itself.
+- **Flow nodes** decide what should run next.
+- **Utility nodes** transform values so the next node gets the shape it needs.
 
-### How it works
+You build scripts in the **Scripts** tab for an instance. Each script belongs to one instance, can be paused or active, and starts listening for events when it is active.
 
-1. **Triggers** start your script when something happens: a chat message arrives, a bot joins, a timer fires
-2. **Data flows** along the edges between nodes, carrying values like messages, positions, or bot references
-3. **Logic nodes** make decisions: check conditions, branch execution, loop over items
-4. **Action nodes** control your bots: send chat messages, pathfind to coordinates, attack entities, place blocks
-5. **The engine runs reactively**: scripts don't loop continuously, they respond to events as they happen
+## How scripts actually run
 
-### Key features
-
-- **70+ built-in nodes** across 12 categories, from basic math to AI chat completions
-- **9 event triggers** that respond to chat messages, deaths, damage, ticks, timers, and more
-- **Real-time execution logs** so you can watch your script run node by node with live output
-- **Node debugging** to inspect values flowing through any connection
-- **AI/LLM integration** with built-in nodes for OpenAI chat completions
-- **HTTP requests** to call external APIs and webhooks from your scripts
-- **Persistent state** to store data per-script or per-bot across sessions
-- **Import/Export** to share scripts as JSON files
-- **Keyboard shortcuts** with 20+ shortcuts for power users (Shift+A to quick-add, Ctrl+G to group, M to mute)
-
-## Quick start: your first script
-
-Here's how to build a simple auto-greeter that welcomes players when your bot joins a server:
-
-1. Open the SoulFire client and navigate to your instance
-2. Go to the **Scripts** tab and click **Create Script**
-3. Give it a name like "Auto Greeter"
-4. In the editor, press **Shift+A** to open the quick-add menu
-5. Search for **On Join** and place it on the canvas (this is your trigger)
-6. Press **Shift+A** again and add a **Send Chat** action node
-7. Connect the **exec** output port of "On Join" to the **exec** input port of "Send Chat"
-8. In the Send Chat node's settings, type your welcome message (e.g., `Hello everyone!`)
-9. Click **Save**, then hit the **Play** button to activate your script
-
-That's it. When your bot joins a server, it will automatically send the greeting. You can watch it happen in real-time in the **Execution Log** panel at the bottom of the editor.
-
-## Core concepts
-
-### Nodes
-
-Nodes are the building blocks of your scripts. Each node has:
-
-- **Input ports** on the left side to receive data or execution signals
-- **Output ports** on the right side to send data or execution signals
-- A **category color**: orange for triggers, green for actions, blue for logic, purple for flow control, etc.
-
-### Edges
-
-Edges are the connections between nodes. There are two types:
-
-- **Execution edges** control the order that nodes run (like a program's control flow)
-- **Data edges** carry values between nodes (numbers, strings, bots, lists, etc.)
-
-### Ports
-
-Ports are the connection points on nodes. Each port has a type:
-
-| Port Type | Description | Example |
-|-----------|-------------|---------|
-| Exec | Controls execution order | "Run this node next" |
-| Number | Numeric values | Health, coordinates, counts |
-| String | Text values | Chat messages, player names |
-| Boolean | True/false values | Condition results |
-| Bot | Bot references | Which bot to control |
-| List | Collections of values | All connected bots |
-| Block | Minecraft block types | Stone, dirt, diamond ore |
-| Entity | Entity references | Players, mobs |
-| Item | Item types | Diamond sword, golden apple |
-| Vector3 | 3D coordinates | Positions in the world |
-
-### Triggers
-
-Triggers are special nodes that start your script's execution. A script does nothing until a trigger fires. You can have multiple triggers in one script, and each one starts its own independent execution chain.
-
-### Execution model
-
-SoulFire scripts are **reactive**, not imperative. Instead of running in a loop, scripts wait for triggers to fire and then execute the connected node chain.
+SoulFire scripting is event-driven. A script does not sit in a busy loop. It waits for a trigger, then runs the connected chain for that trigger.
 
 <Mermaid chart="
 graph LR
-    T[Trigger fires] --> E[Execute node chain]
-    E --> D{More nodes?}
-    D -->|Yes| E
-    D -->|No| W[Wait for next trigger]
-    W --> T
+    A[Trigger fires] --> B[Run connected nodes]
+    B --> C{More work?}
+    C -->|Yes| B
+    C -->|No| D[Wait for the next trigger]
 " />
 
-This means:
+That matters because:
 
-- Scripts use minimal resources when idle
-- Multiple trigger events can run in parallel (up to 8 concurrent branches)
-- Each trigger invocation gets its own isolated state
-- Errors in one execution don't affect others
+- Idle scripts cost very little.
+- Different triggers in the same script can start separate runs.
+- Concurrency is limited by script quotas. The current default is **1 concurrent trigger run**, not 8.
+- Event-based triggers use backpressure. If a trigger floods faster than SoulFire can process it, extra events can be dropped.
+- `On Pre Entity Tick` and `On Post Entity Tick` run synchronously on the tick thread. Use them only when you truly need per-tick timing.
+
+## The mental model
+
+### 1. Triggers start runs
+
+SoulFire currently ships with **12 trigger nodes**:
+
+- `On Bot Init`
+- `On Chat`
+- `On Container Open`
+- `On Damage`
+- `On Death`
+- `On Disconnect`
+- `On Interval`
+- `On Join`
+- `On Pre Entity Tick`
+- `On Post Entity Tick`
+- `On Script Init`
+- `On Script End`
+
+The old idea of a single generic `On Tick` trigger is outdated. The current engine splits tick work into pre-physics and post-physics phases.
+
+### 2. Execution edges decide order
+
+Execution edges answer the question "what runs next?"
+
+If you connect `On Join -> Send Chat -> Wait -> Pathfind To`, SoulFire runs those nodes in that order when the trigger fires.
+
+### 3. Data edges carry values
+
+Data edges move values like:
+
+- numbers
+- strings
+- booleans
+- vectors
+- bots
+- entities
+- blocks
+- items
+- lists
+
+For example, `On Chat` can output the plain-text message, then `String Contains` can inspect it, then `Branch` can choose a path.
+
+### 4. Not every trigger gives you a bot
+
+This is one of the most important implementation details.
+
+- Most bot event triggers output a `bot`.
+- `On Interval`, `On Script Init`, and `On Script End` do **not** give you a bot.
+- If you want to act on bots from `On Interval`, start with `Get Bots` and then loop with `For Each Bot`.
+
+## Quick start
+
+Build a simple "say hello on join" script:
+
+1. Open an instance and go to **Scripts**.
+2. Create a new script.
+3. Add `On Join`.
+4. Add `Send Chat`.
+5. Connect the `exec` output of `On Join` to the `exec` input of `Send Chat`.
+6. Set the message on `Send Chat`, for example `hello from SoulFire`.
+7. Save the script and make sure it is active.
+
+That is enough to make each joining bot send a message once it is fully ready in the world.
+
+## Choose the right trigger
+
+Use this table when you are deciding where to start.
+
+| If you want to... | Start with... | Why |
+| --- | --- | --- |
+| Do one-time setup when the script starts | `On Script Init` | Good for initialization that is not tied to a specific bot |
+| Run logic when a bot is fully ready in the world | `On Join` | Best default for bot startup actions |
+| Run logic before the player object is ready | `On Bot Init` | Earlier than `On Join` |
+| React to chat | `On Chat` | Gives you the message and the bot |
+| Poll on a timer | `On Interval` | Simple, predictable, not tied to a single bot |
+| Run precise per-tick movement or aiming logic | `On Pre Entity Tick` | Happens before entity physics |
+| Run precise per-tick combat or post-move logic | `On Post Entity Tick` | Happens after entity physics |
+
+## Common building blocks
+
+These node groups do most of the heavy lifting in real scripts:
+
+- **Actions** for movement, chat, inventory, combat, and pathfinding
+- **Data** for reading bot state, inventory, position, light, weather, effects, and nearby targets
+- **Flow Control** for branching, looping, rate limiting, and iterating over bots or lists
+- **Variables and State** for session data, persistent metadata, and in-memory caches
+- **Network, Integration, and AI** for web requests, Discord webhooks, and LLM calls
+
+SoulFire currently exposes **163 built-in nodes** across **17 categories**.
+
+## Practical advice
+
+- Start with `On Join`, `On Chat`, or `On Interval` unless you specifically need lower-level timing.
+- Keep tick-trigger scripts small. Expensive chains do not belong in pre-tick or post-tick paths.
+- Use `Print` while building. It is the fastest way to see what your script is doing.
+- Use `Wait`, `Debounce`, or `Rate Limit` before repeated network calls or chat actions.
+- Prefer `Vector3` values for movement-related logic when a node supports them.
+- Store durable data in persistent variables. Use session variables for throwaway run-time state.
 
 ## Learn more
 
 <Cards>
   <Card
-    icon={<Blocks/>}
-    title="Node Reference"
-    href="/docs/scripting/node-reference"
-  >
-    Browse all 70+ nodes organized by category.
-  </Card>
-  <Card
-    icon={<Zap/>}
+    icon={<Zap />}
     title="Triggers"
     href="/docs/scripting/triggers"
   >
-    Deep dive into the 9 event triggers.
+    Learn when each trigger fires and what data it provides.
   </Card>
   <Card
-    icon={<Workflow/>}
+    icon={<Workflow />}
     title="Examples"
     href="/docs/scripting/examples"
   >
-    Step-by-step workflow examples.
+    Build common automation flows step by step.
+  </Card>
+  <Card
+    icon={<Blocks />}
+    title="Node reference"
+    href="/docs/scripting/node-reference"
+  >
+    Browse every built-in node by category.
+  </Card>
+  <Card
+    icon={<BookOpen />}
+    title="Docs index"
+    href="/docs"
+  >
+    Return to the main documentation.
   </Card>
 </Cards>
