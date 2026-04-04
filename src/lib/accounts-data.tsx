@@ -493,7 +493,7 @@ export const SHOPS: Shop[] = [
     slug: "localts",
     name: "Localts",
     logo: "/accounts/localts.png",
-    url: "https://localts.store",
+    url: "https://localts.store/?campaign=soulfire",
     websiteUrl: "https://localts.info",
     discordUrl: "https://localts.store/discord",
     startDate: "Jun 2023",
