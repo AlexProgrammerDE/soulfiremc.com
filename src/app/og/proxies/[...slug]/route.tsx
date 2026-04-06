@@ -1,6 +1,6 @@
 import { ImageResponse } from "@takumi-rs/image-response";
 import { notFound } from "next/navigation";
-import { ProxyOgImage } from "@/components/og/soulfire";
+import { ProxyOgImage } from "@/components/og/site";
 import { getProxyPageImage, stripOgSuffix } from "@/lib/og";
 import { getOgAssetDataUri } from "@/lib/og-assets";
 import { getProviderBySlug, PROVIDERS } from "@/lib/proxies-data";

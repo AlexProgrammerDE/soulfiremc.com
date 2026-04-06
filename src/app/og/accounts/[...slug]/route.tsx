@@ -1,6 +1,6 @@
 import { ImageResponse } from "@takumi-rs/image-response";
 import { notFound } from "next/navigation";
-import { AccountOgImage } from "@/components/og/soulfire";
+import { AccountOgImage } from "@/components/og/site";
 import { getShopBySlug, SHOPS } from "@/lib/accounts-data";
 import { getAccountPageImage, stripOgSuffix } from "@/lib/og";
 import { getOgAssetDataUri } from "@/lib/og-assets";

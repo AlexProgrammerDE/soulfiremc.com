@@ -5,7 +5,7 @@ import {
   DirectoryOgImage,
   DownloadOgImage,
   HomeOgImage,
-} from "@/components/og/soulfire";
+} from "@/components/og/site";
 import { PROVIDERS as ACCOUNT_PROVIDERS } from "@/lib/accounts-data";
 import { getSitePageImage, SITE_OG_PAGES, stripOgSuffix } from "@/lib/og";
 import { PROVIDERS as PROXY_PROVIDERS } from "@/lib/proxies-data";
@@ -66,9 +66,7 @@ export async function GET(
       break;
     case "get-accounts": {
       const uniqueProviders = [
-        ...new Map(
-          ACCOUNT_PROVIDERS.map((p) => [p.slug, p]),
-        ).values(),
+        ...new Map(ACCOUNT_PROVIDERS.map((p) => [p.slug, p])).values(),
       ];
       image = (
         <DirectoryOgImage

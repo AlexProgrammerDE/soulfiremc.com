@@ -392,6 +392,114 @@ export function BlogOgImage({
   );
 }
 
+export function DocsOgImage({
+  title,
+  description,
+  slugs,
+}: {
+  title: string;
+  description?: string | null;
+  slugs?: string[];
+}) {
+  const visibleSlugs =
+    slugs && slugs.length > 0
+      ? slugs.slice(-4).map((slug) => labelize(slug))
+      : ["Documentation"];
+  const breadcrumb =
+    slugs && slugs.length > 0
+      ? slugs
+          .slice(-2)
+          .map((slug) => labelize(slug))
+          .join(" / ")
+      : "SoulFire Docs";
+
+  return (
+    <Canvas primary={palette.cyan} secondary={palette.violet}>
+      <Eyebrow label="Docs" accent={palette.cyan} trailing={breadcrumb} />
+      <div style={{ display: "flex", flex: 1, gap: 28, marginTop: 34 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            flex: 1.1,
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+            <div
+              style={{
+                fontSize: fitTitleSize(title, {
+                  base: 80,
+                  medium: 72,
+                  long: 64,
+                  xlong: 56,
+                }),
+                lineHeight: 1.02,
+                fontWeight: 800,
+                letterSpacing: "-0.05em",
+              }}
+            >
+              {title}
+            </div>
+            <div
+              style={{
+                maxWidth: 680,
+                fontSize: 29,
+                lineHeight: 1.35,
+                color: palette.muted,
+              }}
+            >
+              {description ||
+                "Guides and reference material for using, extending, and operating SoulFire."}
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {visibleSlugs.map((slug) => (
+              <Chip key={slug}>{slug}</Chip>
+            ))}
+          </div>
+        </div>
+        <Panel width={340}>
+          <MutedLabel>Documentation</MutedLabel>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 18,
+              padding: 22,
+              borderRadius: 24,
+              background: "rgba(255,255,255,0.04)",
+              border: `1px solid ${palette.border}`,
+            }}
+          >
+            <div style={{ fontSize: 24, color: palette.text, fontWeight: 700 }}>
+              Reference
+            </div>
+            <div
+              style={{ fontSize: 22, color: palette.muted, lineHeight: 1.45 }}
+            >
+              Setup, usage, scripting, plugin development, and operational
+              guides for SoulFire.
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 12 }}>
+            <Metric
+              label="Section"
+              value={visibleSlugs[0] || "Guides"}
+              accent={palette.cyan}
+            />
+            <Metric
+              label="Depth"
+              value={`${slugs?.length ?? 1} levels`}
+              accent={palette.violet}
+            />
+          </div>
+        </Panel>
+      </div>
+    </Canvas>
+  );
+}
+
 const opsPalette = {
   ink: "#040913",
   inkAlt: "#0a1422",
