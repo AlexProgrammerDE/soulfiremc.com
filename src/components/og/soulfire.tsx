@@ -299,6 +299,7 @@ export function BlogOgImage({
   date,
   tags,
   readTime,
+  logoSrc,
 }: {
   title: string;
   description?: string | null;
@@ -306,6 +307,7 @@ export function BlogOgImage({
   date?: string | null;
   tags?: string[];
   readTime?: string;
+  logoSrc?: string;
 }) {
   const category = tags?.[0] ? labelize(tags[0]) : "Blog";
   const byline = author || "SoulFire Team";
@@ -381,30 +383,33 @@ export function BlogOgImage({
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-        <div
-          style={{
-            display: "flex",
-            width: 80,
-            height: 80,
-            borderRadius: "50%",
-            overflow: "hidden",
-            border: "4px solid rgba(255,255,255,0.1)",
-            background: "rgba(255,255,255,0.04)",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        {logoSrc ? (
+          // biome-ignore lint/performance/noImgElement: Takumi ImageResponse needs a plain img tag for embedded OG assets.
+          <img
+            src={logoSrc}
+            alt="SoulFire logo"
+            style={{
+              width: 84,
+              height: 84,
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
+          />
+        ) : (
           <div
             style={{
               color: palette.amber,
               fontSize: 30,
               fontWeight: 800,
               letterSpacing: "-0.03em",
+              width: 64,
+              textAlign: "center",
+              flexShrink: 0,
             }}
           >
             SF
           </div>
-        </div>
+        )}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 32, fontWeight: 600 }}>{byline}</div>
           {metadata ? (
@@ -420,10 +425,12 @@ export function DocsOgImage({
   title,
   description,
   slugs,
+  logoSrc,
 }: {
   title: string;
   description?: string | null;
   slugs?: string[];
+  logoSrc?: string;
 }) {
   const section = slugs?.[0] ? labelize(slugs[0]) : "Documentation";
   const siteLabel = "soulfiremc.com/docs";
@@ -508,19 +515,30 @@ export function DocsOgImage({
           <div
             style={{
               display: "flex",
-              width: 42,
-              height: 42,
-              borderRadius: 12,
-              background: "rgba(76,201,255,0.16)",
-              border: "1px solid rgba(76,201,255,0.32)",
               alignItems: "center",
               justifyContent: "center",
               color: "#8bdcff",
               fontSize: 18,
               fontWeight: 800,
+              width: 42,
+              height: 42,
+              flexShrink: 0,
             }}
           >
-            SF
+            {logoSrc ? (
+              // biome-ignore lint/performance/noImgElement: Takumi ImageResponse needs a plain img tag for embedded OG assets.
+              <img
+                src={logoSrc}
+                alt="SoulFire logo"
+                style={{
+                  width: 34,
+                  height: 34,
+                  objectFit: "contain",
+                }}
+              />
+            ) : (
+              "SF"
+            )}
           </div>
           <div
             style={{
