@@ -241,6 +241,15 @@ export const PROVIDERS: Provider[] = [
       "isp",
     ],
   },
+  {
+    slug: "flameproxies",
+    name: "FlameProxies",
+    logo: "/providers/flameproxies.svg",
+    testimonial:
+      "81M+ residential IPs across 180+ countries, plus mobile, datacenter, and rotating ISP options. Pay-as-you-go from $0.50/GB with sticky sessions and SOCKS5 support.",
+    url: "https://flameproxies.com/register?referral=42M1SH76",
+    badges: ["budget-friendly", "residential", "datacenter", "mobile", "isp"],
+  },
   // Enterprise tier
   {
     slug: "bright-data",
