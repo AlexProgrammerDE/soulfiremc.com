@@ -2,19 +2,19 @@ import type { CSSProperties, ReactNode } from "react";
 import { labelize } from "@/lib/og";
 
 const palette = {
-  bg: "#07111d",
-  bgAlt: "#0c1a2c",
-  panel: "rgba(10, 24, 40, 0.8)",
-  panelStrong: "rgba(11, 28, 46, 0.94)",
-  border: "rgba(126, 171, 214, 0.22)",
-  text: "#f4fbff",
-  muted: "#9cb5cb",
-  cyan: "#58c7ff",
+  bg: "#040c18",
+  bgAlt: "#0a1628",
+  panel: "rgba(8, 20, 36, 0.85)",
+  panelStrong: "rgba(10, 24, 44, 0.94)",
+  border: "rgba(120, 170, 220, 0.18)",
+  text: "#f0f6ff",
+  muted: "#8daec8",
+  cyan: "#4cc9ff",
   blue: "#4a7dff",
-  green: "#75f1ba",
-  amber: "#ffb562",
-  rose: "#ff7d99",
-  violet: "#b89cff",
+  green: "#5ef0a8",
+  amber: "#ffb04a",
+  rose: "#ff6b8a",
+  violet: "#a98aff",
 };
 
 function canvasBackground(primary: string, secondary: string) {
