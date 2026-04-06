@@ -1,8 +1,8 @@
 import { ImageResponse } from "@takumi-rs/image-response";
 import { notFound } from "next/navigation";
 import { BlogOgImage } from "@/components/og/soulfire";
-import { getOgAssetDataUri } from "@/lib/og-assets";
 import { getBlogPageImage, stripOgSuffix } from "@/lib/og";
+import { getOgAssetDataUri } from "@/lib/og-assets";
 import { blogSource } from "@/lib/source";
 
 function getReadingTime(structuredData?: { contents?: { content: string }[] }) {

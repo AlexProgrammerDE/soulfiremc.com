@@ -801,8 +801,6 @@ export function ResourceOgImage({
   version?: string;
   logoSrc?: string;
 }) {
-  const normalizedBadges = badges.map((badge) => labelize(badge));
-
   return (
     <Layout
       section="Community Resource"

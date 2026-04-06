@@ -1,8 +1,8 @@
 import { ImageResponse } from "@takumi-rs/image-response";
 import { notFound } from "next/navigation";
 import { DocsOgImage } from "@/components/og/soulfire";
-import { getOgAssetDataUri } from "@/lib/og-assets";
 import { getDocsPageImage, stripOgSuffix } from "@/lib/og";
+import { getOgAssetDataUri } from "@/lib/og-assets";
 import { source } from "@/lib/source";
 
 export async function GET(
