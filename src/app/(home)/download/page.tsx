@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { imageMetadata } from "@/lib/metadata";
 import {
   getClientRelease,
   getReleaseVersion,
@@ -31,6 +32,7 @@ const SERVER_ICONS = {
 export const metadata: Metadata = {
   title: "Download SoulFire",
   description: "Pick your OS and CPU to grab the right SoulFire build.",
+  ...imageMetadata("/og/site/download/image.webp"),
 };
 
 export default async function DownloadPage() {

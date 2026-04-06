@@ -12,6 +12,7 @@ import {
   Rocket,
   Zap,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import type {
   BreadcrumbList,
@@ -31,12 +32,17 @@ import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
+import { imageMetadata } from "@/lib/metadata";
 import {
   HeroBackground,
   HomeFaq,
   ScriptingAnimation,
   TerminalAnimation,
 } from "./page.client";
+
+export const metadata: Metadata = {
+  ...imageMetadata("/og/site/home/image.webp"),
+};
 
 const plugins = [
   "Kill Aura",

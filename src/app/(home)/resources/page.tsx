@@ -3,6 +3,7 @@ import { cacheLife } from "next/cache";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
 import { JsonLd } from "@/components/json-ld";
+import { imageMetadata } from "@/lib/metadata";
 import { RESOURCES } from "@/lib/resources-data";
 import { getUpvoteCounts } from "@/lib/upvotes";
 import { ResourcesClient } from "./page.client";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   title: "Resources",
   description:
     "Community SoulFire plugins and scripts. Browse the registry to find plugins and scripts that extend your Minecraft bot automation.",
+  ...imageMetadata("/og/site/resources/image.webp"),
 };
 
 export default async function ResourcesPage() {

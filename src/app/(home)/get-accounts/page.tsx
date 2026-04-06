@@ -5,6 +5,7 @@ import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
 import { getDiscordInviteUrl, PROVIDERS } from "@/lib/accounts-data";
 import { fetchDiscordInvite } from "@/lib/discord";
+import { imageMetadata } from "@/lib/metadata";
 import { getUpvoteCounts } from "@/lib/upvotes";
 import { GetAccountsClient } from "./page.client";
 
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
   title: "Get Accounts",
   description:
     "Buy cheap Minecraft accounts for bot testing. Compare MFA and NFA accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
+  ...imageMetadata("/og/site/get-accounts/image.webp"),
 };
 
 export default async function GetAccountsPage() {

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 
-const DEFAULT_IMAGE = "/logo.png";
-
 export function imageMetadata(
   image?: string,
 ): Pick<Metadata, "openGraph" | "twitter"> {
@@ -11,12 +9,12 @@ export function imageMetadata(
       url: "./",
       siteName: "SoulFire",
       type: "website",
-      images: [image ?? DEFAULT_IMAGE],
+      images: [image ?? "/og/site/home/image.webp"],
     },
     twitter: {
       site: "https://soulfiremc.com",
-      card: "summary",
-      images: [image ?? DEFAULT_IMAGE],
+      card: "summary_large_image",
+      images: [image ?? "/og/site/home/image.webp"],
     },
   };
 }

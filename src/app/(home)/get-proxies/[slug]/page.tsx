@@ -30,6 +30,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { imageMetadata } from "@/lib/metadata";
+import { getProxyPageImage } from "@/lib/og";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -57,7 +58,7 @@ export async function generateMetadata(props: {
     alternates: {
       canonical: "./",
     },
-    ...imageMetadata(provider.logo),
+    ...imageMetadata(getProxyPageImage(provider.slug).url),
   };
 }
 

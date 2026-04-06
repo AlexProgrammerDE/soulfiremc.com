@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Blog, WithContext } from "schema-dts";
 import { JsonLd } from "@/components/json-ld";
+import { imageMetadata } from "@/lib/metadata";
 import { blogSource } from "@/lib/source";
 
 function getReadingTime(structuredData: {
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   title: "Blog",
   description:
     "Latest updates, tutorials, and insights about Minecraft bot testing, server stress testing, and SoulFire development.",
+  ...imageMetadata("/og/site/blog/image.webp"),
 };
 
 export default function BlogIndex() {

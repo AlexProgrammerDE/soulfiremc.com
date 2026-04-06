@@ -3,6 +3,7 @@ import { cacheLife } from "next/cache";
 import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import { JsonLd } from "@/components/json-ld";
+import { imageMetadata } from "@/lib/metadata";
 import { PROVIDERS } from "@/lib/proxies-data";
 import { getUpvoteCounts } from "@/lib/upvotes";
 import { GetProxiesClient } from "./page.client";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   title: "Get Proxies",
   description:
     "Best proxy providers for Minecraft bot testing. Compare residential, datacenter, ISP, and mobile proxies. Free tiers available, with coupon codes and bulk pricing from top providers.",
+  ...imageMetadata("/og/site/get-proxies/image.webp"),
 };
 
 export default async function GetProxiesPage() {

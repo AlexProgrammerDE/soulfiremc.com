@@ -29,6 +29,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { imageMetadata } from "@/lib/metadata";
+import { getResourcePageImage } from "@/lib/og";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -55,7 +56,7 @@ export async function generateMetadata(props: {
     alternates: {
       canonical: "./",
     },
-    ...imageMetadata(resource.logo),
+    ...imageMetadata(getResourcePageImage(resource.slug).url),
   };
 }
 

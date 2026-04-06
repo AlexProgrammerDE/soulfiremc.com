@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import type { BlogPosting, BreadcrumbList, WithContext } from "schema-dts";
 import { ShareButton } from "@/components/blog/share-button";
 import { JsonLd } from "@/components/json-ld";
+import { getBlogPageImage } from "@/lib/og";
 import { blogSource } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -262,7 +263,7 @@ export async function generateMetadata(props: {
   const page = blogSource.getPage([params.slug]);
   if (!page) notFound();
 
-  const ogImage = `/blog-og/${params.slug}/image.png`;
+  const ogImage = getBlogPageImage(page).url;
 
   return {
     title: page.data.title,

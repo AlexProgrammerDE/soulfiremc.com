@@ -57,6 +57,7 @@ import {
 } from "@/lib/accounts-data";
 import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
+import { getAccountPageImage } from "@/lib/og";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -81,7 +82,7 @@ export async function generateMetadata(props: {
     alternates: {
       canonical: "./",
     },
-    ...imageMetadata(shop.logo),
+    ...imageMetadata(getAccountPageImage(shop.slug).url),
   };
 }
 
