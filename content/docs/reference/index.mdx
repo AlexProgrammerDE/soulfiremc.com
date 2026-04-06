@@ -1,0 +1,81 @@
+---
+title: Reference
+description: Look up SoulFire commands, flags, formats, versions, and other product facts.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import {
+  Terminal,
+  List,
+  FileText,
+  BookText,
+  Blocks,
+} from "lucide-react";
+
+Use these pages when you need exact values, supported formats, or authoritative behavior details.
+
+<Cards>
+  <Card
+    icon={
+      <Terminal/>
+    }
+    title="Commands"
+    href="/docs/reference/commands"
+  >
+    Browse the built-in command set.
+  </Card>
+  <Card
+    icon={
+      <Terminal/>
+    }
+    title="CLI Flags"
+    href="/docs/reference/cli-flags"
+  >
+    See startup flags and their defaults.
+  </Card>
+  <Card
+    icon={
+      <FileText/>
+    }
+    title="Account Formats"
+    href="/docs/reference/account-formats"
+  >
+    See supported account types, input formats, and settings defaults.
+  </Card>
+  <Card
+    icon={
+      <FileText/>
+    }
+    title="Proxy Formats"
+    href="/docs/reference/proxy-formats"
+  >
+    See supported proxy types, file formats, and proxy settings defaults.
+  </Card>
+  <Card
+    icon={
+      <List/>
+    }
+    title="Supported Versions"
+    href="/docs/reference/versions"
+  >
+    Check which Minecraft versions SoulFire supports.
+  </Card>
+  <Card
+    icon={
+      <Blocks/>
+    }
+    title="Built-in Plugins"
+    href="/docs/reference/built-in-plugins"
+  >
+    See the currently documented built-in plugin list.
+  </Card>
+  <Card
+    icon={
+      <BookText/>
+    }
+    title="Terminology"
+    href="/docs/reference/terminology"
+  >
+    Look up common terms used across the docs and API.
+  </Card>
+</Cards>

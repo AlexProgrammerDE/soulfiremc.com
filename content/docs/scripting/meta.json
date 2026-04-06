@@ -1,4 +1,4 @@
 {
   "icon": "Workflow",
-  "pages": ["node-reference", "triggers", "examples"]
+  "pages": ["examples", "triggers", "node-reference"]
 }

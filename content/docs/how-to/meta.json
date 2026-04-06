@@ -1,0 +1,13 @@
+{
+  "icon": "BookOpen",
+  "pages": [
+    "gui-navigation",
+    "import-accounts",
+    "import-proxies",
+    "install-plugins",
+    "mcp",
+    "webdav",
+    "docker",
+    "dedicated-mode"
+  ]
+}

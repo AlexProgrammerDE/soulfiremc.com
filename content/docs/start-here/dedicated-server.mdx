@@ -1,12 +1,12 @@
 ---
-title: Installation on a Dedicated Server (Docker)
-description: Learn how to deploy SoulFire on a remote server using our automated setup script.
+title: Deploy a Dedicated Server (Automated Setup)
+description: Deploy SoulFire on a remote Linux server with the automated Docker-based setup script.
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Before installing, we recommend you to read the [main installation page](/docs/installation).
+If you are not sure whether you need a remote setup, read [Choose Your Setup](/docs/start-here/choose-your-setup) first.
 
 ## Automated Setup
 
@@ -95,7 +95,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
   <Step>
     ### Connect the GUI client
 
-    Open SoulFire on your PC ([install it](/docs/installation) if you haven't) and enter:
+    Open SoulFire on your PC ([install it](/docs/start-here) if you haven't) and enter:
     - **Server URL**: The HTTPS URL you configured (e.g. `https://your-domain.com` or `https://your-server-ip`)
     - **Access token**: The token from the previous step
 
@@ -120,5 +120,5 @@ From the menu you can:
 
 ## Further reading
 
-- [Docker guide](/docs/guides/docker) — manual Docker Compose setup, Pterodactyl/Pelican egg, and advanced HTTPS configuration
-- [Dedicated mode guide](/docs/guides/dedicated-mode) — running SoulFire without Docker (bare metal Java)
+- [Docker guide](/docs/how-to/docker) — manual Docker Compose setup, Pterodactyl/Pelican egg, and advanced HTTPS configuration
+- [Dedicated mode guide](/docs/how-to/dedicated-mode) — running SoulFire without Docker (bare metal Java)

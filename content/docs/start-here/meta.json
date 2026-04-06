@@ -1,0 +1,12 @@
+{
+  "icon": "Map",
+  "pages": [
+    "choose-your-setup",
+    "windows",
+    "macos",
+    "linux",
+    "gui-mode",
+    "dedicated-server",
+    "cli-mode"
+  ]
+}

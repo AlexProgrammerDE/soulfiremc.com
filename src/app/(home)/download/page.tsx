@@ -100,11 +100,11 @@ export default async function DownloadPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              Follow the installation docs for a full walkthrough, including
+              Follow the start-here docs for a full walkthrough, including
               account setup, plugins, and tuning tips for realistic bot testing.
             </p>
             <Button asChild variant="outline">
-              <Link href="/docs/installation">Open the docs</Link>
+              <Link href="/docs/start-here">Open the docs</Link>
             </Button>
           </CardContent>
         </Card>

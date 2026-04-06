@@ -649,7 +649,7 @@ export function GetAccountsClient(props: Props) {
           <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more
           information on how to use accounts with SoulFire, read the{" "}
           <Link
-            href="/docs/usage/accounts"
+            href="/docs/how-to/import-accounts"
             className="underline hover:text-foreground"
           >
             Account Guide

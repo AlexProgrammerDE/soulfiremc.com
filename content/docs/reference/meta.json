@@ -1,0 +1,12 @@
+{
+  "icon": "FileText",
+  "pages": [
+    "commands",
+    "cli-flags",
+    "account-formats",
+    "proxy-formats",
+    "versions",
+    "built-in-plugins",
+    "terminology"
+  ]
+}

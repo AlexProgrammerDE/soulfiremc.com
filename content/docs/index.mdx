@@ -1,48 +1,71 @@
 ---
-title: Introduction
-description: SoulFire is an advanced Minecraft bot tool that sends bots to your server for testing, automation, and development purposes.
+title: Docs
+description: Install SoulFire, run your first session, automate bots, and look up product details.
 ---
 
-import { DownloadIcon, Workflow } from 'lucide-react';
+import {
+  Compass,
+  DownloadIcon,
+  FileText,
+  Lightbulb,
+  Workflow,
+  Wrench,
+} from 'lucide-react';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
 
 <Callout type="info">
-  **SoulFire 2.0** is built on **Fabric**, using official Minecraft client code. Bots now behave identically to real players.
+  New users should usually start with the local GUI path:
+  choose a setup, install SoulFire, then run the first session in the desktop app.
 </Callout>
 
-## Why should I use SoulFire?
+SoulFire is a Minecraft bot framework for server testing, automation, and development.
+This documentation is organized by what you are trying to do, not just by feature area.
 
-SoulFire strives to be the best bot tool for Minecraft servers.
-It's simple enough for beginners, but gives advanced users full control.
+## Start here
 
-SoulFire 2.0 was a complete rewrite that transformed SoulFire into a special Fabric mod running the official Minecraft client code.
-Servers can't tell the bots apart from real players.
-
-### Why Fabric-based?
-
-SoulFire 2.0 uses the actual Minecraft client code through Fabric, which provides:
-
-* **Perfect vanilla parity**: Bots use the exact same code as real Minecraft clients
-* **100% accurate physics**: Movement, collisions, and action prediction match the real client exactly
-* **Protocol parity**: Network communication is identical to real clients, making bots undetectable by most anticheats
-* **Faster updates**: New Minecraft versions can be supported much more quickly
-* **Fabric mod support**: SoulFire plugins are Fabric mods, and some third-party Fabric mods work out of the box
-* **Multi-version support**: Through [ViaFabricPlus](https://github.com/ViaVersion/ViaFabricPlus), SoulFire supports Bedrock Edition, and every Minecraft Classic, Alpha, Beta, Release version, and April Fools snapshots, all while running on the latest Minecraft version
-
-### Features
-
-* Pathfinding system to measure chunk loading and entity processing
-* Many [plugins](/docs/usage/plugins) to make your bots do useful things, such as kill aura, auto totem/armor/eat/jump and more
-* [Visual scripting system](/docs/scripting) with 70+ drag-and-drop nodes for building bot behaviors without writing code
-* Tools for advanced connections such as connecting to backend servers with proxy forwarding mode enabled (BungeeCord, Velocity, BungeeGuard)
-
-## Getting started
+Follow these pages in order if this is your first time with SoulFire.
 
 <Cards>
-  <Card icon={<DownloadIcon/>} title="Install SoulFire" href="/docs/installation">
+  <Card
+    icon={<Compass />}
+    title="Choose Your Setup"
+    href="/docs/start-here/choose-your-setup"
+  >
+    Decide between local GUI, CLI automation, or a remote dedicated server.
   </Card>
-  <Card icon={<Workflow/>} title="Visual Scripting" href="/docs/scripting">
+  <Card
+    icon={<DownloadIcon />}
+    title="Install SoulFire"
+    href="/docs/start-here"
+  >
+    Pick the right desktop or server install path.
+  </Card>
+  <Card
+    icon={<Workflow />}
+    title="Run Your First Session"
+    href="/docs/start-here/gui-mode"
+  >
+    Create an instance, configure a target, and start bots from the GUI.
+  </Card>
+</Cards>
+
+## Browse by goal
+
+<Cards>
+  <Card icon={<Compass />} title="Start Here" href="/docs/start-here">
+    Installation and first-run guides for new users.
+  </Card>
+  <Card icon={<Wrench />} title="How-to Guides" href="/docs/how-to">
+    Complete specific tasks such as importing accounts, proxies, and plugins.
+  </Card>
+  <Card icon={<Workflow />} title="Scripting" href="/docs/scripting">
     Build bot behaviors with drag-and-drop nodes.
+  </Card>
+  <Card icon={<FileText />} title="Reference" href="/docs/reference">
+    Look up commands, flags, formats, versions, and built-in plugin lists.
+  </Card>
+  <Card icon={<Lightbulb />} title="Concepts" href="/docs/concepts">
+    Understand operation modes, plugin architecture, and how SoulFire fits together.
   </Card>
 </Cards>

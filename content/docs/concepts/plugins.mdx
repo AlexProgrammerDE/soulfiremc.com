@@ -1,0 +1,77 @@
+---
+title: Plugins
+description: Understand why SoulFire plugins are Fabric mods and what that means for compatibility and extension.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## SoulFire 2.0: Built on Fabric
+
+<Callout type="info">
+  SoulFire 2.0 was a complete rewrite that transformed SoulFire into a special **Fabric mod** running the official Minecraft client code.
+  **SoulFire plugins are Fabric mods** and are loaded using the standard Fabric mod loader.
+</Callout>
+
+This architectural choice changes how you should think about extending SoulFire.
+
+### Why Fabric?
+
+- **Perfect vanilla parity**: SoulFire bots use the exact same code as the official Minecraft client, so they behave identically to real players on the server side
+- **Accurate physics and movement**: Bot movement, action prediction, and collision detection are 100% accurate since they use Minecraft's actual physics code
+- **Protocol parity**: Network communication matches the real client exactly, making bots effectively undetectable by anticheats
+- **Faster version updates**: Supporting new Minecraft versions is significantly easier and faster since the Minecraft code is already present
+- **Rapid feature development**: New features can be implemented quickly by building on top of existing Minecraft code
+- **Third-party mod support**: Some existing Fabric mods can work with SoulFire out of the box
+
+## Plugins are Fabric mods
+
+<Callout type="warn">
+  **Important**: SoulFire plugins are now standard Fabric mods. They are loaded by the Fabric mod loader just like any other Fabric mod.
+</Callout>
+
+Since SoulFire plugins are Fabric mods:
+
+- Plugins follow the standard Fabric mod structure (`fabric.mod.json`, entrypoints, etc.)
+- Plugins are loaded from the `minecraft/mods` directory by the Fabric mod loader
+- Plugins can use **Mixins** to modify both Minecraft and SoulFire code
+- Plugins have full access to the Minecraft codebase and Fabric APIs
+- Some existing Fabric mods may be compatible with SoulFire without modification
+
+## Built-in plugins vs community plugins
+
+- **Built-in plugins** ship with SoulFire and can be enabled or disabled per instance.
+- **Community plugins** are external Fabric mods that you add yourself.
+- Both use the same underlying Fabric loading model.
+
+For the current built-in list, see [Built-in Plugins](/docs/reference/built-in-plugins).
+
+## Compatibility expectations
+
+Some Fabric mods work with SoulFire without modification, but compatibility is not universal.
+
+- Mods that depend on rendering, audio, or other client-only features usually do not work.
+- Mods that change gameplay logic, networking, inventory behavior, or automation are more likely to work.
+- Mixins can touch both Minecraft code and SoulFire code, so plugin power comes with plugin risk.
+
+## Writing plugins
+
+Any questions regarding how SoulFire works and how to write a plugin can be asked in the [Discord](/discord).
+
+Since SoulFire plugins are Fabric mods, you create them the same way you would create any Fabric mod:
+
+1. Create a new Java or Kotlin project using the [Fabric mod template](https://fabricmc.net/develop/template/)
+2. Add SoulFire as a dependency in your `build.gradle`
+3. Create your `fabric.mod.json` with proper metadata and entrypoints
+4. Use Mixins to hook into Minecraft or SoulFire code as needed
+5. Build your mod as a standard Fabric mod `.jar` file
+
+There is a [plugin template](https://github.com/AlexProgrammerDE/SoulFirePluginExample) available on GitHub to help you get started.
+Official Javadocs are hosted on [CodeMC CI](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/index.html).
+
+You can also look at the built-in plugins for inspiration on how to structure your plugin.
+
+## Related pages
+
+- [Install Plugins](/docs/how-to/install-plugins) for the practical install steps
+- [Built-in Plugins](/docs/reference/built-in-plugins) for the built-in list
+- [Resources](/resources) for community plugins and scripts

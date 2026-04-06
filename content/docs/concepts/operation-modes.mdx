@@ -1,17 +1,17 @@
 ---
 title: Operation Modes
-description: Learn about the different operation modes of SoulFire.
+description: Understand how local integrated servers and remote dedicated servers fit into the SoulFire model.
 ---
 
 import { Mermaid } from '../../../src/components/mdx/mermaid';
 
-## Client vs. Server
+## One product, two roles
 
 In SoulFire there is a distinction between the client and the server.
 This is very similar to Minecraft, where the client is the game you play and the server is the game you connect to.
 In SoulFire, the client is the one that controls the bots and the server is the one that runs the bot sessions.
 
-## GUI/CLI Client Standalone
+## Integrated server (local)
 
 The GUI/CLI comes pre-installed with a SoulFire server.
 This means that you can run bot sessions on your machine without needing to set up a dedicated server.
@@ -30,7 +30,9 @@ graph LR
     I --> M
 " />
 
-## GUI/CLI Client Remote
+This is the recommended mode for most first-time users.
+
+## Dedicated server (remote)
 
 The GUI/CLI client is the SoulFire client that connects to a remote server.
 This is useful if you want to run bot sessions on a remote server that you want to remotely control.
@@ -55,3 +57,21 @@ graph LR
     OtherClient --> S
     S --> M
 " />
+
+## How GUI and CLI fit in
+
+- The **GUI** is best when you want visual control, configuration screens, plugins, and scripting tools.
+- The **CLI** is best when you want terminal automation, headless runs, or SSH workflows.
+- Both can run locally with an integrated server or connect to a remote dedicated server.
+
+## Which mode should you choose?
+
+- Choose the integrated server when you want the simplest local setup.
+- Choose a dedicated server when you want a long-running backend, remote access, or multiple clients on the same backend.
+- Choose the CLI when you want automation or a keyboard-only workflow.
+
+## Related pages
+
+- [Choose Your Setup](/docs/start-here/choose-your-setup) for the practical decision guide
+- [Run Your First Session](/docs/start-here/gui-mode) for the beginner path
+- [Deploy a Dedicated Server](/docs/start-here/dedicated-server) for the automated remote setup

@@ -1,0 +1,91 @@
+---
+title: How-to Guides
+description: Complete specific SoulFire tasks such as importing data, enabling plugins, and using integrations.
+---
+
+import {
+  AppWindow,
+  Cloud,
+  Blocks,
+  Bot,
+  Server,
+  User,
+} from "lucide-react";
+import { Cards, Card } from 'fumadocs-ui/components/card';
+
+Use these pages when you already know what you want to do and need the shortest path to completing it.
+
+<Cards>
+  <Card
+    icon={
+      <AppWindow/>
+    }
+    title="GUI Navigation"
+    href="/docs/how-to/gui-navigation"
+  >
+    Find where instances, settings, plugins, and scripts live in the interface.
+  </Card>
+  <Card
+    icon={
+      <User/>
+    }
+    title="Import Accounts"
+    href="/docs/how-to/import-accounts"
+  >
+    Add offline or Microsoft accounts to an instance.
+  </Card>
+  <Card
+    icon={
+      <Cloud/>
+    }
+    title="Import Proxies"
+    href="/docs/how-to/import-proxies"
+  >
+    Add proxy lists and control how bots are distributed across them.
+  </Card>
+  <Card
+    icon={
+      <Blocks/>
+    }
+    title="Install Plugins"
+    href="/docs/how-to/install-plugins"
+  >
+    Enable built-in plugins and install compatible community Fabric mods.
+  </Card>
+  <Card
+    icon={
+      <Bot/>
+    }
+    title="MCP (AI Integration)"
+    href="/docs/how-to/mcp"
+  >
+    Connect AI assistants to SoulFire through the Model Context Protocol.
+  </Card>
+  <Card
+    icon={
+      <Cloud/>
+    }
+    title="WebDAV"
+    href="/docs/how-to/webdav"
+  >
+    Browse and edit SoulFire files over WebDAV.
+  </Card>
+  <Card
+    icon={
+      <Server/>
+    }
+    title="Docker"
+    href="/docs/how-to/docker"
+  >
+    Deploy SoulFire with Docker Compose and optional HTTPS.
+  </Card>
+  <Card
+    icon={
+      <Server/>
+    }
+    title="Dedicated Mode"
+    href="/docs/how-to/dedicated-mode"
+  >
+    Run a long-lived SoulFire server without the automated setup script.
+  </Card>
+</Cards>

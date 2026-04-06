@@ -71,7 +71,7 @@ const features = [
     name: "Easy to use",
     description:
       "Native installers for Windows, macOS, and Linux. No Java required. Just download, install, and start botting.",
-    href: "/docs/installation",
+    href: "/docs/start-here",
     cta: "Install now",
     className: "col-span-3 lg:col-span-1",
     background: (
@@ -105,7 +105,7 @@ const features = [
     name: "Bring your own accounts",
     description:
       "Import Microsoft Java, Microsoft Bedrock, or Offline accounts. Supports device code auth, credentials, and auto-generated offline names.",
-    href: "/docs/usage/accounts",
+    href: "/docs/how-to/import-accounts",
     cta: "Learn more",
     className: "col-span-3 lg:col-span-2",
     background: <Meteors number={80} />,
@@ -132,7 +132,7 @@ const features = [
     name: "Every version supported",
     description:
       "Connect to any Minecraft version ever released: Classic, Alpha, Beta, up to the latest release, including Bedrock Edition and April Fools snapshots.",
-    href: "/docs/usage/versions",
+    href: "/docs/reference/versions",
     cta: "See all versions",
     className: "col-span-3 lg:col-span-1",
     background: (
@@ -153,8 +153,8 @@ const features = [
     name: "Plugin system",
     description:
       "15+ built-in plugins including Kill Aura, Auto Eat, Auto Armor, AI Chat Bot, and more. Create custom plugins as Fabric mods with full Minecraft API access.",
-    href: "/docs/usage/plugins",
-    cta: "Browse plugins",
+    href: "/docs/concepts/plugins",
+    cta: "Learn about plugins",
     className: "col-span-3 lg:col-span-2",
     background: (
       <Marquee pauseOnHover duration={20} gap={12} className="absolute top-8">
@@ -221,14 +221,14 @@ const faqItems: {
   {
     question: "What Minecraft versions does SoulFire support?",
     answerHtml:
-      'Every version ever released, from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support. See the <a href="https://soulfiremc.com/docs/usage/versions">full version list</a>.',
+      'Every version ever released, from Classic and Alpha through the latest release, including Beta, Combat Snapshots, April Fools editions, and Bedrock Edition. Version translation is handled automatically via built-in protocol support. See the <a href="https://soulfiremc.com/docs/reference/versions">full version list</a>.',
     answerElement: (
       <>
         Every version ever released, from Classic and Alpha through the latest
         release, including Beta, Combat Snapshots, April Fools editions, and
         Bedrock Edition. Version translation is handled automatically via
         built-in protocol support. See the{" "}
-        <Link href="/docs/usage/versions" className="underline text-primary">
+        <Link href="/docs/reference/versions" className="underline text-primary">
           full version list
         </Link>
         .
@@ -251,7 +251,7 @@ const faqItems: {
   {
     question: "How do I install SoulFire?",
     answerHtml:
-      '<a href="https://soulfiremc.com/download">Download</a> the native installer for your platform (Windows, macOS, or Linux). No Java required, everything is bundled. Just install and run. See the <a href="https://soulfiremc.com/docs/installation">installation guide</a> for a full walkthrough.',
+      '<a href="https://soulfiremc.com/download">Download</a> the native installer for your platform (Windows, macOS, or Linux). No Java required, everything is bundled. Just install and run. See the <a href="https://soulfiremc.com/docs/start-here">start-here guide</a> for a full walkthrough.',
     answerElement: (
       <>
         <Link href="/download" className="underline text-primary">
@@ -259,8 +259,8 @@ const faqItems: {
         </Link>{" "}
         the native installer for your platform (Windows, macOS, or Linux). No
         Java required, everything is bundled. Just install and run. See the{" "}
-        <Link href="/docs/installation" className="underline text-primary">
-          installation guide
+        <Link href="/docs/start-here" className="underline text-primary">
+          start-here guide
         </Link>{" "}
         for a full walkthrough.
       </>
@@ -269,13 +269,13 @@ const faqItems: {
   {
     question: "Does SoulFire support Bedrock Edition?",
     answerHtml:
-      'Yes. SoulFire can connect to Bedrock Edition servers via built-in protocol translation. Some features are still being added, but core functionality like joining, moving, and interacting works. See <a href="https://soulfiremc.com/docs/usage/versions">supported versions</a> for details.',
+      'Yes. SoulFire can connect to Bedrock Edition servers via built-in protocol translation. Some features are still being added, but core functionality like joining, moving, and interacting works. See <a href="https://soulfiremc.com/docs/reference/versions">supported versions</a> for details.',
     answerElement: (
       <>
         Yes. SoulFire can connect to Bedrock Edition servers via built-in
         protocol translation. Some features are still being added, but core
         functionality like joining, moving, and interacting works. See{" "}
-        <Link href="/docs/usage/versions" className="underline text-primary">
+        <Link href="/docs/reference/versions" className="underline text-primary">
           supported versions
         </Link>{" "}
         for details.
@@ -285,13 +285,13 @@ const faqItems: {
   {
     question: "Can I write custom plugins?",
     answerHtml:
-      'Yes. SoulFire plugins are Fabric mods with full access to the Minecraft API. You can create custom bot behaviors, automate complex tasks, or build testing scenarios tailored to your server. Learn how in the <a href="https://soulfiremc.com/docs/usage/plugins">plugin docs</a>.',
+      'Yes. SoulFire plugins are Fabric mods with full access to the Minecraft API. You can create custom bot behaviors, automate complex tasks, or build testing scenarios tailored to your server. Learn how in the <a href="https://soulfiremc.com/docs/concepts/plugins">plugin docs</a>.',
     answerElement: (
       <>
         Yes. SoulFire plugins are Fabric mods with full access to the Minecraft
         API. You can create custom bot behaviors, automate complex tasks, or
         build testing scenarios tailored to your server. Learn how in the{" "}
-        <Link href="/docs/usage/plugins" className="underline text-primary">
+        <Link href="/docs/concepts/plugins" className="underline text-primary">
           plugin docs
         </Link>
         .
@@ -589,7 +589,7 @@ export default function Page() {
           </div>
           <TerminalAnimation />
           <div className="flex mt-8">
-            <Link href="/docs/usage/commands">
+            <Link href="/docs/reference/commands">
               <Button variant="outline" className="gap-2">
                 View all commands
                 <ArrowRight className="w-4 h-4" />

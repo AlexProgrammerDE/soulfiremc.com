@@ -1,0 +1,82 @@
+---
+title: Install Plugins
+description: Enable built-in plugins and install compatible community Fabric mods in SoulFire.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+## Before you start
+
+- SoulFire plugins are Fabric mods. See [Plugins](/docs/concepts/plugins) for the architecture behind that.
+- Built-in plugins are already shipped with SoulFire. You only need to enable them.
+- Community plugins must be added as `.jar` files and loaded at startup.
+
+<Callout type="info">
+  For the current built-in list, see [Built-in Plugins](/docs/reference/built-in-plugins).
+</Callout>
+
+## Enable a built-in plugin
+
+<Steps>
+  <Step>
+    ### Open the instance
+
+    Open the instance where you want the plugin to run.
+  </Step>
+
+  <Step>
+    ### Enable the plugin
+
+    Open **Plugins** and turn on the built-in plugin you want to use.
+  </Step>
+
+  <Step>
+    ### Configure it if needed
+
+    Open **Plugin Settings** to change any options exposed by that plugin.
+  </Step>
+
+  <Step>
+    ### Start or restart the session
+
+    Start the instance, or restart it if you changed settings that only apply on startup.
+  </Step>
+</Steps>
+
+## Install a community plugin
+
+<Steps>
+  <Step>
+    ### Get a compatible Fabric mod `.jar`
+
+    Use a SoulFire-specific plugin or a Fabric mod that is compatible with SoulFire's non-rendering environment.
+  </Step>
+
+  <Step>
+    ### Place it in the mods directory
+
+    Put the `.jar` file in `minecraft/mods`.
+
+    - **Integrated server (GUI/CLI)**: Open `Help -> Data directory`, then go to `soulfire/minecraft/mods`
+    - **Dedicated server**: Use the `minecraft/mods` directory next to the server `.jar`
+  </Step>
+
+  <Step>
+    ### Restart SoulFire
+
+    New Fabric mods are loaded on startup, so restart the relevant SoulFire server after adding the file.
+  </Step>
+</Steps>
+
+## Compatibility notes
+
+- Mods that require rendering, audio, or other client-only features usually do not work.
+- Mods that change networking, automation, inventory behavior, or other game logic are more likely to work.
+- A plugin can use Mixins and deep integration points, so only install plugins you trust.
+
+## Related pages
+
+- [Plugins](/docs/concepts/plugins) for the Fabric-based plugin model
+- [Built-in Plugins](/docs/reference/built-in-plugins) for the shipped plugin list
+- [Resources](/resources) for community plugins and scripts

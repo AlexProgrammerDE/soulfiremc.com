@@ -116,6 +116,126 @@ const config: NextConfig = {
         destination: "https://www.youtube.com/watch?v=BD-xE8vbHtQ",
         permanent: false,
       },
+      {
+        source: "/docs/installation/windows",
+        destination: "/docs/start-here/windows",
+        permanent: true,
+      },
+      {
+        source: "/docs/installation/macos",
+        destination: "/docs/start-here/macos",
+        permanent: true,
+      },
+      {
+        source: "/docs/installation/linux",
+        destination: "/docs/start-here/linux",
+        permanent: true,
+      },
+      {
+        source: "/docs/installation/dedicated-server",
+        destination: "/docs/start-here/dedicated-server",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/gui-mode",
+        destination: "/docs/start-here/gui-mode",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/cli-mode",
+        destination: "/docs/start-here/cli-mode",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/gui-navigation",
+        destination: "/docs/how-to/gui-navigation",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/docker",
+        destination: "/docs/how-to/docker",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/webdav",
+        destination: "/docs/how-to/webdav",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/mcp",
+        destination: "/docs/how-to/mcp",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides/dedicated-mode",
+        destination: "/docs/how-to/dedicated-mode",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/accounts",
+        destination: "/docs/how-to/import-accounts",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/proxies",
+        destination: "/docs/how-to/import-proxies",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/account-formats",
+        destination: "/docs/reference/account-formats",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/proxy-formats",
+        destination: "/docs/reference/proxy-formats",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/versions",
+        destination: "/docs/reference/versions",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/commands",
+        destination: "/docs/reference/commands",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/cli-flags",
+        destination: "/docs/reference/cli-flags",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/operation-modes",
+        destination: "/docs/concepts/operation-modes",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage/plugins",
+        destination: "/docs/concepts/plugins",
+        permanent: true,
+      },
+      {
+        source: "/docs/terminology",
+        destination: "/docs/reference/terminology",
+        permanent: true,
+      },
+      {
+        source: "/docs/installation",
+        destination: "/docs/start-here",
+        permanent: true,
+      },
+      {
+        source: "/docs/guides",
+        destination: "/docs/how-to",
+        permanent: true,
+      },
+      {
+        source: "/docs/usage",
+        destination: "/docs/reference",
+        permanent: true,
+      },
     ];
   },
   // This is required to support PostHog trailing slash API requests

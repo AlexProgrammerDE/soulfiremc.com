@@ -352,7 +352,7 @@ export function GetProxiesClient({
           <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more
           information on how to use proxies with SoulFire, read the{" "}
           <Link
-            href="/docs/usage/proxies"
+            href="/docs/how-to/import-proxies"
             className="underline hover:text-foreground"
           >
             Proxy Guide

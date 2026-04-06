@@ -1,10 +1,10 @@
 {
   "pages": [
     "index",
-    "terminology",
-    "installation",
-    "guides",
+    "start-here",
+    "how-to",
     "scripting",
-    "usage"
+    "reference",
+    "concepts"
   ]
 }
