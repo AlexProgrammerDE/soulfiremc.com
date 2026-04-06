@@ -586,101 +586,47 @@ export function HomeOgImage() {
       <Eyebrow
         label="SoulFire"
         accent={palette.green}
-        trailing="Advanced Minecraft Bot Tool"
+        trailing="soulfiremc.com"
       />
-      <div style={{ display: "flex", flex: 1, gap: 30, marginTop: 34 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <div
-              style={{
-                fontSize: 92,
-                lineHeight: 0.98,
-                fontWeight: 850,
-                letterSpacing: "-0.06em",
-              }}
-            >
-              Real client code for serious Minecraft bot testing.
-            </div>
-            <div
-              style={{
-                maxWidth: 650,
-                fontSize: 30,
-                lineHeight: 1.35,
-                color: palette.muted,
-              }}
-            >
-              Stress test servers, automate sessions, and run bots across every
-              Minecraft era with a native desktop workflow.
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Chip tone="accent">Every version supported</Chip>
-            <Chip>Fabric-based runtime</Chip>
-            <Chip>Open source</Chip>
-          </div>
-        </div>
-        <Panel width={360}>
-          <MutedLabel>Session Overview</MutedLabel>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flex: 1,
+          marginTop: 28,
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 14,
-              padding: 22,
-              borderRadius: 24,
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${palette.border}`,
+              fontSize: 84,
+              lineHeight: 0.98,
+              fontWeight: 850,
+              letterSpacing: "-0.06em",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontSize: 24,
-              }}
-            >
-              <span style={{ color: palette.muted }}>Profiles</span>
-              <span style={{ color: palette.text, fontWeight: 700 }}>
-                GUI + CLI
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontSize: 24,
-              }}
-            >
-              <span style={{ color: palette.muted }}>Accounts</span>
-              <span style={{ color: palette.text, fontWeight: 700 }}>
-                Microsoft + Offline
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontSize: 24,
-              }}
-            >
-              <span style={{ color: palette.muted }}>Automation</span>
-              <span style={{ color: palette.text, fontWeight: 700 }}>
-                Plugins + Scripts
-              </span>
-            </div>
+            Advanced Minecraft Server Stress Testing
           </div>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Metric label="Bots" value="Real Physics" accent={palette.cyan} />
-            <Metric label="Reach" value="All Versions" accent={palette.green} />
+          <div
+            style={{
+              maxWidth: 820,
+              fontSize: 32,
+              lineHeight: 1.35,
+              color: palette.muted,
+            }}
+          >
+            Real client code. Every version. GUI, CLI, and dedicated server
+            modes. Open source.
           </div>
-        </Panel>
+        </div>
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+          <Chip tone="accent">All Minecraft Versions</Chip>
+          <Chip>Fabric Runtime</Chip>
+          <Chip>GUI + CLI + Dedicated</Chip>
+          <Chip>Plugin System</Chip>
+          <Chip>Open Source</Chip>
+        </div>
       </div>
     </Canvas>
   );
@@ -692,64 +638,46 @@ export function DownloadOgImage({ version }: { version?: string }) {
       <Eyebrow
         label="Download"
         accent={palette.blue}
-        trailing={version ? `Latest ${version}` : "Native installers"}
+        trailing={version ? `v${version}` : "soulfiremc.com"}
       />
-      <div style={{ display: "flex", flex: 1, gap: 30, marginTop: 34 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <div
-              style={{
-                fontSize: 86,
-                lineHeight: 0.98,
-                fontWeight: 850,
-                letterSpacing: "-0.06em",
-              }}
-            >
-              Pick the right SoulFire build fast.
-            </div>
-            <div
-              style={{
-                maxWidth: 650,
-                fontSize: 30,
-                lineHeight: 1.35,
-                color: palette.muted,
-              }}
-            >
-              Native downloads for Windows, macOS, and Linux, plus dedicated and
-              CLI builds for server-side automation.
-            </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flex: 1,
+          marginTop: 28,
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+          <div
+            style={{
+              fontSize: 86,
+              lineHeight: 0.98,
+              fontWeight: 850,
+              letterSpacing: "-0.06em",
+            }}
+          >
+            Download SoulFire
           </div>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Chip tone="accent">Windows</Chip>
-            <Chip>macOS</Chip>
-            <Chip>Linux</Chip>
-            <Chip>CLI</Chip>
-            <Chip>Dedicated</Chip>
+          <div
+            style={{
+              maxWidth: 820,
+              fontSize: 32,
+              lineHeight: 1.35,
+              color: palette.muted,
+            }}
+          >
+            Native installers for every platform. No Java required.
           </div>
         </div>
-        <Panel width={360}>
-          <MutedLabel>Package Set</MutedLabel>
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            <Metric label="Desktop" value="GUI Builds" accent={palette.cyan} />
-            <Metric
-              label="Automation"
-              value="CLI + Server"
-              accent={palette.blue}
-            />
-            <Metric
-              label="Setup"
-              value="No Java Required"
-              accent={palette.green}
-            />
-          </div>
-        </Panel>
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+          <Chip tone="accent">Windows</Chip>
+          <Chip tone="accent">macOS</Chip>
+          <Chip tone="accent">Linux</Chip>
+          <Chip>CLI</Chip>
+          <Chip>Dedicated Server</Chip>
+        </div>
       </div>
     </Canvas>
   );
@@ -761,6 +689,7 @@ export function DirectoryOgImage({
   description,
   accent,
   secondary,
+  count,
   samples,
 }: {
   label: string;
@@ -768,21 +697,23 @@ export function DirectoryOgImage({
   description: string;
   accent: string;
   secondary: string;
-  samples: { title: string; subtitle: string; meta: string }[];
+  count?: number;
+  samples: string[];
 }) {
   return (
     <Canvas primary={accent} secondary={secondary}>
-      <Eyebrow label={label} accent={accent} trailing="SoulFire Directory" />
-      <div style={{ display: "flex", flex: 1, gap: 30, marginTop: 34 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <Eyebrow label={label} accent={accent} trailing="soulfiremc.com" />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flex: 1,
+          marginTop: 28,
+        }}
+      >
+        <div style={{ display: "flex", gap: 40 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 22, flex: 1 }}>
             <div
               style={{
                 fontSize: 82,
@@ -795,8 +726,8 @@ export function DirectoryOgImage({
             </div>
             <div
               style={{
-                maxWidth: 650,
-                fontSize: 29,
+                maxWidth: 750,
+                fontSize: 30,
                 lineHeight: 1.35,
                 color: palette.muted,
               }}
@@ -804,39 +735,44 @@ export function DirectoryOgImage({
               {description}
             </div>
           </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: 380,
-            gap: 14,
-          }}
-        >
-          {samples.slice(0, 3).map((sample) => (
+          {count !== undefined ? (
             <div
-              key={sample.title}
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 8,
-                padding: 22,
-                borderRadius: 24,
-                background: palette.panelStrong,
-                border: `1px solid ${palette.border}`,
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: 160,
+                padding: "28px 32px",
+                borderRadius: 28,
+                background: `${accent}14`,
+                border: `1px solid ${accent}44`,
               }}
             >
-              <div style={{ fontSize: 26, fontWeight: 700 }}>
-                {sample.title}
+              <div style={{ fontSize: 64, fontWeight: 850, color: accent }}>
+                {count}
               </div>
-              <div style={{ fontSize: 22, color: palette.muted }}>
-                {sample.subtitle}
-              </div>
-              <div style={{ fontSize: 18, color: accent, fontWeight: 700 }}>
-                {sample.meta}
+              <div
+                style={{
+                  fontSize: 20,
+                  fontWeight: 700,
+                  color: palette.muted,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                }}
+              >
+                {label}
               </div>
             </div>
+          ) : null}
+        </div>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          {samples.slice(0, 6).map((name) => (
+            <Chip key={name}>{name}</Chip>
           ))}
+          {samples.length > 6 ? (
+            <Chip>{`+${samples.length - 6} more`}</Chip>
+          ) : null}
         </div>
       </div>
     </Canvas>
@@ -863,77 +799,48 @@ export function ProxyOgImage({
         accent={palette.cyan}
         trailing={sponsor ? "SoulFire Sponsor" : "Proxy Provider"}
       />
-      <div style={{ display: "flex", flex: 1, gap: 30, marginTop: 34 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-            <BrandMark value={name} accent={palette.cyan} logoSrc={logoSrc} />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
-                flex: 1,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 80,
-                  lineHeight: 1.02,
-                  fontWeight: 820,
-                  letterSpacing: "-0.05em",
-                }}
-              >
-                {name}
-              </div>
-              <div
-                style={{
-                  maxWidth: 620,
-                  fontSize: 26,
-                  lineHeight: 1.35,
-                  color: palette.muted,
-                }}
-              >
-                {testimonial}
-              </div>
-            </div>
-          </div>
-          <HumanizedBadges badges={badges} limit={4} />
-        </div>
-        <Panel width={340}>
-          <MutedLabel>Basic Info</MutedLabel>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Metric label="Coverage" value="Global IPs" accent={palette.cyan} />
-            <Metric label="Protocols" value="SOCKS5" accent={palette.blue} />
-          </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flex: 1,
+          marginTop: 28,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+          <BrandMark value={name} accent={palette.cyan} logoSrc={logoSrc} />
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 12,
-              padding: 20,
-              borderRadius: 22,
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${palette.border}`,
+              gap: 14,
+              flex: 1,
             }}
           >
-            <div style={{ fontSize: 24, fontWeight: 700 }}>
-              Bot Testing Focus
+            <div
+              style={{
+                fontSize: 80,
+                lineHeight: 1.02,
+                fontWeight: 820,
+                letterSpacing: "-0.05em",
+              }}
+            >
+              {name}
             </div>
             <div
-              style={{ fontSize: 22, lineHeight: 1.45, color: palette.muted }}
+              style={{
+                maxWidth: 900,
+                fontSize: 30,
+                lineHeight: 1.35,
+                color: palette.muted,
+              }}
             >
-              Built to help distribute sessions, control reputation, and keep
-              large test runs moving.
+              {testimonial}
             </div>
           </div>
-        </Panel>
+        </div>
+        <HumanizedBadges badges={badges} limit={6} />
       </div>
     </Canvas>
   );
@@ -957,81 +864,54 @@ export function AccountOgImage({
         accent={palette.green}
         trailing="Minecraft Provider"
       />
-      <div style={{ display: "flex", flex: 1, gap: 30, marginTop: 34 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-            <BrandMark value={name} accent={palette.green} logoSrc={logoSrc} />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
-                flex: 1,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 80,
-                  lineHeight: 1.02,
-                  fontWeight: 820,
-                  letterSpacing: "-0.05em",
-                }}
-              >
-                {name}
-              </div>
-              <div
-                style={{
-                  maxWidth: 620,
-                  fontSize: 26,
-                  lineHeight: 1.35,
-                  color: palette.muted,
-                }}
-              >
-                {description}
-              </div>
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            {listings.map((listing) => (
-              <Chip
-                key={listing.label}
-              >{`${listing.label} · ${listing.price}`}</Chip>
-            ))}
-          </div>
-        </div>
-        <Panel width={340}>
-          <MutedLabel>Inventory</MutedLabel>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Metric label="Delivery" value="Instant" accent={palette.green} />
-            <Metric label="Profiles" value="MFA + NFA" accent={palette.amber} />
-          </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flex: 1,
+          marginTop: 28,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+          <BrandMark value={name} accent={palette.green} logoSrc={logoSrc} />
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 12,
-              padding: 20,
-              borderRadius: 22,
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${palette.border}`,
+              gap: 14,
+              flex: 1,
             }}
           >
-            <div style={{ fontSize: 24, fontWeight: 700 }}>Checkout Signal</div>
             <div
-              style={{ fontSize: 22, lineHeight: 1.45, color: palette.muted }}
+              style={{
+                fontSize: 80,
+                lineHeight: 1.02,
+                fontWeight: 820,
+                letterSpacing: "-0.05em",
+              }}
             >
-              Compare categories quickly, evaluate pricing, and move directly
-              into your SoulFire testing workflow.
+              {name}
+            </div>
+            <div
+              style={{
+                maxWidth: 900,
+                fontSize: 30,
+                lineHeight: 1.35,
+                color: palette.muted,
+              }}
+            >
+              {description}
             </div>
           </div>
-        </Panel>
+        </div>
+        <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+          {listings.map((listing) => (
+            <Chip key={listing.label} tone="accent">
+              {`${listing.label} · ${listing.price}`}
+            </Chip>
+          ))}
+        </div>
       </div>
     </Canvas>
   );
@@ -1059,81 +939,54 @@ export function ResourceOgImage({
       <Eyebrow
         label="Resource"
         accent={palette.violet}
-        trailing={version ? `v${version}` : labelize(category)}
+        trailing={
+          [labelize(category), version ? `v${version}` : null, `by ${author}`]
+            .filter(Boolean)
+            .join(" · ")
+        }
       />
-      <div style={{ display: "flex", flex: 1, gap: 30, marginTop: 34 }}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-            <BrandMark value={name} accent={palette.violet} logoSrc={logoSrc} />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 12,
-                flex: 1,
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 78,
-                  lineHeight: 1.02,
-                  fontWeight: 820,
-                  letterSpacing: "-0.05em",
-                }}
-              >
-                {name}
-              </div>
-              <div
-                style={{
-                  maxWidth: 620,
-                  fontSize: 26,
-                  lineHeight: 1.35,
-                  color: palette.muted,
-                }}
-              >
-                {description}
-              </div>
-            </div>
-          </div>
-          <HumanizedBadges badges={badges} limit={4} />
-        </div>
-        <Panel width={340}>
-          <MutedLabel>Package Info</MutedLabel>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Metric label="Author" value={author} accent={palette.violet} />
-            <Metric
-              label="Type"
-              value={labelize(category)}
-              accent={palette.cyan}
-            />
-          </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flex: 1,
+          marginTop: 28,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+          <BrandMark value={name} accent={palette.violet} logoSrc={logoSrc} />
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: 12,
-              padding: 20,
-              borderRadius: 22,
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${palette.border}`,
+              gap: 14,
+              flex: 1,
             }}
           >
-            <div style={{ fontSize: 24, fontWeight: 700 }}>Registry Entry</div>
             <div
-              style={{ fontSize: 22, lineHeight: 1.45, color: palette.muted }}
+              style={{
+                fontSize: 78,
+                lineHeight: 1.02,
+                fontWeight: 820,
+                letterSpacing: "-0.05em",
+              }}
             >
-              Plugins and scripts that extend SoulFire with automation, utility,
-              combat, and server-specific workflows.
+              {name}
+            </div>
+            <div
+              style={{
+                maxWidth: 900,
+                fontSize: 30,
+                lineHeight: 1.35,
+                color: palette.muted,
+              }}
+            >
+              {description}
             </div>
           </div>
-        </Panel>
+        </div>
+        <HumanizedBadges badges={badges} limit={6} />
       </div>
     </Canvas>
   );
