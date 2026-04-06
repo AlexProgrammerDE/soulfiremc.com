@@ -30,7 +30,10 @@ import { GallerySection } from "@/app/(home)/components/gallery-section";
 import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
 import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
-import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
+import {
+  CouponCode,
+  LinkDiscountNotice,
+} from "@/app/(home)/get-proxies/coupon-code";
 import { DetailUpvote } from "@/components/detail-upvote";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
@@ -542,12 +545,14 @@ export default async function AccountProviderPage(props: {
                   />
                 ))}
               </div>
-              {listing.couponCode && (
+              {listing.couponCode ? (
                 <CouponCode
                   code={listing.couponCode}
                   discount={listing.couponDiscount}
                 />
-              )}
+              ) : listing.linkDiscountMessage ? (
+                <LinkDiscountNotice message={listing.linkDiscountMessage} />
+              ) : null}
             </Card>
           );
         })}

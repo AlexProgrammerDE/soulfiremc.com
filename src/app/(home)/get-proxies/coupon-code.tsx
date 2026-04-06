@@ -43,3 +43,13 @@ export function CouponCode({
     </div>
   );
 }
+
+export function LinkDiscountNotice({ message }: { message: string }) {
+  return (
+    <div className="rounded-lg bg-pink-500/10 p-3">
+      <p className="text-sm font-medium text-pink-600 dark:text-pink-400">
+        {message}
+      </p>
+    </div>
+  );
+}

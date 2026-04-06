@@ -51,6 +51,7 @@ export type Listing = {
   priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
+  linkDiscountMessage?: string;
   priceDetails?: string;
 };
 
@@ -92,6 +93,7 @@ export type Provider = {
   priceValue: number;
   couponCode?: string;
   couponDiscount?: string;
+  linkDiscountMessage?: string;
   priceDetails?: string;
 };
 
@@ -504,6 +506,8 @@ export const SHOPS: Shop[] = [
         badges: ["high-quality", "instant-delivery"],
         price: "25¢+",
         priceValue: 0.25,
+        linkDiscountMessage:
+          "register using the link below for a 5% discount on checkout",
         priceDetails:
           "Current public store starts at 25¢ for Hypixel Level 1-9 and Gamepass NFAs, then 40¢ for Level 10+, 55¢ for Bedwars 8+, 67¢ for Level 21+, 70¢ for random rank, $3.50 for MVP+, and $4.50 for Level 70+. Terms advertise replacements within 24 hours.",
       },
@@ -513,6 +517,8 @@ export const SHOPS: Shop[] = [
         badges: ["high-quality", "instant-delivery"],
         price: "$5.99+",
         priceValue: 5.99,
+        linkDiscountMessage:
+          "register using the link below for a 5% discount on checkout",
         priceDetails:
           "Base no-rank full access starts at $5.99. Fresh Hypixel stats is $7.49, ranked variants start at $8.49, and their Terms advertise replacements within 24 hours.",
       },

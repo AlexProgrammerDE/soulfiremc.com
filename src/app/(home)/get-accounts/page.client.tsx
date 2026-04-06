@@ -57,7 +57,7 @@ import {
 } from "@/lib/accounts-data";
 import type { DiscordInviteResponse } from "@/lib/discord";
 import { cn } from "@/lib/utils";
-import { CouponCode } from "../get-proxies/coupon-code";
+import { CouponCode, LinkDiscountNotice } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
 
 type DiscordInvites = Promise<Record<string, DiscordInviteResponse | null>>;
@@ -273,12 +273,14 @@ function ProviderCard({
               {provider.gallery.length !== 1 && "s"}
             </Link>
           )}
-          {provider.couponCode && (
+          {provider.couponCode ? (
             <CouponCode
               code={provider.couponCode}
               discount={provider.couponDiscount}
             />
-          )}
+          ) : provider.linkDiscountMessage ? (
+            <LinkDiscountNotice message={provider.linkDiscountMessage} />
+          ) : null}
           <div className="flex flex-wrap gap-2">
             <Button asChild className={theme?.primaryButton}>
               <a href={provider.url} target="_blank" rel="noopener nofollow">
