@@ -92,7 +92,7 @@ export function Feedback({
       className="border-y py-3"
     >
       <div className="flex flex-row items-center gap-2">
-        <p className="text-sm font-medium pe-2">How is this guide?</p>
+        <p className="text-sm font-medium pe-2">How is this page?</p>
         <button
           type="button"
           disabled={previous !== null}

@@ -1,0 +1,118 @@
+---
+title: Proxy Formats
+description: Reference for supported proxy types, import formats, and proxy settings in SoulFire.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Supported proxy types
+
+| Type | Authentication | Notes |
+| --- | --- | --- |
+| **HTTP** | None, username, or username and password | Good for standard proxy lists |
+| **SOCKS4** | None or username only | SOCKS4 does not support passwords |
+| **SOCKS5** | None, username, or username and password | Common choice for bot traffic |
+| **URI** | Depends on the scheme | Lets one file mix HTTP, SOCKS4, and SOCKS5 entries |
+
+<Callout type="info">
+  `https://` proxy URLs are not accepted. Use HTTP, SOCKS4, SOCKS5, or URI-formatted entries with those schemes.
+</Callout>
+
+## Import formats
+
+### HTTP
+
+```text
+ip:port <- no authentication
+ip:port:username <- username
+ip:port:username:password <- username & password
+username:password@ip:port <- username & password (alternative)
+```
+
+Example:
+
+```text
+192.168.0.1:8080
+192.168.0.2:1080:root
+192.168.0.3:1090:root:PassW0rd
+root:PassW0rd@192.168.0.4:1090
+```
+
+### SOCKS4
+
+```text
+ip:port <- no authentication
+ip:port:username <- username
+username@ip:port <- username (alternative)
+(socks4 doesn't support passwords)
+```
+
+Example:
+
+```text
+192.168.0.1:8080
+192.168.0.2:1080:root
+root@192.168.0.3:1080
+```
+
+### SOCKS5
+
+```text
+ip:port <- no authentication
+ip:port:username <- username
+ip:port:username:password <- username & password
+username:password@ip:port <- username & password (alternative)
+```
+
+Example:
+
+```text
+192.168.0.1:8080
+192.168.0.2:1080:root
+192.168.0.3:1090:root:PassW0rd
+root:PassW0rd@192.168.0.4:1090
+```
+
+### URI
+
+Use URI format when you want one file to mix proxy types.
+
+```text
+socks5://ip:port <- socks5
+socks5://username@ip:port <- socks5 & username
+socks5://username:password@ip:port <- socks5 & username & password
+
+socks4://ip:port <- socks4
+socks4://username@ip:port <- socks4 & username
+(socks4 doesn't support passwords)
+
+http://ip:port <- http
+http://username@ip:port <- http & username
+http://username:password@ip:port <- http & username & password
+```
+
+Example:
+
+```text
+http://192.168.0.1:8080
+socks4://root@192.168.0.1:8080
+socks5://root:PassW0rd@192.168.0.1:8080
+```
+
+## Bot distribution across proxies
+
+SoulFire defaults to `-1` bots per proxy, which means unlimited.
+It still tries to distribute bots evenly across the available proxies.
+
+If you set a hard limit such as `10`, SoulFire only allows 10 bots per proxy.
+If you ask for more bots than `bots per proxy * number of proxies`, SoulFire reduces the session to the maximum possible amount.
+
+## Proxy settings reference
+
+| Setting | Default | What it does |
+| --- | --- | --- |
+| **Bots per proxy** | `-1` | Limits how many bots can use one proxy |
+| **Shuffle proxies** | `false` | Randomizes proxy order before bots join |
+| **Proxy check address** | `mc.hypixel.net` | The server address used for proxy validation |
+| **Proxy check concurrency** | `10` | How many proxy checks run at once |
+| **Proxy check timeout** | `30` | How many seconds SoulFire waits before a check fails |

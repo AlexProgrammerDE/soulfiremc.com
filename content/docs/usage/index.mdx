@@ -1,6 +1,6 @@
 ---
 title: Usage
-description: SoulFire offers many features to manage your bots, we have written down a few common features to help you get started.
+description: How-to and reference pages for common SoulFire features and configuration.
 ---
 
 import { Cards, Card } from 'fumadocs-ui/components/card';
@@ -10,12 +10,14 @@ import {
   Terminal,
   List,
   AppWindow,
-  User
+  User,
+  ArrowLeftRight,
+  FileText,
 } from "lucide-react";
 
-## Entries
+## Common tasks
 
-So you have installed SoulFire, now what? In this section, you will find entries on how-to use SoulFire features.
+Use these pages when you want to complete a concrete task in SoulFire.
 
 <Cards>
   <Card
@@ -25,6 +27,7 @@ So you have installed SoulFire, now what? In this section, you will find entries
     title="Import Accounts"
     href="/docs/usage/accounts"
   >
+    Add offline or Microsoft accounts to an instance.
   </Card>
   <Card
     icon={
@@ -33,22 +36,7 @@ So you have installed SoulFire, now what? In this section, you will find entries
     title="Import Proxies"
     href="/docs/usage/proxies"
   >
-  </Card>
-  <Card
-    icon={
-      <List/>
-    }
-    title="Supported Versions"
-    href="/docs/usage/versions"
-  >
-  </Card>
-  <Card
-    icon={
-      <Zap/>
-    }
-    title="Commands"
-    href="/docs/usage/commands"
-  >
+    Add proxies and control how bots are distributed across them.
   </Card>
   <Card
     icon={
@@ -57,6 +45,59 @@ So you have installed SoulFire, now what? In this section, you will find entries
     title="Plugins"
     href="/docs/usage/plugins"
   >
+    Enable built-in plugins and install community Fabric mods.
+  </Card>
+</Cards>
+
+## Reference
+
+Use these pages when you need formats, defaults, or behavior details.
+
+<Cards>
+  <Card
+    icon={
+      <ArrowLeftRight/>
+    }
+    title="Operation Modes"
+    href="/docs/usage/operation-modes"
+  >
+    Understand integrated vs remote SoulFire setups.
+  </Card>
+  <Card
+    icon={
+      <FileText/>
+    }
+    title="Account Formats"
+    href="/docs/usage/account-formats"
+  >
+    See supported account types, input formats, and settings defaults.
+  </Card>
+  <Card
+    icon={
+      <FileText/>
+    }
+    title="Proxy Formats"
+    href="/docs/usage/proxy-formats"
+  >
+    See supported proxy types, file formats, and proxy settings defaults.
+  </Card>
+  <Card
+    icon={
+      <List/>
+    }
+    title="Supported Versions"
+    href="/docs/usage/versions"
+  >
+    Check which Minecraft versions SoulFire supports.
+  </Card>
+  <Card
+    icon={
+      <Zap/>
+    }
+    title="Commands"
+    href="/docs/usage/commands"
+  >
+    Browse the built-in command set.
   </Card>
   <Card
     icon={
@@ -65,5 +106,6 @@ So you have installed SoulFire, now what? In this section, you will find entries
     title="CLI Flags"
     href="/docs/usage/cli-flags"
   >
+    See startup flags and their defaults.
   </Card>
 </Cards>

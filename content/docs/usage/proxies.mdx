@@ -1,226 +1,72 @@
 ---
 title: Import Proxies
-description: SoulFire allows you to use proxies to hide your IP address and bypass IP limits on servers.
+description: Add HTTP, SOCKS4, or SOCKS5 proxies to an instance and control how SoulFire distributes bots across them.
 ---
 
-import { Mermaid } from '../../../src/components/mdx/mermaid';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Callout } from 'fumadocs-ui/components/callout';
 
-## How do proxies work?
+## Before you start
 
-Proxies work by hiding your IP similar to how VPNs work.
-When you start a session, SoulFire will connect through the proxies you provide instead of directly connecting to the server.
-This way, the server will see the proxy IP address instead of the IP address of your computer/server.
+- SoulFire accepts HTTP, SOCKS4, SOCKS5, and URI files that mix supported types.
+- `https://` proxy URLs are not accepted.
+- For exact formats and defaults, see [Proxy Formats](/docs/usage/proxy-formats).
 
-Here is an example of how proxies work:
-
-<Mermaid chart="
-graph LR
-    subgraph Y[SoulFire IP: 20.20.20.20]
-        S[SoulFire server]
-    end
-    subgraph P1[Proxy IP: 33.33.33.33]
-      P1S[HTTP Proxy]
-    end
-    subgraph P2[Proxy IP: 44.44.44.44]
-      P2S[SOCKS4 Proxy]
-    end
-    subgraph P3[Proxy IP: 55.55.55.55]
-      P3S[SOCKS5 Proxy]
-    end
-    subgraph M[Minecraft Server]
-    end
-    S --> P1S
-    S --> P2S
-    S --> P3S
-    P1S --> M
-    P2S --> M
-    P3S --> M
-" />
-
-Your setup may use more proxies/only one type of proxy, but the concept is the same.
-
-## Looking for proxies?
-
-There are many websites that offer free proxies, but be careful as many of them are not reliable or secure.
-
-Our recommended proxy provider is [Thordata](https://affiliate.thordata.com/soulfire), who sponsors SoulFire.
-They offer premium residential proxies with excellent speeds - use code **THORDATA** for 20% off your first purchase.
-
-For a full list of recommended providers, check out our [Get Proxies](/get-proxies) page.
-
-## Proxy types
-
-SoulFire supports HTTP, SOCKS4 and SOCKS5 proxies.
-
-<Callout type="warning" emoji="⚠️">
-  Please note HTTPS proxies are not supported.
-  This is because HTTPS runs on an encrypted protocol that is not supported by Minecraft.
-  However HTTP works because it's effectively a raw tcp tunnel without any encryption.
+<Callout type="info">
+  Need providers? See [Get Proxies](/get-proxies) for a list of proxy sources and recommendations.
 </Callout>
 
-Select the proxy type in the GUI or CLI and use one of these formats with one proxy per line:
+## Import proxies in the GUI
 
-### HTTP
+<Steps>
+  <Step>
+    ### Open the proxy settings
 
-Here's the format for HTTP proxies:
+    Open an instance and go to **Proxy Settings**.
+  </Step>
 
-```text
-ip:port <- no authentication
-ip:port:username <- username
-ip:port:username:password <- username & password
-username:password@ip:port <- username & password (alternative)
-```
+  <Step>
+    ### Choose how the file is formatted
 
-Example:
+    If all entries use the same proxy type, select that type before importing.
+    If the file mixes types, use URI-formatted entries instead.
+  </Step>
 
-```text
-192.168.0.1:8080
-192.168.0.2:1080:root
-192.168.0.3:1090:root:PassW0rd
-root:PassW0rd@192.168.0.4:1090
-```
+  <Step>
+    ### Paste or import the proxy data
 
-### SOCKS4
+    Add one proxy per line, then save or confirm the import.
+  </Step>
 
-Here's the format for SOCKS4 proxies:
+  <Step>
+    ### Check the proxies
 
-```text
-ip:port <- no authentication
-ip:port:username <- username
-username@ip:port <- username (alternative)
-(socks4 doesn't support passwords)
-```
+    Use the proxy-check options if you want SoulFire to validate the list before starting the session.
+  </Step>
+</Steps>
 
-Example:
+## Import proxies in CLI mode
 
-```text
-192.168.0.1:8080
-192.168.0.2:1080:root
-root@192.168.0.3:1080
-```
+CLI imports use these flags:
 
-### SOCKS5
+- `--proxy-file` points to the file that contains the proxies.
+- `--proxy-type` tells SoulFire how to parse the file when all entries use one type.
+- If the file uses URI format with mixed proxy types, omit `--proxy-type`.
 
-Here's the format for SOCKS5 proxies:
+For the full flag list, see [Command line flags](/docs/usage/cli-flags).
 
-```text
-ip:port <- no authentication
-ip:port:username <- username
-ip:port:username:password <- username & password
-username:password@ip:port <- username & password (alternative)
-```
+## Settings that matter most
 
-Example:
+| Setting | What it changes |
+| --- | --- |
+| **Bots per proxy** | Limits how many bots can use the same proxy |
+| **Shuffle proxies** | Randomizes proxy order before bots join |
+| **Proxy check address** | Controls which server is used to validate the proxies |
+| **Proxy check concurrency** | Controls how many proxy checks run at once |
+| **Proxy check timeout** | Controls how long SoulFire waits before a check fails |
 
-```text
-192.168.0.1:8080
-192.168.0.2:1080:root
-192.168.0.3:1090:root:PassW0rd
-root:PassW0rd@192.168.0.4:1090
-```
+## Related pages
 
-### URI
-
-This format allows you to use multiple proxy types in one file.
-You can use the following URI formats:
-
-```text
-socks5://ip:port <- socks5
-socks5://username@ip:port <- socks5 & username
-socks5://username:password@ip:port <- socks5 & username & password
-
-socks4://ip:port <- socks4
-socks4://username@ip:port <- socks4 & username
-(socks4 doesn't support passwords)
-
-http://ip:port <- http
-http://username@ip:port <- http & username
-http://username:password@ip:port <- http & username & password
-```
-
-<Callout type="info" emoji="ℹ️">
-  If you use a URI scheme that is not supported (like `https://`), SoulFire will ignore the proxy.
-</Callout>
-
-Example:
-
-```text
-http://192.168.0.1:8080
-socks4://root@192.168.0.1:8080
-socks5://root:PassW0rd@192.168.0.1:8080
-```
-
-## Multiple bots on one proxy?
-
-Yes, you can run multiple bots on one proxy.
-This is useful if you have a limited number of proxies and want to run more bots than proxies.
-Please be aware some servers can detect this and ban the proxy, so use this feature with caution.
-Many servers work by limiting the amount of connections per IP, so if you run too many bots on one proxy, the server may not allow more connections from that proxy.
-
-SoulFire defaults to `-1` connections per proxy, which means unlimited bots can connect through one proxy.
-But it will always try to evenly distribute the bots across all proxies.
-If you set any value like `10`, SoulFire will only allow 10 bots to connect through one proxy.
-If you request more bots than the `limit per proxy * amount of proxies`, SoulFire will reduce the amount of bots to the maximum possible amount.
-
-Here is an example of how multiple bots on one proxy work:
-
-<Mermaid chart="
-graph LR
-    subgraph Y[SoulFire]
-        S[SoulFire server]
-        B1[Bot_1]
-        B2[Bot_2]
-        B3[Bot_3]
-    end
-    subgraph P1[Proxy 1]
-      P1S[HTTP Proxy]
-    end
-    subgraph P2[Proxy 2]
-      P2S[SOCKS5 Proxy]
-    end
-    subgraph M[Minecraft Server]
-    end
-    S --> B1
-    S --> B2
-    S --> B3
-    B1 --> P1S
-    B2 --> P1S
-    B3 --> P2S
-    P1S --> M
-    P2S --> M
-" />
-
-## Proxy Settings
-
-When you navigate to the Proxy Settings page in SoulFire, you'll find several configuration options:
-
-### Bots per proxy
-
-This setting (default: `-1`) controls how many bots can connect through a single proxy.
-A value of `-1` means unlimited bots can use the same proxy.
-SoulFire will always try to evenly distribute bots across all available proxies.
-
-### Shuffle proxies
-
-SoulFire supports shuffling proxies, but it's disabled by default.
-When enabled, SoulFire will shuffle the proxies randomly before starting the session.
-If disabled, SoulFire will use the proxies in the order they are in the settings.
-
-The shuffling feature is useful if you want to randomize the order of the proxies to make it harder for servers to detect which proxies are bots on subsequent sessions.
-
-### Proxy check address
-
-This setting (default: `mc.hypixel.net`) specifies the server address used to verify that proxies are working.
-When you import proxies, SoulFire can check if they are functional by attempting to connect to this address.
-
-### Proxy check concurrency
-
-This setting (default: `10`) controls how many proxies can be checked simultaneously.
-Higher values will check proxies faster but may cause issues if you have limited bandwidth or resources.
-
-### Proxy check timeout
-
-This setting (default: `30`) controls how many seconds SoulFire waits for a proxy check response before considering a proxy as failed.
-Lower values will speed up proxy checking but may incorrectly mark slower proxies as invalid.
-Increase this value if you are using high-latency proxies or checking against distant servers.
+- [Proxy Formats](/docs/usage/proxy-formats) for exact file formats
+- [GUI Mode](/docs/guides/gui-mode) for the main GUI workflow
+- [Command line flags](/docs/usage/cli-flags) for CLI imports

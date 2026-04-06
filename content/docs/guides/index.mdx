@@ -1,6 +1,6 @@
 ---
 title: Guides
-description: Learn how to use SoulFire in different modes.
+description: Step-by-step guides for running SoulFire locally, remotely, or through integrations.
 ---
 
 import {
@@ -9,12 +9,13 @@ import {
   Server,
   Layers,
   Cloud,
+  Bot,
 } from "lucide-react";
 import { Cards, Card } from 'fumadocs-ui/components/card';
 
-## List of guides
+## Guides
 
-SoulFire has modes for developers, server owners, and beginners alike.
+Use these guides when you want to complete a specific workflow with SoulFire.
 
 <Cards>
   <Card
@@ -24,6 +25,16 @@ SoulFire has modes for developers, server owners, and beginners alike.
     title="GUI Mode"
     href="/docs/guides/gui-mode"
   >
+    Start an instance and launch your first session from the desktop app.
+  </Card>
+  <Card
+    icon={
+      <Monitor/>
+    }
+    title="GUI Navigation"
+    href="/docs/guides/gui-navigation"
+  >
+    Find where instances, settings, plugins, and scripts live in the interface.
   </Card>
   <Card
     icon={
@@ -32,6 +43,7 @@ SoulFire has modes for developers, server owners, and beginners alike.
     title="CLI Mode"
     href="/docs/guides/cli-mode"
   >
+    Run SoulFire from the terminal and automate startup with flags.
   </Card>
   <Card
     icon={
@@ -40,6 +52,7 @@ SoulFire has modes for developers, server owners, and beginners alike.
     title="Dedicated Mode"
     href="/docs/guides/dedicated-mode"
   >
+    Run a long-lived SoulFire server that GUI and CLI clients can connect to.
   </Card>
   <Card
     icon={
@@ -48,6 +61,7 @@ SoulFire has modes for developers, server owners, and beginners alike.
     title="Docker"
     href="/docs/guides/docker"
   >
+    Deploy SoulFire with Docker Compose and optional HTTPS.
   </Card>
   <Card
     icon={
@@ -56,5 +70,15 @@ SoulFire has modes for developers, server owners, and beginners alike.
     title="WebDAV"
     href="/docs/guides/webdav"
   >
+    Browse and edit SoulFire files over WebDAV.
+  </Card>
+  <Card
+    icon={
+      <Bot/>
+    }
+    title="MCP (AI Integration)"
+    href="/docs/guides/mcp"
+  >
+    Connect AI assistants to SoulFire through the Model Context Protocol.
   </Card>
 </Cards>

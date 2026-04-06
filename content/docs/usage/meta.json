@@ -1,10 +1,12 @@
 {
   "icon": "Wrench",
   "pages": [
-    "accounts",
-    "proxies",
-    "versions",
     "operation-modes",
+    "accounts",
+    "account-formats",
+    "proxies",
+    "proxy-formats",
+    "versions",
     "commands",
     "plugins",
     "cli-flags"

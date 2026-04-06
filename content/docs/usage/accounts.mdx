@@ -1,154 +1,85 @@
 ---
 title: Import Accounts
-description: Learn how to import accounts into SoulFire and how to use them.
+description: Add offline or Microsoft accounts to an instance and choose how SoulFire should use them.
 ---
 
-import { Mermaid } from '../../../src/components/mdx/mermaid';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
-## How does this look in practice?
+## Before you start
 
-When you start a session, SoulFire will use the accounts you provide to log in to the server.
+- If you do not import any accounts, SoulFire can generate offline accounts from the configured **Name format**.
+- Use offline accounts only on servers that accept them.
+- For exact file formats and defaults, see [Account Formats](/docs/usage/account-formats).
 
-Here is an example of how accounts work:
+<Callout type="info">
+  Need sources for test accounts? See [Get Accounts](/get-accounts).
+  If you use Ravealts, SoulFire can import purchases directly from the account settings dialog.
+</Callout>
 
-<Mermaid chart="
-graph LR
-    subgraph Y[SoulFire]
-        S[SoulFire server]
-        B1[Bot_1: Offline]
-        B2[Pistonmaster: Microsoft Java]
-        B3[BotAccount: Offline]
-    end
-    subgraph M[Minecraft Server]
-    end
-    S --> B1
-    S --> B2
-    S --> B3
-    B1 --> M
-    B2 --> M
-    B3 --> M
-" />
+## Choose the right account type
 
-Your setup may use more accounts/only one type of account, but the concept is the same.
+| Type | Use it when |
+| --- | --- |
+| **Microsoft Java Credentials** | You have a normal Java account with email and password |
+| **Microsoft Java Device Code** | You want to sign in through a browser instead of storing credentials |
+| **Microsoft Bedrock Credentials** | You want to connect to Bedrock servers |
+| **Microsoft Bedrock Device Code** | You want browser-based Bedrock sign-in |
+| **Microsoft Java Refresh Token** | You already have refresh tokens and want long-lived imports |
+| **Microsoft Java Cookies** | You want to import a browser login session |
+| **Microsoft Java Access Token** | You only have a short-lived access token |
+| **Offline** | The target server accepts offline-mode accounts |
 
-## Looking for Minecraft accounts?
+## Import accounts in the GUI
 
-If you need Minecraft accounts for bot testing, check out our [Get Accounts](/get-accounts) page for a list of recommended providers.
+<Steps>
+  <Step>
+    ### Open the account settings
 
-### Ravealts Integration
+    Open an instance and go to **Account Settings**.
+  </Step>
 
-SoulFire has a built-in integration with [Ravealts](https://ravealts.com) that lets you purchase and import accounts directly from within the client.
-Open the Ravealts dialog in the account settings, enter your API key from the [Ravealts dashboard](https://dash.ravealts.com), and browse available stock.
-After purchasing, accounts are automatically imported into your session in the correct format — no manual copy-pasting required.
-Use the coupon code `SOULFIRE` for 10% off.
+  <Step>
+    ### Select the account type
 
-## Account types
+    Choose the type that matches the data you want to import.
+  </Step>
 
-SoulFire supports Microsoft Java, Microsoft Bedrock, and Offline accounts.
-It also supports importing accounts via refresh tokens, browser cookies, and raw access tokens.
+  <Step>
+    ### Paste or import the account data
 
-If no account is selected, SoulFire will generate offline accounts based on the configured name format.
+    Add one account per line using the format for that account type.
+    For device-code flows, SoulFire prompts you to finish the login in a browser.
+  </Step>
 
-Select the account type in the GUI or CLI and use one of these formats with one account per line:
+  <Step>
+    ### Review the imported accounts
 
-### Microsoft Java Credentials
+    Confirm that the instance shows the expected accounts before you start the session.
+  </Step>
+</Steps>
 
-The account needs to have bought Minecraft Java Edition.
+## Import accounts in CLI mode
 
-```text
-email:password
-email2:password2
-email3:password3
-```
+CLI imports use two flags:
 
-### Microsoft Java Device Code
+- `--account-file` points to the file that contains the accounts.
+- `--account-type` tells SoulFire how to parse that file.
 
-This is a special login type where SoulFire will generate a device code for you to log in with on a Microsoft login page.
+If you want GUI-equivalent behavior from the terminal, combine those with the rest of your CLI session flags.
+For the full flag list, see [Command line flags](/docs/usage/cli-flags).
 
-### Microsoft Bedrock Credentials
+## Settings that matter most
 
-This is the only way to connect to Bedrock Edition servers.
-On Bedrock there is no game ownership check, so any Microsoft account can play on any Bedrock Edition server.
-You need to have Xbox Live enabled on the account and have a gamer tag.
+| Setting | What it changes |
+| --- | --- |
+| **Name format** | Controls how generated offline accounts are named |
+| **Shuffle accounts** | Randomizes the account order before bots join |
+| **Use proxies for account auth** | Sends Microsoft authentication through your configured proxies |
+| **Account import concurrency** | Controls how many account imports run at the same time |
 
-```text
-email:password
-email2:password2
-email3:password3
-```
+## Related pages
 
-### Microsoft Bedrock Device Code
-
-This is a special login type where SoulFire will generate a device code for you to log in with on a Microsoft login page.
-
-### Microsoft Java Refresh Token
-
-Import accounts using Microsoft refresh tokens. This is commonly used with NFA accounts purchased from account providers.
-The refresh token allows SoulFire to obtain new access tokens automatically, so these accounts stay logged in long-term.
-
-```text
-refresh_token_here
-refresh_token_here2
-refresh_token_here3
-```
-
-### Microsoft Java Cookies
-
-Import accounts using browser cookies from `login.live.com`. SoulFire accepts three cookie formats:
-
-- **Netscape cookie jar** (tab-separated, exported from browsers or curl)
-- **Cookie Editor JSON** (array of objects with domain/name/value, from the Cookie Editor browser extension)
-- **Raw cookie header** (semicolon-separated name=value pairs)
-
-SoulFire will exchange the cookies for a full authentication chain, so the account can be refreshed automatically.
-
-### Microsoft Java Access Token
-
-Import accounts using a raw Minecraft access token (JWT). This is useful for short-lived accounts where you only have the token itself.
-
-```text
-eyJhbGciOiJIUzI1NiJ9...
-```
-
-Note that access token accounts cannot be refreshed. Once the token expires, you will need to import a new one.
-
-### Offline
-
-Offline accounts are generally case-sensitive and can be used to connect to servers that have explicitly set online-mode to false in their server.properties file.
-So both `username` and `UserName` are valid offline accounts and can play at the same time.
-Minecraft generates a case-sensitive UUID for each username, so the server can differentiate between them.
-Most auth plugins like AuthMe however will block offline accounts that are spelled the same but have different cases.
-
-```text
-Username
-Username2
-Username3
-```
-
-## Account Settings
-
-When you navigate to the Account Settings page in SoulFire, you'll find several configuration options:
-
-### Name format
-
-The name format setting (default: `Bot_%d`) determines how offline accounts are named when generated automatically.
-The `%d` placeholder is replaced with a number for each bot.
-For example, with the default format, bots will be named `Bot_1`, `Bot_2`, `Bot_3`, etc.
-
-### Shuffle accounts
-
-SoulFire supports shuffling accounts, but it's disabled by default.
-When enabled, SoulFire will shuffle the accounts randomly before starting the session.
-If disabled, SoulFire will use the accounts in the order they are in the settings.
-
-The shuffling feature is useful if you want to randomize the order of the accounts to make it harder for servers to detect which accounts are bots on subsequent sessions.
-
-### Use proxies for account auth
-
-When enabled, SoulFire will use your configured proxies when authenticating Microsoft accounts.
-This is useful if you want to hide your IP address during the authentication process or if your IP is rate-limited by Microsoft.
-
-### Account import concurrency
-
-This setting (default: `3`) controls how many accounts can be imported simultaneously.
-Higher values will import accounts faster but may cause rate limiting issues with Microsoft authentication servers.
+- [Account Formats](/docs/usage/account-formats) for exact input formats
+- [GUI Mode](/docs/guides/gui-mode) for the main GUI workflow
+- [Command line flags](/docs/usage/cli-flags) for CLI imports

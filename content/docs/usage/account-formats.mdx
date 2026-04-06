@@ -1,0 +1,100 @@
+---
+title: Account Formats
+description: Reference for supported account types, import formats, and account settings in SoulFire.
+---
+
+## Supported account types
+
+| Type | What you provide | Notes |
+| --- | --- | --- |
+| **Microsoft Java Credentials** | `email:password` | The account must own Minecraft Java Edition |
+| **Microsoft Java Device Code** | Browser sign-in | Good when you do not want to paste credentials |
+| **Microsoft Bedrock Credentials** | `email:password` | Required for Bedrock server connections |
+| **Microsoft Bedrock Device Code** | Browser sign-in | Browser-based Bedrock login |
+| **Microsoft Java Refresh Token** | One refresh token per line | Suitable for long-lived imports |
+| **Microsoft Java Cookies** | Exported `login.live.com` cookies | SoulFire exchanges them for a refreshable auth chain |
+| **Microsoft Java Access Token** | Raw Minecraft access token | Short-lived and cannot be refreshed |
+| **Offline** | One username per line | Only works on servers that accept offline accounts |
+
+## Import formats
+
+### Microsoft Java Credentials
+
+The account must own Minecraft Java Edition.
+
+```text
+email:password
+email2:password2
+email3:password3
+```
+
+### Microsoft Java Device Code
+
+Start the import from SoulFire and complete the device-code login in your browser when prompted.
+
+### Microsoft Bedrock Credentials
+
+This is the credential-based option for Bedrock Edition servers.
+The account needs Xbox Live enabled and a gamer tag.
+
+```text
+email:password
+email2:password2
+email3:password3
+```
+
+### Microsoft Bedrock Device Code
+
+Start the import from SoulFire and complete the device-code login in your browser when prompted.
+
+### Microsoft Java Refresh Token
+
+Refresh-token imports are commonly used when you already have tokens from another workflow or provider.
+
+```text
+refresh_token_here
+refresh_token_here2
+refresh_token_here3
+```
+
+### Microsoft Java Cookies
+
+SoulFire accepts these cookie formats from `login.live.com`:
+
+- **Netscape cookie jar**: tab-separated cookie exports from browsers or curl
+- **Cookie Editor JSON**: an array of cookie objects from the Cookie Editor browser extension
+- **Raw cookie header**: semicolon-separated `name=value` pairs
+
+SoulFire exchanges those cookies for a full authentication chain so the account can be refreshed automatically.
+
+### Microsoft Java Access Token
+
+Use this when you only have the raw Minecraft access token.
+
+```text
+eyJhbGciOiJIUzI1NiJ9...
+```
+
+Access-token imports cannot be refreshed. When the token expires, you need to import a new one.
+
+### Offline
+
+Offline usernames are generally case-sensitive. That means `username` and `UserName` are treated as different accounts.
+Some auth plugins, such as AuthMe, may still reject names that differ only by case.
+
+```text
+Username
+Username2
+Username3
+```
+
+## Account settings reference
+
+| Setting | Default | What it does |
+| --- | --- | --- |
+| **Name format** | `Bot_%d` | Controls how generated offline accounts are named |
+| **Shuffle accounts** | `false` | Randomizes account order before bots join |
+| **Use proxies for account auth** | `false` | Sends Microsoft authentication through your configured proxies |
+| **Account import concurrency** | `3` | Controls how many account imports run at the same time |
+
+If no accounts are selected, SoulFire generates offline accounts from the configured name format.

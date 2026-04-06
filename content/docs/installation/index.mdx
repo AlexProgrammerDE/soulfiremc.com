@@ -1,16 +1,15 @@
 ---
 title: Installation
-description: Learn how to install SoulFire on your PC.
+description: Install SoulFire on your desktop or deploy it on a remote server.
 ---
 
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Callout } from 'fumadocs-ui/components/callout';
+import { Server } from 'lucide-react';
 import Image from "next/image";
 
-Here you can find everything you need for your first time installation of SoulFire as well as the recommended way
-of doing so.
-If you're having issues or questions while installing, feel
-free to ask questions on our [discord server](https://soulfiremc.com/discord)
+Choose the installation path that matches how you want to run SoulFire.
+If you get stuck, ask in our [Discord server](https://soulfiremc.com/discord).
 
 ## Legal disclaimer
 
@@ -23,15 +22,15 @@ free to ask questions on our [discord server](https://soulfiremc.com/discord)
 
 ## Requirements
 
-To be able to use SoulFire, little is needed:
+To install SoulFire, you need:
 
 * An internet connection to download the software.
-* A supported operating system (`Windows`, `macOS`, `Linux`)
+* A supported desktop operating system (`Windows`, `macOS`, `Linux`) for the local app.
+* A Linux server if you want to run SoulFire remotely in dedicated mode.
 
-## Platform Installation
+## Desktop installation
 
-In this section, you can read how to set up SoulFire for your PC!
-Select your operating system type below to get started.
+Use one of these packages if you want to run SoulFire on your own machine.
 
 <Cards>
   <Card
@@ -45,6 +44,7 @@ Select your operating system type below to get started.
     title="Windows (.exe)"
     href="/docs/installation/windows"
   >
+    Install the desktop app on Windows.
   </Card>
   <Card
     icon={
@@ -57,6 +57,7 @@ Select your operating system type below to get started.
     title="macOS (.dmg)"
     href="/docs/installation/macos"
   >
+    Install the desktop app on macOS.
   </Card>
   <Card
     icon={
@@ -69,5 +70,20 @@ Select your operating system type below to get started.
     title="Linux (.flatpak)"
     href="/docs/installation/linux"
   >
+    Install the desktop app on Linux with Flatpak.
+  </Card>
+</Cards>
+
+## Remote deployment
+
+Use this path if you want a long-running SoulFire server on a VPS or other remote machine.
+
+<Cards>
+  <Card
+    icon={<Server />}
+    title="Dedicated Server (Docker)"
+    href="/docs/installation/dedicated-server"
+  >
+    Deploy SoulFire on a remote Linux server with the automated Docker setup.
   </Card>
 </Cards>

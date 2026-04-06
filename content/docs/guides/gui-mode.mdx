@@ -1,162 +1,91 @@
 ---
 title: GUI Mode
-description: Learn how to use SoulFire in GUI mode.
+description: Start an instance, configure it, and launch your first session from the SoulFire GUI.
 ---
 
-## Who needs a GUI?
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Callout } from 'fumadocs-ui/components/callout';
 
-A GUI is good for beginners, the GUI mode allows you to take full advantage of all features SoulFire offers.
+## When to use GUI Mode
 
-This guide expects that you have SoulFire already installed and running on your machine.
-If you haven't done that yet, please refer to the [Installation Guide](/docs/installation)
+GUI mode is the best starting point if you want to run SoulFire interactively, inspect instance state, and change settings without memorizing commands.
 
-## Starting the GUI
+<Callout type="info">
+  New users should usually start with `Integrated server (local)`.
+  If you already run a remote SoulFire server, use `Dedicated server (remote)` instead.
+  For the difference, see [Operation Modes](/docs/usage/operation-modes).
+</Callout>
 
-When you first launch SoulFire, you'll see a connection screen with three options:
+## Before you start
 
-- **Integrated server (local)**: Runs SoulFire on your machine. Recommended for beginners.
-- **Dedicated server (remote)**: Connect to a remote SoulFire server using an address and token.
-- **Demo server**: Try out the SoulFire interface without installing anything.
+- Install the desktop app from [Installation](/docs/installation).
+- If you want to connect to a remote server, have the server URL and access token ready.
+- If you only want to explore the interface, `Demo server` is useful, but it does not replace a real session.
 
-For beginners, it is recommended to select `Integrated server (local)`.
-This means that SoulFire will run on your machine instead of controlling a remote server.
+## Start your first session
 
-If you are a power-user wanting to learn more about why and how to set up a remote server, follow the [Dedicated Mode guide](/docs/guides/dedicated-mode).
+<Steps>
+  <Step>
+    ### Choose how to connect
 
-## Dashboard
+    Launch SoulFire and pick one of the three connection options:
 
-After connecting, you'll see the main dashboard. The interface is organized into several sections accessible from the left sidebar:
+    - `Integrated server (local)` for a local first run
+    - `Dedicated server (remote)` for an existing SoulFire server
+    - `Demo server` to explore the UI without a live backend
+  </Step>
 
-### User Section
+  <Step>
+    ### Create an instance
 
-- **Instances**: View and manage your bot instances. Each instance is an independent bot session configuration.
-- **Access**: Manage access permissions and tokens.
-- **Settings**: Configure user-specific settings.
+    Open **Instances**, click **Create Instance**, and give the instance a name.
+    Each instance keeps its own bots, settings, scripts, accounts, proxies, and plugin configuration.
+  </Step>
 
-### Admin Section
+  <Step>
+    ### Configure the target server
 
-If you have admin privileges, you'll also see:
+    Open **Bot Settings** and set the server address, bot amount, join delays, protocol version, and timeouts.
+    For most first runs, the defaults are enough except for the target server address.
+  </Step>
 
-- **Overview**: Server overview and status.
-- **Logs**: View server logs.
-- **Terminal**: Execute commands directly on the server.
-- **Users**: Manage user accounts.
-- **Scripts**: Manage server-side scripts.
-- **Server Settings**: Configure server behavior.
-- **Dev Settings**: Advanced developer settings.
+  <Step>
+    ### Add accounts or keep offline mode
 
-## Creating an Instance
+    If the server allows offline accounts, you can start without importing anything and let SoulFire generate names from the configured format.
+    If you need Microsoft or Bedrock accounts, follow [Import Accounts](/docs/usage/accounts).
+  </Step>
 
-To start your first bot session, you need to create an instance:
+  <Step>
+    ### Add proxies if you need them
 
-1. Click on **Instances** in the sidebar
-2. Click the **Create Instance** button (+ icon)
-3. Give your instance a name
+    Open **Proxy Settings** only if you want bots to connect through proxies.
+    If you do, follow [Import Proxies](/docs/usage/proxies).
+  </Step>
 
-Once created, click on your instance to access its settings and controls.
+  <Step>
+    ### Start and monitor the session
 
-## Instance Overview
+    Return to **Overview** and click **Start**.
+    Use **Terminal** to watch activity and run commands, **Pause** to temporarily halt the session, and **Stop** to end it completely.
+  </Step>
+</Steps>
 
-When you select an instance, you'll see several sections:
+## Where common tasks live
 
-### Controls
+- **Instances**: Create, open, and delete instances.
+- **Overview**: Start, pause, stop, and inspect the current instance.
+- **Terminal**: Run SoulFire commands for the current instance.
+- **Account Settings**: Import Microsoft, Bedrock, or offline accounts.
+- **Proxy Settings**: Import and check proxies.
+- **Plugins** and **Plugin Settings**: Enable plugins and change their options.
+- **Scripts**: Create and manage visual automation for the instance.
 
-- **Overview**: See the instance status and control buttons (Start, Pause, Stop)
-- **Terminal**: Execute commands for this specific instance
-- **Audit Log**: View a history of actions performed on this instance
+For a fuller map of the interface, see [GUI Navigation](/docs/guides/gui-navigation).
 
-### Settings
+## Next steps
 
-- **Bot Settings**: Configure the target server address, bot amount, join delays, protocol version, timeouts, and more
-- **Account Settings**: Import and manage accounts for your bots
-- **Proxy Settings**: Import and manage proxies
-- **AI Settings**: Configure AI-related features
-- **Instance Settings**: Configure instance-specific metadata
-
-### Plugins
-
-- **Plugins**: Enable/disable built-in plugins with a simple toggle switch
-- **Plugin Settings**: Configure individual plugin settings
-- **Scripts**: Manage instance-specific scripts
-
-## Bot Settings
-
-The Bot Settings panel is where you configure the core session parameters:
-
-| Setting | Description | Default |
-|---------|-------------|---------|
-| Address | Target server address (e.g., `127.0.0.1:25565`) | `127.0.0.1:25565` |
-| Amount | Number of bots to connect | `1` |
-| Min Join Delay (ms) | Minimum delay between bot joins | `1000` |
-| Max Join Delay (ms) | Maximum delay between bot joins | `3000` |
-| Protocol Version | Minecraft version to use | Latest version |
-| Read Timeout | Connection read timeout in seconds | `30` |
-| Write Timeout | Connection write timeout in seconds | `0` |
-| Connect Timeout | Connection timeout in seconds | `30` |
-| Resolve SRV | Whether to resolve SRV records | Enabled |
-| Concurrent Connects | Number of simultaneous connections | `1` |
-| Restore on Reboot | Restore instance state after server restart | Enabled |
-
-## Starting a Session
-
-Once you've configured your instance:
-
-1. Navigate to the **Overview** page of your instance
-2. Click the **Start** button to begin the session
-3. Monitor progress in the **Terminal** tab
-4. Use **Pause** to temporarily halt the session
-5. Use **Stop** to completely stop all bots
-
-## Importing Proxies
-
-To use proxies with your bots:
-
-1. Select your instance and go to **Proxy Settings**
-2. Use the import options to add proxies
-3. Configure proxy settings like "Bots per proxy" (`-1` means unlimited)
-
-To learn what format the proxies should be in, read the [Proxies Page](/docs/usage/proxies).
-
-## Importing Accounts
-
-To use specific accounts instead of auto-generated offline accounts:
-
-1. Select your instance and go to **Account Settings**
-2. Use the import options to add accounts
-3. Configure account settings like "Name format" for offline accounts
-
-To learn what format the accounts should be in, read the [Accounts Page](/docs/usage/accounts).
-
-## Managing Plugins
-
-SoulFire comes with many built-in plugins that can be enabled or disabled:
-
-1. Select your instance and go to **Plugins**
-2. Toggle plugins on/off using the switch next to each plugin
-3. Click on a plugin name to configure its specific settings
-
-Popular plugins include:
-- **Auto Reconnect**: Automatically reconnects bots when disconnected
-- **Auto Respawn**: Automatically respawns bots after death
-- **Anti AFK**: Prevents bots from being kicked for inactivity
-- **Chat Logger**: Logs chat messages to the terminal
-
-## Commands
-
-The Terminal tab provides a command input where you can interact with SoulFire.
-Unlike Minecraft, commands do not start with `/`.
-So instead of typing `/help`, you just type `help`.
-
-Commands can be scoped to specific bots or instances:
-- `bot Bot_1 say hello` - Run command for a specific bot
-- `instance myinstance say hello` - Run command for all bots in an instance
-
-For a full list of commands, see the [Commands Page](/docs/usage/commands).
-
-## Themes
-
-You can switch between light and dark themes using the theme toggle button in the bottom left corner of the interface.
-
-## Language
-
-SoulFire supports multiple languages. You can change the interface language using the language selector button in the bottom left corner.
+- [GUI Navigation](/docs/guides/gui-navigation) for a page-by-page UI map
+- [Commands](/docs/usage/commands) for terminal commands
+- [Plugins](/docs/usage/plugins) for built-in and community plugins
+- [Dedicated Mode](/docs/guides/dedicated-mode) if you want a long-running remote server

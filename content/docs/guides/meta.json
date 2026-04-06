@@ -1,4 +1,12 @@
 {
   "icon": "BookOpen",
-  "pages": ["gui-mode", "cli-mode", "dedicated-mode", "docker", "webdav", "mcp"]
+  "pages": [
+    "gui-mode",
+    "gui-navigation",
+    "cli-mode",
+    "dedicated-mode",
+    "docker",
+    "webdav",
+    "mcp"
+  ]
 }
