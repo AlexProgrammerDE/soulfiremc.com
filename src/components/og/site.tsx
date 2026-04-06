@@ -2,19 +2,19 @@ import type { ReactNode } from "react";
 import { labelize } from "@/lib/og";
 
 const theme = {
-  background: "#f3efe8",
-  surface: "#fbf9f5",
-  rail: "#f6f2eb",
-  ink: "#141414",
-  inkSoft: "#2a2a2a",
-  muted: "#6b665f",
-  border: "#d7d0c6",
-  borderStrong: "#bdb4a7",
-  orange: "#c8681d",
-  cyan: "#0f7d89",
-  green: "#3e765e",
-  rose: "#a54f5b",
-  violet: "#6552a2",
+  background: "#101010",
+  surface: "#161616",
+  rail: "#121212",
+  ink: "#f5f5f2",
+  inkSoft: "#dfdfda",
+  muted: "#9b938a",
+  border: "#2a2a2a",
+  borderStrong: "#393939",
+  orange: "#d17a33",
+  cyan: "#4b8d96",
+  green: "#5d8d76",
+  rose: "#b26a76",
+  violet: "#7f70ad",
 };
 
 function fitTitleSize(
