@@ -1,0 +1,158 @@
+---
+title: Mixins And Access Wideners
+description: Use Fabric Mixins and access wideners to inject into Minecraft or SoulFire internals when the public event surface is not enough.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SoulFire plugins are Fabric mods, so you get the normal Fabric toolbox:
+
+- Mixins for behavior changes and hook injection
+- access wideners for changing member visibility
+- direct access to Minecraft classes on the runtime classpath
+
+## Use Mixins only when you need them
+
+Use the public SoulFire API first:
+
+- events
+- settings pages
+- metadata
+- `BotConnection`, `ControlState`, and `ControllingTask`
+
+Reach for Mixins when:
+
+- there is no event at the right timing point
+- you need to change or observe control flow inside Minecraft
+- you need access to data that SoulFire does not expose yet
+- you need a hook inside one specific Minecraft method
+
+<Callout type="info">
+  SoulFire itself uses Mixins heavily.
+  Its own event hooks for chat, packets, ticks, client settings, and movement input are all implemented through Mixins.
+  That makes the SoulFire source tree a practical reference for your plugin Mixins.
+</Callout>
+
+## Required resource files
+
+Your plugin normally needs these resources:
+
+- `src/main/resources/fabric.mod.json`
+- `src/main/resources/<plugin-id>.mixins.json`
+- `src/main/resources/<plugin-id>.accesswidener` if you need widened access
+
+## `fabric.mod.json`
+
+Make sure the Fabric metadata points to the Mixin config and optional access widener:
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "my-plugin",
+  "version": "${version}",
+  "entrypoints": {
+    "main": ["com.example.myplugin.Main"]
+  },
+  "mixins": ["my-plugin.mixins.json"],
+  "accessWidener": "my-plugin.accesswidener",
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*",
+    "soulfire": "*"
+  }
+}
+```
+
+## Mixin config
+
+A minimal Mixin config looks like this:
+
+```json
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.example.myplugin.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": ["MyMixin"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
+```
+
+Follow the template and the SoulFire runtime you target.
+Do not invent your own compatibility level blindly.
+
+## Loom wiring
+
+The template wires the access widener like this:
+
+```kotlin
+loom {
+  accessWidenerPath = file("src/main/resources/my-plugin.accesswidener")
+}
+```
+
+If you do not use an access widener yet, you can still keep the empty file so the structure is already in place.
+
+## Current-safe pattern for bot-aware Mixins
+
+The example repository is useful, but low-level API details can drift between SoulFire versions.
+For current versions, prefer `currentOptional()` or `current()` instead of relying on old internal field access patterns.
+
+Example:
+
+```java
+@Mixin(LocalPlayer.class)
+public class MyMixin {
+  @Inject(method = "tick", at = @At("HEAD"))
+  private void onTick(CallbackInfo ci) {
+    var bot = BotConnection.currentOptional().orElse(null);
+    if (bot == null) {
+      return;
+    }
+
+    if (bot.settingsSource().get(MySettings.ENABLED)) {
+      // your low-level logic here
+    }
+  }
+}
+```
+
+That keeps the Mixin resilient when it executes outside a bot-owned thread.
+
+## Access widener versus Mixin
+
+Use an access widener when:
+
+- you only need visibility changes
+- you want to read or call an otherwise inaccessible field or method
+- you do not need to alter control flow
+
+Use a Mixin when:
+
+- you need to inject before or after a method call
+- you need to wrap or replace logic
+- you need access to locals or method parameters at a precise point
+
+Many plugins need both.
+
+## Best practices
+
+- Keep Mixins thin. Put the real logic in ordinary classes.
+- Prefer stable high-level targets over fragile local-variable-heavy injections.
+- Null-check runtime objects like `player`, `level`, and `gameMode`.
+- Test against the exact SoulFire version you ship for.
+- Recheck the current built-in mixins before copying old examples.
+
+## Source trees worth reading
+
+- [SoulFire mixin config](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/resources/soulfire.mixins.json)
+- [SoulFire event-emitting mixins](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/mod/mixin/soulfire/api/event)
+- [Plugin example mixin](https://github.com/AlexProgrammerDE/SoulFirePluginExample/blob/main/src/main/java/com/soulfiremc/pluginexample/mixin/EntityEffectStateMixin.java)
+
+## Next steps
+
+- [Bot Control And Direct Access](/docs/development/bot-control-and-direct-access)
+- [Developer Resources](/docs/development/developer-resources)

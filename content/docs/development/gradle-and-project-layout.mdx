@@ -1,0 +1,150 @@
+---
+title: Gradle And Project Layout
+description: Configure Fabric Loom, SoulFire dependencies, Maven repositories, and the required project files for a SoulFire plugin.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The fastest way to get a correct build is to copy the official template structure and only then trim it down.
+SoulFire plugins are Fabric mods, so the project layout is a normal Fabric Loom layout with SoulFire-specific dependencies and resources layered on top.
+
+## Published coordinates
+
+SoulFire publishes the artifacts most plugin authors care about under the `com.soulfiremc` group:
+
+| What | Value |
+| --- | --- |
+| Maven repository | `https://repo.codemc.org/repository/maven-public/` |
+| Main plugin dependency | `com.soulfiremc:mod` |
+| Companion compile-only dependency | `com.soulfiremc:shared` |
+| Release metadata | `https://repo.codemc.org/repository/maven-public/com/soulfiremc/mod/maven-metadata.xml` |
+| Shared metadata | `https://repo.codemc.org/repository/maven-public/com/soulfiremc/shared/maven-metadata.xml` |
+
+The public metadata currently exposes a newer release than the version pinned in the template repository.
+Check the metadata before you pin a version, especially if you are targeting a recent SoulFire build.
+
+## Minimal repositories block
+
+If you want the smallest working setup, these repositories are the important ones:
+
+```kotlin
+repositories {
+  maven("https://repo.codemc.org/repository/maven-public/")
+  maven("https://maven.fabricmc.net")
+  maven("https://libraries.minecraft.net")
+  mavenCentral()
+}
+```
+
+The official template includes more repositories because it mirrors the larger SoulFire build and keeps room for common transitive dependencies.
+If you are unsure, copy the template block as-is.
+
+## Minimal dependency shape
+
+The core structure looks like this:
+
+```kotlin
+dependencies {
+  minecraft("com.mojang:minecraft:<minecraft-version>")
+  implementation("net.fabricmc:fabric-loader:<fabric-loader-version>")
+
+  implementation("com.soulfiremc:mod:<soulfire-version>")
+  compileOnly("com.soulfiremc:shared:<soulfire-version>")
+
+  compileOnly("org.projectlombok:lombok:<lombok-version>")
+  annotationProcessor("org.projectlombok:lombok:<lombok-version>")
+}
+```
+
+Use `implementation` for `com.soulfiremc:mod` because that is the runtime API surface you actually integrate against.
+Use `compileOnly` for `shared` unless you know you need it packaged differently.
+
+## Loom configuration
+
+The example plugin uses this pattern:
+
+```kotlin
+loom {
+  accessWidenerPath = file("src/main/resources/my-plugin.accesswidener")
+
+  runs {
+    removeIf { true }
+  }
+}
+```
+
+That means:
+
+- your plugin can ship an access widener if needed
+- the template disables Loom run configurations because the plugin is not a standalone game or server
+
+Test the plugin against a real SoulFire install instead of expecting the plugin project itself to boot SoulFire.
+
+## Recommended file layout
+
+| File | Purpose |
+| --- | --- |
+| `settings.gradle.kts` | Gradle project identity |
+| `build.gradle.kts` | Loom, repositories, dependencies, and build logic |
+| `gradle/libs.versions.toml` | central place for Minecraft, Fabric Loader, and SoulFire versions |
+| `src/main/resources/fabric.mod.json` | Fabric mod metadata and entrypoint registration |
+| `src/main/resources/<plugin-id>.mixins.json` | Mixin configuration |
+| `src/main/resources/<plugin-id>.accesswidener` | optional access widener |
+| `src/main/java/.../Main.java` | `ModInitializer` entrypoint |
+| `src/main/java/.../MyPlugin.java` | your `ExternalPlugin` implementation |
+
+## `fabric.mod.json`
+
+At minimum, your metadata file needs:
+
+- a unique `id`
+- a `main` entrypoint
+- a SoulFire dependency entry under `depends`
+- your mixin config name if you use Mixins
+- your access widener name if you use one
+
+The official example uses this dependency block:
+
+```json
+"depends": {
+  "fabricloader": "*",
+  "minecraft": "*",
+  "soulfire": "*"
+}
+```
+
+That keeps the plugin aligned with the SoulFire runtime instead of hardcoding narrow mod dependency rules.
+
+## Build output and installation
+
+Build the jar with:
+
+```bash
+./gradlew build
+```
+
+Then install the resulting jar into SoulFire's `minecraft/mods` directory and restart SoulFire.
+
+<Callout type="info">
+  SoulFire loads your plugin through Fabric, not through a separate SoulFire-specific plugin loader.
+  If the jar is not a valid Fabric mod jar, SoulFire will never reach your `ExternalPlugin`.
+</Callout>
+
+## What to copy directly from the template
+
+Copy these without trying to be clever on day one:
+
+- the Gradle wrapper
+- the Loom plugin setup
+- the version catalog structure
+- the `fabric.mod.json` skeleton
+- the mixin config skeleton
+- the access widener file name wiring
+
+Once the plugin works, then simplify the build.
+
+## Next steps
+
+- [Build Your First Plugin](/docs/development/first-plugin)
+- [Mixins And Access Wideners](/docs/development/mixins-and-access-wideners)
+- [Developer Resources](/docs/development/developer-resources)

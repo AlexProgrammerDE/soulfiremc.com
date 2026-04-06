@@ -1,0 +1,85 @@
+---
+title: Environment Setup
+description: Set up Java, Gradle, IntelliJ, and a source checkout that matches the SoulFire version your plugin targets.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+For serious plugin work, treat SoulFire like an API plus a source tree, not just a jar dependency.
+You will move faster if your local environment lets you inspect the current implementation, the built-in plugins, and the generated Javadocs side by side.
+
+## Recommended stack
+
+- **Java 25**: SoulFire currently builds and generates Javadocs with JDK 25.
+- **Gradle Wrapper**: use the wrapper from your plugin project and from the SoulFire source checkout.
+- **IntelliJ IDEA**: recommended for Fabric Loom, Mixins, Lombok, and large Java source navigation.
+- **A local SoulFire checkout**: use it as the real reference, even if your plugin lives in a separate repository.
+
+<Callout type="info">
+  SoulFire's current build logic and aggregated Javadocs both target Java 25.
+  If you work on an older JDK, you will spend time fighting toolchain problems instead of building the plugin.
+</Callout>
+
+## Clone the repos you need
+
+The most practical layout is keeping these repositories next to each other:
+
+```bash
+git clone https://github.com/AlexProgrammerDE/SoulFire.git
+git clone https://github.com/AlexProgrammerDE/SoulFirePluginExample.git
+```
+
+Use:
+
+- `SoulFire` as the source of truth for current internals, built-in plugins, settings, gRPC services, and proto contracts
+- `SoulFirePluginExample` as the scaffold for new external plugins
+
+## Recommended IntelliJ setup
+
+If you use IntelliJ IDEA:
+
+1. open the plugin project as a Gradle project
+2. let Loom finish dependency setup before judging the project state
+3. install Lombok support if IntelliJ prompts you
+4. if you also open the SoulFire repo, import its inspection profile from `config/intellij_inspections.xml`
+
+You do not need to open the whole SoulFire repo as a second module in the same project, but it is often useful.
+
+## What to inspect in the SoulFire source tree
+
+| Source location | Why it matters |
+| --- | --- |
+| `mod/src/main/java/com/soulfiremc/server/api` | Public plugin API classes such as `SoulFireAPI`, `Plugin`, and event types |
+| `mod/src/main/java/com/soulfiremc/server/settings` | Typed settings model, property classes, and settings page registration |
+| `mod/src/main/java/com/soulfiremc/server/bot` | `BotConnection`, `ControlState`, and `ControllingTask` |
+| `mod/src/main/java/com/soulfiremc/server/plugins` | Built-in plugins that show real patterns used by the project |
+| `mod/src/main/java/com/soulfiremc/server/grpc` | How GUI and CLI actions are translated into in-process bot operations |
+| `proto/src/main/proto/soulfire` | The wire contracts for server info, instance info, bot control, scripting, and more |
+
+## Keep versions aligned
+
+This matters more for SoulFire than for many ordinary libraries.
+
+- Match your plugin dependency version to the SoulFire version you actually run.
+- Check the current [CodeMC Maven metadata](https://repo.codemc.org/repository/maven-public/com/soulfiremc/mod/maven-metadata.xml) before pinning versions.
+- Treat the example plugin as a scaffold, not as the final word on every low-level API detail.
+
+The current example repository pins an older SoulFire version than the latest CodeMC metadata.
+That is normal for a template repository, but it means you should verify current APIs in the Javadocs and source before copying low-level code unchanged.
+
+## When another IDE is acceptable
+
+Other IDEs can work if they handle:
+
+- Gradle Kotlin DSL
+- annotation processing
+- Loom and Fabric dependency resolution
+- large Java projects with generated sources
+
+IntelliJ is still the easiest path when you start debugging Mixins or browsing Minecraft and SoulFire source at the same time.
+
+## Next steps
+
+- [Gradle And Project Layout](/docs/development/gradle-and-project-layout)
+- [Developer Resources](/docs/development/developer-resources)
+- [Architecture And Protocols](/docs/development/architecture-and-protocols)

@@ -1,0 +1,161 @@
+---
+title: Bot Control And Direct Access
+description: Use ControlState, ControllingTask, BotConnection, and direct Minecraft access when you need in-process control beyond the public scripting surface.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+This is the part of plugin development that makes SoulFire powerful and risky at the same time.
+Your plugin runs inside the same JVM as SoulFire and the headless Minecraft client, so you can work with the real runtime objects instead of sending remote commands to an external process.
+
+<Callout type="warning">
+  Direct access is for advanced use cases.
+  If the job can stay in [Scripting](/docs/scripting) or in a higher-level event hook, do that first.
+  The lower you go, the more sensitive your plugin becomes to version changes.
+</Callout>
+
+## Core runtime objects
+
+| Object | What it gives you |
+| --- | --- |
+| `SoulFireServer` | the whole SoulFire server process |
+| `InstanceManager` | one instance, its settings, bots, and lifecycle |
+| `BotConnection` | one connected bot, its Minecraft client copy, settings, scheduler, metadata, and control state |
+| `ControlState` | persistent WASD, jump, sneak, and sprint input flags |
+| `BotControlAPI` | single-tick or staged controlling tasks |
+
+## Thread-local direct access
+
+SoulFire exposes the current runtime object in the matching execution context:
+
+- `SoulFireServer.current()` and `currentOptional()`
+- `InstanceManager.current()` and `currentOptional()`
+- `BotConnection.current()` and `currentOptional()`
+
+This is especially useful inside:
+
+- event handlers already running in bot or instance context
+- Mixins injected into Minecraft classes
+- helper code that runs under the bot's wrapped scheduler
+
+Use the `Optional` variants when you are not certain the code is running under the right context.
+
+## Continuous movement control
+
+`ControlState` is the low-level source of truth for movement inputs.
+SoulFire's own keyboard input mixin reads these booleans and turns them into the real Minecraft `Input` object for the bot.
+
+That makes `ControlState` the right tool for persistent movement toggles:
+
+```java
+var state = connection.controlState();
+state.up(true);
+state.sprint(true);
+```
+
+Then later:
+
+```java
+connection.controlState().resetAll();
+```
+
+Use this for behavior that should stay active until you explicitly change it.
+
+## Discrete actions with `ControllingTask`
+
+For one-off actions, use `BotControlAPI` and `ControllingTask`.
+
+The main forms are:
+
+- `ControllingTask.singleTick(...)`
+- `ControllingTask.staged(...)`
+- `ControllingTask.manual(...)`
+
+### Single-tick action
+
+```java
+connection.botControl().registerControllingTask(
+  ControllingTask.singleTick(() -> connection.minecraft().player.sendOpenInventory())
+);
+```
+
+### Staged action
+
+This is how SoulFire handles multi-step inventory work in several built-in plugins:
+
+```java
+connection.botControl().registerControllingTask(
+  ControllingTask.staged(List.of(
+    new ControllingTask.RunnableStage(player::sendOpenInventory),
+    new ControllingTask.WaitDelayStage(() -> 50L),
+    new ControllingTask.RunnableStage(player::closeContainer)
+  ))
+);
+```
+
+### Manual markers
+
+Manual tasks are useful when you want a plugin to claim control ownership without immediately doing work every tick.
+`KillAura` uses this pattern with a custom marker object so it can coordinate follow-up logic cleanly.
+
+## `registerControllingTask` versus `maybeRegister`
+
+Choose carefully:
+
+- `registerControllingTask(...)` replaces any existing controlling task
+- `maybeRegister(...)` only registers if nothing else is currently controlling the bot
+
+If your plugin is optional background automation, `maybeRegister(...)` is usually safer.
+If your plugin is an explicit active command, taking over with `registerControllingTask(...)` may be correct.
+
+## Direct Minecraft access
+
+From a `BotConnection`, you can reach the actual headless client copy:
+
+- `connection.minecraft().player`
+- `connection.minecraft().level`
+- `connection.minecraft().gameMode`
+- `connection.minecraft().getConnection()`
+
+That lets you do things such as:
+
+- inspect the player's inventory and level state
+- click containers through `gameMode.handleContainerInput(...)`
+- open or close inventories
+- set rotation directly on the `LocalPlayer`
+- read or mutate lower-level Minecraft systems that SoulFire does not wrap yet
+
+Always null-check objects like `player`, `level`, and `gameMode`.
+They are not guaranteed to exist in early lifecycle stages.
+
+## How GUI and CLI actions map to this layer
+
+SoulFire's own gRPC `BotService` uses the same primitives plugin authors do:
+
+- movement RPCs update `ControlState`
+- rotation, hotbar, inventory, mouse, and dialog actions register `ControllingTask.singleTick(...)`
+- more complex interactions use staged tasks or direct player and gameMode calls
+
+That is useful for plugin authors because the internal gRPC layer shows the intended low-level execution model for user-facing actions.
+
+## Use the scheduler that already belongs to the bot
+
+If you need async or delayed work, prefer the bot's own wrapped scheduler:
+
+```java
+connection.scheduler().scheduleWithFixedDelay(...);
+```
+
+That keeps your work attached to the bot lifecycle and preserves the runtime context SoulFire expects.
+
+## Good reference plugins
+
+- [AutoArmor](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AutoArmor.java) for staged inventory manipulation
+- [AutoEat](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AutoEat.java) for conditional control decisions
+- [AutoTotem](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AutoTotem.java) for multi-step inventory tasks
+- [KillAura](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/KillAura.java) for control-state ownership and manual markers
+
+## Next steps
+
+- [Mixins And Access Wideners](/docs/development/mixins-and-access-wideners)
+- [Architecture And Protocols](/docs/development/architecture-and-protocols)

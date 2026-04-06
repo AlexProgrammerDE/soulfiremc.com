@@ -1,0 +1,143 @@
+---
+title: Event System
+description: Understand how SoulFire events are registered, what the current event hierarchy looks like, and which mutable hooks exist before you reach for Mixins.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The event system is the first extension seam you should use.
+It is much cheaper to maintain than Mixins, and SoulFire already exposes a meaningful amount of lifecycle, session, bot, chat, packet, and settings behavior through events.
+
+## How listener registration works
+
+Every `Plugin` registers itself in two ways when it is constructed:
+
+- it registers static listeners declared on the class
+- it registers instance listeners declared on the plugin object
+
+That is why both of these patterns work:
+
+```java
+@EventHandler
+public static void onBotInit(BotConnectionInitEvent event) {
+  // stateless handler
+}
+```
+
+```java
+@EventHandler
+public void onSettingsRegistryInit(InstanceSettingsRegistryInitEvent event) {
+  // instance handler
+}
+```
+
+The annotation comes from LambdaEvents:
+
+```java
+import net.lenni0451.lambdaevents.EventHandler;
+```
+
+## Event hierarchy
+
+The public event model is split into three scopes:
+
+- `SoulFireGlobalEvent`: events that belong to the whole SoulFire server
+- `SoulFireInstanceEvent`: events that belong to one instance
+- `SoulFireBotEvent`: events that belong to one bot and also imply instance access
+
+That hierarchy means a bot event gives you a `BotConnection`, and from that you can also reach the `InstanceManager` and `SoulFireServer`.
+
+## Lifecycle events
+
+These are the main lifecycle hooks currently exposed:
+
+| Event | Scope | When it fires |
+| --- | --- | --- |
+| `CommandManagerInitEvent` | global | after built-in commands are registered and before you add your own |
+| `ServerSettingsRegistryInitEvent` | global | while the server settings registry is being assembled |
+| `InstanceSettingsRegistryInitEvent` | instance | while an instance settings registry is being assembled |
+| `InstanceInitEvent` | instance | immediately after an `InstanceManager` is created |
+| `SessionStartEvent` | instance | when an instance session starts |
+| `SessionTickEvent` | instance | on each instance tick while the session is ticking |
+| `SessionBotRemoveEvent` | instance | when a disconnected bot is evicted from the active bot map |
+| `SessionEndedEvent` | instance | when the session ends |
+
+## Bot events
+
+These are the current bot-facing events exposed in `com.soulfiremc.server.api.event.bot`:
+
+| Event | What it is for |
+| --- | --- |
+| `PreBotConnectEvent` | async pre-connect hook before the bot joins |
+| `BotConnectionInitEvent` | right after the `BotConnection` object exists |
+| `BotPreTickEvent` | bot tick hook before the tick body finishes |
+| `BotPostTickEvent` | bot tick hook after the tick body finishes |
+| `BotPreEntityTickEvent` | before entity tracking logic ticks |
+| `BotPostEntityTickEvent` | after entity tracking logic ticks |
+| `ChatMessageReceiveEvent` | incoming chat messages |
+| `BotPacketPreReceiveEvent` | inspect or replace inbound packets before handling |
+| `BotPacketPreSendEvent` | inspect or replace outbound packets before send |
+| `BotDamageEvent` | health went down |
+| `BotOpenContainerEvent` | a container or screen opened |
+| `BotClientBrandEvent` | outgoing client brand can be changed |
+| `BotClientSettingsEvent` | outgoing client settings can be changed |
+| `BotShouldRespawnEvent` | control automatic respawn behavior |
+| `BotDisconnectedEvent` | the bot disconnected |
+
+## Mutable hooks
+
+Some events are plain immutable records.
+Some are deliberately mutable and are the lowest-friction way to change behavior without a Mixin.
+
+Use these when they match your need:
+
+- `BotPacketPreReceiveEvent`: replace the packet, or set it to `null` to suppress handling
+- `BotPacketPreSendEvent`: replace the packet, or set it to `null` to suppress sending
+- `BotClientBrandEvent`: change the brand string
+- `BotClientSettingsEvent`: change the `ClientInformation`
+- `BotShouldRespawnEvent`: set `shouldRespawn`
+
+<Callout type="info">
+  SoulFire currently exposes `AbstractCancellable`, but the public event surface mostly relies on mutable event objects rather than broad cancellation.
+  For many low-level hooks, replacing a packet or mutating the outgoing value is the intended extension model.
+</Callout>
+
+## Timing and thread context
+
+The event name alone is not enough. You also need to care about timing:
+
+- `PreBotConnectEvent` runs before the player is ready and can do blocking work
+- `BotConnectionInitEvent` has a fully constructed `BotConnection`, but the bot is not connected yet
+- `BotPreTickEvent` and `BotPostTickEvent` run in the live bot tick loop
+- `BotPreEntityTickEvent` and `BotPostEntityTickEvent` are even closer to the entity update path
+
+If you need `minecraft().player`, always assume it may still be `null` in early lifecycle hooks.
+
+## Custom commands
+
+If your plugin needs terminal commands, listen for `CommandManagerInitEvent` and add Brigadier commands there.
+SoulFire posts this event after its built-in commands are already registered.
+
+## When to stop and use a Mixin instead
+
+Use a Mixin only when:
+
+- there is no event at the right timing point
+- you need access to data that the event surface does not expose
+- you need to alter control flow inside Minecraft or SoulFire internals
+
+Before writing the Mixin, check whether one of the packet or client-setting events already covers the use case.
+
+## Reference code to study
+
+The built-in plugins and SoulFire's own event-emitting mixins are the best reference:
+
+- [Built-in plugin sources](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/server/plugins)
+- [Event-emitting mixins](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/mod/mixin/soulfire/api/event)
+- [API Javadocs for `com.soulfiremc.server.api.event`](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/com/soulfiremc/server/api/event/package-summary.html)
+
+## Next steps
+
+- [Settings And Metadata](/docs/development/settings-and-metadata)
+- [Mixins And Access Wideners](/docs/development/mixins-and-access-wideners)
+- [Architecture And Protocols](/docs/development/architecture-and-protocols)

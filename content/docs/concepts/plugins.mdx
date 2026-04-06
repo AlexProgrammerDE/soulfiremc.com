@@ -37,6 +37,12 @@ Since SoulFire plugins are Fabric mods:
 - Plugins have full access to the Minecraft codebase and Fabric APIs
 - Some existing Fabric mods may be compatible with SoulFire without modification
 
+<Callout type="info">
+  This power is meant for advanced users.
+  If visual automation is enough, stay in [Scripting](/docs/scripting).
+  Move to [Development](/docs/development) when you need Mixins, packet hooks, custom settings pages, or direct access to Minecraft and SoulFire internals.
+</Callout>
+
 ## Built-in plugins vs community plugins
 
 - **Built-in plugins** ship with SoulFire and can be enabled or disabled per instance.
@@ -57,21 +63,19 @@ Some Fabric mods work with SoulFire without modification, but compatibility is n
 
 Any questions regarding how SoulFire works and how to write a plugin can be asked in the [Discord](/discord).
 
-Since SoulFire plugins are Fabric mods, you create them the same way you would create any Fabric mod:
+The short version:
 
-1. Create a new Java or Kotlin project using the [Fabric mod template](https://fabricmc.net/develop/template/)
-2. Add SoulFire as a dependency in your `build.gradle`
-3. Create your `fabric.mod.json` with proper metadata and entrypoints
-4. Use Mixins to hook into Minecraft or SoulFire code as needed
-5. Build your mod as a standard Fabric mod `.jar` file
+1. Start from the official [SoulFirePluginExample](https://github.com/AlexProgrammerDE/SoulFirePluginExample) template
+2. Add the current SoulFire dependencies from [CodeMC Maven](https://repo.codemc.org/repository/maven-public/)
+3. Register your plugin with `SoulFireAPI.registerServerExtension(...)`
+4. Build a standard Fabric mod jar and place it in `minecraft/mods`
 
-There is a [plugin template](https://github.com/AlexProgrammerDE/SoulFirePluginExample) available on GitHub to help you get started.
-Official Javadocs are hosted on [CodeMC CI](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/index.html).
-
-You can also look at the built-in plugins for inspiration on how to structure your plugin.
+For the real developer workflow, use the new [Development](/docs/development) section.
+It covers environment setup, Gradle, settings pages, the event system, bot control, Mixins, access wideners, internal architecture, and the current Javadocs and source references.
 
 ## Related pages
 
+- [Development](/docs/development) for the full plugin-authoring documentation
 - [Install Plugins](/docs/how-to/install-plugins) for the practical install steps
 - [Built-in Plugins](/docs/reference/built-in-plugins) for the built-in list
 - [Resources](/resources) for community plugins and scripts

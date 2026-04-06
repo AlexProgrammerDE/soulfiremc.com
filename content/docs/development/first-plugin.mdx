@@ -1,0 +1,156 @@
+---
+title: Build Your First Plugin
+description: Create a working SoulFire plugin from the official template and load it into SoulFire as a Fabric mod.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+This guide takes the shortest path to a real plugin.
+It uses the official template instead of starting from an empty Fabric project, because the template already includes the SoulFire-specific wiring.
+
+<Callout type="info">
+  The official template repository is [SoulFirePluginExample](https://github.com/AlexProgrammerDE/SoulFirePluginExample).
+  Treat it as your starting scaffold, then cross-check the current [Javadocs](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/)
+  and current [SoulFire source](https://github.com/AlexProgrammerDE/SoulFire) for low-level APIs.
+</Callout>
+
+## Before you start
+
+- Install Java 25.
+- Install Git.
+- Use IntelliJ IDEA if possible. It is the least painful option for Fabric Loom, Mixins, and Java plugin work.
+- Have a working SoulFire install where you can test jars in `minecraft/mods`.
+
+## Create the project
+
+<Steps>
+  <Step>
+    ### Clone the template
+
+    ```bash
+    git clone https://github.com/AlexProgrammerDE/SoulFirePluginExample.git my-soulfire-plugin
+    cd my-soulfire-plugin
+    ```
+  </Step>
+
+  <Step>
+    ### Rename the plugin metadata
+
+    Update these files first:
+
+    - `settings.gradle.kts`
+    - `build.gradle.kts`
+    - `gradle/libs.versions.toml`
+    - `src/main/resources/fabric.mod.json`
+    - the Java package under `src/main/java`
+
+    Make your plugin ID lowercase and hyphenated.
+    Reuse the same ID consistently in `PluginInfo`, `fabric.mod.json`, settings namespaces, mixin config names, and access widener names.
+  </Step>
+
+  <Step>
+    ### Keep the Fabric entrypoint
+
+    SoulFire plugins are Fabric mods, so the JVM entrypoint is still a normal `ModInitializer`:
+
+    ```java
+    package com.example.myplugin;
+
+    import com.soulfiremc.server.api.SoulFireAPI;
+    import net.fabricmc.api.ModInitializer;
+
+    public final class Main implements ModInitializer {
+      @Override
+      public void onInitialize() {
+        SoulFireAPI.registerServerExtension(new MyPlugin());
+      }
+    }
+    ```
+
+    `SoulFireAPI.registerServerExtension(...)` is the moment your plugin becomes visible to SoulFire.
+  </Step>
+
+  <Step>
+    ### Implement the plugin class
+
+    For external plugins, extend `ExternalPlugin` and provide `PluginInfo`:
+
+    ```java
+    package com.example.myplugin;
+
+    import com.soulfiremc.server.api.ExternalPlugin;
+    import com.soulfiremc.server.api.PluginInfo;
+    import com.soulfiremc.server.api.event.bot.BotConnectionInitEvent;
+    import lombok.extern.slf4j.Slf4j;
+    import net.lenni0451.lambdaevents.EventHandler;
+
+    @Slf4j
+    public final class MyPlugin extends ExternalPlugin {
+      public MyPlugin() {
+        super(new PluginInfo(
+          "my-plugin",
+          "1.0.0",
+          "Example SoulFire plugin",
+          "YourName",
+          "MIT",
+          "https://example.com"
+        ));
+      }
+
+      @EventHandler
+      public void onBotInit(BotConnectionInitEvent event) {
+        log.info("Bot {} was initialized", event.connection().accountName());
+      }
+    }
+    ```
+  </Step>
+
+  <Step>
+    ### Build the jar
+
+    ```bash
+    ./gradlew build
+    ```
+
+    Your plugin jar will be written to `build/libs/`.
+  </Step>
+
+  <Step>
+    ### Install it into SoulFire
+
+    Copy the jar into SoulFire's Fabric mods directory and restart SoulFire:
+
+    - integrated GUI or CLI install: `soulfire/minecraft/mods`
+    - dedicated server install: `minecraft/mods` next to the server jar
+  </Step>
+</Steps>
+
+## Add settings and a plugin page
+
+The official example plugin shows the standard pattern:
+
+1. create a `SettingsObject` class with `public static final` properties
+2. listen for `InstanceSettingsRegistryInitEvent`
+3. call `event.settingsPageRegistry().addPluginPage(...)`
+4. read values through `connection.settingsSource()`
+
+That makes your settings appear in the GUI, CLI, and exported instance metadata automatically.
+
+## Verify that it loaded
+
+Use the built-in plugin inspection tools:
+
+- open the instance UI and check **Plugins**
+- run `plugins` in the terminal
+- run `print-docs plugins` if you want the current built-in plugin documentation output
+
+If the mod failed before registration, check the startup logs first.
+Fabric loading problems, missing dependencies, and bad mixin config usually fail before SoulFire ever sees your `ExternalPlugin`.
+
+## What to do next
+
+- [Environment Setup](/docs/development/environment-setup) to align your IDE and source checkout
+- [Gradle And Project Layout](/docs/development/gradle-and-project-layout) for the important build files
+- [Event System](/docs/development/event-system) to choose the right hook
+- [Mixins And Access Wideners](/docs/development/mixins-and-access-wideners) if events are not enough

@@ -1,0 +1,14 @@
+{
+  "icon": "Code2",
+  "pages": [
+    "first-plugin",
+    "environment-setup",
+    "gradle-and-project-layout",
+    "event-system",
+    "settings-and-metadata",
+    "bot-control-and-direct-access",
+    "mixins-and-access-wideners",
+    "architecture-and-protocols",
+    "developer-resources"
+  ]
+}

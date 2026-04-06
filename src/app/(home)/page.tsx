@@ -152,9 +152,9 @@ const features = [
     Icon: AppWindow,
     name: "Plugin system",
     description:
-      "15+ built-in plugins including Kill Aura, Auto Eat, Auto Armor, AI Chat Bot, and more. Create custom plugins as Fabric mods with full Minecraft API access.",
-    href: "/docs/concepts/plugins",
-    cta: "Learn about plugins",
+      "15+ built-in plugins including Kill Aura, Auto Eat, Auto Armor, AI Chat Bot, and more. Build your own Fabric-based plugin when scripting is not enough and you need direct API, protocol, or Mixin access.",
+    href: "/docs/development",
+    cta: "Build advanced plugins",
     className: "col-span-3 lg:col-span-2",
     background: (
       <Marquee pauseOnHover duration={20} gap={12} className="absolute top-8">
@@ -228,7 +228,10 @@ const faqItems: {
         release, including Beta, Combat Snapshots, April Fools editions, and
         Bedrock Edition. Version translation is handled automatically via
         built-in protocol support. See the{" "}
-        <Link href="/docs/reference/versions" className="underline text-primary">
+        <Link
+          href="/docs/reference/versions"
+          className="underline text-primary"
+        >
           full version list
         </Link>
         .
@@ -275,7 +278,10 @@ const faqItems: {
         Yes. SoulFire can connect to Bedrock Edition servers via built-in
         protocol translation. Some features are still being added, but core
         functionality like joining, moving, and interacting works. See{" "}
-        <Link href="/docs/reference/versions" className="underline text-primary">
+        <Link
+          href="/docs/reference/versions"
+          className="underline text-primary"
+        >
           supported versions
         </Link>{" "}
         for details.
@@ -285,16 +291,17 @@ const faqItems: {
   {
     question: "Can I write custom plugins?",
     answerHtml:
-      'Yes. SoulFire plugins are Fabric mods with full access to the Minecraft API. You can create custom bot behaviors, automate complex tasks, or build testing scenarios tailored to your server. Learn how in the <a href="https://soulfiremc.com/docs/concepts/plugins">plugin docs</a>.',
+      'Yes. SoulFire plugins are Fabric mods with full access to Minecraft and SoulFire internals. Use scripting for high-level automation, and move to the <a href="https://soulfiremc.com/docs/development">Development docs</a> when you need low-level hooks, custom settings, Mixins, or direct bot control.',
     answerElement: (
       <>
-        Yes. SoulFire plugins are Fabric mods with full access to the Minecraft
-        API. You can create custom bot behaviors, automate complex tasks, or
-        build testing scenarios tailored to your server. Learn how in the{" "}
-        <Link href="/docs/concepts/plugins" className="underline text-primary">
-          plugin docs
-        </Link>
-        .
+        Yes. SoulFire plugins are Fabric mods with full access to Minecraft and
+        SoulFire internals. Use scripting for high-level automation, and move to
+        the{" "}
+        <Link href="/docs/development" className="underline text-primary">
+          Development docs
+        </Link>{" "}
+        when you need low-level hooks, custom settings, Mixins, or direct bot
+        control.
       </>
     ),
   },

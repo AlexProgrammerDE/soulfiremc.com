@@ -1,0 +1,177 @@
+---
+title: Settings And Metadata
+description: Define typed settings, expose plugin pages to the UI, and store transient or persistent plugin state in the SoulFire runtime.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SoulFire settings are not loose JSON blobs.
+They are typed property definitions that the server exports to the GUI and CLI as structured metadata.
+That gives plugin authors a clean way to define options once and have them appear everywhere.
+
+## How the settings model works
+
+The usual flow is:
+
+1. define `public static final` properties inside a `SettingsObject`
+2. listen for a settings registry event
+3. register a page with `SettingsPageRegistry`
+4. read values back through a `SettingsSource`
+
+The official example plugin follows exactly this pattern.
+
+## Scopes
+
+SoulFire uses three setting scopes:
+
+| Scope | Source type | Meaning |
+| --- | --- | --- |
+| server | `SettingsSource.Server` | one value for the whole SoulFire server |
+| instance | `SettingsSource.Instance` | one value for an instance |
+| bot | `SettingsSource.Bot` | one value per bot/account inside an instance |
+
+For most plugin behavior, `SettingsSource.Bot` is the right default because it lets users override behavior per bot.
+
+## Property types
+
+These are the current built-in property families:
+
+| Property type | Use it for |
+| --- | --- |
+| `BooleanProperty` | enable flags and simple toggles |
+| `IntProperty` | bounded integer values |
+| `DoubleProperty` | decimal values |
+| `StringProperty` | text, URLs, prompts, commands, and other strings |
+| `ComboProperty` | enum-like selections |
+| `StringListProperty` | lists of strings |
+| `MinMaxProperty` | min/max pairs like random delay windows |
+
+Each property is identified by `namespace + key`.
+Use your plugin ID as the namespace unless you have a very good reason not to.
+
+## Example settings object
+
+```java
+@NoArgsConstructor(access = AccessLevel.NONE)
+public final class MySettings implements SettingsObject {
+  private static final String NAMESPACE = "my-plugin";
+
+  public static final BooleanProperty<SettingsSource.Bot> ENABLED =
+    ImmutableBooleanProperty.<SettingsSource.Bot>builder()
+      .sourceType(SettingsSource.Bot.INSTANCE)
+      .namespace(NAMESPACE)
+      .key("enabled")
+      .uiName("Enable My Plugin")
+      .description("Turn the plugin on for this bot")
+      .defaultValue(false)
+      .build();
+}
+```
+
+SoulFire discovers page properties by reflecting over `public static final` fields on the class you register.
+
+## Registering a plugin page
+
+Plugin pages are normally registered from `InstanceSettingsRegistryInitEvent`:
+
+```java
+@EventHandler
+public void onSettingsRegistryInit(InstanceSettingsRegistryInitEvent event) {
+  event.settingsPageRegistry().addPluginPage(
+    MySettings.class,
+    "my-plugin",
+    "My Plugin",
+    this,
+    "puzzle",
+    MySettings.ENABLED
+  );
+}
+```
+
+That page definition is exported to the GUI and CLI.
+The `iconId` values are Lucide icon IDs, the same icon set SoulFire uses elsewhere.
+
+## Reading settings
+
+Read settings through the relevant `SettingsSource`:
+
+```java
+var enabled = connection.settingsSource().get(MySettings.ENABLED);
+```
+
+If you use a `ComboProperty`, you can map it to an enum:
+
+```java
+var mode = connection.settingsSource().get(MySettings.MODE, MyMode.class);
+```
+
+If you use a `MinMaxProperty`, you can either read the full structure or ask SoulFire for a random value within the stored window.
+
+## Why the GUI and CLI can render your settings automatically
+
+`SettingsPageRegistry` exports two kinds of data:
+
+- `SettingsDefinition`: the type, description, defaults, and validation rules for each property
+- `SettingsPage`: the grouping, ordering, icon, owning plugin, and optional enabled toggle
+
+Those definitions are then shipped over the server and instance gRPC responses.
+That is why the GUI and CLI do not need hardcoded knowledge of your plugin page.
+
+## Metadata: transient versus persistent
+
+Plugin state does not always belong in settings.
+SoulFire also gives you metadata holders.
+
+Use:
+
+- `metadata()` for transient in-memory state
+- `persistentMetadata()` for data that should survive restarts
+
+Both instance and bot objects expose metadata holders.
+
+## Metadata keys
+
+Always use a namespaced `MetadataKey`:
+
+```java
+private static final MetadataKey<Integer> COUNTER =
+  MetadataKey.of("my-plugin", "counter", Integer.class);
+```
+
+Then read or write it through the holder:
+
+```java
+var count = bot.metadata().getOrSet(COUNTER, () -> 0);
+bot.metadata().set(COUNTER, count + 1);
+```
+
+## Persistent metadata rules
+
+Persistent metadata is best for plugin-owned state such as:
+
+- cached dialog or workflow progress
+- last completed objective
+- sticky proxy or routing hints
+- cooldown or deduplication state that should survive reconnects
+
+It is not a substitute for user-facing configuration.
+If the user should edit it from the GUI or CLI, it probably belongs in a typed setting instead.
+
+<Callout type="warning">
+  `MetadataKey` forbids the `minecraft` namespace.
+  Use your plugin ID or another plugin-owned namespace instead.
+</Callout>
+
+## Built-in plugins worth studying
+
+These internal plugins are especially useful reference points:
+
+- [AntiAFK](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AntiAFK.java) for a small settings page and scheduler usage
+- [CaptchaSolver](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/CaptchaSolver.java) for richer mixed property types
+- [KillAura](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/KillAura.java) for metadata and controlling-task coordination
+- [DialogHandler](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/DialogHandler.java) for persistent low-level bot state bridged into the API layer
+
+## Next steps
+
+- [Bot Control And Direct Access](/docs/development/bot-control-and-direct-access)
+- [Developer Resources](/docs/development/developer-resources)

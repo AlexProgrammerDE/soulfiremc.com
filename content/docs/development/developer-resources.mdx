@@ -1,0 +1,94 @@
+---
+title: Developer Resources
+description: Jump directly to the current Javadocs, source trees, artifact coordinates, built-in plugin references, and other official SoulFire development entry points.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+This page is the reference map for SoulFire plugin authors.
+If you already know what you are looking for, start here.
+
+## Official links
+
+| Resource | Link |
+| --- | --- |
+| SoulFire source repository | [github.com/AlexProgrammerDE/SoulFire](https://github.com/AlexProgrammerDE/SoulFire) |
+| Official plugin template | [github.com/AlexProgrammerDE/SoulFirePluginExample](https://github.com/AlexProgrammerDE/SoulFirePluginExample) |
+| Aggregated Javadocs | [ci.codemc.io/.../SoulFire/javadoc](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/) |
+| Maven public repo | [repo.codemc.org/repository/maven-public](https://repo.codemc.org/repository/maven-public/) |
+| `mod` metadata | [maven-metadata.xml](https://repo.codemc.org/repository/maven-public/com/soulfiremc/mod/maven-metadata.xml) |
+| `shared` metadata | [maven-metadata.xml](https://repo.codemc.org/repository/maven-public/com/soulfiremc/shared/maven-metadata.xml) |
+
+## Current package entry points in the Javadocs
+
+These package summaries are the most useful places to start:
+
+- [`com.soulfiremc.server.api`](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/com/soulfiremc/server/api/package-summary.html)
+- [`com.soulfiremc.server.api.event`](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/com/soulfiremc/server/api/event/package-summary.html)
+- [`com.soulfiremc.server.bot`](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/com/soulfiremc/server/bot/package-summary.html)
+- [`com.soulfiremc.server.settings.lib`](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/com/soulfiremc/server/settings/lib/package-summary.html)
+- [`com.soulfiremc.grpc.generated`](https://ci.codemc.io/job/AlexProgrammerDE/job/SoulFire/javadoc/com/soulfiremc/grpc/generated/package-summary.html)
+
+## Artifact coordinates
+
+Use these coordinates for most plugin projects:
+
+```text
+groupId:    com.soulfiremc
+artifactId: mod
+artifactId: shared
+repository: https://repo.codemc.org/repository/maven-public/
+```
+
+The public metadata currently reports:
+
+- latest release for `mod`: `2.7.0`
+- latest snapshot for `mod`: `2.7.1-SNAPSHOT`
+
+Check the metadata again before pinning a version, because the template repository can lag behind current releases.
+
+## Source tree map
+
+| Location | What you learn there |
+| --- | --- |
+| [`mod/src/main/java/com/soulfiremc/server/api`](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/server/api) | plugin base classes, events, metadata helpers |
+| [`mod/src/main/java/com/soulfiremc/server/bot`](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/server/bot) | `BotConnection`, `ControlState`, `ControllingTask` |
+| [`mod/src/main/java/com/soulfiremc/server/settings`](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/server/settings) | property model and settings infrastructure |
+| [`mod/src/main/java/com/soulfiremc/server/grpc`](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/server/grpc) | how client actions become runtime behavior |
+| [`proto/src/main/proto/soulfire`](https://github.com/AlexProgrammerDE/SoulFire/tree/main/proto/src/main/proto/soulfire) | server, instance, bot, command, and scripting contracts |
+| [`mod/src/main/java/com/soulfiremc/server/plugins`](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/server/plugins) | built-in plugin implementations |
+
+## Built-in plugins to study first
+
+If you only read a few internal plugins, read these:
+
+| Plugin | Why it is useful |
+| --- | --- |
+| [AntiAFK](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AntiAFK.java) | small, clean example of event hooks plus settings page registration |
+| [AutoArmor](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AutoArmor.java) | staged inventory control |
+| [AutoEat](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/AutoEat.java) | action sequencing and fallback behavior |
+| [CaptchaSolver](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/CaptchaSolver.java) | richer settings, multiple property types, and more complex behavior |
+| [KillAura](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/KillAura.java) | metadata, control ownership, and manual task markers |
+| [DialogHandler](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/java/com/soulfiremc/server/plugins/DialogHandler.java) | bridging Minecraft dialog state into the API layer |
+
+## Template caveat
+
+The official example template is the best starting point for project layout and first plugin scaffolding.
+It is not always the final word on low-level current internals.
+
+Cross-check these three sources before shipping:
+
+1. the current template repository
+2. the current SoulFire Javadocs
+3. the current built-in plugin and mixin sources
+
+<Callout type="warning">
+  If an old template example and the current Javadocs disagree, trust the current Javadocs and current SoulFire source tree.
+</Callout>
+
+## Extra references
+
+- [Built-in Plugins reference](/docs/reference/built-in-plugins)
+- [Plugins concept page](/docs/concepts/plugins)
+- [Mixins And Access Wideners](/docs/development/mixins-and-access-wideners)
+- [Architecture And Protocols](/docs/development/architecture-and-protocols)

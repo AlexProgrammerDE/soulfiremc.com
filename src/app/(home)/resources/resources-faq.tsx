@@ -8,44 +8,51 @@ export const resourcesFaqItems: {
   {
     question: "What are SoulFire plugins?",
     answerHtml:
-      'SoulFire plugins are extensions that add new features to the bot engine. They use the Fabric mod infrastructure and can hook into events, add settings, and extend bot behavior. See the <a href="https://soulfiremc.com/docs/plugins">Plugin Documentation</a> for details.',
+      'SoulFire plugins are Fabric mods that extend the bot engine with low-level hooks, settings pages, Mixins, and direct Minecraft access. See the <a href="https://soulfiremc.com/docs/development">Development docs</a> for the full plugin authoring workflow.',
     answerElement: (
       <>
-        SoulFire plugins are extensions that add new features to the bot engine.
-        They use the Fabric mod infrastructure and can hook into events, add
-        settings, and extend bot behavior. See the{" "}
-        <Link href="/docs/plugins" className="underline text-primary">
-          Plugin Documentation
+        SoulFire plugins are Fabric mods that extend the bot engine with
+        low-level hooks, settings pages, Mixins, and direct Minecraft access.
+        See the{" "}
+        <Link href="/docs/development" className="underline text-primary">
+          Development docs
         </Link>{" "}
-        for details.
+        for the full plugin authoring workflow.
       </>
     ),
   },
   {
     question: "How do I install a SoulFire plugin?",
     answerHtml:
-      'Download the plugin JAR file and place it in the SoulFire plugins directory. Restart SoulFire and the plugin will be loaded automatically. Check the <a href="https://soulfiremc.com/docs/plugins">Plugin Documentation</a> for more information.',
+      'Download the plugin JAR file, place it in SoulFire&apos;s <code>minecraft/mods</code> directory, and restart SoulFire. Use the <a href="https://soulfiremc.com/docs/how-to/install-plugins">install guide</a> for loading plugins and the <a href="https://soulfiremc.com/docs/development">Development docs</a> if you are building your own.',
     answerElement: (
       <>
-        Download the plugin JAR file and place it in the SoulFire plugins
-        directory. Restart SoulFire and the plugin will be loaded automatically.
-        Check the{" "}
-        <Link href="/docs/plugins" className="underline text-primary">
-          Plugin Documentation
+        Download the plugin JAR file, place it in SoulFire&apos;s{" "}
+        <code>minecraft/mods</code> directory, and restart SoulFire. Use the{" "}
+        <Link
+          href="/docs/how-to/install-plugins"
+          className="underline text-primary"
+        >
+          install guide
         </Link>{" "}
-        for more information.
+        for loading plugins and the{" "}
+        <Link href="/docs/development" className="underline text-primary">
+          Development docs
+        </Link>{" "}
+        if you are building your own.
       </>
     ),
   },
   {
     question: "What are SoulFire scripts?",
     answerHtml:
-      "SoulFire scripts automate bot behavior using the scripting API. They can control movement, interact with the world, chat, and more. Scripts are written in JavaScript and loaded at runtime.",
+      "SoulFire scripts automate bot behavior with SoulFire&apos;s visual scripting system. You build flows from triggers, actions, logic, and data nodes in the editor, then run them directly inside SoulFire without writing a full plugin.",
     answerElement: (
       <>
-        SoulFire scripts automate bot behavior using the scripting API. They can
-        control movement, interact with the world, chat, and more. Scripts are
-        written in JavaScript and loaded at runtime.
+        SoulFire scripts automate bot behavior with SoulFire&apos;s visual
+        scripting system. You build flows from triggers, actions, logic, and
+        data nodes in the editor, then run them directly inside SoulFire without
+        writing a full plugin.
       </>
     ),
   },

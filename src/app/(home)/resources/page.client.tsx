@@ -389,12 +389,12 @@ export function ResourcesClient({
         </p>
         <p className="text-sm text-muted-foreground">
           <BookOpen className="inline h-4 w-4 align-text-bottom" /> Learn how to
-          create your own in the{" "}
+          build advanced plugins in the{" "}
           <Link
-            href="/docs/plugins"
+            href="/docs/development"
             className="underline hover:text-foreground"
           >
-            Plugin Documentation
+            Development docs
           </Link>
           .
         </p>
