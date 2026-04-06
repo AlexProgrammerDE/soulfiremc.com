@@ -233,6 +233,7 @@ function Sidebar({
         display: "flex",
         flexDirection: "column",
         gap: 0,
+        width: "100%",
       }}
     >
       {top ? (
@@ -252,7 +253,13 @@ function Sidebar({
       ) : null}
 
       {rows && rows.length > 0 ? (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
           {rows.map((row, index) => (
             <div
               key={`${row.label}-${row.value}`}
@@ -260,6 +267,7 @@ function Sidebar({
                 display: "flex",
                 flexDirection: "column",
                 gap: 6,
+                width: "100%",
                 paddingTop: 18,
                 paddingBottom:
                   index === rows.length - 1 && visibleEntries.length === 0
@@ -276,7 +284,7 @@ function Sidebar({
               <div
                 style={{
                   color: accent,
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: 600,
                 }}
               >
@@ -284,10 +292,11 @@ function Sidebar({
               </div>
               <div
                 style={{
-                  color: theme.ink,
-                  fontSize: 22,
-                  lineHeight: 1.3,
-                  fontWeight: 650,
+                  color: theme.inkSoft,
+                  fontSize: 18,
+                  lineHeight: 1.25,
+                  fontWeight: 600,
+                  wordBreak: "break-word",
                 }}
               >
                 {row.value}
@@ -329,7 +338,7 @@ function Sidebar({
               <div
                 style={{
                   color: theme.inkSoft,
-                  fontSize: 20,
+                  fontSize: 18,
                   lineHeight: 1.3,
                   fontWeight: 600,
                 }}
@@ -561,8 +570,8 @@ function Layout({
           </div>
           <div
             style={{
-              width: 320,
-              minWidth: 320,
+              width: 344,
+              minWidth: 344,
               padding: "30px 28px",
               background: theme.rail,
               borderLeft: `1px solid ${theme.border}`,
@@ -679,10 +688,6 @@ export function DirectoryOgImage({
               />
             ) : undefined
           }
-          rows={[
-            { label: "Type", value: label },
-            { label: "Format", value: "Directory and comparison" },
-          ]}
           entries={samples}
         />
       }
@@ -728,10 +733,10 @@ export function ProxyOgImage({
               value: sponsor ? "SoulFire sponsor" : "Listed provider",
             },
             {
-              label: "Highlight",
+              label: "Network",
               value:
                 normalizedBadges.length > 0
-                  ? normalizedBadges.slice(0, 2).join(" / ")
+                  ? normalizedBadges[0]
                   : "Proxy network",
             },
           ]}

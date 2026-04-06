@@ -251,6 +251,8 @@ function Metric({
   value: string;
   accent: string;
 }) {
+  const valueFontSize = value.length > 11 ? 22 : value.length > 7 ? 24 : 28;
+
   return (
     <div
       style={{
@@ -277,9 +279,11 @@ function Metric({
       </div>
       <div
         style={{
-          fontSize: 28,
+          fontSize: valueFontSize,
           fontWeight: 800,
           color: accent,
+          lineHeight: 1.15,
+          letterSpacing: value.length > 7 ? "-0.03em" : "0em",
         }}
       >
         {value}
@@ -303,92 +307,112 @@ export function BlogOgImage({
   tags?: string[];
   readTime?: string;
 }) {
+  const category = tags?.[0] ? labelize(tags[0]) : "Blog";
+  const byline = author || "SoulFire Team";
+  const metadata = [date, readTime].filter(Boolean).join("  •  ");
+  const titleSize = fitTitleSize(title, {
+    base: 86,
+    medium: 78,
+    long: 70,
+    xlong: 62,
+  });
+
   return (
-    <Canvas primary={palette.amber} secondary={palette.rose}>
-      <Eyebrow
-        label="Blog"
-        accent={palette.amber}
-        trailing={author || "SoulFire Team"}
-      />
-      <div style={{ display: "flex", flex: 1, gap: 28, marginTop: 34 }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#111111",
+        color: "white",
+        backgroundImage:
+          "linear-gradient(135deg, #1a1a1a 0%, #000000 100%), radial-gradient(circle at top right, rgba(255,176,74,0.18), transparent 32%)",
+        padding: "60px",
+        justifyContent: "space-between",
+        fontFamily: "Geist",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1.1,
+            backgroundColor: palette.amber,
+            color: "#111111",
+            padding: "8px 24px",
+            borderRadius: "9999px",
+            fontSize: 24,
+            fontWeight: 600,
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-            <div
-              style={{
-                fontSize: 80,
-                lineHeight: 1.02,
-                fontWeight: 800,
-                letterSpacing: "-0.05em",
-              }}
-            >
-              {title}
-            </div>
-            <div
-              style={{
-                maxWidth: 680,
-                fontSize: 29,
-                lineHeight: 1.35,
-                color: palette.muted,
-              }}
-            >
-              {description ||
-                "Fresh notes on Minecraft bot testing, operations, and SoulFire development."}
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            {(tags && tags.length > 0
-              ? tags.slice(0, 4)
-              : ["Minecraft", "Testing"]
-            ).map((tag) => (
-              <Chip key={tag}>{tag}</Chip>
-            ))}
-          </div>
+          {category}
         </div>
-        <Panel width={340}>
-          <MutedLabel>Article</MutedLabel>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div
+          style={{
+            fontSize: titleSize,
+            fontWeight: 800,
+            lineHeight: 1.08,
+            margin: 0,
+            letterSpacing: "-0.05em",
+            textShadow: "0 4px 12px rgba(0,0,0,0.35)",
+          }}
+        >
+          {title}
+        </div>
+        <div
+          style={{
+            fontSize: 32,
+            color: "#a1a1aa",
+            fontWeight: 400,
+            lineHeight: 1.35,
+            maxWidth: "92%",
+            letterSpacing: "-0.01em",
+            lineClamp: 2,
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+        >
+          {description ||
+            "Fresh notes on Minecraft bot testing, operations, and SoulFire development."}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
+        <div
+          style={{
+            display: "flex",
+            width: 80,
+            height: 80,
+            borderRadius: "50%",
+            overflow: "hidden",
+            border: "4px solid rgba(255,255,255,0.1)",
+            background: "rgba(255,255,255,0.04)",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 18,
-              padding: 22,
-              borderRadius: 24,
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${palette.border}`,
+              color: palette.amber,
+              fontSize: 30,
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
             }}
           >
-            <div style={{ fontSize: 24, color: palette.text, fontWeight: 700 }}>
-              Editorial Notes
-            </div>
-            <div
-              style={{ fontSize: 22, color: palette.muted, lineHeight: 1.45 }}
-            >
-              Structured, practical write-ups for operators stress testing
-              Minecraft servers or building automation around SoulFire.
-            </div>
+            SF
           </div>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Metric
-              label="Published"
-              value={date || "Latest"}
-              accent={palette.amber}
-            />
-            <Metric
-              label="Read Time"
-              value={readTime || "5 min"}
-              accent={palette.rose}
-            />
-          </div>
-        </Panel>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ fontSize: 32, fontWeight: 600 }}>{byline}</div>
+          {metadata ? (
+            <div style={{ fontSize: 24, color: "#a1a1aa" }}>{metadata}</div>
+          ) : null}
+        </div>
       </div>
-    </Canvas>
+    </div>
   );
 }
 
@@ -401,102 +425,139 @@ export function DocsOgImage({
   description?: string | null;
   slugs?: string[];
 }) {
-  const visibleSlugs =
-    slugs && slugs.length > 0
-      ? slugs.slice(-4).map((slug) => labelize(slug))
-      : ["Documentation"];
-  const breadcrumb =
-    slugs && slugs.length > 0
-      ? slugs
-          .slice(-2)
-          .map((slug) => labelize(slug))
-          .join(" / ")
-      : "SoulFire Docs";
+  const section = slugs?.[0] ? labelize(slugs[0]) : "Documentation";
+  const siteLabel = "soulfiremc.com/docs";
+  const titleSize = fitTitleSize(title, {
+    base: 74,
+    medium: 68,
+    long: 62,
+    xlong: 56,
+  });
 
   return (
-    <Canvas primary={palette.cyan} secondary={palette.violet}>
-      <Eyebrow label="Docs" accent={palette.cyan} trailing={breadcrumb} />
-      <div style={{ display: "flex", flex: 1, gap: 28, marginTop: 34 }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#050505",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        color: "white",
+        backgroundImage:
+          "linear-gradient(to bottom right, rgba(76,201,255,0.22), transparent 38%), linear-gradient(135deg, #09111a 0%, #050505 100%)",
+        fontFamily: "Geist",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          height: "100%",
+          padding: "90px 60px 90px 60px",
+          position: "relative",
+          justifyContent: "space-between",
+        }}
+      >
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
-            flex: 1.1,
+            gap: "32px",
+            marginBottom: "40px",
+            textWrap: "pretty",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-            <div
-              style={{
-                fontSize: fitTitleSize(title, {
-                  base: 80,
-                  medium: 72,
-                  long: 64,
-                  xlong: 56,
-                }),
-                lineHeight: 1.02,
-                fontWeight: 800,
-                letterSpacing: "-0.05em",
-              }}
-            >
-              {title}
-            </div>
-            <div
-              style={{
-                maxWidth: 680,
-                fontSize: 29,
-                lineHeight: 1.35,
-                color: palette.muted,
-              }}
-            >
-              {description ||
-                "Guides and reference material for using, extending, and operating SoulFire."}
-            </div>
+          <div
+            style={{
+              fontSize: titleSize,
+              fontWeight: 800,
+              lineHeight: 1.1,
+              letterSpacing: "-0.04em",
+              color: "white",
+            }}
+          >
+            {title}
           </div>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            {visibleSlugs.map((slug) => (
-              <Chip key={slug}>{slug}</Chip>
-            ))}
+          <div
+            style={{
+              fontSize: 44,
+              color: "#a1a1aa",
+              fontWeight: 400,
+              lineHeight: 1.4,
+              maxWidth: "95%",
+              letterSpacing: "-0.01em",
+              lineClamp: 2,
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+            }}
+          >
+            {description ||
+              "Guides and reference material for using, extending, and operating SoulFire."}
           </div>
         </div>
-        <Panel width={340}>
-          <MutedLabel>Documentation</MutedLabel>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "28px",
+          }}
+        >
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              gap: 18,
-              padding: 22,
-              borderRadius: 24,
-              background: "rgba(255,255,255,0.04)",
-              border: `1px solid ${palette.border}`,
+              width: 42,
+              height: 42,
+              borderRadius: 12,
+              background: "rgba(76,201,255,0.16)",
+              border: "1px solid rgba(76,201,255,0.32)",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#8bdcff",
+              fontSize: 18,
+              fontWeight: 800,
             }}
           >
-            <div style={{ fontSize: 24, color: palette.text, fontWeight: 700 }}>
-              Reference
-            </div>
-            <div
-              style={{ fontSize: 22, color: palette.muted, lineHeight: 1.45 }}
-            >
-              Setup, usage, scripting, plugin development, and operational
-              guides for SoulFire.
-            </div>
+            SF
           </div>
-          <div style={{ display: "flex", gap: 12 }}>
-            <Metric
-              label="Section"
-              value={visibleSlugs[0] || "Guides"}
-              accent={palette.cyan}
-            />
-            <Metric
-              label="Depth"
-              value={`${slugs?.length ?? 1} levels`}
-              accent={palette.violet}
-            />
+          <div
+            style={{
+              fontSize: 30,
+              fontWeight: 700,
+              letterSpacing: "-0.02em",
+              color: "white",
+              opacity: 0.9,
+            }}
+          >
+            {siteLabel}
           </div>
-        </Panel>
+          <div style={{ display: "flex", flexGrow: 1 }} />
+          <div
+            style={{
+              display: "flex",
+              height: 4,
+              width: 60,
+              backgroundColor: palette.cyan,
+              borderRadius: 2,
+            }}
+          />
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.2em",
+              color: "#8bdcff",
+              opacity: 0.8,
+            }}
+          >
+            {section}
+          </div>
+        </div>
       </div>
-    </Canvas>
+    </div>
   );
 }
 
