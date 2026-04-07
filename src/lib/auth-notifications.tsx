@@ -20,7 +20,7 @@ interface OTPEmailParams extends BaseEmailParams {
 interface EmailOTPParams {
   email: string;
   otp: string;
-  type: "sign-in" | "email-verification" | "forget-password";
+  type: "sign-in" | "email-verification" | "forget-password" | "change-email";
 }
 
 const siteName = "SoulFire";
@@ -81,7 +81,7 @@ export const authNotifications = {
     );
   },
 
-  async sendChangeEmailVerification({ user, url }: EmailWithUrlParams) {
+  async sendChangeEmailConfirmation({ user, url }: EmailWithUrlParams) {
     const name = user.name ?? user.email.split("@")[0];
     await sendEmail(
       fromAddress,
@@ -165,11 +165,13 @@ export const authNotifications = {
       "sign-in": "Sign in code",
       "email-verification": "Email verification code",
       "forget-password": "Password reset code",
+      "change-email": "Change email",
     };
     const subjectMap = {
       "sign-in": `Your sign-in code for ${siteName}`,
       "email-verification": `Your verification code for ${siteName}`,
       "forget-password": `Your password reset code for ${siteName}`,
+      "change-email": `Your email change verification code for ${siteName}`,
     };
 
     await sendEmail(
