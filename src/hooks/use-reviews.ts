@@ -9,7 +9,7 @@ import {
   type PublicReviewRecord,
   type ReviewSummary,
   type UserReviewRecord,
-} from "@/lib/reviews";
+} from "@/lib/review-core";
 
 type UseReviewsOptions = {
   initialSummaries?: Record<string, ReviewSummary>;

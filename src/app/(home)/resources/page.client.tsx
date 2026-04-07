@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/hover-card";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { useReviews } from "@/hooks/use-reviews";
-import type { ReviewSummary, UserReviewRecord } from "@/lib/reviews";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import {
   BADGE_CONFIG,
   type Badge,

@@ -36,7 +36,7 @@ import {
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
-import type { ReviewSummary, UserReviewRecord } from "@/lib/reviews";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { cn } from "@/lib/utils";
 import { CouponCode } from "./coupon-code";
 import { proxiesSearchParams } from "./search-params";

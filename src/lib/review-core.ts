@@ -1,0 +1,72 @@
+import type { AggregateRating, Review as SchemaReview } from "schema-dts";
+
+export type ItemType = "account" | "proxy" | "resource";
+
+export type ReviewSummary = {
+  averageRating: number | null;
+  reviewCount: number;
+};
+
+export type UserReviewRecord = {
+  rating: number;
+  anonymous: boolean;
+  body: string | null;
+};
+
+export type PublicReviewRecord = {
+  id: string;
+  itemSlug: string;
+  rating: number;
+  anonymous: boolean;
+  body: string;
+  createdAt: string;
+  authorName: string;
+  authorImage: string | null;
+};
+
+export function emptyReviewSummary(): ReviewSummary {
+  return {
+    averageRating: null,
+    reviewCount: 0,
+  };
+}
+
+export function getAggregateRatingJsonLd(
+  summary: ReviewSummary,
+): AggregateRating | undefined {
+  if (summary.reviewCount === 0 || summary.averageRating === null) {
+    return undefined;
+  }
+
+  return {
+    "@type": "AggregateRating",
+    ratingValue: summary.averageRating,
+    ratingCount: summary.reviewCount,
+    bestRating: 5,
+    worstRating: 1,
+  };
+}
+
+export function getReviewJsonLd(
+  reviews: PublicReviewRecord[],
+): SchemaReview[] | undefined {
+  if (reviews.length === 0) {
+    return undefined;
+  }
+
+  return reviews.map((entry) => ({
+    "@type": "Review",
+    author: {
+      "@type": "Person",
+      name: entry.authorName,
+    },
+    datePublished: entry.createdAt.slice(0, 10),
+    reviewBody: entry.body,
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: entry.rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  }));
+}

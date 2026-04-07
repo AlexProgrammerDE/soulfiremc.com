@@ -55,7 +55,7 @@ import {
   type SocialLink,
   type SortOption,
 } from "@/lib/accounts-data";
-import type { ReviewSummary, UserReviewRecord } from "@/lib/reviews";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import type { DiscordInviteResponse } from "@/lib/discord";
 import { cn } from "@/lib/utils";
 import { CouponCode, LinkDiscountNotice } from "../get-proxies/coupon-code";

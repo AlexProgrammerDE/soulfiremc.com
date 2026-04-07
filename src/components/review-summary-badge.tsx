@@ -1,5 +1,5 @@
 import { MessageSquareText } from "lucide-react";
-import type { ReviewSummary } from "@/lib/reviews";
+import type { ReviewSummary } from "@/lib/review-core";
 import { cn } from "@/lib/utils";
 import { ReviewStars } from "./review-stars";
 

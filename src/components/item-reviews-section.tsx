@@ -9,7 +9,7 @@ import type {
   ItemType,
   PublicReviewRecord,
   ReviewSummary,
-} from "@/lib/reviews";
+} from "@/lib/review-core";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

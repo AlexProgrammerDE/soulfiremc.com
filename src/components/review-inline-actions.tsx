@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import type { ReviewSummary } from "@/lib/reviews";
+import type { ReviewSummary } from "@/lib/review-core";
 import { Button } from "./ui/button";
 import { ReviewStarInput } from "./review-stars";
 import { ReviewSummaryBadge } from "./review-summary-badge";
