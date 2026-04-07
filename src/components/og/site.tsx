@@ -225,7 +225,18 @@ function Sidebar({
   entries?: string[];
   accent: string;
 }) {
-  const visibleEntries = entries?.slice(0, 3) ?? [];
+  const visibleEntries =
+    entries
+      ?.slice(0, 3)
+      .reduce<Array<{ key: string; value: string }>>((acc, value) => {
+        const occurrence = acc.filter((entry) => entry.value === value).length;
+
+        acc.push({
+          value,
+          key: `${value}-${occurrence + 1}`,
+        });
+        return acc;
+      }, []) ?? [];
 
   return (
     <div
@@ -315,9 +326,9 @@ function Sidebar({
             paddingTop: 18,
           }}
         >
-          {visibleEntries.map((item, index) => (
+          {visibleEntries.map((entry, index) => (
             <div
-              key={`${index + 1}-${item}`}
+              key={entry.key}
               style={{
                 display: "flex",
                 alignItems: "flex-start",
@@ -343,7 +354,7 @@ function Sidebar({
                   fontWeight: 600,
                 }}
               >
-                {item}
+                {entry.value}
               </div>
             </div>
           ))}
@@ -801,6 +812,8 @@ export function ResourceOgImage({
   version?: string;
   logoSrc?: string;
 }) {
+  const normalizedBadges = badges.map((badge) => labelize(badge));
+
   return (
     <Layout
       section="Community Resource"
@@ -820,6 +833,7 @@ export function ResourceOgImage({
           top={
             <LogoHero value={name} accent={theme.violet} logoSrc={logoSrc} />
           }
+          entries={normalizedBadges}
           rows={[
             { label: "Category", value: labelize(category) },
             { label: "Author", value: author },

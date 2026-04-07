@@ -1,6 +1,7 @@
 import {
   index,
   pgTable,
+  // biome-ignore lint/suspicious/noDeprecatedImports: Drizzle marks the legacy overload on this symbol as deprecated, but the object form used below is the current API.
   primaryKey,
   text,
   timestamp,

@@ -581,9 +581,9 @@ function MainContent(props: Props) {
                   </p>
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                  {mfaProviders.map((provider, index) => (
+                  {mfaProviders.map((provider) => (
                     <ProviderCard
-                      key={`${provider.name}-${index}`}
+                      key={provider.slug}
                       provider={provider}
                       discordInvites={props.discordInvites}
                       upvoteCount={counts[provider.slug] ?? 0}
@@ -613,9 +613,9 @@ function MainContent(props: Props) {
                   </p>
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                  {nfaProviders.map((provider, index) => (
+                  {nfaProviders.map((provider) => (
                     <ProviderCard
-                      key={`${provider.name}-${index}`}
+                      key={provider.slug}
                       provider={provider}
                       discordInvites={props.discordInvites}
                       upvoteCount={counts[provider.slug] ?? 0}
