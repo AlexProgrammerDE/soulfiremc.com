@@ -5,11 +5,23 @@ description: Use Fabric Mixins and access wideners to inject into Minecraft or S
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
+Use this page only when events, settings, metadata, and normal plugin APIs are no longer enough.
 SoulFire plugins are Fabric mods, so you get the normal Fabric toolbox:
 
 - Mixins for behavior changes and hook injection
 - access wideners for changing member visibility
 - direct access to Minecraft classes on the runtime classpath
+
+## External docs you should keep open
+
+These are the official references that matter most when you start doing low-level integration work:
+
+| Topic | Link |
+| --- | --- |
+| Fabric documentation | [docs.fabricmc.net](https://docs.fabricmc.net/) |
+| Fabric wiki: Mixin injection reference | [tutorial:mixin_injects](https://wiki.fabricmc.net/tutorial%3Amixin_injects) |
+| Fabric wiki: Access wideners | [tutorial:accesswideners](https://wiki.fabricmc.net/tutorial%3Aaccesswideners) |
+| SpongePowered Mixin wiki | [github.com/SpongePowered/Mixin/wiki](https://github.com/SpongePowered/Mixin/wiki) |
 
 ## Use Mixins only when you need them
 
@@ -84,6 +96,9 @@ A minimal Mixin config looks like this:
 Follow the template and the SoulFire runtime you target.
 Do not invent your own compatibility level blindly.
 
+The current SoulFire source tree and official example template both use `compatibilityLevel: "JAVA_21"`.
+Keep that aligned with the runtime you actually target instead of forcing it to match your local JDK version.
+
 ## Loom wiring
 
 The template wires the access widener like this:
@@ -148,9 +163,11 @@ Many plugins need both.
 
 ## Source trees worth reading
 
+- [SoulFire Fabric metadata](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/resources/fabric.mod.json)
 - [SoulFire mixin config](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/resources/soulfire.mixins.json)
 - [SoulFire event-emitting mixins](https://github.com/AlexProgrammerDE/SoulFire/tree/main/mod/src/main/java/com/soulfiremc/mod/mixin/soulfire/api/event)
 - [Plugin example mixin](https://github.com/AlexProgrammerDE/SoulFirePluginExample/blob/main/src/main/java/com/soulfiremc/pluginexample/mixin/EntityEffectStateMixin.java)
+- [SoulFire access widener](https://github.com/AlexProgrammerDE/SoulFire/blob/main/mod/src/main/resources/soulfire.accesswidener)
 
 ## Next steps
 

@@ -5,8 +5,14 @@ description: Understand how SoulFire boots, loads plugins, manages instances and
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-If you want to build serious plugins, you should understand how SoulFire is layered.
-That is the difference between a plugin that happens to work today and a plugin you can keep alive across updates.
+This page is explanation, not the first page you should read.
+Come here after your first plugin loads and you need to trace how SoulFire moves from UI or RPC requests down to bot behavior.
+
+<Callout type="info">
+  If you only need to build a normal plugin, stay in [Build Your First Plugin](/docs/development/first-plugin),
+  [Event System](/docs/development/event-system), and [Settings And Metadata](/docs/development/settings-and-metadata).
+  Read this page when you need to follow an internal code path end to end.
+</Callout>
 
 ## Runtime layers
 
@@ -18,6 +24,13 @@ At a high level, SoulFire looks like this:
 4. **InstanceManager** manages one instance: config, accounts, proxies, metrics, and session lifecycle.
 5. **BotConnection** owns one bot's headless Minecraft client copy plus settings, metadata, scheduler, and control state.
 6. **Plugins** listen to events, register settings pages, and optionally use Mixins for deeper integration.
+
+What matters for plugin authors is simple:
+
+- Fabric loads both SoulFire and your plugin jar
+- SoulFire exposes higher-level hooks through events, settings, metadata, and control APIs
+- the GUI and CLI are thin clients over structured gRPC and proto definitions
+- when you need to go lower, you are following the same path SoulFire itself follows
 
 ## Internal plugins versus external plugins
 

@@ -5,7 +5,7 @@ description: Configure Fabric Loom, SoulFire dependencies, Maven repositories, a
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-The fastest way to get a correct build is to copy the official template structure and only then trim it down.
+Use this page when the template exists but you need to understand what each build file is doing.
 SoulFire plugins are Fabric mods, so the project layout is a normal Fabric Loom layout with SoulFire-specific dependencies and resources layered on top.
 
 ## Published coordinates
@@ -22,6 +22,12 @@ SoulFire publishes the artifacts most plugin authors care about under the `com.s
 
 The public metadata currently exposes a newer release than the version pinned in the template repository.
 Check the metadata before you pin a version, especially if you are targeting a recent SoulFire build.
+
+## External references for this page
+
+- [Fabric Documentation](https://docs.fabricmc.net/)
+- [Fabric wiki: Access wideners](https://wiki.fabricmc.net/tutorial%3Aaccesswideners)
+- [SpongePowered Mixin wiki](https://github.com/SpongePowered/Mixin/wiki)
 
 ## Minimal repositories block
 
@@ -79,6 +85,11 @@ That means:
 - the template disables Loom run configurations because the plugin is not a standalone game or server
 
 Test the plugin against a real SoulFire install instead of expecting the plugin project itself to boot SoulFire.
+
+<Callout type="info">
+  SoulFire's current template and runtime use Mixins with `compatibilityLevel: "JAVA_21"` while the overall project toolchain runs on Java 25.
+  Do not "fix" that blindly. Follow the current template and the current SoulFire runtime you target.
+</Callout>
 
 ## Recommended file layout
 

@@ -5,8 +5,8 @@ description: Use ControlState, ControllingTask, BotConnection, and direct Minecr
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-This is the part of plugin development that makes SoulFire powerful and risky at the same time.
-Your plugin runs inside the same JVM as SoulFire and the headless Minecraft client, so you can work with the real runtime objects instead of sending remote commands to an external process.
+Use this page when you need to make a bot do something that the normal event and settings surface does not model cleanly.
+Your plugin runs inside the same JVM as SoulFire and the headless Minecraft client, so you can work with real runtime objects instead of sending remote commands to another process.
 
 <Callout type="warning">
   Direct access is for advanced use cases.
@@ -137,6 +137,11 @@ SoulFire's own gRPC `BotService` uses the same primitives plugin authors do:
 - more complex interactions use staged tasks or direct player and gameMode calls
 
 That is useful for plugin authors because the internal gRPC layer shows the intended low-level execution model for user-facing actions.
+
+If you need to trace one of those actions end to end, read:
+
+- [Architecture And Protocols](/docs/development/architecture-and-protocols)
+- [Developer Resources](/docs/development/developer-resources)
 
 ## Use the scheduler that already belongs to the bot
 

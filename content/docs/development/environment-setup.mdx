@@ -5,8 +5,8 @@ description: Set up Java, Gradle, IntelliJ, and a source checkout that matches t
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-For serious plugin work, treat SoulFire like an API plus a source tree, not just a jar dependency.
-You will move faster if your local environment lets you inspect the current implementation, the built-in plugins, and the generated Javadocs side by side.
+This page is about getting to a productive plugin workspace quickly.
+The goal is not to understand every SoulFire internal yet. The goal is to have a setup where you can build, debug, and inspect the current API without fighting your tools.
 
 ## Recommended stack
 
@@ -14,6 +14,12 @@ You will move faster if your local environment lets you inspect the current impl
 - **Gradle Wrapper**: use the wrapper from your plugin project and from the SoulFire source checkout.
 - **IntelliJ IDEA**: recommended for Fabric Loom, Mixins, Lombok, and large Java source navigation.
 - **A local SoulFire checkout**: use it as the real reference, even if your plugin lives in a separate repository.
+
+## Keep these references open
+
+- [Fabric Documentation](https://docs.fabricmc.net/) for the underlying modding toolchain
+- [Fabric wiki: Access wideners](https://wiki.fabricmc.net/tutorial%3Aaccesswideners) if you need widened visibility later
+- [SpongePowered Mixin wiki](https://github.com/SpongePowered/Mixin/wiki) if you end up debugging low-level injection behavior
 
 <Callout type="info">
   SoulFire's current build logic and aggregated Javadocs both target Java 25.
@@ -33,6 +39,9 @@ Use:
 
 - `SoulFire` as the source of truth for current internals, built-in plugins, settings, gRPC services, and proto contracts
 - `SoulFirePluginExample` as the scaffold for new external plugins
+
+Do not treat the template as the only source of truth.
+Use the template for layout, then cross-check current behavior in the SoulFire repo and Javadocs.
 
 ## Recommended IntelliJ setup
 

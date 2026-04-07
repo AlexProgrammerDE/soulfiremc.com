@@ -6,8 +6,8 @@ description: Create a working SoulFire plugin from the official template and loa
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-This guide takes the shortest path to a real plugin.
-It uses the official template instead of starting from an empty Fabric project, because the template already includes the SoulFire-specific wiring.
+This guide takes the shortest path to a real plugin that SoulFire will actually load.
+It uses the official template instead of starting from an empty Fabric project, because the template already includes the SoulFire-specific Fabric, Loom, and plugin wiring.
 
 <Callout type="info">
   The official template repository is [SoulFirePluginExample](https://github.com/AlexProgrammerDE/SoulFirePluginExample).
@@ -15,12 +15,23 @@ It uses the official template instead of starting from an empty Fabric project, 
   and current [SoulFire source](https://github.com/AlexProgrammerDE/SoulFire) for low-level APIs.
 </Callout>
 
+If you are new to Fabric itself, keep [Fabric Documentation](https://docs.fabricmc.net/) open too.
+
 ## Before you start
 
 - Install Java 25.
 - Install Git.
 - Use IntelliJ IDEA if possible. It is the least painful option for Fabric Loom, Mixins, and Java plugin work.
 - Have a working SoulFire install where you can test jars in `minecraft/mods`.
+
+## Success criteria
+
+By the end of this page, you should have:
+
+- a plugin project cloned from the template
+- a `ModInitializer` that registers your `ExternalPlugin`
+- a built jar in `build/libs`
+- a jar that loads from SoulFire's `minecraft/mods` directory
 
 ## Create the project
 
@@ -147,6 +158,11 @@ Use the built-in plugin inspection tools:
 
 If the mod failed before registration, check the startup logs first.
 Fabric loading problems, missing dependencies, and bad mixin config usually fail before SoulFire ever sees your `ExternalPlugin`.
+
+If Fabric itself is complaining, go back to:
+
+- [Gradle And Project Layout](/docs/development/gradle-and-project-layout)
+- [Fabric Documentation](https://docs.fabricmc.net/)
 
 ## What to do next
 
