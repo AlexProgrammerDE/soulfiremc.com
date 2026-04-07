@@ -635,39 +635,15 @@ function MainContent(props: Props) {
 }
 
 export function GetAccountsClient(props: Props) {
-  const terminologyCards = [
-    {
-      title: "MFA / Full Access",
-      description:
-        "Permanent Minecraft accounts with long-term ownership. You can usually change the email, password, and username.",
-    },
-    {
-      title: "NFA / Temporary Alts",
-      description:
-        "Budget Minecraft alts that may expire or lose access over time. Many shops sell these as token or cookie-based logins.",
-    },
-    {
-      title: "Token / Cookie Accounts",
-      description:
-        "Common NFA delivery formats on Minecraft alt shops. SoulFire supports refresh token, cookie, and access token auth where providers offer them.",
-    },
-  ];
-
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Compare Minecraft Alts, MFA & NFA Accounts
+          Get Minecraft Accounts
         </h1>
         <p className="text-lg text-muted-foreground">
-          Compare Minecraft alt shops and account providers for SoulFire bot
-          testing. Browse MFA full-access accounts, NFA temporary accounts, and
-          token or cookie login options.
-        </p>
-        <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
-          This page targets the market terms people actually search for:
-          Minecraft alts, alt shops, MFA accounts, NFA accounts, token alts, and
-          cookie accounts.
+          Compare trusted Minecraft alt shops for SoulFire, including MFA
+          full-access accounts and NFA temporary accounts.
         </p>
         <p className="text-sm text-muted-foreground">
           <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more
@@ -682,15 +658,6 @@ export function GetAccountsClient(props: Props) {
         </p>
       </div>
 
-      <section className="grid gap-4 max-w-5xl mx-auto md:grid-cols-3">
-        {terminologyCards.map((item) => (
-          <Card key={item.title} className="gap-2 p-5 text-left">
-            <h2 className="text-lg font-semibold">{item.title}</h2>
-            <p className="text-sm text-muted-foreground">{item.description}</p>
-          </Card>
-        ))}
-      </section>
-
       <Suspense>
         <MainContent
           discordInvites={props.discordInvites}
@@ -701,10 +668,9 @@ export function GetAccountsClient(props: Props) {
       {/* FAQ Section */}
       <div className="max-w-3xl mx-auto w-full space-y-4">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold">Minecraft Alt Shop FAQ</h2>
+          <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
           <p className="text-sm text-muted-foreground">
-            Common questions about Minecraft alts, MFA accounts, NFA accounts,
-            and temporary account formats
+            Common questions about Minecraft accounts
           </p>
         </div>
         <Accordion type="single" collapsible className="w-full">

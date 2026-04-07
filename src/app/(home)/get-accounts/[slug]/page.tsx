@@ -248,10 +248,6 @@ export default async function AccountProviderPage(props: {
     Category,
     NonNullable<Shop["listings"][Category]>,
   ][];
-  const categorySummary = joinPhrases(
-    categories.map(([category]) => describeCategory(category)),
-  );
-  const seoSummary = `${shop.name} is a Minecraft alt shop offering ${categorySummary} for SoulFire bot testing.`;
   const theme = shop.theme ? PROVIDER_THEMES[shop.theme] : undefined;
   const hasAffiliate = categories.some(([, listing]) =>
     listing.badges.includes("affiliate"),
@@ -387,9 +383,6 @@ export default async function AccountProviderPage(props: {
                   <DiscordMemberBadge info={null} />
                 )}
               </div>
-              <p className="max-w-2xl text-sm text-muted-foreground">
-                {seoSummary}
-              </p>
               {hasAffiliate && (
                 <p className="max-w-2xl text-sm text-muted-foreground">
                   Buy with the RaveAlts code or link below and you directly help
@@ -484,9 +477,6 @@ export default async function AccountProviderPage(props: {
                 <DiscordMemberBadge info={null} />
               )}
             </div>
-            <p className="max-w-2xl text-sm text-muted-foreground">
-              {seoSummary}
-            </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild>
                 <a href={shop.url} target="_blank" rel="noopener nofollow">
