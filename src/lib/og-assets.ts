@@ -14,7 +14,7 @@ function getMimeType(filePath: string) {
 }
 
 export async function getOgAssetDataUri(assetPath?: string) {
-  if (!assetPath || !assetPath.startsWith("/")) return undefined;
+  if (!assetPath?.startsWith("/")) return undefined;
   if (cache.has(assetPath)) return cache.get(assetPath);
 
   const filePath = path.join(process.cwd(), "public", assetPath.slice(1));

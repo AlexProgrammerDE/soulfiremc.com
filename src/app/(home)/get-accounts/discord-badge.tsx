@@ -18,7 +18,7 @@ export function DiscordMemberBadge({
 }: {
   info: DiscordInviteResponse | null;
 }) {
-  if (!info || !info.approximate_member_count) {
+  if (!info?.approximate_member_count) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-[#5865F2]/10 px-2.5 py-0.5 text-xs font-medium text-[#5865F2]/50">
         <Users className="h-3 w-3" />

@@ -34,7 +34,8 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "useImportExtensions": "off"
+        "useImportExtensions": "off",
+        "noUnresolvedImports": "off"
       },
       "style": {
         "useComponentExportOnlyModules": "off"
