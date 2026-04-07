@@ -1,5 +1,3 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { createOpenAPI } from "fumadocs-openapi/server";
 import type { ApiPageProps } from "fumadocs-openapi/ui";
 
@@ -50,16 +48,7 @@ type OpenApiDocument = {
 };
 
 export const openapi = createOpenAPI({
-  async input() {
-    const schema = await readFile(
-      path.join(process.cwd(), "public", "sf-openapi.json"),
-      "utf8",
-    );
-
-    return {
-      soulfire: JSON.parse(schema),
-    };
-  },
+  input: ["./public/sf-openapi.json"],
 });
 
 export function isOpenApiPage(page: {
