@@ -64,6 +64,24 @@ export function generateStaticParams() {
   return SHOPS.map((shop) => ({ slug: shop.slug }));
 }
 
+function describeCategory(category: Category): string {
+  return category === "mfa-accounts"
+    ? "MFA full-access accounts"
+    : "NFA temporary accounts";
+}
+
+function joinPhrases(phrases: string[]): string {
+  if (phrases.length <= 1) {
+    return phrases[0] ?? "";
+  }
+
+  if (phrases.length === 2) {
+    return `${phrases[0]} and ${phrases[1]}`;
+  }
+
+  return `${phrases.slice(0, -1).join(", ")}, and ${phrases.at(-1)}`;
+}
+
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
@@ -71,14 +89,23 @@ export async function generateMetadata(props: {
   const shop = getShopBySlug(params.slug);
   if (!shop) notFound();
 
+  const categories = Object.keys(shop.listings) as Category[];
+  const categorySummary = joinPhrases(categories.map(describeCategory));
   const firstListing = Object.values(shop.listings)[0];
   const description =
     firstListing?.testimonial ??
-    `${shop.name} - Minecraft account provider. Compare prices and features.`;
+    `${shop.name} is a Minecraft alt shop offering ${categorySummary}. Compare prices, delivery, and account formats for SoulFire.`;
 
   return {
-    title: `${shop.name} - Minecraft Account Provider`,
+    title: `${shop.name} | Minecraft Alt Shop`,
     description,
+    keywords: [
+      shop.name,
+      "minecraft alt shop",
+      "minecraft accounts",
+      "minecraft alts",
+      ...categories.map(describeCategory),
+    ],
     alternates: {
       canonical: "./",
     },
@@ -221,6 +248,10 @@ export default async function AccountProviderPage(props: {
     Category,
     NonNullable<Shop["listings"][Category]>,
   ][];
+  const categorySummary = joinPhrases(
+    categories.map(([category]) => describeCategory(category)),
+  );
+  const seoSummary = `${shop.name} is a Minecraft alt shop offering ${categorySummary} for SoulFire bot testing.`;
   const theme = shop.theme ? PROVIDER_THEMES[shop.theme] : undefined;
   const hasAffiliate = categories.some(([, listing]) =>
     listing.badges.includes("affiliate"),
@@ -356,6 +387,9 @@ export default async function AccountProviderPage(props: {
                   <DiscordMemberBadge info={null} />
                 )}
               </div>
+              <p className="max-w-2xl text-sm text-muted-foreground">
+                {seoSummary}
+              </p>
               {hasAffiliate && (
                 <p className="max-w-2xl text-sm text-muted-foreground">
                   Buy with the RaveAlts code or link below and you directly help
@@ -450,6 +484,9 @@ export default async function AccountProviderPage(props: {
                 <DiscordMemberBadge info={null} />
               )}
             </div>
+            <p className="max-w-2xl text-sm text-muted-foreground">
+              {seoSummary}
+            </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild>
                 <a href={shop.url} target="_blank" rel="noopener nofollow">

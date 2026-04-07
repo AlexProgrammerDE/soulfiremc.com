@@ -10,9 +10,22 @@ import { getUpvoteCounts } from "@/lib/upvotes";
 import { GetAccountsClient } from "./page.client";
 
 export const metadata: Metadata = {
-  title: "Get Accounts",
+  title: "Minecraft Alts, MFA & NFA Accounts",
   description:
-    "Buy cheap Minecraft accounts for bot testing. Compare MFA and NFA accounts from trusted providers. Prices from 5¢ per alt with instant delivery and bulk discounts.",
+    "Compare Minecraft alt shops and account providers for SoulFire. Browse MFA full-access accounts, NFA temporary accounts, and token or cookie alts with current pricing and delivery details.",
+  keywords: [
+    "minecraft alts",
+    "minecraft accounts",
+    "minecraft alt shop",
+    "mfa accounts",
+    "nfa accounts",
+    "temporary minecraft alts",
+    "token alts",
+    "cookie alts",
+  ],
+  alternates: {
+    canonical: "./",
+  },
   ...imageMetadata("/og/site/get-accounts/image.webp"),
 };
 
@@ -49,9 +62,9 @@ export default async function GetAccountsPage() {
   const itemListJsonLd: WithContext<ItemList> = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Minecraft Account Providers",
+    name: "Minecraft Alt Shops and Account Providers",
     description:
-      "Trusted Minecraft account providers for bot testing with SoulFire. Compare MFA, high-quality, and budget accounts.",
+      "Trusted Minecraft alt shops for SoulFire bot testing. Compare MFA full-access accounts, NFA temporary accounts, and token or cookie account options.",
     numberOfItems: PROVIDERS.length,
     itemListElement: PROVIDERS.map((provider, index) => ({
       "@type": "ListItem",

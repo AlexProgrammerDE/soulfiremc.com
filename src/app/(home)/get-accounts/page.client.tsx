@@ -573,11 +573,11 @@ function MainContent(props: Props) {
               <div className="space-y-4">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-semibold">
-                    MFA Accounts (Permanent)
+                    MFA Accounts (Full Access / Permanent)
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    Full access accounts you own forever. Change email,
-                    password, and username as you want.
+                    Permanent full-access Minecraft accounts. Change email,
+                    password, and username as needed.
                   </p>
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -601,15 +601,15 @@ function MainContent(props: Props) {
               <div className="space-y-4">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-semibold">
-                    NFA Accounts (Temporary)
+                    NFA Accounts (Temporary / Non-Full Access)
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    Temporary accounts that may stop working over time. Prices
-                    shown are per account.
+                    Temporary Minecraft alts that may stop working over time.
+                    Prices shown are per account.
                   </p>
                   <p className="text-sm text-yellow-600 dark:text-yellow-500">
                     <strong>Note:</strong> SoulFire supports refresh token,
-                    cookie, and access token auth for NFA accounts.
+                    cookie, and access token auth for many NFA account formats.
                   </p>
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -635,15 +635,39 @@ function MainContent(props: Props) {
 }
 
 export function GetAccountsClient(props: Props) {
+  const terminologyCards = [
+    {
+      title: "MFA / Full Access",
+      description:
+        "Permanent Minecraft accounts with long-term ownership. You can usually change the email, password, and username.",
+    },
+    {
+      title: "NFA / Temporary Alts",
+      description:
+        "Budget Minecraft alts that may expire or lose access over time. Many shops sell these as token or cookie-based logins.",
+    },
+    {
+      title: "Token / Cookie Accounts",
+      description:
+        "Common NFA delivery formats on Minecraft alt shops. SoulFire supports refresh token, cookie, and access token auth where providers offer them.",
+    },
+  ];
+
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
       <div className="space-y-4 text-center max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Get Minecraft Accounts
+          Compare Minecraft Alts, MFA & NFA Accounts
         </h1>
         <p className="text-lg text-muted-foreground">
-          SoulFire works best with quality Minecraft accounts. Here are trusted
-          providers we recommend for bot testing.
+          Compare Minecraft alt shops and account providers for SoulFire bot
+          testing. Browse MFA full-access accounts, NFA temporary accounts, and
+          token or cookie login options.
+        </p>
+        <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
+          This page targets the market terms people actually search for:
+          Minecraft alts, alt shops, MFA accounts, NFA accounts, token alts, and
+          cookie accounts.
         </p>
         <p className="text-sm text-muted-foreground">
           <BookOpen className="inline h-4 w-4 align-text-bottom" /> For more
@@ -658,6 +682,15 @@ export function GetAccountsClient(props: Props) {
         </p>
       </div>
 
+      <section className="grid gap-4 max-w-5xl mx-auto md:grid-cols-3">
+        {terminologyCards.map((item) => (
+          <Card key={item.title} className="gap-2 p-5 text-left">
+            <h2 className="text-lg font-semibold">{item.title}</h2>
+            <p className="text-sm text-muted-foreground">{item.description}</p>
+          </Card>
+        ))}
+      </section>
+
       <Suspense>
         <MainContent
           discordInvites={props.discordInvites}
@@ -668,9 +701,10 @@ export function GetAccountsClient(props: Props) {
       {/* FAQ Section */}
       <div className="max-w-3xl mx-auto w-full space-y-4">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-semibold">Minecraft Alt Shop FAQ</h2>
           <p className="text-sm text-muted-foreground">
-            Common questions about Minecraft accounts
+            Common questions about Minecraft alts, MFA accounts, NFA accounts,
+            and temporary account formats
           </p>
         </div>
         <Accordion type="single" collapsible className="w-full">

@@ -198,11 +198,12 @@ export const CATEGORY_CONFIG: Record<
 > = {
   "nfa-accounts": {
     label: "NFA Accounts",
-    description: "Temporary accounts - budget to premium tiers",
+    description:
+      "Temporary Minecraft alts, often sold as token or cookie accounts",
   },
   "mfa-accounts": {
     label: "MFA Accounts",
-    description: "Full access permanent accounts you own forever",
+    description: "Full-access permanent Minecraft accounts you own long-term",
   },
 };
 

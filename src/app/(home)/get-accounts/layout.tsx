@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Get Minecraft Accounts",
+  title: "Minecraft Alts, MFA & NFA Accounts",
   description:
-    "Find reliable Minecraft account providers for bot testing with SoulFire. Compare high-quality alts and MFA accounts.",
+    "Compare Minecraft alt shops and account providers for SoulFire. Browse MFA full-access accounts, NFA temporary accounts, and token or cookie alts.",
 };
 
 export default function GetAccountsLayout({
