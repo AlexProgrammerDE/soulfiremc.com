@@ -503,7 +503,7 @@ export const SHOPS: Shop[] = [
       "nfa-accounts": {
         testimonial:
           "Cookie NFAs with multiple Hypixel tiers, random rank options, and no-VPN-detection variants on higher levels.",
-        badges: ["high-quality", "instant-delivery"],
+        badges: ["affiliate", "high-quality", "instant-delivery"],
         price: "25¢+",
         priceValue: 0.25,
         linkDiscountMessage:
@@ -514,7 +514,7 @@ export const SHOPS: Shop[] = [
       "mfa-accounts": {
         testimonial:
           "Full-access accounts with instant delivery, 7+ day age, and OTP secret included. Ranked variants are available above the base tier.",
-        badges: ["high-quality", "instant-delivery"],
+        badges: ["affiliate", "high-quality", "instant-delivery"],
         price: "$5.99+",
         priceValue: 5.99,
         linkDiscountMessage:

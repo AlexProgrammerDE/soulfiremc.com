@@ -17,14 +17,14 @@ const palette = {
 };
 
 export function BlogOgImage({
-                              title,
-                              description,
-                              author,
-                              date,
-                              tags,
-                              readTime,
-                              logoSrc,
-                            }: {
+  title,
+  description,
+  author,
+  date,
+  tags,
+  readTime,
+  logoSrc,
+}: {
   title: string;
   description?: string | null;
   author?: string | null;

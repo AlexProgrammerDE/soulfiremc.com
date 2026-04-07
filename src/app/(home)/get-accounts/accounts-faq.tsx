@@ -15,7 +15,10 @@ export const accountFaqItems: {
         accounts with full access. You can change the email, password, and
         username. They're more secure and stable, which makes them pricier.
         Learn more in the{" "}
-        <Link href="/docs/how-to/import-accounts" className="underline text-primary">
+        <Link
+          href="/docs/how-to/import-accounts"
+          className="underline text-primary"
+        >
           Account Guide
         </Link>
         .
@@ -31,7 +34,10 @@ export const accountFaqItems: {
         NFA (Non-Full Access) accounts are temporary accounts that may stop
         working over time. They're cheaper but come with a higher risk of losing
         access. See the{" "}
-        <Link href="/docs/how-to/import-accounts" className="underline text-primary">
+        <Link
+          href="/docs/how-to/import-accounts"
+          className="underline text-primary"
+        >
           Account Guide
         </Link>{" "}
         for details on supported account types.
@@ -46,7 +52,10 @@ export const accountFaqItems: {
       <>
         MFA accounts are fully supported by SoulFire. For NFA accounts, SoulFire
         supports refresh token, cookie, and access token auth. Read the{" "}
-        <Link href="/docs/how-to/import-accounts" className="underline text-primary">
+        <Link
+          href="/docs/how-to/import-accounts"
+          className="underline text-primary"
+        >
           Account Guide
         </Link>{" "}
         for setup instructions.

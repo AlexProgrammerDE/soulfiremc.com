@@ -14,7 +14,10 @@ export const proxiesFaqItems: {
         When running multiple bots, servers may block your IP. Proxies give each
         bot a different IP address, avoiding rate limits and IP bans. Learn more
         in the{" "}
-        <Link href="/docs/how-to/import-proxies" className="underline text-primary">
+        <Link
+          href="/docs/how-to/import-proxies"
+          className="underline text-primary"
+        >
           Proxy Guide
         </Link>
         .
@@ -30,7 +33,10 @@ export const proxiesFaqItems: {
         Residential proxies are the hardest to detect but cost more. Datacenter
         proxies are faster and cheaper but easier to block. ISP proxies offer a
         middle ground. See the{" "}
-        <Link href="/docs/how-to/import-proxies" className="underline text-primary">
+        <Link
+          href="/docs/how-to/import-proxies"
+          className="underline text-primary"
+        >
           Proxy Guide
         </Link>{" "}
         for recommendations.
