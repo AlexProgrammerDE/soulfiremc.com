@@ -8,6 +8,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
+    "validate-links": "tsx scripts/validate-links.ts",
     "fix": "biome check --write --unsafe",
     "check": "biome check",
     "postinstall": "fumadocs-mdx"
@@ -78,6 +79,8 @@
     "babel-plugin-react-compiler": "^1.0.0",
     "discord.js": "^14.26.2",
     "drizzle-kit": "^0.31.10",
+    "github-slugger": "^2.0.0",
+    "next-validate-link": "^1.6.4",
     "postcss": "^8.5.8",
     "shadcn": "^4.1.2",
     "tailwindcss": "4.2.2",
