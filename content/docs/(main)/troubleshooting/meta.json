@@ -1,0 +1,11 @@
+{
+  "icon": "TriangleAlert",
+  "pages": [
+    "index",
+    "cannot-connect-or-times-out",
+    "accounts-and-authentication",
+    "proxies",
+    "scripts-and-automation",
+    "dedicated-server-and-docker"
+  ]
+}

@@ -1,0 +1,88 @@
+---
+title: Troubleshooting
+description: Diagnose common SoulFire problems by symptom instead of guessing.
+---
+
+import { Cloud, KeyRound, Server, TriangleAlert, Workflow } from 'lucide-react';
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warning">
+  Change one thing at a time while troubleshooting.
+  If you change proxies, account type, bot amount, protocol version, and automation settings all at once, you usually lose the real cause.
+</Callout>
+
+Use this section when something that should work does not.
+Start with the symptom that is closest to what you see on screen or in the logs.
+
+## Before you change anything
+
+Collect the basics first:
+
+- the exact SoulFire version
+- whether you are using GUI, CLI, or a dedicated server
+- whether the problem is local or remote
+- the exact error text, not just a paraphrase
+- the smallest setup that still reproduces the issue
+- whether the problem disappears when you remove proxies or automation
+
+That saves time both for you and for anyone else trying to reproduce the problem later.
+
+## Pick the closest symptom
+
+<Cards>
+  <Card
+    icon={<Server />}
+    title="Cannot Connect Or Times Out"
+    href="/docs/troubleshooting/cannot-connect-or-times-out"
+  >
+    Use this when the GUI, CLI, or bots cannot stay connected.
+  </Card>
+  <Card
+    icon={<KeyRound />}
+    title="Accounts And Authentication"
+    href="/docs/troubleshooting/accounts-and-authentication"
+  >
+    Use this when account import, Microsoft auth, or login-related setup fails.
+  </Card>
+  <Card
+    icon={<Cloud />}
+    title="Proxies"
+    href="/docs/troubleshooting/proxies"
+  >
+    Use this when proxy imports, checks, or connect attempts fail.
+  </Card>
+  <Card
+    icon={<Workflow />}
+    title="Scripts And Automation"
+    href="/docs/troubleshooting/scripts-and-automation"
+  >
+    Use this when scripts or native automation behave incorrectly.
+  </Card>
+  <Card
+    icon={<TriangleAlert />}
+    title="Dedicated Server And Docker"
+    href="/docs/troubleshooting/dedicated-server-and-docker"
+  >
+    Use this when the remote server, Docker stack, Cloudflared, or Traefik setup is the failing layer.
+  </Card>
+</Cards>
+
+## Troubleshoot the narrowest layer first
+
+In practice, SoulFire problems usually break down into layers:
+
+1. the client cannot reach the SoulFire server
+2. the SoulFire server is reachable, but the bots cannot join or stay connected to the target server
+3. the bots can join, but accounts, proxies, scripts, or automation change the behavior
+
+If you can make the problem disappear by turning off one layer, you have found the right page to start from.
+
+## Related pages
+
+- [Run Your First Session in GUI Mode](/docs/start-here/gui-mode)
+- [CLI Mode](/docs/start-here/cli-mode)
+- [Deploy a Dedicated Server](/docs/start-here/dedicated-server)
+- [Import Accounts](/docs/how-to/import-accounts)
+- [Import Proxies](/docs/how-to/import-proxies)
+- [Automation](/docs/automation)

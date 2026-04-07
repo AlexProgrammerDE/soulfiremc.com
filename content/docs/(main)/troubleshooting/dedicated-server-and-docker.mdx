@@ -1,0 +1,107 @@
+---
+title: Dedicated Server And Docker
+description: Diagnose remote-server, Docker, Cloudflared, and Traefik problems before you start changing client-side settings.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Start with the server, not the client
+
+If you run SoulFire as a dedicated server, fix the server-side access path first.
+Do not keep changing GUI settings while the remote stack itself is unhealthy.
+
+## Check the selected access mode
+
+Your client URL needs to match the way the server is exposed:
+
+- Cloudflared tunnel
+- Traefik with a domain
+- Traefik with public-IP HTTPS
+- plain HTTP
+
+If those do not match, the client can look broken even when SoulFire itself is fine.
+
+## Use the setup script management menu
+
+If you used the automated dedicated-server installer, re-run it and use the management menu.
+
+That gives you the fastest path to:
+
+- the expected access URL
+- container health
+- logs
+- update/reconfigure actions
+
+If the management menu already shows the stack is unhealthy, troubleshoot there before touching the GUI client.
+
+## Check HTTPS expectations
+
+Cloudflared and Traefik setups should normally be used through HTTPS.
+If you chose HTTP-only mode, remember:
+
+- traffic is unencrypted
+- some environments behave worse over plain HTTP
+- browser-like or HTTPS-oriented flows can be confusing in HTTP-only deployments
+
+Use HTTP-only mainly for LAN or controlled testing.
+
+## If Cloudflared is the failing layer
+
+Check:
+
+- the tunnel token
+- the Cloudflare-side tunnel configuration
+- that the URL you use in the client is the tunnel URL, not a local container address
+
+If the tunnel is healthy but SoulFire still does not respond, inspect the app container next.
+
+## If Traefik is the failing layer
+
+Check:
+
+- the domain or IP you actually configured
+- whether ports `80` and `443` are reachable from the internet
+- certificate issuance status
+- container logs for Traefik and the app
+
+Do not assume a certificate problem is a SoulFire application problem.
+
+## If Docker is the failing layer
+
+Start simple:
+
+1. check whether the app container is running
+2. check whether it is healthy
+3. inspect logs
+4. retry a basic GUI or CLI login with a fresh token
+
+Only after that should you re-enable extra layers such as proxies, automation, or external integrations.
+
+## If remote login fails
+
+Generate a fresh API token from the server side:
+
+```bash
+generate-token api
+```
+
+Then retry with the normal base server URL.
+Do not use `/mcp`, `/webdav`, or `/docs` as the normal client login address.
+
+## If links and related endpoints look wrong
+
+When a dedicated server is exposed behind another public address, the public address matters for generated links and related endpoints.
+
+If the main login works but related URLs are wrong, check the server-side public address configuration before changing the client.
+
+<Callout type="warning">
+  After an update, confirm the base GUI or CLI login works again before you put proxies, automation, WebDAV, or MCP back into the test.
+</Callout>
+
+## Related pages
+
+- [Deploy a Dedicated Server](/docs/start-here/dedicated-server)
+- [Docker](/docs/how-to/docker)
+- [Cannot Connect Or Times Out](/docs/troubleshooting/cannot-connect-or-times-out)
+- [MCP (AI Integration)](/docs/how-to/mcp)
+- [WebDAV](/docs/how-to/webdav)

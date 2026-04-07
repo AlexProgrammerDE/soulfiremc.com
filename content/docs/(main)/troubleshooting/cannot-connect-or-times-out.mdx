@@ -1,0 +1,138 @@
+---
+title: Cannot Connect Or Times Out
+description: Diagnose remote-login failures, session disconnects, and timeout errors without changing everything at once.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Start by identifying which connection is failing
+
+There are two very different failures that users often describe as "it cannot connect":
+
+1. your GUI or CLI cannot connect to the SoulFire server
+2. SoulFire is running, but the bots cannot stay connected to the target Minecraft server
+
+Work out which one is failing first.
+
+## If the GUI or CLI cannot connect to the SoulFire server
+
+### Check the server URL
+
+Make sure the client is using the actual server URL for the access mode you deployed:
+
+- `https://your-domain` or `https://your-server-ip` for HTTPS frontends such as Traefik or Cloudflared
+- `http://host:38765` only when you intentionally deployed plain HTTP
+
+Do not paste `/docs`, `/mcp`, or `/webdav` into the normal server login field.
+
+### Check the access token
+
+Generate a fresh token from the server side:
+
+```bash
+generate-token api
+```
+
+Then retry with that token.
+If an old token suddenly stops working, avoid guessing and rotate it first.
+
+### Check the deployment mode
+
+If this is a dedicated server:
+
+- re-run the setup script management menu
+- check container health and logs
+- confirm the access URL shown there still matches the address you use in the client
+
+If you deliberately chose HTTP-only mode, remember that some setups behave better behind HTTPS.
+
+### Check whether the issue is server access or browser-only access
+
+Being able to open the docs page or another HTTP endpoint does not prove the normal client login flow is correct.
+The real test is a normal GUI or CLI login with a fresh token.
+
+## If the bots connect to SoulFire but time out on the target Minecraft server
+
+### Remove proxies first
+
+Disable proxies temporarily and test with one or two bots.
+If the timeouts disappear, the proxy pool is the problem, not the core session setup.
+
+### Reduce concurrency
+
+Test with:
+
+- fewer bots
+- higher join delays
+- one known-good account or offline mode where allowed
+
+That tells you quickly whether the failure is load-related or basic connectivity.
+
+### Check Bot Settings
+
+Verify:
+
+- target server address
+- protocol version
+- connect/read/write timeout values
+
+If local servers also fail, do not assume the remote target is the problem.
+Treat that as a configuration or regression signal.
+
+### Check for server-side login requirements
+
+Some target servers need:
+
+- authenticated accounts instead of offline names
+- specific protocol versions
+- additional chat-based login or registration steps after joining
+
+If the bot spawns but then becomes unusable or disconnects, the session may be missing one of those requirements.
+
+### Look at the instance terminal, not just the UI state
+
+The instance terminal is usually the fastest place to see whether the disconnect came from:
+
+- a timeout
+- a proxy connect failure
+- authentication
+- a plugin-driven action after join
+
+## If only some bots fail
+
+That usually points to one of these:
+
+- bad proxies
+- bad accounts
+- the target server rate-limiting or filtering connections
+- different automation or script state between bots
+
+Try the same test with:
+
+- one bot
+- no proxies
+- one account
+- no automation
+
+If that works, add the layers back one at a time.
+
+## What to capture before you report it
+
+- exact SoulFire version
+- exact timeout or disconnect text
+- whether `localhost` also fails
+- whether the issue happens with proxies disabled
+- the smallest bot count that still reproduces it
+
+## Related pages
+
+- [Dedicated Server And Docker](/docs/troubleshooting/dedicated-server-and-docker)
+- [Proxies](/docs/troubleshooting/proxies)
+- [Accounts And Authentication](/docs/troubleshooting/accounts-and-authentication)
+- [GUI Mode](/docs/start-here/gui-mode)
+- [CLI Flags](/docs/reference/cli-flags)
+
+<Callout type="info">
+  If a new SoulFire version introduced the timeout and an older one did not, write down both exact versions before you change anything else.
+  That makes regressions much easier to confirm.
+</Callout>

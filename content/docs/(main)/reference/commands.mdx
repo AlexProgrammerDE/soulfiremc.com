@@ -54,6 +54,14 @@ It can either display information or control the bots.
 | `session start{:bash}`                                                | Makes selected instances start a session                                                                                            |
 | `session stop{:bash}`                                                 | Makes selected instances stop their session                                                                                         |
 | `session pause{:bash}`                                                | Makes selected instances pause their session                                                                                        |
+| `automation beat{:bash}`                                              | Starts the native automation progression controller for selected bots                                                               |
+| `automation get <target> <count>{:bash}`                             | Makes selected bots acquire an item or automation target                                                                            |
+| `automation pause{:bash}`                                             | Pauses automation for selected bots without clearing their current goal                                                             |
+| `automation resume{:bash}`                                            | Resumes automation for selected paused bots                                                                                         |
+| `automation collaboration <true\|false>{:bash}`                      | Toggles shared team collaboration for visible instances                                                                             |
+| `automation status{:bash}`                                            | Shows the current automation status for selected bots                                                                               |
+| `automation teamstatus{:bash}`                                        | Shows shared automation coordinator status for the current instance                                                                 |
+| `automation stop{:bash}`                                              | Stops automation for selected bots                                                                                                  |
 | `online{:bash}`                                                       | Shows connected bots in sessions                                                                                                    |
 | `say <message>{:bash}`                                                | Makes selected bots send a message in chat or execute a command                                                                     |
 | `respawn{:bash}`                                                      | Respawn selected bots                                                                                                               |
