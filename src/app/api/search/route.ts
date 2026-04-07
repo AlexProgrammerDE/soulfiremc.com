@@ -2,6 +2,30 @@ import { createFromSource } from "fumadocs-core/search/server";
 import { getOpenApiStructuredData, isOpenApiPage } from "@/lib/docs/openapi";
 import { source } from "@/lib/source";
 
+type SearchStructuredData = Awaited<ReturnType<typeof getOpenApiStructuredData>>;
+
+function hasStructuredData(
+  data: unknown,
+): data is { structuredData: SearchStructuredData } {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "structuredData" in data &&
+    data.structuredData !== undefined
+  );
+}
+
+function hasStructuredDataLoader(
+  data: unknown,
+): data is { load: () => Promise<{ structuredData?: SearchStructuredData }> } {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "load" in data &&
+    typeof data.load === "function"
+  );
+}
+
 export const { GET } = createFromSource(source, {
   buildIndex: async (page) => {
     const breadcrumbs = ["Docs"];
@@ -12,12 +36,13 @@ export const { GET } = createFromSource(source, {
       }
     }
 
+    const pageData: unknown = page.data;
     const structuredData = isOpenApiPage(page)
       ? await getOpenApiStructuredData(page)
-      : "structuredData" in page.data
-        ? page.data.structuredData
-        : "load" in page.data && typeof page.data.load === "function"
-          ? (await page.data.load()).structuredData
+      : hasStructuredData(pageData)
+        ? pageData.structuredData
+        : hasStructuredDataLoader(pageData)
+          ? (await pageData.load()).structuredData
           : undefined;
 
     if (!structuredData) {

@@ -121,7 +121,9 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
         <MDX
           components={getMDXComponents({
             a: ({ href, ...props }) => {
-              const found = source.getPageByHref(href ?? "", {
+              if (!href) return <a {...props} />;
+
+              const found = source.getPageByHref(href, {
                 dir: path.dirname(page.path),
               });
 
