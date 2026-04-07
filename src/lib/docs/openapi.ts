@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { ApiPageProps } from "fumadocs-openapi/ui";
 import { createOpenAPI } from "fumadocs-openapi/server";
+import type { ApiPageProps } from "fumadocs-openapi/ui";
 
 type OpenApiPageLike = {
   data: {
@@ -72,10 +72,7 @@ export function isOpenApiPage(page: {
 
 export async function getOpenApiPageText(page: OpenApiPageLike) {
   const sections = await getOpenApiSections(page);
-  const lines = [
-    `# ${page.data.title}`,
-    `URL: ${page.url}`,
-  ];
+  const lines = [`# ${page.data.title}`, `URL: ${page.url}`];
 
   if (page.data.description) {
     lines.push("", cleanText(page.data.description));
@@ -103,7 +100,9 @@ export async function getOpenApiStructuredData(page: OpenApiPageLike) {
   };
 }
 
-async function getOpenApiSections(page: OpenApiPageLike): Promise<OpenApiSection[]> {
+async function getOpenApiSections(
+  page: OpenApiPageLike,
+): Promise<OpenApiSection[]> {
   const props = page.data.getAPIPageProps();
   const document = await resolveDocument(props.document);
   const sections: OpenApiSection[] = [];

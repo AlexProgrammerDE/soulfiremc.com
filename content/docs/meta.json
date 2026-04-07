@@ -1,6 +1,3 @@
 {
-  "pages": [
-    "(main)",
-    "openapi"
-  ]
+  "pages": ["(main)", "openapi"]
 }

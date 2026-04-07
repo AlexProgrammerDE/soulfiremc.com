@@ -1,8 +1,5 @@
 import { createFromSource } from "fumadocs-core/search/server";
-import {
-  getOpenApiStructuredData,
-  isOpenApiPage,
-} from "@/lib/docs/openapi";
+import { getOpenApiStructuredData, isOpenApiPage } from "@/lib/docs/openapi";
 import { source } from "@/lib/source";
 
 export const { GET } = createFromSource(source, {
