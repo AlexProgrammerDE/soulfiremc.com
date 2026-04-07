@@ -497,7 +497,7 @@ export const SHOPS: Shop[] = [
     logo: "/accounts/localts.png",
     url: "https://localts.store/?campaign=soulfire",
     websiteUrl: "https://localts.info",
-    discordUrl: "https://localts.store/discord",
+    discordUrl: "https://invite.localts.store",
     startDate: "Jun 2023",
     listings: {
       "nfa-accounts": {
