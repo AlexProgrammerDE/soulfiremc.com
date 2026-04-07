@@ -2,7 +2,9 @@ import { createFromSource } from "fumadocs-core/search/server";
 import { getOpenApiStructuredData, isOpenApiPage } from "@/lib/docs/openapi";
 import { source } from "@/lib/source";
 
-type SearchStructuredData = Awaited<ReturnType<typeof getOpenApiStructuredData>>;
+type SearchStructuredData = Awaited<
+  ReturnType<typeof getOpenApiStructuredData>
+>;
 
 function hasStructuredData(
   data: unknown,

@@ -9,7 +9,7 @@ import { Mermaid } from "@/components/mdx/mermaid";
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...defaultMdxComponents,
-    img: (props: ImageZoomProps) => <ImageZoom {...props} />,
+    img: (props) => <ImageZoom {...(props as ImageZoomProps)} />,
     // HTML `ref` attribute conflicts with `forwardRef`
     pre: ({ ref: _ref, ...props }) => (
       <CodeBlock {...props}>
