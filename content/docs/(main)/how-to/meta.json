@@ -5,6 +5,7 @@
     "import-accounts",
     "import-proxies",
     "install-plugins",
+    "ai-support",
     "mcp",
     "webdav",
     "docker",
