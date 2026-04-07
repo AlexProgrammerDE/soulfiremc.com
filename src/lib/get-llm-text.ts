@@ -1,10 +1,24 @@
 import type { InferPageType } from "fumadocs-core/source";
+import { getOpenApiPageText, isOpenApiPage } from "@/lib/docs/openapi";
 import { source } from "@/lib/source";
 
 export async function getLLMText(page: InferPageType<typeof source>) {
-  const processed = await page.data.getText("processed");
+  if (isOpenApiPage(page)) {
+    return getOpenApiPageText(page);
+  }
 
-  return `# ${page.data.title}
+  if (!("getText" in page.data)) {
+    const title = page.data.title ?? page.slugs.at(-1) ?? "Docs";
+    return `# ${title}
+URL: ${page.url}
+
+${page.data.description ?? ""}`;
+  }
+
+  const processed = await page.data.getText("processed");
+  const title = page.data.title ?? page.slugs.at(-1) ?? "Docs";
+
+  return `# ${title}
 URL: ${page.url}
 
 ${page.data.description}

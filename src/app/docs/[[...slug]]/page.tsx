@@ -10,6 +10,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import posthog from "posthog-js";
 import type { BreadcrumbList, WithContext } from "schema-dts";
+import { APIPage } from "@/components/api-page";
 import { Feedback } from "@/components/feedback";
 import { JsonLd } from "@/components/json-ld";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
@@ -18,6 +19,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { isOpenApiPage } from "@/lib/docs/openapi";
 import { getDocsPageImage } from "@/lib/og";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
@@ -28,8 +30,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
   const page = source.getPage(params.slug);
   if (!page) notFound();
-
-  const MDX = page.data.body;
+  const pageTitle = page.data.title ?? page.slugs.at(-1) ?? "Docs";
 
   // Build breadcrumb trail
   const breadcrumbItems: Array<{ name: string; url: string }> = [
@@ -44,7 +45,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
       const currentPage = source.getPage(params.slug.slice(0, i + 1));
       if (currentPage) {
         breadcrumbItems.push({
-          name: currentPage.data.title,
+          name: currentPage.data.title ?? currentPage.slugs.at(-1) ?? "Docs",
           url: `https://soulfiremc.com${currentPath}`,
         });
       }
@@ -62,6 +63,35 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
     })),
   };
 
+  if (isOpenApiPage(page)) {
+    return (
+      <DocsPage full>
+        <JsonLd data={breadcrumbJsonLd} />
+        <div className="mb-6 flex flex-col gap-2 border-b pb-6">
+          <DocsTitle>{pageTitle}</DocsTitle>
+          <DocsDescription>{page.data.description}</DocsDescription>
+        </div>
+        <DocsBody>
+          <APIPage {...page.data.getAPIPageProps()} />
+        </DocsBody>
+        <Feedback
+          onRateAction={async (_url, feedback) => {
+            "use server";
+
+            posthog.capture("on_rate_docs", feedback);
+            return {};
+          }}
+        />
+      </DocsPage>
+    );
+  }
+
+  if (!("body" in page.data)) {
+    notFound();
+  }
+
+  const MDX = page.data.body;
+
   return (
     <DocsPage
       toc={page.data.toc}
@@ -75,7 +105,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
     >
       <JsonLd data={breadcrumbJsonLd} />
       <div className="flex flex-col gap-2">
-        <DocsTitle>{page.data.title}</DocsTitle>
+        <DocsTitle>{pageTitle}</DocsTitle>
         <DocsDescription className="mb-2.5">
           {page.data.description}
         </DocsDescription>
@@ -110,7 +140,11 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
                     />
                   </HoverCardTrigger>
                   <HoverCardContent className="text-sm">
-                    <p className="font-medium">{found.page.data.title}</p>
+                    <p className="font-medium">
+                      {found.page.data.title ??
+                        found.page.slugs.at(-1) ??
+                        "Docs"}
+                    </p>
                     <p className="text-fd-muted-foreground">
                       {found.page.data.description}
                     </p>
@@ -147,7 +181,7 @@ export async function generateMetadata(props: {
   const image = getDocsPageImage(page).url;
 
   return {
-    title: page.data.title,
+    title: page.data.title ?? page.slugs.at(-1) ?? "Docs",
     description: page.data.description,
     openGraph: {
       images: image,

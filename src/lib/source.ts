@@ -1,21 +1,23 @@
-import { blog, docs } from "fumadocs-mdx:collections/server";
-import { loader } from "fumadocs-core/source";
-import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
-import { icons } from "lucide-react";
-import { createElement } from "react";
+import {blog, docs} from "fumadocs-mdx:collections/server";
+import {loader, multiple} from "fumadocs-core/source";
+import {toFumadocsSource} from "fumadocs-mdx/runtime/server";
+import {openapiPlugin, openapiSource} from "fumadocs-openapi/server";
+import {openapi} from "@/lib/docs/openapi";
+import {lucideIconsPlugin} from "fumadocs-core/source/lucide-icons";
 
-export const source = loader({
-  baseUrl: "/docs",
-  source: docs.toFumadocsSource(),
-  icon(icon) {
-    if (!icon) {
-      // You may set a default icon
-      return;
-    }
-
-    if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
+export const source = loader(
+  multiple({
+    docs: docs.toFumadocsSource(),
+    openapi: await openapiSource(openapi, {
+      baseDir: "openapi/(generated)",
+      groupBy: "tag",
+    }),
+  }),
+  {
+    baseUrl: "/docs",
+    plugins: [lucideIconsPlugin(), openapiPlugin()],
   },
-});
+);
 
 export const blogSource = loader({
   baseUrl: "/blog",

@@ -12,10 +12,11 @@ export async function GET(
   const { slug } = await params;
   const page = source.getPage(stripOgSuffix(slug));
   if (!page) notFound();
+  const title = page.data.title ?? page.slugs.at(-1) ?? "Docs";
 
   return new ImageResponse(
     <DocsOgImage
-      title={page.data.title}
+      title={title}
       description={page.data.description}
       slugs={page.slugs}
       logoSrc={await getOgAssetDataUri("/logo-square.svg")}

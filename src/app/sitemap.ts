@@ -17,7 +17,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }) satisfies MetadataRoute.Sitemap[number],
     ),
     ...source.getPages().map((page) => {
-      const { lastModified } = page.data;
+      const lastModified =
+        "lastModified" in page.data ? page.data.lastModified : undefined;
       return {
         url: `https://soulfiremc.com${page.url}`,
         lastModified: lastModified ? new Date(lastModified) : undefined,

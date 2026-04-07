@@ -1,0 +1,15 @@
+{
+  "title": "Docs",
+  "description": "SoulFire documentation for users and developers",
+  "icon": "BookText",
+  "root": true,
+  "pages": [
+    "index",
+    "start-here",
+    "how-to",
+    "scripting",
+    "development",
+    "reference",
+    "concepts"
+  ]
+}
