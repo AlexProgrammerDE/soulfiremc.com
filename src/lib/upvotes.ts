@@ -1,6 +1,6 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { upvote } from "@/lib/db/schema";
+import { review } from "@/lib/db/schema";
 
 type ItemType = "account" | "proxy" | "resource";
 
@@ -12,12 +12,12 @@ export async function getUpvoteCounts(
 
   const counts = await db
     .select({
-      itemSlug: upvote.itemSlug,
+      itemSlug: review.itemSlug,
       count: sql<number>`count(*)::int`,
     })
-    .from(upvote)
-    .where(and(eq(upvote.itemType, itemType), inArray(upvote.itemSlug, slugs)))
-    .groupBy(upvote.itemSlug);
+    .from(review)
+    .where(and(eq(review.itemType, itemType), inArray(review.itemSlug, slugs)))
+    .groupBy(review.itemSlug);
 
   const countMap: Record<string, number> = {};
   for (const slug of slugs) {

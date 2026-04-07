@@ -2,7 +2,7 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { upvote } from "@/lib/db/schema";
+import { review } from "@/lib/db/schema";
 import {
   getExpectedTurnstileHostname,
   getTurnstileRemoteIp,
@@ -33,12 +33,12 @@ export async function GET(request: NextRequest) {
 
   const counts = await db
     .select({
-      itemSlug: upvote.itemSlug,
+      itemSlug: review.itemSlug,
       count: sql<number>`count(*)::int`,
     })
-    .from(upvote)
-    .where(and(eq(upvote.itemType, itemType), inArray(upvote.itemSlug, slugs)))
-    .groupBy(upvote.itemSlug);
+    .from(review)
+    .where(and(eq(review.itemType, itemType), inArray(review.itemSlug, slugs)))
+    .groupBy(review.itemSlug);
 
   let userUpvotes: string[] = [];
   try {
@@ -47,13 +47,13 @@ export async function GET(request: NextRequest) {
     });
     if (session?.user) {
       const userVotes = await db
-        .select({ itemSlug: upvote.itemSlug })
-        .from(upvote)
+        .select({ itemSlug: review.itemSlug })
+        .from(review)
         .where(
           and(
-            eq(upvote.userId, session.user.id),
-            eq(upvote.itemType, itemType),
-            inArray(upvote.itemSlug, slugs),
+            eq(review.userId, session.user.id),
+            eq(review.itemType, itemType),
+            inArray(review.itemSlug, slugs),
           ),
         );
       userUpvotes = userVotes.map((v) => v.itemSlug);
@@ -106,24 +106,24 @@ export async function POST(request: NextRequest) {
 
   const existing = await db
     .select()
-    .from(upvote)
+    .from(review)
     .where(
       and(
-        eq(upvote.userId, session.user.id),
-        eq(upvote.itemType, itemType),
-        eq(upvote.itemSlug, itemSlug),
+        eq(review.userId, session.user.id),
+        eq(review.itemType, itemType),
+        eq(review.itemSlug, itemSlug),
       ),
     )
     .limit(1);
 
   if (existing.length > 0) {
     await db
-      .delete(upvote)
+      .delete(review)
       .where(
         and(
-          eq(upvote.userId, session.user.id),
-          eq(upvote.itemType, itemType),
-          eq(upvote.itemSlug, itemSlug),
+          eq(review.userId, session.user.id),
+          eq(review.itemType, itemType),
+          eq(review.itemSlug, itemSlug),
         ),
       );
     return NextResponse.json({ upvoted: false });
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  await db.insert(upvote).values({
+  await db.insert(review).values({
     userId: session.user.id,
     itemType,
     itemSlug,
