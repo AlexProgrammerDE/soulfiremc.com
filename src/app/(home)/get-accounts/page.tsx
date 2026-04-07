@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/json-ld";
 import { getDiscordInviteUrl, PROVIDERS } from "@/lib/accounts-data";
 import { fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
-import { getUpvoteCounts } from "@/lib/upvotes";
+import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { GetAccountsClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -36,6 +36,9 @@ export default async function GetAccountsPage() {
   const providersBySlug = [
     ...new Map(PROVIDERS.map((provider) => [provider.slug, provider])).values(),
   ];
+  const reviewSummaries = await getReviewSummaries("account", [
+    ...new Set(PROVIDERS.map((provider) => provider.slug)),
+  ]);
   const discordInvites = Promise.all(
     providersBySlug.map(async (provider) => {
       const discordInviteUrl = getDiscordInviteUrl(provider);
@@ -65,14 +68,28 @@ export default async function GetAccountsPage() {
     name: "Minecraft Alt Shops and Account Providers",
     description:
       "Trusted Minecraft alt shops for SoulFire bot testing. Compare MFA full-access accounts, NFA temporary accounts, and token or cookie account options.",
-    numberOfItems: PROVIDERS.length,
-    itemListElement: PROVIDERS.map((provider, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: provider.name,
-      description: provider.testimonial,
-      url: provider.websiteUrl ?? provider.url,
-    })),
+    numberOfItems: providersBySlug.length,
+    itemListElement: providersBySlug.map((provider, index) => {
+      const aggregateRating = getAggregateRatingJsonLd(
+        reviewSummaries[provider.slug] ?? {
+          averageRating: null,
+          reviewCount: 0,
+        },
+      );
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        url: `https://soulfiremc.com/get-accounts/${provider.slug}`,
+        item: {
+          "@type": "Product",
+          name: provider.name,
+          description: provider.summary,
+          url: `https://soulfiremc.com/get-accounts/${provider.slug}`,
+          ...(aggregateRating && { aggregateRating }),
+        },
+      };
+    }),
   };
 
   return (
@@ -81,11 +98,7 @@ export default async function GetAccountsPage() {
       <JsonLd data={faqJsonLd} />
       <GetAccountsClient
         discordInvites={discordInvites}
-        initialCounts={
-          await getUpvoteCounts("account", [
-            ...new Set(PROVIDERS.map((p) => p.slug)),
-          ])
-        }
+        initialSummaries={reviewSummaries}
       />
     </>
   );

@@ -19,7 +19,7 @@ export async function GET(
     price: listing.price,
   }));
   const description =
-    Object.values(shop.listings)[0]?.testimonial ??
+    Object.values(shop.listings)[0]?.summary ??
     "Minecraft account provider for SoulFire bot testing.";
 
   return new ImageResponse(

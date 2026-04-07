@@ -7,7 +7,6 @@ import {
   Plug,
   Shield,
   Star,
-  ThumbsUp,
   Zap,
 } from "lucide-react";
 
@@ -45,7 +44,7 @@ export type Category = "nfa-accounts" | "mfa-accounts";
 export type SortOption = "default" | "price-asc" | "price-desc";
 
 export type Listing = {
-  testimonial: string;
+  summary: string;
   badges: Badge[];
   price: string;
   priceValue: number;
@@ -67,7 +66,6 @@ export type Shop = {
   trustpilotUrl?: string;
   socialLinks?: SocialLink[];
   startDate?: string;
-  testimonials?: { quote: string; author: string; authorNote?: string }[];
   gallery?: { src: string; alt: string }[];
   listings: Partial<Record<Category, Listing>>;
 };
@@ -78,14 +76,13 @@ export type Provider = {
   logo?: string;
   logoUnoptimized?: boolean;
   theme?: string;
-  testimonial: string;
+  summary: string;
   url: string;
   websiteUrl?: string;
   discordUrl?: string;
   trustpilotUrl?: string;
   socialLinks?: SocialLink[];
   startDate?: string;
-  testimonials?: { quote: string; author: string; authorNote?: string }[];
   gallery?: { src: string; alt: string }[];
   badges: Badge[];
   category: Category;
@@ -212,8 +209,8 @@ export const SORT_CONFIG: Record<
   { label: string; icon?: React.ReactNode }
 > = {
   default: {
-    label: "Most Upvoted",
-    icon: <ThumbsUp className="h-3 w-3" />,
+    label: "Most Rated",
+    icon: <Star className="h-3 w-3" />,
   },
   "price-asc": {
     label: "Price: Low to High",
@@ -261,31 +258,9 @@ export const SHOPS: Shop[] = [
       { platform: "x", url: "https://x.com/ravealts" },
     ],
     startDate: "Jul 2025",
-    testimonials: [
-      {
-        quote:
-          "Their alts are good quality and they have amazing support. Once I contacted support and they responded in less than a minute. Their services are really cheap. They are constantly running giveaways and ways to get free items. 10/10 would recommend!",
-        author: "mindcrafter",
-      },
-      {
-        quote:
-          "Great alts, and their best quality: their customer support, they were amazing at helping with very fast response time. I had an issue getting my 500 credits, but they helped me, and I got them.",
-        author: "stormcph",
-      },
-      {
-        quote:
-          "Ravealts offered me a great experience in buying alt accounts, their service is stupidly fast and their support is one of the best I've seen in years.",
-        author: "Miguel Lopez Falcon",
-      },
-      {
-        quote:
-          "Cookie alt has lasted me a whole month and I haven't gotten banned.",
-        author: "jhyjjgy",
-      },
-    ],
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "Credit-based dashboard with instant delivery, live validation, API access, and public credit packs. Also sells Dispenser keys for automated bulk generation.",
         badges: [
           "affiliate",
@@ -302,7 +277,7 @@ export const SHOPS: Shop[] = [
           "Public checkout currently sells 500 credits for $4.99, 1000 for $8.99, 2000 for $15.99, plus a $5 VIP key. Dispenser keys are $19.99 (1 month), $44.99 (3 months), $69.99 (6 months), and $99.99 (1 year). Invalid accounts are auto-refunded when precheck fails.",
       },
       "mfa-accounts": {
-        testimonial:
+        summary:
           "Permanent accounts with full access. Change email, password and username. Also sells Microsoft/Xbox accounts with Game Pass and Bedrock. Accepts crypto, card, Klarna and more.",
         badges: [
           "affiliate",
@@ -325,7 +300,7 @@ export const SHOPS: Shop[] = [
     startDate: "Nov 2025",
     listings: {
       "mfa-accounts": {
-        testimonial:
+        summary:
           "Full access accounts that work well as mains or long-term alts. Over 100 accounts sold since launch.",
         badges: ["high-quality", "instant-delivery", "12h-warranty"],
         price: "$5.00",
@@ -357,7 +332,7 @@ export const SHOPS: Shop[] = [
   //   ],
   //   listings: {
   //     "nfa-accounts": {
-  //       testimonial:
+  //       summary:
   //         "Free accounts with Hypixel, DonutSMP and CubeCraft status checks. Premium tier also free. Nothing is sold, runs on occasional Linkvertise links. Up to 75 accounts per day with hourly restocks.",
   //       badges: ["free", "instant-delivery"],
   //       price: "Free",
@@ -376,7 +351,7 @@ export const SHOPS: Shop[] = [
     startDate: "Mar 2025",
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "Multiple tiers from budget tokens to high-quality cookies. Responsive support.",
         badges: ["high-quality", "instant-delivery", "bulk-discount"],
         price: "5-10¢",
@@ -390,34 +365,9 @@ export const SHOPS: Shop[] = [
     logo: "/accounts/aquamfa.png",
     url: "https://discord.gg/87XFhsS35V",
     startDate: "Aug 2025",
-    testimonials: [
-      {
-        quote: "Held $6 LTC in a middleman trade for an MFA.",
-        author: "chorb",
-        authorNote: "Luna Pixel Studios (BetterMC)",
-      },
-      {
-        quote: "Quick responses and very helpful.",
-        author: "ldklol",
-      },
-      {
-        quote:
-          "Bought an MFA, and he even reserved it for me while I exchanged real quick.",
-        author: "JagHack",
-      },
-      {
-        quote: "Quick, cheap, and even put it on hold for me.",
-        author: "ghost",
-      },
-      {
-        quote:
-          "Made the process smooth, put the account on hold while I sorted crypto, and helped secure it afterward.",
-        author: "Almost",
-      },
-    ],
     listings: {
       "mfa-accounts": {
-        testimonial:
+        summary:
           "Cheap MFA accounts with instant delivery and lifetime warranty.",
         badges: ["high-quality", "instant-delivery", "lifetime-warranty"],
         price: "$4.00-$5.50",
@@ -437,7 +387,7 @@ export const SHOPS: Shop[] = [
     startDate: "Dec 2025",
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "Public website now sells Discord bot token packs rather than listing individual alts directly. Landing page advertises instant delivery, crypto payments, and premium stock redeemed through the server bot.",
         badges: ["instant-delivery"],
         price: "1¢/token",
@@ -446,7 +396,7 @@ export const SHOPS: Shop[] = [
           "Current public shop lists 100 tokens for $1, 200 for $2, and 500 for $5. Terms advertise replacements for invalid or banned-on-delivery alts, with 10 minute NFA warranty and 1-2 hour MC token warranties.",
       },
       "mfa-accounts": {
-        testimonial:
+        summary:
           "Public WooCommerce shop currently lists a dedicated MFA SKU (`mfa 1+ no ban check`) at $4.50.",
         badges: ["instant-delivery"],
         price: "$4.50",
@@ -464,7 +414,7 @@ export const SHOPS: Shop[] = [
     startDate: "Apr 2025",
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "Cookie and token accounts with their own delivery platform.",
         badges: ["high-quality", "instant-delivery"],
         price: "12¢",
@@ -482,7 +432,7 @@ export const SHOPS: Shop[] = [
     startDate: "Nov 2025",
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "Credit-based storefront with Discord redemption, live stock, 24/7 support, and card plus crypto payments.",
         badges: ["instant-delivery", "bulk-discount"],
         price: "0.80-1.29¢/credit",
@@ -502,7 +452,7 @@ export const SHOPS: Shop[] = [
     startDate: "Jun 2023",
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "Cookie NFAs with multiple Hypixel tiers, random rank options, and no-VPN-detection variants on higher levels.",
         badges: ["affiliate", "high-quality", "instant-delivery"],
         price: "25¢+",
@@ -513,7 +463,7 @@ export const SHOPS: Shop[] = [
           "Current public store starts at 25¢ for Hypixel Level 1-9 and Gamepass NFAs, then 40¢ for Level 10+, 55¢ for Bedwars 8+, 67¢ for Level 21+, 70¢ for random rank, $3.50 for MVP+, and $4.50 for Level 70+. Terms advertise replacements within 24 hours.",
       },
       "mfa-accounts": {
-        testimonial:
+        summary:
           "Full-access accounts with instant delivery, 7+ day age, and OTP secret included. Ranked variants are available above the base tier.",
         badges: ["affiliate", "high-quality", "instant-delivery"],
         price: "$5.99+",
@@ -533,29 +483,9 @@ export const SHOPS: Shop[] = [
     websiteUrl: "https://www.skycron.xyz",
     discordUrl: "https://discord.gg/5sZNDb4UMy",
     startDate: "Feb 2026",
-    testimonials: [
-      {
-        quote:
-          "This is just so good man because you literally get free alts, I spent $20 on lifetime and never need to buy an alt again. W service!",
-        author: "Jet",
-      },
-      {
-        quote: "Best Gen and good quality products. Best Gen.",
-        author: "CraftyJuli",
-      },
-      {
-        quote: "Very responsive support and good quality products.",
-        author: "thecrocraft",
-      },
-      {
-        quote:
-          "Best alt Shop/Gen, first customer, would never buy somewhere else. Skycron on top.",
-        author: "Cupcake",
-      },
-    ],
     listings: {
       "nfa-accounts": {
-        testimonial:
+        summary:
           "NFA generator with a web dashboard. Hypixel unbanned, DonutSMP unbanned, Nitro and banned alts. Short cooldowns (2 min banned, 4 min unbanned).",
         badges: ["instant-delivery"],
         price: "Subscription",
@@ -574,7 +504,7 @@ export const SHOPS: Shop[] = [
   //   url: "https://discord.gg/EsbhHkm9e4",
   //   listings: {
   //     "mfa-accounts": {
-  //       testimonial:
+  //       summary:
   //         "OG usernames, Minecon capes, and rare collectible accounts. Premium pricing for exclusive items.",
   //       badges: ["high-quality", "lifetime-warranty"],
   //       price: "$50.00+",
@@ -607,7 +537,6 @@ export const PROVIDERS: Provider[] = (
         trustpilotUrl: shop.trustpilotUrl,
         socialLinks: shop.socialLinks,
         startDate: shop.startDate,
-        testimonials: shop.testimonials,
         gallery: shop.gallery,
         category,
         ...listing,

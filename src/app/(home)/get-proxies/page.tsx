@@ -5,7 +5,7 @@ import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import { JsonLd } from "@/components/json-ld";
 import { imageMetadata } from "@/lib/metadata";
 import { PROVIDERS } from "@/lib/proxies-data";
-import { getUpvoteCounts } from "@/lib/upvotes";
+import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { GetProxiesClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -18,6 +18,11 @@ export const metadata: Metadata = {
 export default async function GetProxiesPage() {
   "use cache";
   cacheLife("hours");
+
+  const reviewSummaries = await getReviewSummaries(
+    "proxy",
+    PROVIDERS.map((provider) => provider.slug),
+  );
 
   const faqJsonLd: WithContext<FAQPage> = {
     "@context": "https://schema.org",
@@ -39,27 +44,34 @@ export default async function GetProxiesPage() {
     description:
       "Trusted proxy providers for Minecraft bot testing with SoulFire. Compare residential, datacenter, ISP, and mobile proxies.",
     numberOfItems: PROVIDERS.length,
-    itemListElement: PROVIDERS.map((provider, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: provider.name,
-      description: provider.testimonial,
-      url: provider.url,
-    })),
+    itemListElement: PROVIDERS.map((provider, index) => {
+      const aggregateRating = getAggregateRatingJsonLd(
+        reviewSummaries[provider.slug] ?? {
+          averageRating: null,
+          reviewCount: 0,
+        },
+      );
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        url: `https://soulfiremc.com/get-proxies/${provider.slug}`,
+        item: {
+          "@type": "Product",
+          name: provider.name,
+          description: provider.summary,
+          url: `https://soulfiremc.com/get-proxies/${provider.slug}`,
+          ...(aggregateRating && { aggregateRating }),
+        },
+      };
+    }),
   };
 
   return (
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <GetProxiesClient
-        initialCounts={
-          await getUpvoteCounts(
-            "proxy",
-            PROVIDERS.map((p) => p.slug),
-          )
-        }
-      />
+      <GetProxiesClient initialSummaries={reviewSummaries} />
     </>
   );
 }

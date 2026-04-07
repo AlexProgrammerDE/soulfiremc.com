@@ -40,7 +40,6 @@ export type Resource = {
   sourceUrl?: string;
   version?: string;
   startDate?: string;
-  testimonials?: { quote: string; author: string }[];
   gallery?: { src: string; alt: string }[];
 };
 

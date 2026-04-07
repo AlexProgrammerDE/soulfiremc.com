@@ -25,8 +25,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { UpvoteButton } from "@/components/upvote-button";
-import { useUpvotes } from "@/hooks/use-upvotes";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
+import { useReviews } from "@/hooks/use-reviews";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -36,6 +36,7 @@ import {
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 import { CouponCode } from "./coupon-code";
 import { proxiesSearchParams } from "./search-params";
@@ -88,18 +89,23 @@ function ProviderLogo({ provider }: { provider: Provider }) {
 
 function ProviderCard({
   provider,
-  upvoteCount,
-  isUpvoted,
-  upvoteLoading,
-  onToggleUpvote,
+  reviewSummary,
+  userReview,
+  reviewPending,
+  onRate,
+  onClearRating,
 }: {
   provider: Provider;
-  upvoteCount: number;
-  isUpvoted: boolean;
-  upvoteLoading: boolean;
-  onToggleUpvote: (
+  reviewSummary: ReviewSummary;
+  userReview?: UserReviewRecord;
+  reviewPending: boolean;
+  onRate: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
+    rating: number,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
+  onClearRating: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
 }) {
   const theme = provider.sponsorTheme
     ? SPONSOR_THEMES[provider.sponsorTheme]
@@ -144,7 +150,7 @@ function ProviderCard({
               ))}
             </div>
           </div>
-          <p className="text-muted-foreground">{provider.testimonial}</p>
+          <p className="text-muted-foreground">{provider.summary}</p>
           {provider.gallery && provider.gallery.length > 0 && (
             <Link
               href={`/get-proxies/${provider.slug}`}
@@ -172,14 +178,14 @@ function ProviderCard({
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
             </Button>
-            <UpvoteButton
-              slug={provider.slug}
-              count={upvoteCount}
-              isUpvoted={isUpvoted}
-              loading={upvoteLoading}
-              onToggle={onToggleUpvote}
-            />
           </div>
+          <ReviewInlineActions
+            summary={reviewSummary}
+            currentRating={userReview?.rating}
+            pending={reviewPending}
+            onRate={(rating) => onRate(provider.slug, rating)}
+            onClear={() => onClearRating(provider.slug)}
+          />
         </div>
       </div>
     </Card>
@@ -187,18 +193,19 @@ function ProviderCard({
 }
 
 function MainContent({
-  initialCounts,
+  initialSummaries,
 }: {
-  initialCounts: Record<string, number>;
+  initialSummaries: Record<string, ReviewSummary>;
 }) {
   const providers = PROVIDERS;
   const slugs = useMemo(() => providers.map((p) => p.slug), []);
   const {
-    counts,
-    userUpvotes,
-    loading: upvoteLoading,
-    toggleUpvote,
-  } = useUpvotes("proxy", slugs, initialCounts);
+    summaries,
+    userReviews,
+    pendingBySlug,
+    upsertReview,
+    deleteReview,
+  } = useReviews("proxy", slugs, { initialSummaries });
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
@@ -226,13 +233,29 @@ function MainContent({
             badges.every((filter) => provider.badges.includes(filter)),
           );
 
-    // Sort non-sponsors by most upvoted
-    const sorted = [...filtered].sort(
-      (a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0),
-    );
+    const sorted = [...filtered].sort((a, b) => {
+      const summaryA = summaries[a.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+      const summaryB = summaries[b.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+
+      if (summaryB.reviewCount !== summaryA.reviewCount) {
+        return summaryB.reviewCount - summaryA.reviewCount;
+      }
+
+      if (summaryB.averageRating !== summaryA.averageRating) {
+        return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+      }
+
+      return a.name.localeCompare(b.name);
+    });
 
     return [...sponsors, ...sorted];
-  }, [badges, counts]);
+  }, [badges, summaries, providers]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -320,10 +343,19 @@ function MainContent({
               <ProviderCard
                 key={provider.name}
                 provider={provider}
-                upvoteCount={counts[provider.slug] ?? 0}
-                isUpvoted={userUpvotes.has(provider.slug)}
-                upvoteLoading={upvoteLoading}
-                onToggleUpvote={toggleUpvote}
+                reviewSummary={
+                  summaries[provider.slug] ??
+                  initialSummaries[provider.slug] ?? {
+                    averageRating: null,
+                    reviewCount: 0,
+                  }
+                }
+                userReview={userReviews[provider.slug]}
+                reviewPending={pendingBySlug[provider.slug] ?? false}
+                onRate={(slug, rating) =>
+                  upsertReview(slug, { rating, anonymous: true })
+                }
+                onClearRating={deleteReview}
               />
             ))}
           </div>
@@ -334,9 +366,9 @@ function MainContent({
 }
 
 export function GetProxiesClient({
-  initialCounts,
+  initialSummaries,
 }: {
-  initialCounts: Record<string, number>;
+  initialSummaries: Record<string, ReviewSummary>;
 }) {
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
@@ -362,7 +394,7 @@ export function GetProxiesClient({
       </div>
 
       <Suspense>
-        <MainContent initialCounts={initialCounts} />
+        <MainContent initialSummaries={initialSummaries} />
       </Suspense>
 
       {/* FAQ Section */}

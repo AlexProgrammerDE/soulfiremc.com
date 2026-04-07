@@ -708,13 +708,13 @@ export function DirectoryOgImage({
 
 export function ProxyOgImage({
   name,
-  testimonial,
+  summary,
   badges,
   sponsor,
   logoSrc,
 }: {
   name: string;
-  testimonial: string;
+  summary: string;
   badges: string[];
   sponsor?: boolean;
   logoSrc?: string;
@@ -727,7 +727,7 @@ export function ProxyOgImage({
       path="proxies/profile"
       accent={theme.cyan}
       title={name}
-      description={testimonial}
+      description={summary}
       titleSize={fitTitleSize(name, {
         base: 88,
         medium: 80,

@@ -23,19 +23,18 @@ import type {
   BreadcrumbList,
   ImageObject,
   Product,
-  Review,
   WithContext,
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
 import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
-import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
 import {
   CouponCode,
   LinkDiscountNotice,
 } from "@/app/(home)/get-proxies/coupon-code";
-import { DetailUpvote } from "@/components/detail-upvote";
+import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
+import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -58,6 +57,13 @@ import {
 import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
 import { getAccountPageImage } from "@/lib/og";
+import {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getReviewJsonLd,
+  getReviewSummaries,
+  getWrittenReviews,
+} from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -93,7 +99,7 @@ export async function generateMetadata(props: {
   const categorySummary = joinPhrases(categories.map(describeCategory));
   const firstListing = Object.values(shop.listings)[0];
   const description =
-    firstListing?.testimonial ??
+    firstListing?.summary ??
     `${shop.name} is a Minecraft alt shop offering ${categorySummary}. Compare prices, delivery, and account formats for SoulFire.`;
 
   return {
@@ -256,6 +262,11 @@ export default async function AccountProviderPage(props: {
   const hasAffiliate = categories.some(([, listing]) =>
     listing.badges.includes("affiliate"),
   );
+  const [reviewSummaries, writtenReviews] = await Promise.all([
+    getReviewSummaries("account", [shop.slug]),
+    getWrittenReviews("account", shop.slug),
+  ]);
+  const reviewSummary = reviewSummaries[shop.slug] ?? emptyReviewSummary();
 
   const discordInviteUrl = getDiscordInviteUrl(shop);
   const hasDiscord = Boolean(discordInviteUrl);
@@ -268,7 +279,7 @@ export default async function AccountProviderPage(props: {
     "@type": "Product",
     name: shop.name,
     description:
-      Object.values(shop.listings)[0]?.testimonial ??
+      Object.values(shop.listings)[0]?.summary ??
       `${shop.name} Minecraft accounts`,
     image: shop.logo
       ? `https://soulfiremc.com${shop.logo}`
@@ -277,18 +288,15 @@ export default async function AccountProviderPage(props: {
       "@type": "Brand",
       name: shop.name,
     },
+    url: `https://soulfiremc.com/get-accounts/${shop.slug}`,
     category: "Minecraft Accounts",
     ...(shop.startDate && { dateCreated: shop.startDate }),
-    ...(shop.testimonials &&
-      shop.testimonials.length > 0 && {
-        review: shop.testimonials.map(
-          (t): Review => ({
-            "@type": "Review",
-            reviewBody: t.quote,
-            author: { "@type": "Person", name: t.author },
-          }),
-        ),
-      }),
+    ...(getAggregateRatingJsonLd(reviewSummary) && {
+      aggregateRating: getAggregateRatingJsonLd(reviewSummary),
+    }),
+    ...(getReviewJsonLd(writtenReviews) && {
+      review: getReviewJsonLd(writtenReviews),
+    }),
     ...(shop.gallery &&
       shop.gallery.length > 0 && {
         image: shop.gallery.map(
@@ -455,7 +463,10 @@ export default async function AccountProviderPage(props: {
                   socialLinks={shop.socialLinks}
                   className={theme.secondaryButton}
                 />
-                <DetailUpvote itemType="account" slug={shop.slug} />
+                <ReviewSummaryBadge
+                  summary={reviewSummary}
+                  className={theme.secondaryButton}
+                />
               </div>
             </div>
           </div>
@@ -531,7 +542,7 @@ export default async function AccountProviderPage(props: {
                 </Button>
               )}
               <SocialLinkButtons socialLinks={shop.socialLinks} />
-              <DetailUpvote itemType="account" slug={shop.slug} />
+              <ReviewSummaryBadge summary={reviewSummary} />
             </div>
           </div>
         </div>
@@ -571,7 +582,7 @@ export default async function AccountProviderPage(props: {
               <p className="text-sm text-muted-foreground">
                 {catConfig.description}
               </p>
-              <p className="text-muted-foreground">{listing.testimonial}</p>
+              <p className="text-muted-foreground">{listing.summary}</p>
               <div className="flex flex-wrap gap-2">
                 {listing.badges.map((badge) => (
                   <ProviderBadge
@@ -596,10 +607,12 @@ export default async function AccountProviderPage(props: {
         })}
       </div>
 
-      {/* Testimonials */}
-      {shop.testimonials && shop.testimonials.length > 0 && (
-        <TestimonialsSection testimonials={shop.testimonials} />
-      )}
+      <ItemReviewsSection
+        itemType="account"
+        slug={shop.slug}
+        initialSummary={reviewSummary}
+        initialWrittenReviews={writtenReviews}
+      />
 
       {/* Gallery */}
       {shop.gallery && shop.gallery.length > 0 && (

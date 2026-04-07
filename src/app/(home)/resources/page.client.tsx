@@ -28,8 +28,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { UpvoteButton } from "@/components/upvote-button";
-import { useUpvotes } from "@/hooks/use-upvotes";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
+import { useReviews } from "@/hooks/use-reviews";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/reviews";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -85,18 +86,23 @@ function ResourceLogo({ resource }: { resource: Resource }) {
 
 function ResourceCard({
   resource,
-  upvoteCount,
-  isUpvoted,
-  upvoteLoading,
-  onToggleUpvote,
+  reviewSummary,
+  userReview,
+  reviewPending,
+  onRate,
+  onClearRating,
 }: {
   resource: Resource;
-  upvoteCount: number;
-  isUpvoted: boolean;
-  upvoteLoading: boolean;
-  onToggleUpvote: (
+  reviewSummary: ReviewSummary;
+  userReview?: UserReviewRecord;
+  reviewPending: boolean;
+  onRate: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
+    rating: number,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
+  onClearRating: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
 }) {
   return (
     <Card className="transition-all duration-300 hover:shadow-lg">
@@ -169,14 +175,14 @@ function ResourceCard({
                 </a>
               </Button>
             )}
-            <UpvoteButton
-              slug={resource.slug}
-              count={upvoteCount}
-              isUpvoted={isUpvoted}
-              loading={upvoteLoading}
-              onToggle={onToggleUpvote}
-            />
           </div>
+          <ReviewInlineActions
+            summary={reviewSummary}
+            currentRating={userReview?.rating}
+            pending={reviewPending}
+            onRate={(rating) => onRate(resource.slug, rating)}
+            onClear={() => onClearRating(resource.slug)}
+          />
         </div>
       </div>
     </Card>
@@ -184,18 +190,19 @@ function ResourceCard({
 }
 
 function MainContent({
-  initialCounts,
+  initialSummaries,
 }: {
-  initialCounts: Record<string, number>;
+  initialSummaries: Record<string, ReviewSummary>;
 }) {
   const resources = RESOURCES;
   const slugs = useMemo(() => resources.map((r) => r.slug), []);
   const {
-    counts,
-    userUpvotes,
-    loading: upvoteLoading,
-    toggleUpvote,
-  } = useUpvotes("resource", slugs, initialCounts);
+    summaries,
+    userReviews,
+    pendingBySlug,
+    upsertReview,
+    deleteReview,
+  } = useReviews("resource", slugs, { initialSummaries });
   const [{ category, tags }, setParams] = useQueryStates(
     resourcesSearchParams,
     {
@@ -232,11 +239,27 @@ function MainContent({
       return true;
     });
 
-    // Sort by most upvoted
-    return [...filtered].sort(
-      (a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0),
-    );
-  }, [category, tags, counts]);
+    return [...filtered].sort((a, b) => {
+      const summaryA = summaries[a.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+      const summaryB = summaries[b.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+
+      if (summaryB.reviewCount !== summaryA.reviewCount) {
+        return summaryB.reviewCount - summaryA.reviewCount;
+      }
+
+      if (summaryB.averageRating !== summaryA.averageRating) {
+        return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+  }, [category, tags, summaries, resources]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -359,10 +382,19 @@ function MainContent({
               <ResourceCard
                 key={resource.slug}
                 resource={resource}
-                upvoteCount={counts[resource.slug] ?? 0}
-                isUpvoted={userUpvotes.has(resource.slug)}
-                upvoteLoading={upvoteLoading}
-                onToggleUpvote={toggleUpvote}
+                reviewSummary={
+                  summaries[resource.slug] ??
+                  initialSummaries[resource.slug] ?? {
+                    averageRating: null,
+                    reviewCount: 0,
+                  }
+                }
+                userReview={userReviews[resource.slug]}
+                reviewPending={pendingBySlug[resource.slug] ?? false}
+                onRate={(slug, rating) =>
+                  upsertReview(slug, { rating, anonymous: true })
+                }
+                onClearRating={deleteReview}
               />
             ))}
           </div>
@@ -373,9 +405,9 @@ function MainContent({
 }
 
 export function ResourcesClient({
-  initialCounts,
+  initialSummaries,
 }: {
-  initialCounts: Record<string, number>;
+  initialSummaries: Record<string, ReviewSummary>;
 }) {
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
@@ -401,7 +433,7 @@ export function ResourcesClient({
       </div>
 
       <Suspense>
-        <MainContent initialCounts={initialCounts} />
+        <MainContent initialSummaries={initialSummaries} />
       </Suspense>
 
       {/* FAQ Section */}

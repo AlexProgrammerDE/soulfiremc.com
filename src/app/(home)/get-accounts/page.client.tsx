@@ -36,8 +36,8 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { UpvoteButton } from "@/components/upvote-button";
-import { useUpvotes } from "@/hooks/use-upvotes";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
+import { useReviews } from "@/hooks/use-reviews";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -55,6 +55,7 @@ import {
   type SocialLink,
   type SortOption,
 } from "@/lib/accounts-data";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/reviews";
 import type { DiscordInviteResponse } from "@/lib/discord";
 import { cn } from "@/lib/utils";
 import { CouponCode, LinkDiscountNotice } from "../get-proxies/coupon-code";
@@ -64,7 +65,7 @@ type DiscordInvites = Promise<Record<string, DiscordInviteResponse | null>>;
 
 type Props = {
   discordInvites: DiscordInvites;
-  initialCounts: Record<string, number>;
+  initialSummaries: Record<string, ReviewSummary>;
 };
 
 function ProviderBadge({
@@ -182,19 +183,24 @@ function ProviderLogo({ provider }: { provider: Provider }) {
 function ProviderCard({
   provider,
   discordInvites,
-  upvoteCount,
-  isUpvoted,
-  upvoteLoading,
-  onToggleUpvote,
+  reviewSummary,
+  userReview,
+  reviewPending,
+  onRate,
+  onClearRating,
 }: {
   provider: Provider;
   discordInvites: DiscordInvites;
-  upvoteCount: number;
-  isUpvoted: boolean;
-  upvoteLoading: boolean;
-  onToggleUpvote: (
+  reviewSummary: ReviewSummary;
+  userReview?: UserReviewRecord;
+  reviewPending: boolean;
+  onRate: (
     slug: string,
-  ) => Promise<{ error: "unauthorized" | "verification" | null } | undefined>;
+    rating: number,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
+  onClearRating: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
 }) {
   const resolvedDiscordInvites = use(discordInvites);
   const discordInvite = resolvedDiscordInvites[provider.slug] ?? null;
@@ -262,7 +268,7 @@ function ProviderCard({
               ))}
             </div>
           </div>
-          <p className="text-muted-foreground">{provider.testimonial}</p>
+          <p className="text-muted-foreground">{provider.summary}</p>
           {provider.gallery && provider.gallery.length > 0 && (
             <Link
               href={`/get-accounts/${provider.slug}`}
@@ -340,14 +346,14 @@ function ProviderCard({
               socialLinks={provider.socialLinks}
               className={theme?.secondaryButton}
             />
-            <UpvoteButton
-              slug={provider.slug}
-              count={upvoteCount}
-              isUpvoted={isUpvoted}
-              loading={upvoteLoading}
-              onToggle={onToggleUpvote}
-            />
           </div>
+          <ReviewInlineActions
+            summary={reviewSummary}
+            currentRating={userReview?.rating}
+            pending={reviewPending}
+            onRate={(rating) => onRate(provider.slug, rating)}
+            onClear={() => onClearRating(provider.slug)}
+          />
         </div>
       </div>
     </Card>
@@ -357,12 +363,29 @@ function ProviderCard({
 function sortProviders(
   providers: Provider[],
   sort: SortOption,
-  counts: Record<string, number>,
+  summaries: Record<string, ReviewSummary>,
 ): Provider[] {
   if (sort === "default") {
-    return [...providers].sort(
-      (a, b) => (counts[b.slug] ?? 0) - (counts[a.slug] ?? 0),
-    );
+    return [...providers].sort((a, b) => {
+      const summaryA = summaries[a.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+      const summaryB = summaries[b.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+
+      if (summaryB.reviewCount !== summaryA.reviewCount) {
+        return summaryB.reviewCount - summaryA.reviewCount;
+      }
+
+      if (summaryB.averageRating !== summaryA.averageRating) {
+        return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+      }
+
+      return a.name.localeCompare(b.name);
+    });
   }
   return [...providers].sort((a, b) =>
     sort === "price-asc"
@@ -375,11 +398,14 @@ function MainContent(props: Props) {
   const providers = PROVIDERS;
   const slugs = useMemo(() => [...new Set(providers.map((p) => p.slug))], []);
   const {
-    counts,
-    userUpvotes,
-    loading: upvoteLoading,
-    toggleUpvote,
-  } = useUpvotes("account", slugs, props.initialCounts);
+    summaries,
+    userReviews,
+    pendingBySlug,
+    upsertReview,
+    deleteReview,
+  } = useReviews("account", slugs, {
+    initialSummaries: props.initialSummaries,
+  });
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },
@@ -417,12 +443,12 @@ function MainContent(props: Props) {
   const nfaProviders = sortProviders(
     filteredProviders.filter((p) => p.category === "nfa-accounts"),
     sort,
-    counts,
+    summaries,
   );
   const mfaProviders = sortProviders(
     filteredProviders.filter((p) => p.category === "mfa-accounts"),
     sort,
-    counts,
+    summaries,
   );
 
   const hasActiveFilters =
@@ -586,10 +612,19 @@ function MainContent(props: Props) {
                       key={provider.slug}
                       provider={provider}
                       discordInvites={props.discordInvites}
-                      upvoteCount={counts[provider.slug] ?? 0}
-                      isUpvoted={userUpvotes.has(provider.slug)}
-                      upvoteLoading={upvoteLoading}
-                      onToggleUpvote={toggleUpvote}
+                      reviewSummary={
+                        summaries[provider.slug] ??
+                        props.initialSummaries[provider.slug] ?? {
+                          averageRating: null,
+                          reviewCount: 0,
+                        }
+                      }
+                      userReview={userReviews[provider.slug]}
+                      reviewPending={pendingBySlug[provider.slug] ?? false}
+                      onRate={(slug, rating) =>
+                        upsertReview(slug, { rating, anonymous: true })
+                      }
+                      onClearRating={deleteReview}
                     />
                   ))}
                 </div>
@@ -618,10 +653,19 @@ function MainContent(props: Props) {
                       key={provider.slug}
                       provider={provider}
                       discordInvites={props.discordInvites}
-                      upvoteCount={counts[provider.slug] ?? 0}
-                      isUpvoted={userUpvotes.has(provider.slug)}
-                      upvoteLoading={upvoteLoading}
-                      onToggleUpvote={toggleUpvote}
+                      reviewSummary={
+                        summaries[provider.slug] ??
+                        props.initialSummaries[provider.slug] ?? {
+                          averageRating: null,
+                          reviewCount: 0,
+                        }
+                      }
+                      userReview={userReviews[provider.slug]}
+                      reviewPending={pendingBySlug[provider.slug] ?? false}
+                      onRate={(slug, rating) =>
+                        upsertReview(slug, { rating, anonymous: true })
+                      }
+                      onClearRating={deleteReview}
                     />
                   ))}
                 </div>
@@ -661,7 +705,7 @@ export function GetAccountsClient(props: Props) {
       <Suspense>
         <MainContent
           discordInvites={props.discordInvites}
-          initialCounts={props.initialCounts}
+          initialSummaries={props.initialSummaries}
         />
       </Suspense>
 

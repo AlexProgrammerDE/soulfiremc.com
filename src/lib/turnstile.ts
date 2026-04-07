@@ -3,7 +3,7 @@ const TURNSTILE_SITEVERIFY_URL =
 
 const LOCAL_HOSTNAMES = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 
-export const UPVOTE_TURNSTILE_ACTION = "upvote";
+export const REVIEW_TURNSTILE_ACTION = "review";
 
 type TurnstileSiteverifyResponse = {
   success: boolean;
@@ -58,8 +58,8 @@ export async function validateTurnstileToken({
     };
   }
 
-  const upvoteSecretKey = process.env.UPVOTE_TURNSTILE_SECRET_KEY;
-  const secret = upvoteSecretKey ?? "";
+  const reviewSecretKey = process.env.REVIEW_TURNSTILE_SECRET_KEY;
+  const secret = reviewSecretKey ?? "";
   if (!secret) {
     return {
       success: false,

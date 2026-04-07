@@ -34,7 +34,7 @@ export type Provider = {
   slug: string;
   name: string;
   logo?: string;
-  testimonial: string;
+  summary: string;
   url: string;
   badges: Badge[];
   sponsor?: boolean;
@@ -42,7 +42,6 @@ export type Provider = {
   couponCode?: string;
   couponDiscount?: string;
   startDate?: string;
-  testimonials?: { quote: string; author: string }[];
   gallery?: { src: string; alt: string }[];
 };
 
@@ -169,7 +168,7 @@ export const PROVIDERS: Provider[] = [
     slug: "thordata",
     name: "Thordata",
     logo: "/providers/thordata.png",
-    testimonial:
+    summary:
       "60M+ residential IPs across 190+ countries with 99.9% uptime. Offers residential, mobile, datacenter, and static ISP proxies.",
     url: "https://affiliate.thordata.com/soulfire",
     badges: [
@@ -189,7 +188,7 @@ export const PROVIDERS: Provider[] = [
     slug: "proxy-seller",
     name: "Proxy-Seller",
     logo: "/providers/proxyseller.svg",
-    testimonial:
+    summary:
       "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
     url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
     badges: [
@@ -212,7 +211,7 @@ export const PROVIDERS: Provider[] = [
     slug: "webshare",
     name: "Webshare",
     logo: "/providers/webshare.svg",
-    testimonial:
+    summary:
       "80M+ rotating residential IPs from 195 countries, plus fast datacenter proxies. Offers 10 free proxies to get started.",
     url: "https://www.webshare.io/?referral_code=36gneippfiwt",
     badges: ["free-tier", "residential", "datacenter", "budget-friendly"],
@@ -221,7 +220,7 @@ export const PROVIDERS: Provider[] = [
     slug: "proxyscrape",
     name: "ProxyScrape",
     logo: "/providers/proxyscrape.svg",
-    testimonial:
+    summary:
       "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume bot testing.",
     url: "https://proxyscrape.com/?ref=mge4mtc",
     badges: ["bedrock-udp", "unlimited-bandwidth", "residential"],
@@ -230,7 +229,7 @@ export const PROVIDERS: Provider[] = [
     slug: "plainproxies",
     name: "PlainProxies",
     logo: "/providers/plainproxies.png",
-    testimonial:
+    summary:
       "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
     url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
     badges: [
@@ -245,7 +244,7 @@ export const PROVIDERS: Provider[] = [
     slug: "flameproxies",
     name: "FlameProxies",
     logo: "/providers/flameproxies.svg",
-    testimonial:
+    summary:
       "81M+ residential IPs across 180+ countries, plus mobile, datacenter, and rotating ISP options. Pay-as-you-go from $0.50/GB with sticky sessions and SOCKS5 support.",
     url: "https://flameproxies.com/register?referral=42M1SH76",
     badges: [
@@ -262,7 +261,7 @@ export const PROVIDERS: Provider[] = [
     slug: "bright-data",
     name: "Bright Data",
     logo: "/providers/brightdata.png",
-    testimonial:
+    summary:
       "Market leader with 770K+ datacenter IPs and massive residential network. ISO 27001 & SOC 2 certified with 99.99% uptime.",
     url: "https://get.brightdata.com/soulfire",
     badges: [
@@ -278,7 +277,7 @@ export const PROVIDERS: Provider[] = [
     slug: "oxylabs",
     name: "Oxylabs",
     logo: "/providers/oxylabs.png",
-    testimonial:
+    summary:
       "175M+ residential IPs across 195+ countries. Largest proxy network globally with 99.95% success rate and 0.6s avg response time.",
     url: "https://oxylabs.go2cloud.org/aff_c?offer_id=7&aff_id=1896&url_id=144",
     badges: [
@@ -294,7 +293,7 @@ export const PROVIDERS: Provider[] = [
     slug: "decodo",
     name: "Decodo (formerly Smartproxy)",
     logo: "/providers/decodo.svg",
-    testimonial:
+    summary:
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
     url: "https://visit.decodo.com/K0rr7e",
     badges: ["bedrock-udp", "high-quality", "residential", "datacenter"],
@@ -303,7 +302,7 @@ export const PROVIDERS: Provider[] = [
     slug: "iproyal",
     name: "IPRoyal",
     logo: "/providers/iproyal.svg",
-    testimonial:
+    summary:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
     url: "https://iproyal.com/?r=soulfire",
     badges: [
@@ -318,7 +317,7 @@ export const PROVIDERS: Provider[] = [
     slug: "netnut",
     name: "NetNut",
     logo: "/providers/netnut.svg",
-    testimonial:
+    summary:
       "85M+ residential IPs with ISP-based network for fast speeds. Direct ISP connectivity reduces latency.",
     url: "https://netnut.io?ref=odblmzc",
     badges: ["high-quality", "residential", "isp"],

@@ -132,7 +132,8 @@ export default function TermsOfService() {
       <h2>6. User-Generated Content</h2>
       <p>
         When you submit content to the Service (such as documentation feedback
-        or upvotes), you retain ownership of your content. By submitting
+        or ratings and reviews), you retain ownership of your content. By
+        submitting
         content, you grant us a non-exclusive, worldwide, royalty-free license
         to use, display, and distribute your content in connection with the
         Service.

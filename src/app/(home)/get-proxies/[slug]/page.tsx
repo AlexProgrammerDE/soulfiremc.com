@@ -14,14 +14,13 @@ import type {
   BreadcrumbList,
   ImageObject,
   Product,
-  Review,
   WithContext,
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
-import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
 import { CouponCode } from "@/app/(home)/get-proxies/coupon-code";
-import { DetailUpvote } from "@/components/detail-upvote";
+import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
+import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -39,6 +38,13 @@ import {
   type Provider,
   SPONSOR_THEMES,
 } from "@/lib/proxies-data";
+import {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getReviewJsonLd,
+  getReviewSummaries,
+  getWrittenReviews,
+} from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -54,7 +60,7 @@ export async function generateMetadata(props: {
 
   return {
     title: `${provider.name} - Proxy Provider for SoulFire`,
-    description: provider.testimonial,
+    description: provider.summary,
     alternates: {
       canonical: "./",
     },
@@ -121,12 +127,17 @@ export default async function ProxyProviderPage(props: {
   const theme = provider.sponsorTheme
     ? SPONSOR_THEMES[provider.sponsorTheme]
     : undefined;
+  const [reviewSummaries, writtenReviews] = await Promise.all([
+    getReviewSummaries("proxy", [provider.slug]),
+    getWrittenReviews("proxy", provider.slug),
+  ]);
+  const reviewSummary = reviewSummaries[provider.slug] ?? emptyReviewSummary();
 
   const productJsonLd: WithContext<Product> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: provider.name,
-    description: provider.testimonial,
+    description: provider.summary,
     image: provider.logo
       ? `https://soulfiremc.com${provider.logo}`
       : "https://soulfiremc.com/logo.png",
@@ -134,18 +145,15 @@ export default async function ProxyProviderPage(props: {
       "@type": "Brand",
       name: provider.name,
     },
+    url: `https://soulfiremc.com/get-proxies/${provider.slug}`,
     category: "Proxy Service",
     ...(provider.startDate && { dateCreated: provider.startDate }),
-    ...(provider.testimonials &&
-      provider.testimonials.length > 0 && {
-        review: provider.testimonials.map(
-          (t): Review => ({
-            "@type": "Review",
-            reviewBody: t.quote,
-            author: { "@type": "Person", name: t.author },
-          }),
-        ),
-      }),
+    ...(getAggregateRatingJsonLd(reviewSummary) && {
+      aggregateRating: getAggregateRatingJsonLd(reviewSummary),
+    }),
+    ...(getReviewJsonLd(writtenReviews) && {
+      review: getReviewJsonLd(writtenReviews),
+    }),
     ...(provider.gallery &&
       provider.gallery.length > 0 && {
         image: provider.gallery.map(
@@ -242,7 +250,7 @@ export default async function ProxyProviderPage(props: {
               )}
             </div>
             <p className="text-lg text-muted-foreground">
-              {provider.testimonial}
+              {provider.summary}
             </p>
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
@@ -272,16 +280,18 @@ export default async function ProxyProviderPage(props: {
                   <ExternalLink className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-              <DetailUpvote itemType="proxy" slug={provider.slug} />
+              <ReviewSummaryBadge summary={reviewSummary} />
             </div>
           </div>
         </div>
       </Card>
 
-      {/* Testimonials */}
-      {provider.testimonials && provider.testimonials.length > 0 && (
-        <TestimonialsSection testimonials={provider.testimonials} />
-      )}
+      <ItemReviewsSection
+        itemType="proxy"
+        slug={provider.slug}
+        initialSummary={reviewSummary}
+        initialWrittenReviews={writtenReviews}
+      />
 
       {/* Gallery */}
       {provider.gallery && provider.gallery.length > 0 && (

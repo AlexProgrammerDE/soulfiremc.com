@@ -18,9 +18,9 @@ import type {
   WithContext,
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
-import { TestimonialsSection } from "@/app/(home)/components/testimonials-section";
-import { DetailUpvote } from "@/components/detail-upvote";
+import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
+import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -37,6 +37,13 @@ import {
   RESOURCES,
   type Resource,
 } from "@/lib/resources-data";
+import {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getReviewJsonLd,
+  getReviewSummaries,
+  getWrittenReviews,
+} from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -109,6 +116,11 @@ export default async function ResourceDetailPage(props: {
   const params = await props.params;
   const resource = getResourceBySlug(params.slug);
   if (!resource) notFound();
+  const [reviewSummaries, writtenReviews] = await Promise.all([
+    getReviewSummaries("resource", [resource.slug]),
+    getWrittenReviews("resource", resource.slug),
+  ]);
+  const reviewSummary = reviewSummaries[resource.slug] ?? emptyReviewSummary();
 
   const softwareJsonLd: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
@@ -122,7 +134,15 @@ export default async function ResourceDetailPage(props: {
     image: resource.logo
       ? `https://soulfiremc.com${resource.logo}`
       : "https://soulfiremc.com/logo.png",
-    url: resource.url,
+    url: `https://soulfiremc.com/resources/${resource.slug}`,
+    downloadUrl: resource.url,
+    ...(resource.sourceUrl && { sameAs: resource.sourceUrl }),
+    ...(getAggregateRatingJsonLd(reviewSummary) && {
+      aggregateRating: getAggregateRatingJsonLd(reviewSummary),
+    }),
+    ...(getReviewJsonLd(writtenReviews) && {
+      review: getReviewJsonLd(writtenReviews),
+    }),
   };
 
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
@@ -229,16 +249,18 @@ export default async function ResourceDetailPage(props: {
                   </a>
                 </Button>
               )}
-              <DetailUpvote itemType="resource" slug={resource.slug} />
+              <ReviewSummaryBadge summary={reviewSummary} />
             </div>
           </div>
         </div>
       </Card>
 
-      {/* Testimonials */}
-      {resource.testimonials && resource.testimonials.length > 0 && (
-        <TestimonialsSection testimonials={resource.testimonials} />
-      )}
+      <ItemReviewsSection
+        itemType="resource"
+        slug={resource.slug}
+        initialSummary={reviewSummary}
+        initialWrittenReviews={writtenReviews}
+      />
 
       {/* Gallery */}
       {resource.gallery && resource.gallery.length > 0 && (

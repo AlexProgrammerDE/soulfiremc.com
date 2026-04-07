@@ -4,8 +4,8 @@ import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
 import { JsonLd } from "@/components/json-ld";
 import { imageMetadata } from "@/lib/metadata";
+import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { RESOURCES } from "@/lib/resources-data";
-import { getUpvoteCounts } from "@/lib/upvotes";
 import { ResourcesClient } from "./page.client";
 
 export const metadata: Metadata = {
@@ -18,6 +18,11 @@ export const metadata: Metadata = {
 export default async function ResourcesPage() {
   "use cache";
   cacheLife("hours");
+
+  const reviewSummaries = await getReviewSummaries(
+    "resource",
+    RESOURCES.map((resource) => resource.slug),
+  );
 
   const faqJsonLd: WithContext<FAQPage> = {
     "@context": "https://schema.org",
@@ -39,27 +44,34 @@ export default async function ResourcesPage() {
     description:
       "Community plugins and scripts for SoulFire Minecraft bot automation.",
     numberOfItems: RESOURCES.length,
-    itemListElement: RESOURCES.map((resource, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: resource.name,
-      description: resource.description,
-      url: resource.url,
-    })),
+    itemListElement: RESOURCES.map((resource, index) => {
+      const aggregateRating = getAggregateRatingJsonLd(
+        reviewSummaries[resource.slug] ?? {
+          averageRating: null,
+          reviewCount: 0,
+        },
+      );
+
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        url: `https://soulfiremc.com/resources/${resource.slug}`,
+        item: {
+          "@type": "SoftwareApplication",
+          name: resource.name,
+          description: resource.description,
+          url: `https://soulfiremc.com/resources/${resource.slug}`,
+          ...(aggregateRating && { aggregateRating }),
+        },
+      };
+    }),
   };
 
   return (
     <>
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
-      <ResourcesClient
-        initialCounts={
-          await getUpvoteCounts(
-            "resource",
-            RESOURCES.map((r) => r.slug),
-          )
-        }
-      />
+      <ResourcesClient initialSummaries={reviewSummaries} />
     </>
   );
 }

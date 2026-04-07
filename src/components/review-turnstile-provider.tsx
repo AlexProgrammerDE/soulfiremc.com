@@ -15,7 +15,7 @@ import {
   type TurnstileProps,
 } from "react-turnstile";
 
-type UpvoteTurnstileContextValue = {
+type ReviewTurnstileContextValue = {
   enabled: boolean;
   executeTurnstile: () => Promise<string>;
 };
@@ -26,18 +26,18 @@ type PendingChallenge = {
   timeoutId: number;
 };
 
-const DEFAULT_CONTEXT: UpvoteTurnstileContextValue = {
+const DEFAULT_CONTEXT: ReviewTurnstileContextValue = {
   enabled: false,
   executeTurnstile: async () => {
     throw new Error("Cloudflare Turnstile is unavailable.");
   },
 };
 
-const TURNSTILE_ACTION = "upvote";
+const TURNSTILE_ACTION = "review";
 const TURNSTILE_TIMEOUT_MS = 20_000;
 
-const UpvoteTurnstileContext =
-  createContext<UpvoteTurnstileContextValue>(DEFAULT_CONTEXT);
+const ReviewTurnstileContext =
+  createContext<ReviewTurnstileContextValue>(DEFAULT_CONTEXT);
 
 function toError(message: string, error?: unknown) {
   if (error instanceof Error) {
@@ -47,8 +47,12 @@ function toError(message: string, error?: unknown) {
   return new Error(message);
 }
 
-export function UpvoteTurnstileProvider({ children }: { children: ReactNode }) {
-  const siteKey = process.env.NEXT_PUBLIC_UPVOTE_TURNSTILE_SITE_KEY;
+export function ReviewTurnstileProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const siteKey = process.env.NEXT_PUBLIC_REVIEW_TURNSTILE_SITE_KEY;
   const widgetRef = useRef<BoundTurnstileObject | null>(null);
   const pendingRef = useRef<PendingChallenge | null>(null);
 
@@ -156,7 +160,7 @@ export function UpvoteTurnstileProvider({ children }: { children: ReactNode }) {
   const handleError = useCallback<NonNullable<TurnstileProps["onError"]>>(
     (error, boundTurnstile) => {
       rejectPending(
-        "Cloudflare Turnstile could not verify this upvote.",
+        "Cloudflare Turnstile could not verify this review.",
         error,
         boundTurnstile,
       );
@@ -199,7 +203,7 @@ export function UpvoteTurnstileProvider({ children }: { children: ReactNode }) {
     [rejectPending],
   );
 
-  const contextValue = useMemo<UpvoteTurnstileContextValue>(
+  const contextValue = useMemo<ReviewTurnstileContextValue>(
     () => ({
       enabled: Boolean(siteKey),
       executeTurnstile,
@@ -208,7 +212,7 @@ export function UpvoteTurnstileProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <UpvoteTurnstileContext.Provider value={contextValue}>
+    <ReviewTurnstileContext.Provider value={contextValue}>
       {children}
       {siteKey ? (
         <Turnstile
@@ -226,10 +230,10 @@ export function UpvoteTurnstileProvider({ children }: { children: ReactNode }) {
           onUnsupported={handleUnsupported}
         />
       ) : null}
-    </UpvoteTurnstileContext.Provider>
+    </ReviewTurnstileContext.Provider>
   );
 }
 
-export function useUpvoteTurnstile() {
-  return useContext(UpvoteTurnstileContext);
+export function useReviewTurnstile() {
+  return useContext(ReviewTurnstileContext);
 }

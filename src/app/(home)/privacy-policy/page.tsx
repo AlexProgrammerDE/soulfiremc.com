@@ -125,7 +125,8 @@ export default function PrivacyPolicy() {
             Cloudflare Turnstile
           </a>{" "}
           CAPTCHA, including invisible Turnstile challenges for actions such as
-          upvotes, to prevent automated abuse. For more information, see
+          ratings and reviews, to prevent automated abuse. For more
+          information, see
           Cloudflare&apos;s{" "}
           <a
             href="https://www.cloudflare.com/trust-hub/turnstile-privacy-addendum/"

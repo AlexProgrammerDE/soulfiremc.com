@@ -17,7 +17,7 @@ export async function GET(
   return new ImageResponse(
     <ProxyOgImage
       name={provider.name}
-      testimonial={provider.testimonial}
+      summary={provider.summary}
       badges={provider.badges}
       sponsor={provider.sponsor}
       logoSrc={await getOgAssetDataUri(provider.logo)}

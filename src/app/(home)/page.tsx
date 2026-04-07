@@ -345,11 +345,6 @@ export default function Page() {
       name: "SoulFire",
       url: "https://soulfiremc.com",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "5",
-      ratingCount: "1000",
-    },
     featureList: [
       "High-performance bot framework",
       "Multi-version support (Classic to latest)",
