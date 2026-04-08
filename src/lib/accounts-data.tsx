@@ -41,7 +41,7 @@ export type SocialLink = {
 
 export type Category = "nfa-accounts" | "mfa-accounts";
 
-export type SortOption = "default" | "price-asc" | "price-desc";
+export type SortOption = "default" | "best-rated" | "price-asc" | "price-desc";
 
 export type Listing = {
   summary: string;
@@ -212,6 +212,10 @@ export const SORT_CONFIG: Record<
     label: "Most Rated",
     icon: <Star className="h-3 w-3" />,
   },
+  "best-rated": {
+    label: "Best Rated",
+    icon: <Star className="h-3 w-3 fill-current" />,
+  },
   "price-asc": {
     label: "Price: Low to High",
     icon: <ArrowUpNarrowWide className="h-3 w-3" />,
@@ -234,6 +238,7 @@ export const FILTER_CATEGORIES: Category[] = ["mfa-accounts", "nfa-accounts"];
 
 export const SORT_OPTIONS: SortOption[] = [
   "default",
+  "best-rated",
   "price-asc",
   "price-desc",
 ];

@@ -1,11 +1,13 @@
 "use client";
 
 import {
+  ArrowDownWideNarrow,
   BookOpen,
   Calendar,
   ExternalLink,
   Filter,
   ImageIcon,
+  Star,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,7 +41,18 @@ import {
 import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { cn } from "@/lib/utils";
 import { CouponCode } from "./coupon-code";
-import { proxiesSearchParams } from "./search-params";
+import { proxiesSearchParams, SORT_OPTIONS } from "./search-params";
+
+const SORT_CONFIG = {
+  default: {
+    label: "Most Rated",
+    icon: <ArrowDownWideNarrow className="h-3 w-3" />,
+  },
+  "best-rated": {
+    label: "Best Rated",
+    icon: <Star className="h-3 w-3 fill-current" />,
+  },
+} as const;
 
 function ProviderBadge({
   badge,
@@ -201,7 +214,7 @@ function MainContent({
   const slugs = useMemo(() => providers.map((p) => p.slug), []);
   const { summaries, userReviews, pendingBySlug, upsertReview, deleteReview } =
     useReviews("proxy", slugs, { initialSummaries });
-  const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
+  const [{ badges, sort }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
 
@@ -213,7 +226,7 @@ function MainContent({
   };
 
   const clearFilters = () => {
-    setParams({ badges: [] });
+    setParams({ badges: [], sort: "default" });
   };
 
   const filteredProviders = useMemo(() => {
@@ -238,19 +251,29 @@ function MainContent({
         reviewCount: 0,
       };
 
-      if (summaryB.reviewCount !== summaryA.reviewCount) {
-        return summaryB.reviewCount - summaryA.reviewCount;
-      }
+      if (sort === "best-rated") {
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
 
-      if (summaryB.averageRating !== summaryA.averageRating) {
-        return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+      } else {
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
       }
 
       return a.name.localeCompare(b.name);
     });
 
     return [...sponsors, ...sorted];
-  }, [badges, summaries]);
+  }, [badges, sort, summaries]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -259,7 +282,7 @@ function MainContent({
       <div className="flex items-center gap-2">
         <Filter className="h-4 w-4 text-muted-foreground" />
         <span className="text-sm font-medium">Filter by type</span>
-        {badges.length > 0 && (
+        {(badges.length > 0 || sort !== "default") && (
           <button
             type="button"
             onClick={clearFilters}
@@ -268,6 +291,31 @@ function MainContent({
             Clear
           </button>
         )}
+      </div>
+      <div className="space-y-2">
+        <span className="text-xs text-muted-foreground">Sort:</span>
+        <div className="flex flex-wrap gap-2">
+          {SORT_OPTIONS.map((option) => {
+            const config = SORT_CONFIG[option];
+            const isActive = sort === option;
+            return (
+              <button
+                type="button"
+                key={option}
+                onClick={() => setParams({ sort: option })}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                  isActive
+                    ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
+                )}
+              >
+                {config.icon}
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
       <div className="flex flex-wrap gap-2">
         {FILTER_BADGES.map((badge) => {
@@ -306,9 +354,9 @@ function MainContent({
       >
         <Filter className="h-4 w-4" />
         Filters
-        {badges.length > 0 && (
+        {(badges.length > 0 || sort !== "default") && (
           <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
-            {badges.length}
+            {badges.length + (sort !== "default" ? 1 : 0)}
           </span>
         )}
       </button>

@@ -21,9 +21,12 @@ export const TAGS = [
   "open-source",
 ] as const;
 
+export const SORT_OPTIONS = ["default", "best-rated"] as const;
+
 export const resourcesSearchParams = {
   category: parseAsStringLiteral([...CATEGORIES]).withDefault(null as never),
   tags: parseAsArrayOf(parseAsStringLiteral([...TAGS])).withDefault([]),
+  sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
 export const resourcesSearchParamsCache = createSearchParamsCache(

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowDownWideNarrow,
   BookOpen,
   Calendar,
   Code,
@@ -8,6 +9,7 @@ import {
   ExternalLink,
   Filter,
   ImageIcon,
+  Star,
   User,
 } from "lucide-react";
 import Image from "next/image";
@@ -42,7 +44,18 @@ import {
 } from "@/lib/resources-data";
 import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { cn } from "@/lib/utils";
-import { resourcesSearchParams } from "./search-params";
+import { resourcesSearchParams, SORT_OPTIONS } from "./search-params";
+
+const SORT_CONFIG = {
+  default: {
+    label: "Most Rated",
+    icon: <ArrowDownWideNarrow className="h-3 w-3" />,
+  },
+  "best-rated": {
+    label: "Best Rated",
+    icon: <Star className="h-3 w-3 fill-current" />,
+  },
+} as const;
 
 function ResourceBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -198,7 +211,7 @@ function MainContent({
   const slugs = useMemo(() => resources.map((r) => r.slug), []);
   const { summaries, userReviews, pendingBySlug, upsertReview, deleteReview } =
     useReviews("resource", slugs, { initialSummaries });
-  const [{ category, tags }, setParams] = useQueryStates(
+  const [{ category, tags, sort }, setParams] = useQueryStates(
     resourcesSearchParams,
     {
       shallow: false,
@@ -217,11 +230,13 @@ function MainContent({
   };
 
   const clearFilters = () => {
-    setParams({ category: null, tags: [] });
+    setParams({ category: null, tags: [], sort: "default" });
   };
 
   const activeFilterCount =
-    tags.length + (category !== null && category !== undefined ? 1 : 0);
+    tags.length +
+    (category !== null && category !== undefined ? 1 : 0) +
+    (sort !== "default" ? 1 : 0);
 
   const filteredResources = useMemo(() => {
     const filtered = resources.filter((resource) => {
@@ -244,17 +259,27 @@ function MainContent({
         reviewCount: 0,
       };
 
-      if (summaryB.reviewCount !== summaryA.reviewCount) {
-        return summaryB.reviewCount - summaryA.reviewCount;
-      }
+      if (sort === "best-rated") {
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
 
-      if (summaryB.averageRating !== summaryA.averageRating) {
-        return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+      } else {
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
       }
 
       return a.name.localeCompare(b.name);
     });
-  }, [category, tags, summaries]);
+  }, [category, sort, tags, summaries]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -325,6 +350,33 @@ function MainContent({
                     : "bg-muted text-muted-foreground hover:bg-muted/80",
                 )}
               >
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="space-y-2">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          Sort
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {SORT_OPTIONS.map((option) => {
+            const config = SORT_CONFIG[option];
+            const isActive = sort === option;
+            return (
+              <button
+                type="button"
+                key={option}
+                onClick={() => setParams({ sort: option })}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                  isActive
+                    ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
+                )}
+              >
+                {config.icon}
                 {config.label}
               </button>
             );

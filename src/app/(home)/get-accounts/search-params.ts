@@ -17,7 +17,12 @@ export const BADGES = [
   "bulk-discount",
 ] as const;
 
-export const SORT_OPTIONS = ["default", "price-asc", "price-desc"] as const;
+export const SORT_OPTIONS = [
+  "default",
+  "best-rated",
+  "price-asc",
+  "price-desc",
+] as const;
 
 export const accountsSearchParams = {
   category: parseAsStringLiteral([...CATEGORIES]),

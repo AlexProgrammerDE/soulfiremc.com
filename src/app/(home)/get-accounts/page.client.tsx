@@ -365,7 +365,7 @@ function sortProviders(
   sort: SortOption,
   summaries: Record<string, ReviewSummary>,
 ): Provider[] {
-  if (sort === "default") {
+  if (sort === "default" || sort === "best-rated") {
     return [...providers].sort((a, b) => {
       const summaryA = summaries[a.slug] ?? {
         averageRating: null,
@@ -376,12 +376,22 @@ function sortProviders(
         reviewCount: 0,
       };
 
-      if (summaryB.reviewCount !== summaryA.reviewCount) {
-        return summaryB.reviewCount - summaryA.reviewCount;
-      }
+      if (sort === "best-rated") {
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
 
-      if (summaryB.averageRating !== summaryA.averageRating) {
-        return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+      } else {
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
       }
 
       return a.name.localeCompare(b.name);

@@ -18,8 +18,11 @@ export const BADGES = [
   "high-quality",
 ] as const;
 
+export const SORT_OPTIONS = ["default", "best-rated"] as const;
+
 export const proxiesSearchParams = {
   badges: parseAsArrayOf(parseAsStringLiteral([...BADGES])).withDefault([]),
+  sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
 export const proxiesSearchParamsCache =
