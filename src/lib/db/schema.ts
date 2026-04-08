@@ -1,6 +1,5 @@
 import { relations, sql } from "drizzle-orm";
 import {
-  boolean,
   check,
   index,
   integer,
@@ -25,9 +24,6 @@ export const review = pgTable(
       enum: ["account", "proxy", "resource"],
     }).notNull(),
     itemSlug: text("item_slug").notNull(),
-    // Existing thumbs-up rows migrate into the review system as anonymous
-    // 5-star ratings with no review body.
-    anonymous: boolean("anonymous").notNull().default(true),
     rating: integer("rating").notNull().default(5),
     body: text("body"),
     createdAt: timestamp("created_at").notNull().defaultNow(),

@@ -15,6 +15,13 @@
       "when": 1775588187200,
       "tag": "0001_review-schema",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775665920824,
+      "tag": "0002_remove-anonymous",
+      "breakpoints": true
     }
   ]
 }

@@ -68,7 +68,6 @@ export async function getUserReviews(
     .select({
       itemSlug: review.itemSlug,
       rating: review.rating,
-      anonymous: review.anonymous,
       body: review.body,
     })
     .from(review)
@@ -85,7 +84,6 @@ export async function getUserReviews(
       row.itemSlug,
       {
         rating: row.rating,
-        anonymous: row.anonymous,
         body: row.body,
       },
     ]),
@@ -109,7 +107,6 @@ export async function getWrittenReviews(
       id: review.id,
       itemSlug: review.itemSlug,
       rating: review.rating,
-      anonymous: review.anonymous,
       body: review.body,
       createdAt: review.createdAt,
       userName: user.name,
@@ -119,30 +116,22 @@ export async function getWrittenReviews(
     })
     .from(review)
     .leftJoin(user, eq(review.userId, user.id))
-    .where(
-      and(
-        eq(review.itemType, itemType),
-        eq(review.itemSlug, slug),
-      ),
-    )
+    .where(and(eq(review.itemType, itemType), eq(review.itemSlug, slug)))
     .orderBy(desc(review.createdAt))
     .limit(pageSize)
     .offset(offset);
 
   return rows.map((row) => {
-    const authorName = row.anonymous
-      ? "Anonymous"
-      : (row.displayUsername ?? row.username ?? row.userName ?? "User");
+    const authorName = row.displayUsername ?? row.username ?? "User";
 
     return {
       id: row.id,
       itemSlug: row.itemSlug,
       rating: row.rating,
-      anonymous: row.anonymous,
       body: row.body?.trim() || null,
       createdAt: row.createdAt.toISOString(),
       authorName,
-      authorImage: row.anonymous ? null : row.userImage,
+      authorImage: row.userImage,
     };
   });
 }

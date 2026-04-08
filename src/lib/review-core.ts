@@ -9,7 +9,6 @@ export type ReviewSummary = {
 
 export type UserReviewRecord = {
   rating: number;
-  anonymous: boolean;
   body: string | null;
 };
 
@@ -17,7 +16,6 @@ export type PublicReviewRecord = {
   id: string;
   itemSlug: string;
   rating: number;
-  anonymous: boolean;
   body: string | null;
   createdAt: string;
   authorName: string;

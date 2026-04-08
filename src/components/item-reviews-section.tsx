@@ -1,8 +1,8 @@
 "use client";
 
 import { MessageSquareText } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
 import { parseAsInteger, useQueryState } from "nuqs";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { SignInRequiredCredenza } from "@/components/sign-in-required-credenza";
 import { CustomTimeAgo } from "@/components/time-ago";
@@ -89,13 +89,11 @@ export function ItemReviewsSection({
   const pending = pendingBySlug[slug] ?? false;
 
   const [rating, setRating] = useState(currentReview?.rating ?? 5);
-  const [anonymous, setAnonymous] = useState(currentReview?.anonymous ?? true);
   const [body, setBody] = useState(currentReview?.body ?? "");
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
   useEffect(() => {
     setRating(currentReview?.rating ?? 5);
-    setAnonymous(currentReview?.anonymous ?? true);
     setBody(currentReview?.body ?? "");
   }, [currentReview]);
 
@@ -133,7 +131,6 @@ export function ItemReviewsSection({
   const saveReview = async () => {
     const result = await upsertReview(slug, {
       rating,
-      anonymous,
       body,
     });
     handleMutationError(result.error, () => setShowSignInPrompt(true));
@@ -224,37 +221,16 @@ export function ItemReviewsSection({
           </div>
 
           <div className="grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
-            <div className="space-y-5">
-              <div className="space-y-2">
-                <span className="text-sm font-medium">Rating</span>
-                <div className="rounded-xl border border-border/70 bg-muted/20 px-4 py-3">
-                  <ReviewStarInput
-                    value={rating}
-                    onChange={setRating}
-                    disabled={pending}
-                    size="lg"
-                  />
-                </div>
-              </div>
-
-              <label className="flex items-start gap-3 rounded-xl border border-border/70 px-4 py-3 text-sm">
-                <input
-                  type="checkbox"
-                  checked={!anonymous}
-                  onChange={(event) => setAnonymous(!event.target.checked)}
+            <div className="space-y-2">
+              <span className="text-sm font-medium">Rating</span>
+              <div className="rounded-xl border border-border/70 bg-muted/20 px-4 py-3">
+                <ReviewStarInput
+                  value={rating}
+                  onChange={setRating}
                   disabled={pending}
-                  className="mt-0.5 h-4 w-4 rounded border-border accent-primary"
+                  size="lg"
                 />
-                <span className="space-y-1">
-                  <span className="block font-medium">
-                    Show my profile publicly
-                  </span>
-                  <span className="block text-muted-foreground">
-                    When disabled, your review appears as Anonymous without your
-                    avatar or display name.
-                  </span>
-                </span>
-              </label>
+              </div>
             </div>
 
             <div className="space-y-3">

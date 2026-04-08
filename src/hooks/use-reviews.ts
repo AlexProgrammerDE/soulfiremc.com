@@ -7,7 +7,6 @@ import {
   emptyReviewSummary,
   type ItemType,
   type PaginatedPublicReviewRecords,
-  type PublicReviewRecord,
   type ReviewSummary,
   type UserReviewRecord,
 } from "@/lib/review-core";

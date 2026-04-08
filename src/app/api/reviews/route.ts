@@ -134,7 +134,7 @@ export async function PUT(request: NextRequest) {
   }
 
   const normalizedBody = normalizeBody(reviewBody);
-  const isAnonymous = typeof anonymous === "boolean" ? anonymous : true;
+  const _isAnonymous = typeof anonymous === "boolean" ? anonymous : true;
 
   const existing = await db
     .select({ id: review.id })
@@ -171,7 +171,6 @@ export async function PUT(request: NextRequest) {
       itemType,
       itemSlug,
       rating,
-      anonymous: isAnonymous,
       body: normalizedBody,
     });
   } else {
@@ -179,7 +178,6 @@ export async function PUT(request: NextRequest) {
       .update(review)
       .set({
         rating,
-        anonymous: isAnonymous,
         body: normalizedBody,
       })
       .where(eq(review.id, existing[0].id));

@@ -1,0 +1,1 @@
+ALTER TABLE "review" DROP COLUMN "anonymous";
