@@ -11,6 +11,7 @@ import { JsonLd } from "@/components/json-ld";
 import { getRequiredEnv } from "@/lib/env";
 import { imageMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
+import { AuthProvider } from '@/components/auth-provider';
 
 export const viewport: Viewport = {
   themeColor: "#3289BF",
@@ -96,10 +97,12 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <RootProvider>
-            <JsonLd data={organizationJsonLd} />
-            {children}
-            <CookieConsentBanner />
-            <Toaster richColors />
+            <AuthProvider>
+              <JsonLd data={organizationJsonLd} />
+              {children}
+              <CookieConsentBanner />
+              <Toaster richColors />
+            </AuthProvider>
           </RootProvider>
         </NuqsAdapter>
       </body>

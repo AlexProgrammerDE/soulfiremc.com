@@ -51,9 +51,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           type: "custom",
           secondary: true,
           children: (
-            <Suspense>
-              <UserNav />
-            </Suspense>
+            <UserNav />
           ),
         },
       ]}
