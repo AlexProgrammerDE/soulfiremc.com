@@ -44,10 +44,10 @@ export function useReviews(
   const { data: session, isPending: sessionPending } = authClient.useSession();
   const { executeTurnstile } = useReviewTurnstile();
   const includeWrittenReviews = options?.includeWrittenReviews ?? false;
-  const slugsKey = useMemo(() => slugs.join(","), [slugs]);
+  const _slugsKey = useMemo(() => slugs.join(","), [slugs]);
   const normalizedSlugs = useMemo(
     () => slugs.map((slug) => slug.trim()).filter(Boolean),
-    [slugsKey],
+    [slugs.map],
   );
 
   const [state, setState] = useState<ReviewState>({
@@ -138,7 +138,6 @@ export function useReviews(
     options?.initialSummaries,
     options?.initialWrittenReviews,
     refreshReviews,
-    slugsKey,
   ]);
 
   const setPending = useCallback((slug: string, value: boolean) => {
@@ -263,7 +262,15 @@ export function useReviews(
         setPending(slug, false);
       }
     },
-    [itemType, refreshReviews, session?.user, sessionPending, setPending, state.loading, state.pendingBySlug],
+    [
+      itemType,
+      refreshReviews,
+      session?.user,
+      sessionPending,
+      setPending,
+      state.loading,
+      state.pendingBySlug,
+    ],
   );
 
   return {

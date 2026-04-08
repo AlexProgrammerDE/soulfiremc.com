@@ -133,10 +133,9 @@ export default function TermsOfService() {
       <p>
         When you submit content to the Service (such as documentation feedback
         or ratings and reviews), you retain ownership of your content. By
-        submitting
-        content, you grant us a non-exclusive, worldwide, royalty-free license
-        to use, display, and distribute your content in connection with the
-        Service.
+        submitting content, you grant us a non-exclusive, worldwide,
+        royalty-free license to use, display, and distribute your content in
+        connection with the Service.
       </p>
       <p>
         We reserve the right to remove any user-generated content at our

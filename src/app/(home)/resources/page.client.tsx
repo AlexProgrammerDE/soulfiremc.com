@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
 import {
   Accordion,
   AccordionContent,
@@ -28,9 +29,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { useReviews } from "@/hooks/use-reviews";
-import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import {
   BADGE_CONFIG,
   type Badge,
@@ -41,6 +40,7 @@ import {
   RESOURCES,
   type Resource,
 } from "@/lib/resources-data";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { cn } from "@/lib/utils";
 import { resourcesSearchParams } from "./search-params";
 
@@ -196,13 +196,8 @@ function MainContent({
 }) {
   const resources = RESOURCES;
   const slugs = useMemo(() => resources.map((r) => r.slug), []);
-  const {
-    summaries,
-    userReviews,
-    pendingBySlug,
-    upsertReview,
-    deleteReview,
-  } = useReviews("resource", slugs, { initialSummaries });
+  const { summaries, userReviews, pendingBySlug, upsertReview, deleteReview } =
+    useReviews("resource", slugs, { initialSummaries });
   const [{ category, tags }, setParams] = useQueryStates(
     resourcesSearchParams,
     {
@@ -259,7 +254,7 @@ function MainContent({
 
       return a.name.localeCompare(b.name);
     });
-  }, [category, tags, summaries, resources]);
+  }, [category, tags, summaries]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 

@@ -4,8 +4,8 @@ import type { FAQPage, ItemList, WithContext } from "schema-dts";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
 import { JsonLd } from "@/components/json-ld";
 import { imageMetadata } from "@/lib/metadata";
-import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { RESOURCES } from "@/lib/resources-data";
+import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { ResourcesClient } from "./page.client";
 
 export const metadata: Metadata = {

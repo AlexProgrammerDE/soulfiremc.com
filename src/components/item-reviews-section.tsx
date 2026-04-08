@@ -1,19 +1,19 @@
 "use client";
 
 import { MessageSquareText } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { CustomTimeAgo } from "@/components/time-ago";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useReviews } from "@/hooks/use-reviews";
 import type {
   ItemType,
   PublicReviewRecord,
   ReviewSummary,
 } from "@/lib/review-core";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { CustomTimeAgo } from "@/components/time-ago";
 import { ReviewStarInput, ReviewStars } from "./review-stars";
 import { ReviewSummaryBadge } from "./review-summary-badge";
 
@@ -189,7 +189,9 @@ export function ItemReviewsSection({
                 className="mt-0.5 h-4 w-4 rounded border-border accent-primary"
               />
               <span className="space-y-1">
-                <span className="block font-medium">Show my profile publicly</span>
+                <span className="block font-medium">
+                  Show my profile publicly
+                </span>
                 <span className="block text-muted-foreground">
                   When disabled, your review appears as Anonymous without your
                   avatar or display name.
@@ -198,7 +200,10 @@ export function ItemReviewsSection({
             </label>
 
             <div className="space-y-2">
-              <label htmlFor={`review-body-${slug}`} className="text-sm font-medium">
+              <label
+                htmlFor={`review-body-${slug}`}
+                className="text-sm font-medium"
+              >
                 Written review
               </label>
               <textarea
@@ -217,7 +222,11 @@ export function ItemReviewsSection({
             </div>
 
             <div className="flex flex-wrap gap-2">
-              <Button type="button" onClick={saveReview} disabled={pending || loading}>
+              <Button
+                type="button"
+                onClick={saveReview}
+                disabled={pending || loading}
+              >
                 {currentReview ? "Update review" : "Submit review"}
               </Button>
               {currentReview ? (
@@ -249,15 +258,22 @@ export function ItemReviewsSection({
                   <div className="flex items-center gap-3">
                     <Avatar size="lg">
                       {entry.authorImage ? (
-                        <AvatarImage src={entry.authorImage} alt={entry.authorName} />
+                        <AvatarImage
+                          src={entry.authorImage}
+                          alt={entry.authorName}
+                        />
                       ) : null}
-                      <AvatarFallback>{initial(entry.authorName)}</AvatarFallback>
+                      <AvatarFallback>
+                        {initial(entry.authorName)}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
                       <p className="font-medium">{entry.authorName}</p>
                       <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                         <ReviewStars value={entry.rating} size="sm" />
-                        <span className="tabular-nums">{entry.rating.toFixed(1)}</span>
+                        <span className="tabular-nums">
+                          {entry.rating.toFixed(1)}
+                        </span>
                         <span>·</span>
                         <CustomTimeAgo date={entry.createdAt} />
                       </div>

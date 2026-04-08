@@ -414,8 +414,7 @@ export const SHOPS: Shop[] = [
     startDate: "Apr 2025",
     listings: {
       "nfa-accounts": {
-        summary:
-          "Cookie and token accounts with their own delivery platform.",
+        summary: "Cookie and token accounts with their own delivery platform.",
         badges: ["high-quality", "instant-delivery"],
         price: "12¢",
         priceValue: 0.12,

@@ -47,11 +47,7 @@ function toError(message: string, error?: unknown) {
   return new Error(message);
 }
 
-export function ReviewTurnstileProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function ReviewTurnstileProvider({ children }: { children: ReactNode }) {
   const siteKey = process.env.NEXT_PUBLIC_REVIEW_TURNSTILE_SITE_KEY;
   const widgetRef = useRef<BoundTurnstileObject | null>(null);
   const pendingRef = useRef<PendingChallenge | null>(null);

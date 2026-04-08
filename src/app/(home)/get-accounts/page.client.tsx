@@ -23,6 +23,7 @@ import { Suspense, use, useMemo, useState } from "react";
 import { PriceInfoBadge } from "@/app/(home)/components/price-info-badge";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
 import {
   Accordion,
   AccordionContent,
@@ -36,7 +37,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { useReviews } from "@/hooks/use-reviews";
 import {
   BADGE_CONFIG,
@@ -55,8 +55,8 @@ import {
   type SocialLink,
   type SortOption,
 } from "@/lib/accounts-data";
-import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import type { DiscordInviteResponse } from "@/lib/discord";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { cn } from "@/lib/utils";
 import { CouponCode, LinkDiscountNotice } from "../get-proxies/coupon-code";
 import { accountsSearchParams } from "./search-params";
@@ -397,15 +397,10 @@ function sortProviders(
 function MainContent(props: Props) {
   const providers = PROVIDERS;
   const slugs = useMemo(() => [...new Set(providers.map((p) => p.slug))], []);
-  const {
-    summaries,
-    userReviews,
-    pendingBySlug,
-    upsertReview,
-    deleteReview,
-  } = useReviews("account", slugs, {
-    initialSummaries: props.initialSummaries,
-  });
+  const { summaries, userReviews, pendingBySlug, upsertReview, deleteReview } =
+    useReviews("account", slugs, {
+      initialSummaries: props.initialSummaries,
+    });
   const [{ category, badges, sort }, setParams] = useQueryStates(
     accountsSearchParams,
     { shallow: false },

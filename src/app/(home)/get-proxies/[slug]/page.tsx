@@ -249,9 +249,7 @@ export default async function ProxyProviderPage(props: {
                 </span>
               )}
             </div>
-            <p className="text-lg text-muted-foreground">
-              {provider.summary}
-            </p>
+            <p className="text-lg text-muted-foreground">{provider.summary}</p>
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge) => (
                 <ProviderBadge

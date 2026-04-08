@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
 import {
   Accordion,
   AccordionContent,
@@ -25,7 +26,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { useReviews } from "@/hooks/use-reviews";
 import {
   BADGE_CONFIG,
@@ -199,13 +199,8 @@ function MainContent({
 }) {
   const providers = PROVIDERS;
   const slugs = useMemo(() => providers.map((p) => p.slug), []);
-  const {
-    summaries,
-    userReviews,
-    pendingBySlug,
-    upsertReview,
-    deleteReview,
-  } = useReviews("proxy", slugs, { initialSummaries });
+  const { summaries, userReviews, pendingBySlug, upsertReview, deleteReview } =
+    useReviews("proxy", slugs, { initialSummaries });
   const [{ badges }, setParams] = useQueryStates(proxiesSearchParams, {
     shallow: false,
   });
@@ -255,7 +250,7 @@ function MainContent({
     });
 
     return [...sponsors, ...sorted];
-  }, [badges, summaries, providers]);
+  }, [badges, summaries]);
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 

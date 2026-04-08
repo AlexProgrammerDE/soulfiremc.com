@@ -1,15 +1,8 @@
 import "server-only";
 
-import {
-  and,
-  desc,
-  eq,
-  inArray,
-  isNotNull,
-  sql,
-} from "drizzle-orm";
-import { user } from "@/lib/db/auth-schema";
+import { and, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
+import { user } from "@/lib/db/auth-schema";
 import { review } from "@/lib/db/schema";
 import {
   emptyReviewSummary,
@@ -19,16 +12,16 @@ import {
   type UserReviewRecord,
 } from "@/lib/review-core";
 
-export {
-  emptyReviewSummary,
-  getAggregateRatingJsonLd,
-  getReviewJsonLd,
-} from "@/lib/review-core";
 export type {
   ItemType,
   PublicReviewRecord,
   ReviewSummary,
   UserReviewRecord,
+} from "@/lib/review-core";
+export {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getReviewJsonLd,
 } from "@/lib/review-core";
 
 export async function getReviewSummaries(
@@ -135,7 +128,7 @@ export async function getWrittenReviews(
 
     const authorName = row.anonymous
       ? "Anonymous"
-      : row.displayUsername ?? row.username ?? row.userName ?? "User";
+      : (row.displayUsername ?? row.username ?? row.userName ?? "User");
 
     writtenReviews.push({
       id: row.id,

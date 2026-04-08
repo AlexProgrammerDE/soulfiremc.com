@@ -4,10 +4,10 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { review } from "@/lib/db/schema";
 import {
-  type ItemType,
   getReviewSummaries,
   getUserReviews,
   getWrittenReviews,
+  type ItemType,
 } from "@/lib/reviews";
 import {
   getExpectedTurnstileHostname,
@@ -70,7 +70,8 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     summaries,
     userReviews,
-    writtenReviews: includeWrittenReviews && slugs.length === 1 ? writtenReviews : undefined,
+    writtenReviews:
+      includeWrittenReviews && slugs.length === 1 ? writtenReviews : undefined,
   });
 }
 
