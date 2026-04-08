@@ -6,7 +6,6 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { Organization, WithContext } from "schema-dts";
 import { Toaster } from "sonner";
-import { AuthProvider } from "@/components/auth-provider";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { JsonLd } from "@/components/json-ld";
 import { getRequiredEnv } from "@/lib/env";
@@ -97,12 +96,10 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <RootProvider>
-            <AuthProvider>
-              <JsonLd data={organizationJsonLd} />
-              {children}
-              <CookieConsentBanner />
-              <Toaster richColors />
-            </AuthProvider>
+            <JsonLd data={organizationJsonLd} />
+            {children}
+            <CookieConsentBanner />
+            <Toaster richColors />
           </RootProvider>
         </NuqsAdapter>
       </body>

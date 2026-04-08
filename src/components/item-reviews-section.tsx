@@ -4,6 +4,7 @@ import { MessageSquareText } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
 import { SignInRequiredCredenza } from "@/components/sign-in-required-credenza";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +41,29 @@ function handleMutationError(
 }
 
 export function ItemReviewsSection({
+  itemType,
+  slug,
+  initialSummary,
+  initialWrittenReviews,
+}: {
+  itemType: ItemType;
+  slug: string;
+  initialSummary: ReviewSummary;
+  initialWrittenReviews: PaginatedPublicReviewRecords;
+}) {
+  return (
+    <ReviewTurnstileProvider>
+      <ItemReviewsSectionContent
+        itemType={itemType}
+        slug={slug}
+        initialSummary={initialSummary}
+        initialWrittenReviews={initialWrittenReviews}
+      />
+    </ReviewTurnstileProvider>
+  );
+}
+
+function ItemReviewsSectionContent({
   itemType,
   slug,
   initialSummary,

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
-import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
 import { authClient } from "@/lib/auth-client";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -48,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         NAME_PLACEHOLDER: "Display Name",
       }}
     >
-      <ReviewTurnstileProvider>{children}</ReviewTurnstileProvider>
+      {children}
     </AuthUIProvider>
   );
 }

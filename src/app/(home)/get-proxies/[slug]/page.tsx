@@ -47,8 +47,6 @@ import {
   getReviewSummaries,
 } from "@/lib/reviews";
 import {
-  loadReviewsSearchParams,
-  type ReviewsPageSearchParams,
 } from "@/lib/reviews-search-params.server";
 import { cn } from "@/lib/utils";
 
@@ -121,22 +119,12 @@ function ProviderBadge({
 
 export default async function ProxyProviderPage(props: {
   params: Promise<{ slug: string }>;
-  searchParams: ReviewsPageSearchParams;
 }) {
-  const params = await props.params;
-  const searchParams = await props.searchParams;
-
-  return renderProxyProviderPage(params.slug, searchParams);
-}
-
-async function renderProxyProviderPage(
-  slug: string,
-  searchParams: Awaited<ReviewsPageSearchParams>,
-) {
   "use cache";
   cacheLife("hours");
 
-  const { reviewsPage } = await loadReviewsSearchParams(searchParams);
+  const params = await props.params;
+  const slug = params.slug;
   const provider = getProviderBySlug(slug);
   if (!provider) notFound();
 
@@ -149,7 +137,7 @@ async function renderProxyProviderPage(
     "proxy",
     provider.slug,
     reviewSummary.reviewCount,
-    { page: reviewsPage },
+    { page: 1 },
   );
 
   const productJsonLd: WithContext<Product> = {
