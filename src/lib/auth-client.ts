@@ -1,3 +1,4 @@
+import { dashClient, sentinelClient } from "@better-auth/infra/client";
 import { passkeyClient } from "@better-auth/passkey/client";
 import {
   adminClient,
@@ -19,6 +20,8 @@ const clientOptions = {
     passkeyClient(),
     adminClient(),
     lastLoginMethodClient(),
+    dashClient(),
+    sentinelClient(),
   ],
 };
 

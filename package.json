@@ -17,6 +17,7 @@
   "author": "AlexProgrammerDE",
   "license": "ISC",
   "dependencies": {
+    "@better-auth/infra": "^0.1.14",
     "@better-auth/passkey": "^1.6.0",
     "@daveyplate/better-auth-ui": "^3.4.0",
     "@icons-pack/react-simple-icons": "^13.13.0",

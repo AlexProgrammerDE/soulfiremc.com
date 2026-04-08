@@ -1,3 +1,4 @@
+import { dash, sentinel } from "@better-auth/infra";
 import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -246,6 +247,12 @@ export const auth = betterAuth({
       provider: "cloudflare-turnstile",
       secretKey: process.env.TURNSTILE_SECRET_KEY ?? "",
     }),
+    dash({
+      activityTracking: {
+        enabled: true,
+      },
+    }),
+    sentinel(),
     nextCookies(),
   ],
   trustedOrigins: ["https://soulfiremc.com"],
