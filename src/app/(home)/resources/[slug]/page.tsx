@@ -40,9 +40,9 @@ import {
 import {
   emptyReviewSummary,
   getAggregateRatingJsonLd,
+  getPaginatedWrittenReviews,
   getReviewJsonLd,
   getReviewSummaries,
-  getWrittenReviews,
 } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
@@ -116,11 +116,13 @@ export default async function ResourceDetailPage(props: {
   const params = await props.params;
   const resource = getResourceBySlug(params.slug);
   if (!resource) notFound();
-  const [reviewSummaries, writtenReviews] = await Promise.all([
-    getReviewSummaries("resource", [resource.slug]),
-    getWrittenReviews("resource", resource.slug),
-  ]);
+  const reviewSummaries = await getReviewSummaries("resource", [resource.slug]);
   const reviewSummary = reviewSummaries[resource.slug] ?? emptyReviewSummary();
+  const writtenReviews = await getPaginatedWrittenReviews(
+    "resource",
+    resource.slug,
+    reviewSummary.reviewCount,
+  );
 
   const softwareJsonLd: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
@@ -140,8 +142,8 @@ export default async function ResourceDetailPage(props: {
     ...(getAggregateRatingJsonLd(reviewSummary) && {
       aggregateRating: getAggregateRatingJsonLd(reviewSummary),
     }),
-    ...(getReviewJsonLd(writtenReviews) && {
-      review: getReviewJsonLd(writtenReviews),
+    ...(getReviewJsonLd(writtenReviews.entries) && {
+      review: getReviewJsonLd(writtenReviews.entries),
     }),
   };
 

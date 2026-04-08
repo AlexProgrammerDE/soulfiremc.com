@@ -60,9 +60,9 @@ import { getAccountPageImage } from "@/lib/og";
 import {
   emptyReviewSummary,
   getAggregateRatingJsonLd,
+  getPaginatedWrittenReviews,
   getReviewJsonLd,
   getReviewSummaries,
-  getWrittenReviews,
 } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
@@ -262,11 +262,13 @@ export default async function AccountProviderPage(props: {
   const hasAffiliate = categories.some(([, listing]) =>
     listing.badges.includes("affiliate"),
   );
-  const [reviewSummaries, writtenReviews] = await Promise.all([
-    getReviewSummaries("account", [shop.slug]),
-    getWrittenReviews("account", shop.slug),
-  ]);
+  const reviewSummaries = await getReviewSummaries("account", [shop.slug]);
   const reviewSummary = reviewSummaries[shop.slug] ?? emptyReviewSummary();
+  const writtenReviews = await getPaginatedWrittenReviews(
+    "account",
+    shop.slug,
+    reviewSummary.reviewCount,
+  );
 
   const discordInviteUrl = getDiscordInviteUrl(shop);
   const hasDiscord = Boolean(discordInviteUrl);
@@ -294,8 +296,8 @@ export default async function AccountProviderPage(props: {
     ...(getAggregateRatingJsonLd(reviewSummary) && {
       aggregateRating: getAggregateRatingJsonLd(reviewSummary),
     }),
-    ...(getReviewJsonLd(writtenReviews) && {
-      review: getReviewJsonLd(writtenReviews),
+    ...(getReviewJsonLd(writtenReviews.entries) && {
+      review: getReviewJsonLd(writtenReviews.entries),
     }),
     ...(shop.gallery &&
       shop.gallery.length > 0 && {

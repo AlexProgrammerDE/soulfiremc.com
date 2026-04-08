@@ -7,6 +7,7 @@ import { review } from "@/lib/db/schema";
 import {
   emptyReviewSummary,
   type ItemType,
+  type PaginatedPublicReviewRecords,
   type PublicReviewRecord,
   type ReviewSummary,
   type UserReviewRecord,
@@ -14,6 +15,7 @@ import {
 
 export type {
   ItemType,
+  PaginatedPublicReviewRecords,
   PublicReviewRecord,
   ReviewSummary,
   UserReviewRecord,
@@ -93,8 +95,15 @@ export async function getUserReviews(
 export async function getWrittenReviews(
   itemType: ItemType,
   slug: string,
-  limit = 8,
+  options?: {
+    page?: number;
+    pageSize?: number;
+  },
 ): Promise<PublicReviewRecord[]> {
+  const page = Math.max(1, options?.page ?? 1);
+  const pageSize = Math.max(1, options?.pageSize ?? 8);
+  const offset = (page - 1) * pageSize;
+
   const rows = await db
     .select({
       id: review.id,
@@ -117,7 +126,8 @@ export async function getWrittenReviews(
       ),
     )
     .orderBy(desc(review.createdAt))
-    .limit(limit);
+    .limit(pageSize)
+    .offset(offset);
 
   return rows.map((row) => {
     const authorName = row.anonymous
@@ -135,4 +145,37 @@ export async function getWrittenReviews(
       authorImage: row.anonymous ? null : row.userImage,
     };
   });
+}
+
+export async function getPaginatedWrittenReviews(
+  itemType: ItemType,
+  slug: string,
+  totalCount: number,
+  options?: {
+    page?: number;
+    pageSize?: number;
+  },
+): Promise<PaginatedPublicReviewRecords> {
+  const pageSize = Math.max(1, options?.pageSize ?? 8);
+  const totalPages =
+    totalCount === 0 ? 0 : Math.max(1, Math.ceil(totalCount / pageSize));
+  const page =
+    totalPages === 0
+      ? 1
+      : Math.min(Math.max(1, options?.page ?? 1), totalPages);
+  const entries =
+    totalCount === 0
+      ? []
+      : await getWrittenReviews(itemType, slug, {
+          page,
+          pageSize,
+        });
+
+  return {
+    entries,
+    page,
+    pageSize,
+    totalCount,
+    totalPages,
+  };
 }

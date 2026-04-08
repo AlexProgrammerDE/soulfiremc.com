@@ -41,9 +41,9 @@ import {
 import {
   emptyReviewSummary,
   getAggregateRatingJsonLd,
+  getPaginatedWrittenReviews,
   getReviewJsonLd,
   getReviewSummaries,
-  getWrittenReviews,
 } from "@/lib/reviews";
 import { cn } from "@/lib/utils";
 
@@ -127,11 +127,13 @@ export default async function ProxyProviderPage(props: {
   const theme = provider.sponsorTheme
     ? SPONSOR_THEMES[provider.sponsorTheme]
     : undefined;
-  const [reviewSummaries, writtenReviews] = await Promise.all([
-    getReviewSummaries("proxy", [provider.slug]),
-    getWrittenReviews("proxy", provider.slug),
-  ]);
+  const reviewSummaries = await getReviewSummaries("proxy", [provider.slug]);
   const reviewSummary = reviewSummaries[provider.slug] ?? emptyReviewSummary();
+  const writtenReviews = await getPaginatedWrittenReviews(
+    "proxy",
+    provider.slug,
+    reviewSummary.reviewCount,
+  );
 
   const productJsonLd: WithContext<Product> = {
     "@context": "https://schema.org",
@@ -151,8 +153,8 @@ export default async function ProxyProviderPage(props: {
     ...(getAggregateRatingJsonLd(reviewSummary) && {
       aggregateRating: getAggregateRatingJsonLd(reviewSummary),
     }),
-    ...(getReviewJsonLd(writtenReviews) && {
-      review: getReviewJsonLd(writtenReviews),
+    ...(getReviewJsonLd(writtenReviews.entries) && {
+      review: getReviewJsonLd(writtenReviews.entries),
     }),
     ...(provider.gallery &&
       provider.gallery.length > 0 && {

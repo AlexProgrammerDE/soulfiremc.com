@@ -6,6 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import {
   emptyReviewSummary,
   type ItemType,
+  type PaginatedPublicReviewRecords,
   type PublicReviewRecord,
   type ReviewSummary,
   type UserReviewRecord,
@@ -14,13 +15,14 @@ import {
 type UseReviewsOptions = {
   initialSummaries?: Record<string, ReviewSummary>;
   includeWrittenReviews?: boolean;
-  initialWrittenReviews?: Record<string, PublicReviewRecord[]>;
+  initialWrittenReviews?: Record<string, PaginatedPublicReviewRecords>;
+  writtenReviewsPage?: number;
 };
 
 type ReviewState = {
   summaries: Record<string, ReviewSummary>;
   userReviews: Record<string, UserReviewRecord>;
-  writtenReviews: Record<string, PublicReviewRecord[]>;
+  writtenReviews: Record<string, PaginatedPublicReviewRecords>;
   loading: boolean;
   pendingBySlug: Record<string, boolean>;
 };
@@ -44,6 +46,7 @@ export function useReviews(
   const { data: session, isPending: sessionPending } = authClient.useSession();
   const { executeTurnstile } = useReviewTurnstile();
   const includeWrittenReviews = options?.includeWrittenReviews ?? false;
+  const writtenReviewsPage = Math.max(1, options?.writtenReviewsPage ?? 1);
   const _slugsKey = useMemo(() => slugs.join(","), [slugs]);
   const normalizedSlugs = useMemo(
     () => slugs.map((slug) => slug.trim()).filter(Boolean),
@@ -72,6 +75,7 @@ export function useReviews(
 
       if (includeWrittenReviews && targetSlugs.length === 1) {
         params.set("includeWrittenReviews", "1");
+        params.set("reviewsPage", String(writtenReviewsPage));
       }
 
       const res = await fetch(`/api/reviews?${params.toString()}`);
@@ -82,7 +86,7 @@ export function useReviews(
       const data = (await res.json()) as {
         summaries: Record<string, ReviewSummary>;
         userReviews: Record<string, UserReviewRecord>;
-        writtenReviews?: PublicReviewRecord[];
+        writtenReviews?: PaginatedPublicReviewRecords;
       };
 
       setState((prev) => {
@@ -99,7 +103,13 @@ export function useReviews(
 
         const nextWrittenReviews = { ...prev.writtenReviews };
         if (includeWrittenReviews && targetSlugs.length === 1) {
-          nextWrittenReviews[targetSlugs[0]] = data.writtenReviews ?? [];
+          nextWrittenReviews[targetSlugs[0]] = data.writtenReviews ?? {
+            entries: [],
+            page: writtenReviewsPage,
+            pageSize: 8,
+            totalCount: 0,
+            totalPages: 0,
+          };
         }
 
         return {
@@ -111,7 +121,7 @@ export function useReviews(
         };
       });
     },
-    [includeWrittenReviews, itemType],
+    [includeWrittenReviews, itemType, writtenReviewsPage],
   );
 
   useEffect(() => {

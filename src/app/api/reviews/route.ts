@@ -4,9 +4,9 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { review } from "@/lib/db/schema";
 import {
+  getPaginatedWrittenReviews,
   getReviewSummaries,
   getUserReviews,
-  getWrittenReviews,
   type ItemType,
 } from "@/lib/reviews";
 import {
@@ -17,6 +17,7 @@ import {
 } from "@/lib/turnstile";
 
 const VALID_TYPES = ["account", "proxy", "resource"] as const;
+const REVIEWS_PAGE_SIZE = 8;
 
 function isValidType(value: string): value is ItemType {
   return VALID_TYPES.includes(value as ItemType);
@@ -41,6 +42,12 @@ export async function GET(request: NextRequest) {
   const slugsParam = searchParams.get("slugs");
   const includeWrittenReviews =
     searchParams.get("includeWrittenReviews") === "1";
+  const rawReviewsPage = Number.parseInt(
+    searchParams.get("reviewsPage") ?? "1",
+    10,
+  );
+  const reviewsPage =
+    Number.isFinite(rawReviewsPage) && rawReviewsPage > 0 ? rawReviewsPage : 1;
 
   if (!itemType || !isValidType(itemType) || !slugsParam) {
     return NextResponse.json({ error: "Invalid parameters" }, { status: 400 });
@@ -59,19 +66,28 @@ export async function GET(request: NextRequest) {
     headers: request.headers,
   });
 
-  const [summaries, userReviews, writtenReviews] = await Promise.all([
+  const [summaries, userReviews] = await Promise.all([
     getReviewSummaries(itemType, slugs),
     session?.user ? getUserReviews(session.user.id, itemType, slugs) : {},
-    includeWrittenReviews && slugs.length === 1
-      ? getWrittenReviews(itemType, slugs[0])
-      : [],
   ]);
+
+  const writtenReviews =
+    includeWrittenReviews && slugs.length === 1
+      ? await getPaginatedWrittenReviews(
+          itemType,
+          slugs[0],
+          summaries[slugs[0]]?.reviewCount ?? 0,
+          {
+            page: reviewsPage,
+            pageSize: REVIEWS_PAGE_SIZE,
+          },
+        )
+      : undefined;
 
   return NextResponse.json({
     summaries,
     userReviews,
-    writtenReviews:
-      includeWrittenReviews && slugs.length === 1 ? writtenReviews : undefined,
+    writtenReviews,
   });
 }
 

@@ -24,6 +24,14 @@ export type PublicReviewRecord = {
   authorImage: string | null;
 };
 
+export type PaginatedPublicReviewRecords = {
+  entries: PublicReviewRecord[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+};
+
 export function emptyReviewSummary(): ReviewSummary {
   return {
     averageRating: null,

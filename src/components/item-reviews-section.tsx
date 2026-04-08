@@ -2,6 +2,7 @@
 
 import { MessageSquareText } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { toast } from "sonner";
 import { SignInRequiredCredenza } from "@/components/sign-in-required-credenza";
 import { CustomTimeAgo } from "@/components/time-ago";
@@ -11,10 +12,14 @@ import { Card } from "@/components/ui/card";
 import { useReviews } from "@/hooks/use-reviews";
 import type {
   ItemType,
-  PublicReviewRecord,
+  PaginatedPublicReviewRecords,
   ReviewSummary,
 } from "@/lib/review-core";
 import { ReviewStarInput, ReviewStars } from "./review-stars";
+
+const reviewsPageParser = parseAsInteger
+  .withDefault(1)
+  .withOptions({ clearOnDefault: true, shallow: false });
 
 function initial(name: string) {
   return name.trim().charAt(0).toUpperCase() || "?";
@@ -46,8 +51,13 @@ export function ItemReviewsSection({
   itemType: ItemType;
   slug: string;
   initialSummary: ReviewSummary;
-  initialWrittenReviews: PublicReviewRecord[];
+  initialWrittenReviews: PaginatedPublicReviewRecords;
 }) {
+  const [reviewPage, setReviewPage] = useQueryState(
+    "reviewsPage",
+    reviewsPageParser,
+  );
+  const activeReviewPage = Math.max(1, reviewPage);
   const reviewSlugs = useMemo(() => [slug], [slug]);
   const initialSummaryMap = useMemo(
     () => ({ [slug]: initialSummary }),
@@ -69,11 +79,13 @@ export function ItemReviewsSection({
     initialSummaries: initialSummaryMap,
     includeWrittenReviews: true,
     initialWrittenReviews: initialWrittenReviewMap,
+    writtenReviewsPage: activeReviewPage,
   });
 
   const summary = summaries[slug] ?? initialSummary;
   const currentReview = userReviews[slug];
-  const visibleReviews = writtenReviews[slug] ?? initialWrittenReviews;
+  const reviewPageData = writtenReviews[slug] ?? initialWrittenReviews;
+  const visibleReviews = reviewPageData.entries;
   const pending = pendingBySlug[slug] ?? false;
 
   const [rating, setRating] = useState(currentReview?.rating ?? 5);
@@ -87,7 +99,29 @@ export function ItemReviewsSection({
     setBody(currentReview?.body ?? "");
   }, [currentReview]);
 
+  useEffect(() => {
+    if (reviewPage < 1) {
+      void setReviewPage(1);
+    }
+  }, [reviewPage, setReviewPage]);
+
+  useEffect(() => {
+    if (reviewPageData.page !== activeReviewPage) {
+      void setReviewPage(reviewPageData.page);
+    }
+  }, [activeReviewPage, reviewPageData.page, setReviewPage]);
+
   const hasWrittenReviews = visibleReviews.length > 0;
+  const hasPreviousPage = reviewPageData.page > 1;
+  const hasNextPage = reviewPageData.page < reviewPageData.totalPages;
+  const visibleRangeStart =
+    reviewPageData.totalCount === 0
+      ? 0
+      : (reviewPageData.page - 1) * reviewPageData.pageSize + 1;
+  const visibleRangeEnd =
+    reviewPageData.totalCount === 0
+      ? 0
+      : visibleRangeStart + visibleReviews.length - 1;
   const reviewCountLabel = useMemo(() => {
     if (summary.reviewCount === 0) {
       return "No ratings yet";
@@ -116,14 +150,18 @@ export function ItemReviewsSection({
     }
   };
 
+  const goToReviewPage = (page: number) => {
+    void setReviewPage(page);
+  };
+
   return (
     <>
       <section className="space-y-6">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold">Ratings & reviews</h2>
           <p className="text-sm text-muted-foreground">
-            Ratings affect the average immediately. Only written reviews are
-            shown publicly.
+            Ratings affect the average immediately. Public reviews can include
+            either a written comment or a star-only rating.
           </p>
         </div>
 
@@ -264,7 +302,44 @@ export function ItemReviewsSection({
         </Card>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Latest reviews</h3>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold">Latest reviews</h3>
+              {reviewPageData.totalCount > 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Showing {visibleRangeStart}-{visibleRangeEnd} of{" "}
+                  {reviewPageData.totalCount} review
+                  {reviewPageData.totalCount === 1 ? "" : "s"}.
+                </p>
+              ) : null}
+            </div>
+
+            {reviewPageData.totalPages > 1 ? (
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToReviewPage(reviewPageData.page - 1)}
+                  disabled={!hasPreviousPage || loading}
+                >
+                  Previous
+                </Button>
+                <div className="min-w-24 text-center text-sm text-muted-foreground">
+                  Page {reviewPageData.page} of {reviewPageData.totalPages}
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => goToReviewPage(reviewPageData.page + 1)}
+                  disabled={!hasNextPage || loading}
+                >
+                  Next
+                </Button>
+              </div>
+            ) : null}
+          </div>
 
           {hasWrittenReviews ? (
             <div className="grid gap-4">
