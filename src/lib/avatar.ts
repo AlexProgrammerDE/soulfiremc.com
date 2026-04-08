@@ -2,6 +2,14 @@ import "server-only";
 
 import { createHash } from "node:crypto";
 
+const ALLOWED_AVATAR_HOSTNAMES = new Set([
+  "avatars.githubusercontent.com",
+  "cdn.discordapp.com",
+  "github.com",
+  "media.discordapp.net",
+  "www.gravatar.com",
+]);
+
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
@@ -16,12 +24,24 @@ export function getGravatarUrl(email: string, size = 160) {
   return `https://www.gravatar.com/avatar/${hash}?${params.toString()}`;
 }
 
-export function withGravatarFallback(
+export function isAllowedRemoteAvatarUrl(value: string) {
+  try {
+    const url = new URL(value);
+    return (
+      (url.protocol === "https:" || url.protocol === "http:") &&
+      ALLOWED_AVATAR_HOSTNAMES.has(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function getAvatarUrl(
   image: string | null | undefined,
   email: string | null | undefined,
   size?: number,
 ) {
-  if (image) {
+  if (image && isAllowedRemoteAvatarUrl(image)) {
     return image;
   }
 

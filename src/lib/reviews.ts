@@ -1,7 +1,7 @@
 import "server-only";
 
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
-import { withGravatarFallback } from "@/lib/avatar";
+import { getAvatarUrl } from "@/lib/avatar";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/auth-schema";
 import { review } from "@/lib/db/schema";
@@ -133,7 +133,7 @@ export async function getWrittenReviews(
       body: row.body?.trim() || null,
       createdAt: row.createdAt.toISOString(),
       authorName,
-      authorImage: withGravatarFallback(row.userImage, row.userEmail),
+      authorImage: getAvatarUrl(row.userImage, row.userEmail),
     };
   });
 }
