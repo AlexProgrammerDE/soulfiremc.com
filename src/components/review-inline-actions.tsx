@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import type { ReviewSummary } from "@/lib/review-core";
-import { SignInRequiredCredenza } from "./sign-in-required-credenza";
 import { ReviewStarInput } from "./review-stars";
 import { ReviewSummaryBadge } from "./review-summary-badge";
+import { SignInRequiredCredenza } from "./sign-in-required-credenza";
 import { Button } from "./ui/button";
 
 type MutationResult =

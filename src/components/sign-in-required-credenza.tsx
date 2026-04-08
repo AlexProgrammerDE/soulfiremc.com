@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   Credenza,
   CredenzaBody,
@@ -11,7 +12,6 @@ import {
   CredenzaHeader,
   CredenzaTitle,
 } from "@/components/ui/credenza";
-import { Button } from "@/components/ui/button";
 
 export function SignInRequiredCredenza({
   open,
@@ -25,8 +25,6 @@ export function SignInRequiredCredenza({
   description: string;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
@@ -50,7 +48,10 @@ export function SignInRequiredCredenza({
             type="button"
             onClick={() => {
               onOpenChange(false);
-              const currentPath = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
+              const currentPath =
+                typeof window === "undefined"
+                  ? "/"
+                  : `${window.location.pathname}${window.location.search}`;
               const target = `/auth/sign-in?redirectTo=${encodeURIComponent(currentPath)}`;
               router.push(target);
             }}
