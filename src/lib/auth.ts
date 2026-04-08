@@ -2,6 +2,7 @@ import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
+import { eq } from "drizzle-orm";
 import {
   admin,
   captcha,
@@ -15,14 +16,116 @@ import {
 } from "better-auth/plugins";
 import { emailHarmony } from "better-auth-harmony";
 import { db } from "@/lib/db";
+import { user as authUser } from "@/lib/db/auth-schema";
 import * as generatedAuthSchema from "@/lib/db/auth-schema";
 import * as schema from "@/lib/db/schema";
 import { authNotifications } from "./auth-notifications";
 
-function emailToUniqueUsername(email: string): string {
-  const prefix = email.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "");
-  const suffix = Math.random().toString(36).substring(2, 8);
-  return `${prefix}_${suffix}`;
+const USERNAME_ADJECTIVES = [
+  "amber",
+  "brisk",
+  "calm",
+  "cinder",
+  "clear",
+  "cloud",
+  "cool",
+  "crisp",
+  "dawn",
+  "ember",
+  "field",
+  "flint",
+  "forest",
+  "glacier",
+  "golden",
+  "harbor",
+  "hollow",
+  "iron",
+  "ivory",
+  "juniper",
+  "lunar",
+  "maple",
+  "meadow",
+  "mist",
+  "north",
+  "nova",
+  "oak",
+  "olive",
+  "opal",
+  "river",
+  "silver",
+  "solar",
+  "stone",
+  "summit",
+  "timber",
+  "velvet",
+  "wild",
+  "winter",
+].sort();
+
+const USERNAME_NOUNS = [
+  "badger",
+  "brook",
+  "cedar",
+  "comet",
+  "crest",
+  "falcon",
+  "field",
+  "finch",
+  "fjord",
+  "fox",
+  "grove",
+  "harbor",
+  "hawk",
+  "heron",
+  "lynx",
+  "meadow",
+  "otter",
+  "owl",
+  "panda",
+  "pine",
+  "quartz",
+  "raven",
+  "ridge",
+  "river",
+  "robin",
+  "stone",
+  "storm",
+  "sunrise",
+  "thicket",
+  "trail",
+  "vale",
+  "wave",
+  "willow",
+  "wind",
+  "wolf",
+  "wren",
+].sort();
+
+function randomArrayValue(values: string[]): string {
+  return values[Math.floor(Math.random() * values.length)] ?? "user";
+}
+
+function generateGenericUsername(): string {
+  const adjective = randomArrayValue(USERNAME_ADJECTIVES);
+  const noun = randomArrayValue(USERNAME_NOUNS);
+  const suffix = Math.floor(Math.random() * 9_000 + 1_000);
+  return `${adjective}_${noun}_${suffix}`;
+}
+
+async function generateUniqueUsername() {
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const candidate = generateGenericUsername();
+    const existingUser = await db.query.user.findFirst({
+      where: eq(authUser.username, candidate),
+      columns: { id: true },
+    });
+
+    if (!existingUser) {
+      return candidate;
+    }
+  }
+
+  return `user_${crypto.randomUUID().replace(/-/g, "").slice(0, 12)}`;
 }
 
 export const auth = betterAuth({
@@ -55,7 +158,7 @@ export const auth = betterAuth({
             username?: string;
             displayUsername?: string;
           };
-          const uniqueUsername = emailToUniqueUsername(user.email);
+          const uniqueUsername = await generateUniqueUsername();
 
           return {
             data: {
