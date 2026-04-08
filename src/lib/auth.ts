@@ -144,8 +144,10 @@ export const auth = betterAuth({
   advanced: {
     database: {
       generateId: "uuid",
-      experimentalJoins: true,
     },
+  },
+  experimental: {
+    joins: true,
   },
   account: {
     accountLinking: {
