@@ -46,8 +46,6 @@ import {
   getReviewJsonLd,
   getReviewSummaries,
 } from "@/lib/reviews";
-import {
-} from "@/lib/reviews-search-params.server";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {

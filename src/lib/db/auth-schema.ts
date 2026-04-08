@@ -28,6 +28,7 @@ export const user = pgTable("user", {
   banned: boolean("banned").default(false),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
+  lastActiveAt: timestamp("last_active_at"),
 }).enableRLS();
 
 export const session = pgTable(
