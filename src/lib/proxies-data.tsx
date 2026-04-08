@@ -193,7 +193,6 @@ export const PROVIDERS: Provider[] = [
     url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
     badges: [
       "sponsor",
-      "bedrock-udp",
       "budget-friendly",
       "datacenter",
       "isp",
