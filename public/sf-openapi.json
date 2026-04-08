@@ -110,7 +110,7 @@
                     "additionalProperties": true
                   }
                 },
-                "required": ["preset"]
+                "required": ["bot_ids", "preset"]
               }
             }
           }
@@ -258,7 +258,7 @@
           {
             "name": "max_entries",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -342,7 +342,7 @@
           {
             "name": "max_entries",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -500,7 +500,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -590,7 +590,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -835,7 +835,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -925,7 +925,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -1369,7 +1369,7 @@
                     "additionalProperties": true
                   }
                 },
-                "required": ["role"]
+                "required": ["bot_ids", "role"]
               }
             }
           }
@@ -1811,7 +1811,7 @@
                     "format": "int32"
                   }
                 },
-                "required": ["target", "count"]
+                "required": ["bot_ids", "target", "count"]
               }
             }
           }
@@ -1901,7 +1901,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -1991,7 +1991,7 @@
                     "format": "uuid"
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -2107,7 +2107,7 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": ["bot_ids"]
               }
             }
           }
@@ -2411,7 +2411,7 @@
                     "description": "For SWAP_HOTBAR click type: which hotbar slot to swap with.\nRange: 0-8 (corresponding to hotbar slots 1-9).\nIgnored for other click types."
                   }
                 },
-                "required": ["click_type"]
+                "required": ["click_type", "hotbar_slot"]
               }
             }
           }
@@ -3785,7 +3785,7 @@
                     "description": "Map of input key to value for each input field.\nKeys must match the `key` field of DialogInput elements."
                   }
                 },
-                "required": []
+                "required": ["input_values"]
               }
             }
           }
@@ -4608,7 +4608,13 @@
                     "description": "Optional password for proxy authentication.\nUsed with username for SOCKS5 or HTTP proxy authentication.\nNot supported for SOCKS4 proxies (will cause an error if set)."
                   }
                 },
-                "required": ["uri"]
+                "required": [
+                  "uri",
+                  "headers.key",
+                  "headers.value",
+                  "proxy.type",
+                  "proxy.address"
+                ]
               }
             }
           }
@@ -4676,7 +4682,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -4695,6 +4702,7 @@
                   },
                   "account.profile_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The unique profile identifier (UUID) for this account.\nFor online accounts: The official Minecraft profile UUID from Microsoft.\nFor offline accounts: A deterministic UUID derived from the username.\nFormat: Standard UUID string (e.g., \"550e8400-e29b-41d4-a716-446655440000\")."
                   },
                   "account.last_known_name": {
@@ -4741,7 +4749,21 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "account.type",
+                  "account.profile_id",
+                  "account.last_known_name",
+                  "account.online_chain_java_data.auth_chain",
+                  "account.bedrock_data.auth_chain",
+                  "account.online_simple_java_data.access_token",
+                  "account.online_simple_java_data.expire_time_ms",
+                  "account.config.namespace",
+                  "account.config.entries.key",
+                  "account.config.entries.value",
+                  "account.persistent_metadata.namespace",
+                  "account.persistent_metadata.entries.key",
+                  "account.persistent_metadata.entries.value"
+                ]
               }
             }
           }
@@ -4809,7 +4831,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -4867,7 +4890,21 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "accounts.type",
+                  "accounts.profile_id",
+                  "accounts.last_known_name",
+                  "accounts.online_chain_java_data.auth_chain",
+                  "accounts.bedrock_data.auth_chain",
+                  "accounts.online_simple_java_data.access_token",
+                  "accounts.online_simple_java_data.expire_time_ms",
+                  "accounts.config.namespace",
+                  "accounts.config.entries.key",
+                  "accounts.config.entries.value",
+                  "accounts.persistent_metadata.namespace",
+                  "accounts.persistent_metadata.entries.key",
+                  "accounts.persistent_metadata.entries.value"
+                ]
               }
             }
           }
@@ -4935,7 +4972,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -4961,7 +4999,7 @@
                     "type": "string"
                   }
                 },
-                "required": []
+                "required": ["proxies.type", "proxies.address"]
               }
             }
           }
@@ -5029,7 +5067,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -5059,7 +5098,7 @@
                     "description": "Optional password for proxy authentication.\nUsed with username for SOCKS5 or HTTP proxy authentication.\nNot supported for SOCKS4 proxies (will cause an error if set)."
                   }
                 },
-                "required": []
+                "required": ["proxy.type", "proxy.address"]
               }
             }
           }
@@ -5131,7 +5170,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -5149,7 +5189,7 @@
                     "description": "The target state for the instance. Valid transitions:\n- STOPPED -> RUNNING: Starts the instance\n- RUNNING -> PAUSED: Pauses bot ticking\n- PAUSED -> RUNNING: Resumes bot ticking\n- RUNNING/PAUSED -> STOPPED: Stops the instance\nThe server will handle intermediate states (STARTING, STOPPING) automatically."
                   }
                 },
-                "required": []
+                "required": ["state"]
               }
             }
           }
@@ -5226,7 +5266,7 @@
                     "description": "A human-readable name for the instance. This will be displayed in the UI\nand can be changed later via UpdateInstanceMeta."
                   }
                 },
-                "required": []
+                "required": ["friendlyName"]
               },
               "example": {
                 "friendlyName": ""
@@ -5350,7 +5390,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance containing the account.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5359,7 +5400,8 @@
             "required": true,
             "description": "The profile_id (UUID) of the Minecraft account.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5442,7 +5484,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance containing the account.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5451,7 +5494,8 @@
             "required": true,
             "description": "The profile_id (UUID) of the Minecraft account.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5487,7 +5531,7 @@
                     "description": "The value to set. Supports JSON value types."
                   }
                 },
-                "required": []
+                "required": ["value"]
               }
             }
           }
@@ -5558,7 +5602,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance to delete.\nThe instance will be stopped if running before deletion.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -5623,7 +5668,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5699,7 +5745,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5782,7 +5829,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5818,7 +5866,7 @@
                     "description": "The value to set. Supports JSON value types."
                   }
                 },
-                "required": []
+                "required": ["value"]
               }
             }
           }
@@ -5886,7 +5934,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance containing the account.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -5895,7 +5944,8 @@
             "required": true,
             "description": "The profile_id (UUID) of the Minecraft account.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -5962,7 +6012,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6029,7 +6080,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6096,7 +6148,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -6105,7 +6158,8 @@
             "required": true,
             "description": "The profile_id (UUID) of the account to remove.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6172,7 +6226,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6189,10 +6244,11 @@
                     "items": {
                       "type": "string"
                     },
+                    "format": "uuid",
                     "description": "List of profile_ids (UUIDs) of accounts to remove."
                   }
                 },
-                "required": []
+                "required": ["profile_ids"]
               }
             }
           }
@@ -6260,7 +6316,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6280,7 +6337,7 @@
                     "description": "List of proxy addresses to remove (in serialized format, e.g., \"host:port\").\nProxies matching these addresses will be removed."
                   }
                 },
-                "required": []
+                "required": ["addresses"]
               }
             }
           }
@@ -6348,7 +6405,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -6423,7 +6481,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -6463,7 +6522,7 @@
                     "description": "Optional password for proxy authentication.\nUsed with username for SOCKS5 or HTTP proxy authentication.\nNot supported for SOCKS4 proxies (will cause an error if set)."
                   }
                 },
-                "required": []
+                "required": ["proxy.type", "proxy.address"]
               }
             }
           }
@@ -6531,7 +6590,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6550,6 +6610,7 @@
                   },
                   "account.profile_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The unique profile identifier (UUID) for this account.\nFor online accounts: The official Minecraft profile UUID from Microsoft.\nFor offline accounts: A deterministic UUID derived from the username.\nFormat: Standard UUID string (e.g., \"550e8400-e29b-41d4-a716-446655440000\")."
                   },
                   "account.last_known_name": {
@@ -6596,7 +6657,21 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "account.type",
+                  "account.profile_id",
+                  "account.last_known_name",
+                  "account.online_chain_java_data.auth_chain",
+                  "account.bedrock_data.auth_chain",
+                  "account.online_simple_java_data.access_token",
+                  "account.online_simple_java_data.expire_time_ms",
+                  "account.config.namespace",
+                  "account.config.entries.key",
+                  "account.config.entries.value",
+                  "account.persistent_metadata.namespace",
+                  "account.persistent_metadata.entries.key",
+                  "account.persistent_metadata.entries.value"
+                ]
               }
             }
           }
@@ -6667,7 +6742,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance to update.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -6758,7 +6834,29 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "config.settings.namespace",
+                  "config.settings.entries.key",
+                  "config.settings.entries.value",
+                  "config.accounts.type",
+                  "config.accounts.profile_id",
+                  "config.accounts.last_known_name",
+                  "config.accounts.online_chain_java_data.auth_chain",
+                  "config.accounts.bedrock_data.auth_chain",
+                  "config.accounts.online_simple_java_data.access_token",
+                  "config.accounts.online_simple_java_data.expire_time_ms",
+                  "config.accounts.config.namespace",
+                  "config.accounts.config.entries.key",
+                  "config.accounts.config.entries.value",
+                  "config.accounts.persistent_metadata.namespace",
+                  "config.accounts.persistent_metadata.entries.key",
+                  "config.accounts.persistent_metadata.entries.value",
+                  "config.proxies.type",
+                  "config.proxies.address",
+                  "config.persistent_metadata.namespace",
+                  "config.persistent_metadata.entries.key",
+                  "config.persistent_metadata.entries.value"
+                ]
               }
             }
           }
@@ -6829,7 +6927,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance to update.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -6865,7 +6964,7 @@
                     "description": "The new value for the setting. Supports JSON value types\n(string, number, boolean, null, array, object)."
                   }
                 },
-                "required": []
+                "required": ["value"]
               }
             }
           }
@@ -6936,7 +7035,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the instance to update.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -7031,6 +7131,7 @@
                 "properties": {
                   "auth_flow_token": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The authentication flow token received from the Login RPC response.\nThis token links the code verification to the original login request.\nMust be a valid UUID string."
                   },
                   "code": {
@@ -7038,7 +7139,7 @@
                     "description": "The six-digit verification code that was sent to the user's email address.\nMust exactly match the code that was emailed to the user."
                   }
                 },
-                "required": ["code"]
+                "required": ["auth_flow_token", "code"]
               },
               "example": {
                 "authFlowToken": "",
@@ -7173,22 +7274,27 @@
                 "properties": {
                   "scope.instance.instance_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The UUID of the instance to filter logs for. Must be a valid UUID string."
                   },
                   "scope.bot.instance_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The UUID of the instance the bot belongs to. Must be a valid UUID string."
                   },
                   "scope.bot.bot_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The UUID of the bot account to filter logs for. Must be a valid UUID string."
                   },
                   "scope.instance_script.instance_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The UUID of the instance the script is running in. Must be a valid UUID string."
                   },
                   "scope.instance_script.script_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The UUID of the script to filter logs for. Must be a valid UUID string."
                   },
                   "count": {
@@ -7197,7 +7303,14 @@
                     "description": "The maximum number of recent log entries to retrieve.\nMust not exceed 300 (the server's maximum log buffer size).\nReturns the newest entries that match the scope, up to this count."
                   }
                 },
-                "required": ["count"]
+                "required": [
+                  "scope.instance.instance_id",
+                  "scope.bot.instance_id",
+                  "scope.bot.bot_id",
+                  "scope.instance_script.instance_id",
+                  "scope.instance_script.script_id",
+                  "count"
+                ]
               },
               "example": {
                 "count": 0
@@ -7291,6 +7404,7 @@
                   },
                   "account.profile_id": {
                     "type": "string",
+                    "format": "uuid",
                     "description": "The unique profile identifier (UUID) for this account.\nFor online accounts: The official Minecraft profile UUID from Microsoft.\nFor offline accounts: A deterministic UUID derived from the username.\nFormat: Standard UUID string (e.g., \"550e8400-e29b-41d4-a716-446655440000\")."
                   },
                   "account.last_known_name": {
@@ -7337,7 +7451,21 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "account.type",
+                  "account.profile_id",
+                  "account.last_known_name",
+                  "account.online_chain_java_data.auth_chain",
+                  "account.bedrock_data.auth_chain",
+                  "account.online_simple_java_data.access_token",
+                  "account.online_simple_java_data.expire_time_ms",
+                  "account.config.namespace",
+                  "account.config.entries.key",
+                  "account.config.entries.value",
+                  "account.persistent_metadata.namespace",
+                  "account.persistent_metadata.entries.key",
+                  "account.persistent_metadata.entries.value"
+                ]
               }
             }
           }
@@ -7550,7 +7678,8 @@
             "required": true,
             "description": "The instance to create the script in.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -7669,7 +7798,24 @@
                     "description": "When true, disables per-node and data edge timeouts entirely."
                   }
                 },
-                "required": []
+                "required": [
+                  "name",
+                  "nodes.id",
+                  "nodes.type",
+                  "nodes.position.x",
+                  "nodes.position.y",
+                  "nodes.muted",
+                  "nodes.collapsed",
+                  "nodes.parent_frame_id",
+                  "edges.id",
+                  "edges.source",
+                  "edges.source_handle",
+                  "edges.target",
+                  "edges.target_handle",
+                  "edges.edge_type",
+                  "paused",
+                  "quotas.disable_timeouts"
+                ]
               }
             }
           }
@@ -7735,7 +7881,8 @@
             "required": true,
             "description": "The instance to list scripts from.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -7805,7 +7952,8 @@
             "required": true,
             "description": "The instance containing the script.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -7814,7 +7962,8 @@
             "required": true,
             "description": "The ID of the script to deactivate.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -7882,7 +8031,8 @@
             "required": true,
             "description": "The instance containing the script.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -7891,7 +8041,8 @@
             "required": true,
             "description": "The ID of the script to delete.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -7956,7 +8107,8 @@
             "required": true,
             "description": "The instance containing the script.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -7965,7 +8117,8 @@
             "required": true,
             "description": "The ID of the script to retrieve.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -8033,7 +8186,8 @@
             "required": true,
             "description": "The instance containing the script.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -8042,7 +8196,8 @@
             "required": true,
             "description": "The ID of the script to update.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -8173,7 +8328,25 @@
                     "description": "Whether the quotas field should be updated (allows clearing quotas)."
                   }
                 },
-                "required": []
+                "required": [
+                  "nodes.id",
+                  "nodes.type",
+                  "nodes.position.x",
+                  "nodes.position.y",
+                  "nodes.muted",
+                  "nodes.collapsed",
+                  "nodes.parent_frame_id",
+                  "edges.id",
+                  "edges.source",
+                  "edges.source_handle",
+                  "edges.target",
+                  "edges.target_handle",
+                  "edges.edge_type",
+                  "update_nodes",
+                  "update_edges",
+                  "quotas.disable_timeouts",
+                  "update_quotas"
+                ]
               }
             }
           }
@@ -8247,7 +8420,7 @@
           {
             "name": "include_deprecated",
             "in": "query",
-            "required": false,
+            "required": true,
             "description": "Whether to include deprecated node types.\nDefault is false.",
             "schema": {
               "type": "boolean"
@@ -8384,7 +8557,8 @@
             "required": true,
             "description": "The instance containing the script.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -8393,7 +8567,8 @@
             "required": true,
             "description": "The ID of the script to check.\nFormat: UUID string.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -8460,7 +8635,8 @@
             "required": true,
             "description": "The instance context for validation.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -8543,7 +8719,21 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "nodes.id",
+                  "nodes.type",
+                  "nodes.position.x",
+                  "nodes.position.y",
+                  "nodes.muted",
+                  "nodes.collapsed",
+                  "nodes.parent_frame_id",
+                  "edges.id",
+                  "edges.source",
+                  "edges.source_handle",
+                  "edges.target",
+                  "edges.target_handle",
+                  "edges.edge_type"
+                ]
               }
             }
           }
@@ -8682,7 +8872,11 @@
                     "additionalProperties": true
                   }
                 },
-                "required": []
+                "required": [
+                  "config.settings.namespace",
+                  "config.settings.entries.key",
+                  "config.settings.entries.value"
+                ]
               }
             }
           }
@@ -8991,7 +9185,8 @@
             "required": true,
             "description": "The unique identifier (UUID) of the user to delete.\nCannot be the ID of the requesting user (cannot delete self).\nCannot be the root user ID (00000000-0000-0000-0000-000000000000).",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -9406,7 +9601,7 @@
             }
           }
         },
-        "required": []
+        "required": ["settings", "results"]
       },
       "soulfire.v1.AutomationActionResponse": {
         "type": "object",
@@ -9419,7 +9614,7 @@
             }
           }
         },
-        "required": []
+        "required": ["results"]
       },
       "soulfire.v1.BotClickDialogButtonResponse": {
         "type": "object",
@@ -9435,7 +9630,7 @@
             "description": "Error message if success is false.\nPossible errors: \"No dialog is currently displayed\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotCloseContainerResponse": {
         "type": "object",
@@ -9447,7 +9642,7 @@
             "description": "Whether the close action was successful."
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotCloseDialogResponse": {
         "type": "object",
@@ -9463,7 +9658,7 @@
             "description": "Error message if success is false."
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotContainerButtonClickResponse": {
         "type": "object",
@@ -9479,7 +9674,7 @@
             "description": "Error message if success is false.\nPossible errors: \"Invalid button ID for this container type\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotGetDialogResponse": {
         "type": "object",
@@ -9527,7 +9722,7 @@
             "description": "Error message if success is false.\nPossible errors: \"Invalid click type\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotInventoryStateResponse": {
         "type": "object",
@@ -9563,7 +9758,7 @@
             "description": "Currently selected hotbar slot index (0-8)."
           }
         },
-        "required": []
+        "required": ["layout", "slots", "selected_hotbar_slot"]
       },
       "soulfire.v1.BotListResponse": {
         "type": "object",
@@ -9578,7 +9773,7 @@
             "description": "All bots configured in the instance, both online and offline.\nThe order is determined by the account configuration order."
           }
         },
-        "required": []
+        "required": ["bots"]
       },
       "soulfire.v1.BotMouseClickResponse": {
         "type": "object",
@@ -9594,7 +9789,7 @@
             "description": "Error message if success is false.\nPossible errors: \"Invalid mouse button\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotOpenInventoryResponse": {
         "type": "object",
@@ -9606,7 +9801,7 @@
             "description": "Whether the open inventory action was successful."
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotRenderPovResponse": {
         "type": "object",
@@ -9618,7 +9813,7 @@
             "description": "Base64-encoded PNG image data.\nDecode with standard Base64 decoder to get raw PNG bytes.\nThe image uses the bot's current render distance setting."
           }
         },
-        "required": []
+        "required": ["image_base64"]
       },
       "soulfire.v1.BotResetMovementResponse": {
         "type": "object",
@@ -9634,7 +9829,7 @@
             "description": "Error message if success is false."
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotSetContainerTextResponse": {
         "type": "object",
@@ -9650,7 +9845,7 @@
             "description": "Error message if success is false.\nPossible errors: \"Unsupported container or field ID: <type>/<field_id>\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotSetHotbarSlotResponse": {
         "type": "object",
@@ -9666,7 +9861,7 @@
             "description": "Error message if success is false.\nPossible errors: \"Hotbar slot must be between 0 and 8, got: <slot>\",\n\"Player is not available\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotSetMovementStateResponse": {
         "type": "object",
@@ -9682,7 +9877,7 @@
             "description": "Error message if success is false."
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotSetRotationResponse": {
         "type": "object",
@@ -9698,7 +9893,7 @@
             "description": "Error message if success is false.\nPossible errors: \"Player is not available\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotSubmitDialogResponse": {
         "type": "object",
@@ -9714,7 +9909,7 @@
             "description": "Error message if success is false.\nPossible errors: \"No dialog is currently displayed\""
           }
         },
-        "required": []
+        "required": ["success"]
       },
       "soulfire.v1.BotUpdateConfigEntryResponse": {
         "type": "object",
@@ -9730,6 +9925,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "The unique identifier (UUID) of the authenticated user."
           },
           "username": {
@@ -9746,6 +9942,7 @@
           },
           "email": {
             "type": "string",
+            "format": "email",
             "description": "The email address associated with the user account."
           },
           "server_permissions": {
@@ -9764,7 +9961,14 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "username",
+          "role",
+          "email",
+          "server_permissions",
+          "server_info"
+        ]
       },
       "soulfire.v1.CommandCompletionResponse": {
         "type": "object",
@@ -9779,7 +9983,7 @@
             "description": "List of completion suggestions for the partial command.\nMay be empty if no completions are available.\nSuggestions are generated based on the command's Brigadier definition\nand the current execution scope's visibility."
           }
         },
-        "required": []
+        "required": ["suggestions"]
       },
       "soulfire.v1.CommandResponse": {
         "type": "object",
@@ -9792,7 +9996,7 @@
             "description": "The exit code returned by the command.\n- 0: Command failed or had no effect (e.g., syntax error, no targets found)\n- 1 (Command.SINGLE_SUCCESS): Command executed successfully\n- >1: Command succeeded and affected multiple targets (count of affected items)\nNote: Syntax errors return 0 and error details are sent via the logging system."
           }
         },
-        "required": []
+        "required": ["code"]
       },
       "soulfire.v1.CreateScriptResponse": {
         "type": "object",
@@ -9815,7 +10019,7 @@
             "description": "Validation diagnostics (warnings) from building the script graph."
           }
         },
-        "required": []
+        "required": ["script", "diagnostics"]
       },
       "soulfire.v1.DeactivateScriptResponse": {
         "type": "object",
@@ -9868,7 +10072,7 @@
             "description": "The HTTP status code returned by the target server (e.g., 200, 404, 500).\nCommon values:\n- 200: OK - Request succeeded\n- 301/302: Redirect (note: redirects may be followed automatically)\n- 400: Bad Request\n- 401: Unauthorized\n- 403: Forbidden\n- 404: Not Found\n- 500: Internal Server Error"
           }
         },
-        "required": []
+        "required": ["data", "headers", "status_code"]
       },
       "soulfire.v1.GenerateAPITokenResponse": {
         "type": "object",
@@ -9880,7 +10084,7 @@
             "description": "A JWT token with \"api\" audience that can be used to authenticate gRPC/HTTP API requests.\nThis token should be included in the Authorization header for subsequent API calls."
           }
         },
-        "required": []
+        "required": ["token"]
       },
       "soulfire.v1.GenerateUserAPITokenResponse": {
         "type": "object",
@@ -9892,7 +10096,7 @@
             "description": "The generated JWT token for API authentication.\nThis token is signed with the server's secret key and has the \"api\" audience.\nThe token does not expire but can be invalidated by updating the user's min_issued_at.\nShould be stored securely as it grants full access as the specified user."
           }
         },
-        "required": []
+        "required": ["token"]
       },
       "soulfire.v1.GenerateWebDAVTokenResponse": {
         "type": "object",
@@ -9904,7 +10108,7 @@
             "description": "A JWT token with \"webdav\" audience that can be used to authenticate WebDAV requests.\nThis token should be included in the Authorization header when accessing the WebDAV endpoint."
           }
         },
-        "required": []
+        "required": ["token"]
       },
       "soulfire.v1.GetAccountMetadataResponse": {
         "type": "object",
@@ -9916,10 +10120,11 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Metadata organized by namespace. Each namespace contains\nkey-value pairs of metadata."
           }
         },
-        "required": []
+        "required": ["metadata"]
       },
       "soulfire.v1.GetAutomationBotStateResponse": {
         "type": "object",
@@ -9929,7 +10134,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationBotState"
           }
         },
-        "required": []
+        "required": ["state"]
       },
       "soulfire.v1.GetAutomationCoordinationStateResponse": {
         "type": "object",
@@ -9939,7 +10144,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationCoordinationState"
           }
         },
-        "required": []
+        "required": ["state"]
       },
       "soulfire.v1.GetAutomationMemoryStateResponse": {
         "type": "object",
@@ -9949,7 +10154,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationMemoryState"
           }
         },
-        "required": []
+        "required": ["state"]
       },
       "soulfire.v1.GetAutomationTeamStateResponse": {
         "type": "object",
@@ -9959,7 +10164,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationTeamState"
           }
         },
-        "required": []
+        "required": ["state"]
       },
       "soulfire.v1.GetInstanceMetadataResponse": {
         "type": "object",
@@ -9971,10 +10176,11 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Metadata organized by namespace. Each namespace contains\nkey-value pairs of metadata."
           }
         },
-        "required": []
+        "required": ["metadata"]
       },
       "soulfire.v1.GetInstanceMetricsResponse": {
         "type": "object",
@@ -9997,7 +10203,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["snapshots", "distributions"]
       },
       "soulfire.v1.GetNodeTypesResponse": {
         "type": "object",
@@ -10026,7 +10232,7 @@
             "description": "Metadata for each port type including colors and compatibility.\nClients should use this instead of hardcoded port type info."
           }
         },
-        "required": []
+        "required": ["node_types", "categories", "port_type_metadata"]
       },
       "soulfire.v1.GetRegistryDataResponse": {
         "type": "object",
@@ -10062,7 +10268,7 @@
             "description": "Biome types (e.g., \"minecraft:plains\", \"minecraft:forest\")."
           }
         },
-        "required": []
+        "required": ["blocks", "entities", "items", "biomes"]
       },
       "soulfire.v1.GetScriptResponse": {
         "type": "object",
@@ -10078,7 +10284,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["script"]
       },
       "soulfire.v1.GetScriptStatusResponse": {
         "type": "object",
@@ -10094,7 +10300,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["status"]
       },
       "soulfire.v1.GetServerMetricsResponse": {
         "type": "object",
@@ -10109,7 +10315,7 @@
             "description": "Time-series snapshots ordered oldest to newest.\nContains up to 600 snapshots (30 minutes at 3-second intervals)."
           }
         },
-        "required": []
+        "required": ["snapshots"]
       },
       "soulfire.v1.InstanceAddAccountResponse": {
         "type": "object",
@@ -10152,7 +10358,7 @@
             "description": "List of audit log entries, ordered by timestamp descending (newest first)."
           }
         },
-        "required": []
+        "required": ["entry"]
       },
       "soulfire.v1.InstanceCreateResponse": {
         "type": "object",
@@ -10161,10 +10367,11 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "The unique identifier (UUID) of the newly created instance.\nUse this ID for all subsequent operations on the instance."
           }
         },
-        "required": []
+        "required": ["id"]
       },
       "soulfire.v1.InstanceDeleteResponse": {
         "type": "object",
@@ -10207,10 +10414,11 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.InstanceListResponse.Instance"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "List of instances the user has READ_INSTANCE permission for."
           }
         },
-        "required": []
+        "required": ["instances"]
       },
       "soulfire.v1.InstanceRemoveAccountResponse": {
         "type": "object",
@@ -10309,7 +10517,7 @@
             "description": "Summary information for each script in the instance.\nDoes not include full node/edge data to reduce payload size."
           }
         },
-        "required": []
+        "required": ["scripts"]
       },
       "soulfire.v1.NextAuthFlowResponse": {
         "type": "object",
@@ -10361,7 +10569,7 @@
             "description": "The list of log entries matching the requested scope, ordered from oldest to newest.\nMay contain fewer entries than requested if not enough matching logs exist in the buffer."
           }
         },
-        "required": []
+        "required": ["messages"]
       },
       "soulfire.v1.RefreshResponse": {
         "type": "object",
@@ -10377,7 +10585,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["account"]
       },
       "soulfire.v1.ReleaseAutomationBotClaimsResponse": {
         "type": "object",
@@ -10393,7 +10601,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationCoordinationState"
           }
         },
-        "required": []
+        "required": ["results", "state"]
       },
       "soulfire.v1.ReleaseAutomationClaimResponse": {
         "type": "object",
@@ -10406,7 +10614,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationCoordinationState"
           }
         },
-        "required": []
+        "required": ["released", "state"]
       },
       "soulfire.v1.ResetAutomationCoordinationStateResponse": {
         "type": "object",
@@ -10416,7 +10624,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationCoordinationState"
           }
         },
-        "required": []
+        "required": ["state"]
       },
       "soulfire.v1.ResetAutomationMemoryResponse": {
         "type": "object",
@@ -10429,7 +10637,7 @@
             }
           }
         },
-        "required": []
+        "required": ["results"]
       },
       "soulfire.v1.ServerInfoResponse": {
         "type": "object",
@@ -10466,7 +10674,12 @@
             "description": "List of registered plugins on the server.\nEach plugin includes metadata such as ID, version, description, author,\nlicense, and website URL. Plugins may own settings pages."
           }
         },
-        "required": ["config"]
+        "required": [
+          "config",
+          "settings_definitions",
+          "server_settings",
+          "plugins"
+        ]
       },
       "soulfire.v1.ServerUpdateConfigEntryResponse": {
         "type": "object",
@@ -10497,7 +10710,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationMaxEndBotsResponse": {
         "type": "object",
@@ -10507,7 +10720,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationObjectiveOverrideResponse": {
         "type": "object",
@@ -10517,7 +10730,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationQuotaOverrideResponse": {
         "type": "object",
@@ -10527,7 +10740,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationRoleOverrideResponse": {
         "type": "object",
@@ -10540,7 +10753,7 @@
             }
           }
         },
-        "required": []
+        "required": ["results"]
       },
       "soulfire.v1.SetAutomationRolePolicyResponse": {
         "type": "object",
@@ -10550,7 +10763,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationSharedClaimsResponse": {
         "type": "object",
@@ -10560,7 +10773,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationSharedEndEntryResponse": {
         "type": "object",
@@ -10570,7 +10783,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetAutomationSharedStructuresResponse": {
         "type": "object",
@@ -10580,7 +10793,7 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
           }
         },
-        "required": []
+        "required": ["settings"]
       },
       "soulfire.v1.SetInstanceMetadataEntryResponse": {
         "type": "object",
@@ -10600,7 +10813,7 @@
             }
           }
         },
-        "required": []
+        "required": ["results"]
       },
       "soulfire.v1.UpdateScriptResponse": {
         "type": "object",
@@ -10623,7 +10836,7 @@
             "description": "Validation diagnostics (warnings) from building the script graph."
           }
         },
-        "required": []
+        "required": ["script", "diagnostics"]
       },
       "soulfire.v1.UpdateSelfEmailResponse": {
         "type": "object",
@@ -10685,6 +10898,7 @@
           },
           "email": {
             "type": "string",
+            "format": "email",
             "description": "The email address of the user."
           },
           "created_at": {
@@ -10720,7 +10934,14 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "username",
+          "role",
+          "email",
+          "created_at",
+          "updated_at",
+          "min_issued_at"
+        ]
       },
       "soulfire.v1.UserListResponse": {
         "type": "object",
@@ -10732,10 +10953,11 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.UserListResponse.User"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "List of all users in the system."
           }
         },
-        "required": []
+        "required": ["users"]
       },
       "soulfire.v1.ValidateScriptResponse": {
         "type": "object",
@@ -10750,7 +10972,7 @@
             "description": "All diagnostics (errors and warnings) for the script graph."
           }
         },
-        "required": []
+        "required": ["diagnostics"]
       },
       "soulfire.v1.AutomationInstanceSettings": {
         "type": "object",
@@ -10802,14 +11024,29 @@
             "format": "int32"
           }
         },
-        "required": []
+        "required": [
+          "preset",
+          "team_collaboration",
+          "role_policy",
+          "shared_end_entry",
+          "max_end_bots",
+          "shared_structure_intel",
+          "shared_target_claims",
+          "objective_override",
+          "target_blaze_rods",
+          "target_ender_pearls",
+          "target_ender_eyes",
+          "target_arrows",
+          "target_beds"
+        ]
       },
       "soulfire.v1.AutomationBotActionResult": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "bot_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "account_name": {
             "type": "string"
@@ -10821,7 +11058,7 @@
             "type": "string"
           }
         },
-        "required": []
+        "required": ["bot_id", "account_name", "success", "message"]
       },
       "soulfire.v1.ServerDialog": {
         "type": "object",
@@ -10928,7 +11165,16 @@
             "description": "For SERVER_LINKS and DIALOG_LIST: button width.\nDefault: 150."
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "type",
+          "title",
+          "can_close_with_escape",
+          "pause",
+          "after_action",
+          "columns",
+          "button_width"
+        ]
       },
       "soulfire.v1.BotLiveState": {
         "type": "object",
@@ -11019,7 +11265,22 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "x",
+          "y",
+          "z",
+          "xRot",
+          "yRot",
+          "health",
+          "max_health",
+          "food_level",
+          "saturation_level",
+          "selected_hotbar_slot",
+          "dimension",
+          "experience_level",
+          "experience_progress",
+          "game_mode"
+        ]
       },
       "soulfire.v1.ContainerLayout": {
         "type": "object",
@@ -11073,7 +11334,12 @@
             "description": "Current page being displayed (for lectern).\nZero-indexed into book_pages."
           }
         },
-        "required": []
+        "required": [
+          "title",
+          "total_slots",
+          "container_type",
+          "current_book_page"
+        ]
       },
       "soulfire.v1.InventorySlot": {
         "type": "object",
@@ -11099,7 +11365,7 @@
             "description": "The custom display name of the item, if it has been renamed.\nOnly present when the item has a custom name component (e.g., renamed in an anvil).\nContains the plain text string, not JSON text components."
           }
         },
-        "required": []
+        "required": ["slot", "item_id", "count"]
       },
       "soulfire.v1.BotListEntry": {
         "type": "object",
@@ -11108,6 +11374,7 @@
         "properties": {
           "profile_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The Minecraft profile UUID of the bot.\nThis uniquely identifies the bot within the instance."
           },
           "is_online": {
@@ -11123,7 +11390,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["profile_id", "is_online"]
       },
       "soulfire.v1.UserRole": {
         "type": "string",
@@ -11148,7 +11415,7 @@
             "description": "Whether this permission has been granted to the current user.\nTrue if the user has this permission, false otherwise."
           }
         },
-        "required": []
+        "required": ["global_permission", "granted"]
       },
       "soulfire.v1.ServerInfo": {
         "type": "object",
@@ -11169,18 +11436,22 @@
           },
           "public_api_address": {
             "type": "string",
+            "format": "uri",
             "description": "The public URL for the gRPC/HTTP API endpoint.\nThis is the base address clients should use to connect to the server."
           },
           "public_webdav_address": {
             "type": "string",
+            "format": "uri",
             "description": "The public URL for the WebDAV file access endpoint.\nDerived from public_api_address with \"/webdav\" appended."
           },
           "public_docs_address": {
             "type": "string",
+            "format": "uri",
             "description": "The public URL for the API documentation endpoint.\nDerived from public_api_address with \"/docs\" appended."
           },
           "public_mcp_address": {
             "type": "string",
+            "format": "uri",
             "description": "The public URL for the MCP (Model Context Protocol) endpoint.\nDerived from public_api_address with \"/mcp\" appended.\nClients can use this to connect AI assistants to the SoulFire server."
           },
           "minecraft_version": {
@@ -11188,7 +11459,16 @@
             "description": "The native Minecraft protocol version supported by this server (e.g., \"1.21.4\")."
           }
         },
-        "required": []
+        "required": [
+          "version",
+          "commit_hash",
+          "branch_name",
+          "public_api_address",
+          "public_webdav_address",
+          "public_docs_address",
+          "public_mcp_address",
+          "minecraft_version"
+        ]
       },
       "soulfire.v1.CommandCompletion": {
         "type": "object",
@@ -11204,7 +11484,7 @@
             "description": "Optional tooltip providing additional context about this suggestion.\nMay contain formatted text explaining what the suggestion does.\nIf not present, no tooltip should be displayed."
           }
         },
-        "required": []
+        "required": ["suggestion"]
       },
       "soulfire.v1.ScriptData": {
         "type": "object",
@@ -11213,6 +11493,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "Unique identifier for this script.\nFormat: UUID string."
           },
           "name": {
@@ -11239,6 +11520,7 @@
           },
           "instance_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The instance this script belongs to.\nScripts are always associated with a specific instance.\nFormat: UUID string."
           },
           "paused": {
@@ -11254,7 +11536,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["id", "name", "instance_id", "paused"]
       },
       "soulfire.v1.ValidationDiagnostic": {
         "type": "object",
@@ -11282,7 +11564,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["node_id", "edge_id", "message", "severity"]
       },
       "soulfire.v1.HeaderPair": {
         "type": "object",
@@ -11298,7 +11580,7 @@
             "description": "The header value (e.g., \"application/json\", \"Bearer token123\")."
           }
         },
-        "required": []
+        "required": ["key", "value"]
       },
       "soulfire.v1.SettingsNamespace": {
         "type": "object",
@@ -11314,20 +11596,23 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace.SettingsEntry"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "The list of setting entries within this namespace.\nEach entry has a unique key within the namespace."
           }
         },
-        "required": []
+        "required": ["namespace"]
       },
       "soulfire.v1.AutomationBotState": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "instance_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "bot_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "account_name": {
             "type": "string"
@@ -11390,14 +11675,31 @@
             }
           }
         },
-        "required": []
+        "required": [
+          "instance_id",
+          "bot_id",
+          "account_name",
+          "status_summary",
+          "goal_mode",
+          "paused",
+          "target",
+          "team_role",
+          "team_objective",
+          "position",
+          "death_count",
+          "timeout_count",
+          "recovery_count",
+          "last_progress_at",
+          "settings"
+        ]
       },
       "soulfire.v1.AutomationCoordinationState": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "instance_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "friendly_name": {
             "type": "string"
@@ -11449,17 +11751,28 @@
             }
           }
         },
-        "required": []
+        "required": [
+          "instance_id",
+          "friendly_name",
+          "settings",
+          "objective",
+          "active_bots",
+          "shared_block_count",
+          "claim_count",
+          "eye_sample_count"
+        ]
       },
       "soulfire.v1.AutomationMemoryState": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "instance_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "bot_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "account_name": {
             "type": "string"
@@ -11519,14 +11832,25 @@
             }
           }
         },
-        "required": []
+        "required": [
+          "instance_id",
+          "bot_id",
+          "account_name",
+          "tick",
+          "remembered_block_count",
+          "remembered_container_count",
+          "remembered_entity_count",
+          "remembered_dropped_item_count",
+          "unreachable_position_count"
+        ]
       },
       "soulfire.v1.AutomationTeamState": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "instance_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "friendly_name": {
             "type": "string"
@@ -11554,7 +11878,13 @@
             }
           }
         },
-        "required": []
+        "required": [
+          "instance_id",
+          "friendly_name",
+          "settings",
+          "objective",
+          "active_bots"
+        ]
       },
       "soulfire.v1.MetricsSnapshot": {
         "type": "object",
@@ -11660,7 +11990,27 @@
             "description": "Disconnection events since the previous snapshot."
           }
         },
-        "required": []
+        "required": [
+          "timestamp",
+          "bots_online",
+          "bots_total",
+          "packets_sent_total",
+          "packets_received_total",
+          "bytes_sent_total",
+          "bytes_received_total",
+          "packets_sent_per_second",
+          "packets_received_per_second",
+          "bytes_sent_per_second",
+          "bytes_received_per_second",
+          "avg_tick_duration_ms",
+          "max_tick_duration_ms",
+          "avg_health",
+          "avg_food_level",
+          "total_loaded_chunks",
+          "total_tracked_entities",
+          "connections",
+          "disconnections"
+        ]
       },
       "soulfire.v1.MetricsDistributions": {
         "type": "object",
@@ -11788,7 +12138,18 @@
             "description": "Whether this node is expensive (slow, may block).\nUsed for visual warnings in tick-path analysis."
           }
         },
-        "required": []
+        "required": [
+          "type",
+          "display_name",
+          "description",
+          "category",
+          "is_trigger",
+          "deprecated",
+          "is_layout_node",
+          "supports_muting",
+          "supports_preview",
+          "is_expensive"
+        ]
       },
       "soulfire.v1.CategoryDefinition": {
         "type": "object",
@@ -11817,7 +12178,7 @@
             "description": "Sort order for displaying categories (lower = earlier)."
           }
         },
-        "required": []
+        "required": ["id", "display_name", "icon", "sort_order"]
       },
       "soulfire.v1.PortTypeMetadata": {
         "type": "object",
@@ -11864,7 +12225,13 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "port_type",
+          "color",
+          "display_name",
+          "handle_shape",
+          "edge_style"
+        ]
       },
       "soulfire.v1.RegistryEntry": {
         "type": "object",
@@ -11888,7 +12255,7 @@
             "description": "Optional category/group for organizing in UI."
           }
         },
-        "required": []
+        "required": ["id", "display_name"]
       },
       "soulfire.v1.ScriptStatus": {
         "type": "object",
@@ -11897,6 +12264,7 @@
         "properties": {
           "script_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The script this status applies to.\nFormat: UUID string."
           },
           "is_active": {
@@ -11913,7 +12281,7 @@
             "description": "The total number of times this script has been activated.\nIncremented each time ActivateScript is called."
           }
         },
-        "required": []
+        "required": ["script_id", "is_active", "activation_count"]
       },
       "soulfire.v1.ServerMetricsSnapshot": {
         "type": "object",
@@ -12004,7 +12372,24 @@
             "description": "Number of active (non-stopped) instances."
           }
         },
-        "required": []
+        "required": [
+          "timestamp",
+          "process_cpu_load",
+          "system_cpu_load",
+          "heap_used_bytes",
+          "heap_committed_bytes",
+          "heap_max_bytes",
+          "non_heap_used_bytes",
+          "thread_count",
+          "daemon_thread_count",
+          "gc_collection_count",
+          "gc_collection_time_ms",
+          "uptime_ms",
+          "available_processors",
+          "total_bots_online",
+          "total_bots_total",
+          "active_instances"
+        ]
       },
       "soulfire.v1.InstanceAuditLogResponse.AuditLogEntry": {
         "type": "object",
@@ -12044,7 +12429,7 @@
             "description": "Additional data about the action (e.g., command text for EXECUTE_COMMAND).\nMay be empty for some action types."
           }
         },
-        "required": []
+        "required": ["id", "user", "type", "timestamp", "data"]
       },
       "soulfire.v1.InstanceInfo": {
         "type": "object",
@@ -12112,7 +12497,13 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "friendly_name",
+          "icon",
+          "config",
+          "state",
+          "last_modified"
+        ]
       },
       "soulfire.v1.InstanceNotModified": {
         "type": "object",
@@ -12128,7 +12519,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["last_modified"]
       },
       "soulfire.v1.InstanceListResponse.Instance": {
         "type": "object",
@@ -12137,6 +12528,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "The unique identifier (UUID) of the instance."
           },
           "friendly_name": {
@@ -12163,7 +12555,7 @@
             "description": "The permissions the current user has on this instance.\nEach permission indicates whether a specific action is allowed."
           }
         },
-        "required": []
+        "required": ["id", "friendly_name", "icon", "state"]
       },
       "soulfire.v1.ScriptInfo": {
         "type": "object",
@@ -12172,6 +12564,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "Unique identifier for this script.\nFormat: UUID string."
           },
           "name": {
@@ -12184,6 +12577,7 @@
           },
           "instance_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The instance this script belongs to.\nFormat: UUID string."
           },
           "created_at": {
@@ -12207,7 +12601,14 @@
             "description": "Whether this script is paused (not running)."
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "name",
+          "instance_id",
+          "created_at",
+          "updated_at",
+          "paused"
+        ]
       },
       "soulfire.v1.NextAuthFlowResponse.EmailCode": {
         "type": "object",
@@ -12226,7 +12627,7 @@
             "description": "A JWT (JSON Web Token) for authenticating subsequent API requests.\nThis token should be included in the Authorization header for authenticated endpoints.\nThe token is issued with the \"api\" audience claim."
           }
         },
-        "required": []
+        "required": ["token"]
       },
       "soulfire.v1.NextAuthFlowResponse.Failure": {
         "type": "object",
@@ -12242,7 +12643,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["reason"]
       },
       "soulfire.v1.LogString": {
         "type": "object",
@@ -12259,14 +12660,17 @@
           },
           "instance_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The UUID of the instance this log is associated with, if any.\nPresent when the log was generated in the context of a specific attack instance."
           },
           "bot_account_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The UUID of the bot account this log is associated with, if any.\nPresent when the log was generated by or about a specific bot."
           },
           "script_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The UUID of the script this log is associated with, if any.\nPresent when the log was generated during script execution."
           },
           "personal": {
@@ -12315,6 +12719,7 @@
           },
           "profile_id": {
             "type": "string",
+            "format": "uuid",
             "description": "The unique profile identifier (UUID) for this account.\nFor online accounts: The official Minecraft profile UUID from Microsoft.\nFor offline accounts: A deterministic UUID derived from the username.\nFormat: Standard UUID string (e.g., \"550e8400-e29b-41d4-a716-446655440000\")."
           },
           "last_known_name": {
@@ -12358,6 +12763,7 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Per-bot configuration settings stored with the account.\nOrganized as namespace -> key -> value mappings.\nThese settings override instance-level settings when the bot is running.\nTypically includes bot-specific behavior settings."
           },
           "persistent_metadata": {
@@ -12365,10 +12771,11 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Persistent metadata stored with the account across sessions.\nOrganized as namespace -> key -> value mappings.\nUsed by plugins and the system to store account-specific state\nthat should persist across bot restarts (e.g., last position, inventory cache)."
           }
         },
-        "required": []
+        "required": ["type", "profile_id", "last_known_name"]
       },
       "soulfire.v1.ServerConfig": {
         "type": "object",
@@ -12380,6 +12787,7 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Collection of settings organized by namespace.\nEach namespace contains key-value pairs representing individual settings.\nThe structure allows for hierarchical organization of configuration values."
           }
         },
@@ -12463,7 +12871,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["id", "scope"]
       },
       "soulfire.v1.SettingsPage": {
         "type": "object",
@@ -12502,7 +12910,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["id", "page_name", "icon_id"]
       },
       "soulfire.v1.ServerPlugin": {
         "type": "object",
@@ -12531,10 +12939,18 @@
           },
           "website": {
             "type": "string",
+            "format": "uri",
             "description": "URL to the plugin's website, documentation, or repository.\nAllows users to find more information or report issues."
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "version",
+          "description",
+          "author",
+          "license",
+          "website"
+        ]
       },
       "google.protobuf.Timestamp": {
         "type": "object",
@@ -12561,6 +12977,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "The unique identifier (UUID) of the user."
           },
           "username": {
@@ -12577,6 +12994,7 @@
           },
           "email": {
             "type": "string",
+            "format": "email",
             "description": "The email address of the user."
           },
           "created_at": {
@@ -12612,7 +13030,15 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "username",
+          "role",
+          "email",
+          "created_at",
+          "updated_at",
+          "min_issued_at"
+        ]
       },
       "soulfire.v1.AutomationPreset": {
         "type": "string",
@@ -12755,7 +13181,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["label", "width"]
       },
       "soulfire.v1.GameMode": {
         "type": "string",
@@ -12805,7 +13231,14 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "label",
+          "start_index",
+          "slot_count",
+          "columns",
+          "type"
+        ]
       },
       "soulfire.v1.ContainerButton": {
         "type": "object",
@@ -12838,7 +13271,7 @@
             "description": "Whether this button is currently selected/active.\nUsed for toggle-style buttons or to show current selection."
           }
         },
-        "required": []
+        "required": ["button_id", "label", "disabled", "selected"]
       },
       "soulfire.v1.ContainerTextInput": {
         "type": "object",
@@ -12867,7 +13300,13 @@
             "description": "Placeholder text shown when field is empty."
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "label",
+          "current_value",
+          "max_length",
+          "placeholder"
+        ]
       },
       "soulfire.v1.BookPage": {
         "type": "object",
@@ -12884,7 +13323,7 @@
             "description": "Page content text.\nMay contain Minecraft formatting codes (section symbols)."
           }
         },
-        "required": []
+        "required": ["page_number", "content"]
       },
       "soulfire.v1.GlobalPermission": {
         "type": "string",
@@ -12916,6 +13355,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "Unique identifier for this node within the script.\nUsed to reference this node in edges and during execution tracking.\nFormat: UUID string."
           },
           "type": {
@@ -12979,7 +13419,14 @@
             "description": "Parent frame node ID, if this node is inside a frame."
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "type",
+          "position",
+          "muted",
+          "collapsed",
+          "parent_frame_id"
+        ]
       },
       "soulfire.v1.ScriptEdge": {
         "type": "object",
@@ -12988,6 +13435,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "Unique identifier for this edge within the script.\nFormat: UUID string."
           },
           "source": {
@@ -13015,7 +13463,14 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "source",
+          "source_handle",
+          "target",
+          "target_handle",
+          "edge_type"
+        ]
       },
       "soulfire.v1.ScriptQuotas": {
         "type": "object",
@@ -13047,7 +13502,7 @@
             "description": "When true, disables per-node and data edge timeouts entirely."
           }
         },
-        "required": []
+        "required": ["disable_timeouts"]
       },
       "soulfire.v1.DiagnosticSeverity": {
         "type": "string",
@@ -13072,7 +13527,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["key", "value"]
       },
       "soulfire.v1.AutomationGoalMode": {
         "type": "string",
@@ -13112,7 +13567,7 @@
             "format": "int32"
           }
         },
-        "required": []
+        "required": ["requirement_key", "display_name", "count"]
       },
       "soulfire.v1.AutomationTeamRole": {
         "type": "string",
@@ -13142,7 +13597,7 @@
             "format": "double"
           }
         },
-        "required": []
+        "required": ["x", "y", "z"]
       },
       "soulfire.v1.AutomationBotSettings": {
         "type": "object",
@@ -13174,7 +13629,15 @@
             "$ref": "#/components/schemas/soulfire.v1.AutomationTeamRole"
           }
         },
-        "required": []
+        "required": [
+          "enabled",
+          "allow_death_recovery",
+          "memory_scan_radius",
+          "memory_scan_interval_ticks",
+          "retreat_health_threshold",
+          "retreat_food_threshold",
+          "role_override"
+        ]
       },
       "soulfire.v1.AutomationSharedRequirementCount": {
         "type": "object",
@@ -13195,7 +13658,12 @@
             "format": "int32"
           }
         },
-        "required": []
+        "required": [
+          "requirement_key",
+          "display_name",
+          "current_count",
+          "target_count"
+        ]
       },
       "soulfire.v1.AutomationCoordinationSharedBlock": {
         "type": "object",
@@ -13229,7 +13697,16 @@
             "$ref": "#/components/schemas/google.protobuf.Timestamp"
           }
         },
-        "required": []
+        "required": [
+          "observer_bot_id",
+          "observer_account_name",
+          "dimension",
+          "x",
+          "y",
+          "z",
+          "block_id",
+          "last_seen_at"
+        ]
       },
       "soulfire.v1.AutomationCoordinationClaim": {
         "type": "object",
@@ -13251,14 +13728,21 @@
             "$ref": "#/components/schemas/google.protobuf.Timestamp"
           }
         },
-        "required": []
+        "required": [
+          "key",
+          "owner_bot_id",
+          "owner_account_name",
+          "target",
+          "expires_at"
+        ]
       },
       "soulfire.v1.AutomationCoordinationEyeSample": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "bot_id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "account_name": {
             "type": "string"
@@ -13273,7 +13757,13 @@
             "$ref": "#/components/schemas/google.protobuf.Timestamp"
           }
         },
-        "required": []
+        "required": [
+          "bot_id",
+          "account_name",
+          "origin",
+          "direction",
+          "recorded_at"
+        ]
       },
       "soulfire.v1.AutomationMemoryBlock": {
         "type": "object",
@@ -13299,7 +13789,7 @@
             "format": "int64"
           }
         },
-        "required": []
+        "required": ["x", "y", "z", "block_id", "last_seen_tick"]
       },
       "soulfire.v1.AutomationMemoryContainer": {
         "type": "object",
@@ -13336,7 +13826,16 @@
             "format": "int64"
           }
         },
-        "required": []
+        "required": [
+          "x",
+          "y",
+          "z",
+          "block_id",
+          "inspected",
+          "distinct_item_kinds",
+          "total_item_count",
+          "last_seen_tick"
+        ]
       },
       "soulfire.v1.AutomationMemoryEntity": {
         "type": "object",
@@ -13356,7 +13855,7 @@
             "format": "int64"
           }
         },
-        "required": []
+        "required": ["entity_id", "entity_type", "position", "last_seen_tick"]
       },
       "soulfire.v1.AutomationMemoryDroppedItem": {
         "type": "object",
@@ -13380,7 +13879,13 @@
             "format": "int64"
           }
         },
-        "required": []
+        "required": [
+          "entity_id",
+          "item_id",
+          "count",
+          "position",
+          "last_seen_tick"
+        ]
       },
       "soulfire.v1.AutomationMemoryUnreachablePosition": {
         "type": "object",
@@ -13403,7 +13908,7 @@
             "format": "int64"
           }
         },
-        "required": []
+        "required": ["x", "y", "z", "until_tick"]
       },
       "soulfire.v1.AutomationResourceQuota": {
         "type": "object",
@@ -13424,7 +13929,12 @@
             "format": "int32"
           }
         },
-        "required": []
+        "required": [
+          "requirement_key",
+          "display_name",
+          "current_count",
+          "target_count"
+        ]
       },
       "soulfire.v1.BotPosition": {
         "type": "object",
@@ -13446,7 +13956,7 @@
             "description": "Dimension the bot is in (e.g., \"minecraft:overworld\")."
           }
         },
-        "required": []
+        "required": ["x", "z", "dimension"]
       },
       "soulfire.v1.PortDefinition": {
         "type": "object",
@@ -13513,7 +14023,14 @@
             ]
           }
         },
-        "required": []
+        "required": [
+          "id",
+          "display_name",
+          "port_type",
+          "required",
+          "multi_input",
+          "infer_type_from"
+        ]
       },
       "soulfire.v1.PortType": {
         "type": "string",
@@ -13558,6 +14075,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "description": "Unique identifier for the user (UUID format)."
           },
           "username": {
@@ -13566,10 +14084,11 @@
           },
           "email": {
             "type": "string",
+            "format": "email",
             "description": "The email address of the user."
           }
         },
-        "required": []
+        "required": ["id", "username", "email"]
       },
       "soulfire.v1.InstanceAuditLogResponse.AuditLogEntryType": {
         "type": "string",
@@ -13601,6 +14120,7 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Instance settings organized by namespace. Each namespace contains\nkey-value pairs for configuration options."
           },
           "accounts": {
@@ -13622,6 +14142,7 @@
             "items": {
               "$ref": "#/components/schemas/soulfire.v1.SettingsNamespace"
             },
+            "x-google-field-behaviors": ["UNORDERED_LIST"],
             "description": "Persistent metadata stored with the instance across sessions.\nOrganized as namespace -> key -> value mappings.\nUsed by plugins and the system to store instance-specific state\nthat should persist across restarts."
           }
         },
@@ -13650,7 +14171,7 @@
             "description": "Whether the current user has been granted this permission."
           }
         },
-        "required": []
+        "required": ["instance_permission", "granted"]
       },
       "soulfire.v1.NextAuthFlowResponse.Failure.Reason": {
         "type": "string",
@@ -13685,7 +14206,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["auth_chain"]
       },
       "soulfire.v1.MinecraftAccountProto.OfflineJavaData": {
         "type": "object",
@@ -13708,7 +14229,7 @@
             ]
           }
         },
-        "required": []
+        "required": ["auth_chain"]
       },
       "soulfire.v1.MinecraftAccountProto.OnlineSimpleJavaData": {
         "type": "object",
@@ -13725,7 +14246,7 @@
             "description": "Token expiry time in milliseconds since epoch."
           }
         },
-        "required": []
+        "required": ["access_token", "expire_time_ms"]
       },
       "soulfire.v1.SettingsEntryIdentifier": {
         "type": "object",
@@ -13741,7 +14262,7 @@
             "description": "The key of the setting within its namespace.\nMust match a key from a SettingsEntry in the corresponding namespace."
           }
         },
-        "required": []
+        "required": ["namespace", "key"]
       },
       "soulfire.v1.SettingsPageEntryScopeType": {
         "type": "string",
@@ -13796,7 +14317,17 @@
             "description": "Whether this setting is disabled (read-only) in the UI.\nDisabled settings display their value but cannot be modified."
           }
         },
-        "required": []
+        "required": [
+          "ui_name",
+          "description",
+          "def",
+          "input_type",
+          "placeholder",
+          "min_length",
+          "max_length",
+          "pattern",
+          "disabled"
+        ]
       },
       "soulfire.v1.IntSetting": {
         "type": "object",
@@ -13844,7 +14375,17 @@
             "description": "Whether this setting is disabled (read-only) in the UI."
           }
         },
-        "required": []
+        "required": [
+          "ui_name",
+          "description",
+          "def",
+          "min",
+          "max",
+          "step",
+          "placeholder",
+          "thousand_separator",
+          "disabled"
+        ]
       },
       "soulfire.v1.DoubleSetting": {
         "type": "object",
@@ -13901,7 +14442,19 @@
             "description": "Whether this setting is disabled (read-only) in the UI."
           }
         },
-        "required": []
+        "required": [
+          "ui_name",
+          "description",
+          "def",
+          "min",
+          "max",
+          "step",
+          "placeholder",
+          "thousand_separator",
+          "decimal_scale",
+          "fixed_decimal_scale",
+          "disabled"
+        ]
       },
       "soulfire.v1.BoolSetting": {
         "type": "object",
@@ -13925,7 +14478,7 @@
             "description": "Whether this setting is disabled (read-only) in the UI."
           }
         },
-        "required": []
+        "required": ["ui_name", "description", "def", "disabled"]
       },
       "soulfire.v1.ComboSetting": {
         "type": "object",
@@ -13956,7 +14509,7 @@
             "description": "Whether this setting is disabled (read-only) in the UI."
           }
         },
-        "required": []
+        "required": ["ui_name", "description", "def", "disabled"]
       },
       "soulfire.v1.StringListSetting": {
         "type": "object",
@@ -13983,7 +14536,7 @@
             "description": "Whether this setting is disabled (read-only) in the UI."
           }
         },
-        "required": []
+        "required": ["ui_name", "description", "disabled"]
       },
       "soulfire.v1.MinMaxSetting": {
         "type": "object",
@@ -14030,7 +14583,15 @@
             "description": "Whether this setting is disabled (read-only) in the UI."
           }
         },
-        "required": []
+        "required": [
+          "min",
+          "max",
+          "step",
+          "thousand_separator",
+          "minEntry",
+          "maxEntry",
+          "disabled"
+        ]
       },
       "soulfire.v1.DialogPlainMessage": {
         "type": "object",
@@ -14047,7 +14608,7 @@
             "description": "Display width in pixels.\nRange: 1-1024, default: 200."
           }
         },
-        "required": []
+        "required": ["contents", "width"]
       },
       "soulfire.v1.DialogItem": {
         "type": "object",
@@ -14086,7 +14647,14 @@
             "description": "Display height in pixels.\nRange: 1-256, default: 16."
           }
         },
-        "required": []
+        "required": [
+          "item_id",
+          "count",
+          "show_decoration",
+          "show_tooltip",
+          "width",
+          "height"
+        ]
       },
       "soulfire.v1.DialogTextInput": {
         "type": "object",
@@ -14134,7 +14702,17 @@
             "description": "Display height for multiline input in pixels."
           }
         },
-        "required": []
+        "required": [
+          "key",
+          "label",
+          "width",
+          "label_visible",
+          "initial",
+          "max_length",
+          "multiline",
+          "multiline_max_lines",
+          "multiline_height"
+        ]
       },
       "soulfire.v1.DialogBooleanInput": {
         "type": "object",
@@ -14162,7 +14740,7 @@
             "description": "String value to submit when unchecked.\nDefault: \"false\"."
           }
         },
-        "required": []
+        "required": ["key", "label", "initial", "on_true", "on_false"]
       },
       "soulfire.v1.DialogSingleOptionInput": {
         "type": "object",
@@ -14198,7 +14776,13 @@
             "description": "ID of the initially selected option."
           }
         },
-        "required": []
+        "required": [
+          "key",
+          "label",
+          "label_visible",
+          "width",
+          "initial_option_id"
+        ]
       },
       "soulfire.v1.DialogNumberRangeInput": {
         "type": "object",
@@ -14243,7 +14827,16 @@
             "description": "Initial/default value."
           }
         },
-        "required": []
+        "required": [
+          "key",
+          "label",
+          "label_format",
+          "width",
+          "start",
+          "end",
+          "step",
+          "initial"
+        ]
       },
       "soulfire.v1.DialogAction": {
         "type": "object",
@@ -14344,7 +14937,7 @@
             "description": "The vertical position in canvas coordinates.\nPositive values extend downward."
           }
         },
-        "required": []
+        "required": ["x", "y"]
       },
       "google.protobuf.Value": {
         "type": "object",
@@ -14450,7 +15043,7 @@
             "description": "Optional password for proxy authentication.\nUsed with username for SOCKS5 or HTTP proxy authentication.\nNot supported for SOCKS4 proxies (will cause an error if set)."
           }
         },
-        "required": []
+        "required": ["type", "address"]
       },
       "soulfire.v1.InstancePermission": {
         "type": "string",
@@ -14525,7 +15118,7 @@
             "description": "Additional keywords for filtering/searching options.\nAllows finding this option by typing related terms."
           }
         },
-        "required": []
+        "required": ["id", "display_name"]
       },
       "soulfire.v1.MinMaxSetting.Entry": {
         "type": "object",
@@ -14550,7 +15143,7 @@
             "description": "Placeholder text shown when the input is empty."
           }
         },
-        "required": []
+        "required": ["ui_name", "description", "def", "placeholder"]
       },
       "soulfire.v1.DialogOption": {
         "type": "object",
@@ -14566,7 +15159,7 @@
             "description": "Display text for the option.\nIf empty, the id is used for display."
           }
         },
-        "required": []
+        "required": ["id", "display"]
       },
       "soulfire.v1.DialogOpenUrlAction": {
         "type": "object",
@@ -14575,10 +15168,11 @@
         "properties": {
           "url": {
             "type": "string",
+            "format": "uri",
             "description": "The URL to open."
           }
         },
-        "required": []
+        "required": ["url"]
       },
       "soulfire.v1.DialogRunCommandAction": {
         "type": "object",
@@ -14590,7 +15184,7 @@
             "description": "The command to run (including the leading /)."
           }
         },
-        "required": []
+        "required": ["command"]
       },
       "soulfire.v1.DialogSuggestCommandAction": {
         "type": "object",
@@ -14602,7 +15196,7 @@
             "description": "The command to suggest."
           }
         },
-        "required": []
+        "required": ["command"]
       },
       "soulfire.v1.DialogCopyToClipboardAction": {
         "type": "object",
@@ -14614,7 +15208,7 @@
             "description": "The text to copy."
           }
         },
-        "required": []
+        "required": ["value"]
       },
       "soulfire.v1.DialogShowDialogAction": {
         "type": "object",
@@ -14626,7 +15220,7 @@
             "description": "Dialog ID to show (references a registered dialog)."
           }
         },
-        "required": []
+        "required": ["dialog_id"]
       },
       "soulfire.v1.DialogCustomAction": {
         "type": "object",
@@ -14642,7 +15236,7 @@
             "description": "Optional JSON payload for the action."
           }
         },
-        "required": []
+        "required": ["id"]
       },
       "soulfire.v1.DialogDynamicRunCommandAction": {
         "type": "object",
@@ -14654,7 +15248,7 @@
             "description": "Command template with placeholders for input values.\nPlaceholders are replaced with user input before execution."
           }
         },
-        "required": []
+        "required": ["template"]
       },
       "soulfire.v1.DialogDynamicCustomAction": {
         "type": "object",
@@ -14670,7 +15264,7 @@
             "description": "Additional NBT data as JSON string."
           }
         },
-        "required": []
+        "required": ["id", "additions"]
       },
       "google.protobuf.NullValue": {
         "type": "string",
@@ -14713,7 +15307,7 @@
             "description": "The type arguments (e.g., [BOT] for List<Bot>, [STRING, NUMBER] for Map<String, Number>)."
           }
         },
-        "required": []
+        "required": ["base"]
       },
       "soulfire.v1.ProxyProto.Type": {
         "type": "string",
