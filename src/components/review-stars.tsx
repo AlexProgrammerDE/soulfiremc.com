@@ -8,11 +8,11 @@ type Size = "sm" | "md" | "lg";
 function sizeClass(size: Size) {
   switch (size) {
     case "lg":
-      return "h-5 w-5";
+      return "block h-5 w-5 shrink-0";
     case "md":
-      return "h-4.5 w-4.5";
+      return "block h-4.5 w-4.5 shrink-0";
     default:
-      return "h-4 w-4";
+      return "block h-4 w-4 shrink-0";
   }
 }
 
@@ -32,7 +32,7 @@ export function ReviewStars({
       className={cn("relative inline-flex items-center", className)}
       title={`${value.toFixed(1)} out of 5 stars`}
     >
-      <div className="flex text-amber-200/70">
+      <div className="flex items-center gap-0.5 text-amber-200/70">
         {generateN(5).map((i) => (
           <Star key={i} className={sizeClass(size)} />
         ))}
@@ -41,7 +41,7 @@ export function ReviewStars({
         className="absolute inset-0 overflow-hidden text-amber-500"
         style={{ width }}
       >
-        <div className="flex">
+        <div className="flex items-center gap-0.5">
           {generateN(5).map((i) => (
             <Star key={i} className={cn(sizeClass(size), "fill-current")} />
           ))}

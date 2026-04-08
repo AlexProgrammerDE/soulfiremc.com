@@ -1,9 +1,9 @@
 "use client";
 
 import { MessageSquareText } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { SignInRequiredCredenza } from "@/components/sign-in-required-credenza";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -22,17 +22,11 @@ function initial(name: string) {
 }
 
 function handleMutationError(
-  router: ReturnType<typeof useRouter>,
   error: "unauthorized" | "verification" | null,
+  onUnauthorized: () => void,
 ) {
   if (error === "unauthorized") {
-    toast("Sign in to leave a review", {
-      description: "You need to be signed in to rate and review this listing.",
-      action: {
-        label: "Sign In",
-        onClick: () => router.push("/auth/sign-in"),
-      },
-    });
+    onUnauthorized();
     return;
   }
 
@@ -55,7 +49,6 @@ export function ItemReviewsSection({
   initialSummary: ReviewSummary;
   initialWrittenReviews: PublicReviewRecord[];
 }) {
-  const router = useRouter();
   const reviewSlugs = useMemo(() => [slug], [slug]);
   const initialSummaryMap = useMemo(
     () => ({ [slug]: initialSummary }),
@@ -87,6 +80,7 @@ export function ItemReviewsSection({
   const [rating, setRating] = useState(currentReview?.rating ?? 5);
   const [anonymous, setAnonymous] = useState(currentReview?.anonymous ?? true);
   const [body, setBody] = useState(currentReview?.body ?? "");
+  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
   useEffect(() => {
     setRating(currentReview?.rating ?? 5);
@@ -109,7 +103,7 @@ export function ItemReviewsSection({
       anonymous,
       body,
     });
-    handleMutationError(router, result.error);
+    handleMutationError(result.error, () => setShowSignInPrompt(true));
     if (!result.error) {
       toast(currentReview ? "Review updated" : "Review saved");
     }
@@ -117,21 +111,22 @@ export function ItemReviewsSection({
 
   const removeReview = async () => {
     const result = await deleteReview(slug);
-    handleMutationError(router, result.error);
+    handleMutationError(result.error, () => setShowSignInPrompt(true));
     if (!result.error) {
       toast("Review removed");
     }
   };
 
   return (
-    <section className="space-y-5">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-semibold">Ratings & reviews</h2>
-        <p className="text-sm text-muted-foreground">
-          Ratings affect the average immediately. Only written reviews are shown
-          publicly.
-        </p>
-      </div>
+    <>
+      <section className="space-y-5">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold">Ratings & reviews</h2>
+          <p className="text-sm text-muted-foreground">
+            Ratings affect the average immediately. Only written reviews are shown
+            publicly.
+          </p>
+        </div>
 
       <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <Card className="gap-4 p-6">
@@ -244,56 +239,63 @@ export function ItemReviewsSection({
         </Card>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold">Latest written reviews</h3>
-          <ReviewSummaryBadge summary={summary} compact />
-        </div>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-lg font-semibold">Latest written reviews</h3>
+            <ReviewSummaryBadge summary={summary} compact />
+          </div>
 
-        {hasWrittenReviews ? (
-          <div className="grid gap-4">
-            {visibleReviews.map((entry) => (
-              <Card key={entry.id} className="gap-4 p-5">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar size="lg">
-                      {entry.authorImage ? (
-                        <AvatarImage
-                          src={entry.authorImage}
-                          alt={entry.authorName}
-                        />
-                      ) : null}
-                      <AvatarFallback>
-                        {initial(entry.authorName)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-1">
-                      <p className="font-medium">{entry.authorName}</p>
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                        <ReviewStars value={entry.rating} size="sm" />
-                        <span className="tabular-nums">
-                          {entry.rating.toFixed(1)}
-                        </span>
-                        <span>·</span>
-                        <CustomTimeAgo date={entry.createdAt} />
+          {hasWrittenReviews ? (
+            <div className="grid gap-4">
+              {visibleReviews.map((entry) => (
+                <Card key={entry.id} className="gap-4 p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <Avatar size="lg">
+                        {entry.authorImage ? (
+                          <AvatarImage
+                            src={entry.authorImage}
+                            alt={entry.authorName}
+                          />
+                        ) : null}
+                        <AvatarFallback>
+                          {initial(entry.authorName)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="space-y-1">
+                        <p className="font-medium">{entry.authorName}</p>
+                        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                          <ReviewStars value={entry.rating} size="sm" />
+                          <span className="tabular-nums">
+                            {entry.rating.toFixed(1)}
+                          </span>
+                          <span>·</span>
+                          <CustomTimeAgo date={entry.createdAt} />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  {entry.body}
-                </p>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <Card className="flex flex-col items-start gap-3 p-5 text-sm text-muted-foreground">
-            <MessageSquareText className="h-5 w-5" />
-            No written reviews yet. Star-only ratings still count toward the
-            average above.
-          </Card>
-        )}
-      </div>
-    </section>
+                  <p className="text-sm leading-6 text-muted-foreground">
+                    {entry.body}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="flex flex-col items-start gap-3 p-5 text-sm text-muted-foreground">
+              <MessageSquareText className="h-5 w-5" />
+              No written reviews yet. Star-only ratings still count toward the
+              average above.
+            </Card>
+          )}
+        </div>
+      </section>
+      <SignInRequiredCredenza
+        open={showSignInPrompt}
+        onOpenChange={setShowSignInPrompt}
+        title="Sign in to leave a review"
+        description="You need to be signed in to rate and review this listing."
+      />
+    </>
   );
 }
