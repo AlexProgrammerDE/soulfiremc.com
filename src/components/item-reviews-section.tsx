@@ -264,7 +264,7 @@ export function ItemReviewsSection({
         </Card>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Latest written reviews</h3>
+          <h3 className="text-lg font-semibold">Latest reviews</h3>
 
           {hasWrittenReviews ? (
             <div className="grid gap-4">
@@ -296,17 +296,23 @@ export function ItemReviewsSection({
                       </div>
                     </div>
                   </div>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {entry.body}
-                  </p>
+                  {entry.body ? (
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {entry.body}
+                    </p>
+                  ) : (
+                    <p className="text-sm italic text-muted-foreground/80">
+                      No written comment provided.
+                    </p>
+                  )}
                 </Card>
               ))}
             </div>
           ) : (
             <Card className="flex flex-col items-start gap-3 p-5 text-sm text-muted-foreground">
               <MessageSquareText className="h-5 w-5" />
-              No written reviews yet. Star-only ratings still count toward the
-              average above.
+              No reviews yet. Ratings without comments will still appear here
+              and count toward the average above.
             </Card>
           )}
         </div>

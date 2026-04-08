@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/auth-schema";
 import { review } from "@/lib/db/schema";
@@ -114,37 +114,25 @@ export async function getWrittenReviews(
       and(
         eq(review.itemType, itemType),
         eq(review.itemSlug, slug),
-        isNotNull(review.body),
       ),
     )
     .orderBy(desc(review.createdAt))
-    .limit(limit * 2);
+    .limit(limit);
 
-  const writtenReviews: PublicReviewRecord[] = [];
-
-  for (const row of rows) {
-    const body = row.body?.trim();
-    if (!body) continue;
-
+  return rows.map((row) => {
     const authorName = row.anonymous
       ? "Anonymous"
       : (row.displayUsername ?? row.username ?? row.userName ?? "User");
 
-    writtenReviews.push({
+    return {
       id: row.id,
       itemSlug: row.itemSlug,
       rating: row.rating,
       anonymous: row.anonymous,
-      body,
+      body: row.body?.trim() || null,
       createdAt: row.createdAt.toISOString(),
       authorName,
       authorImage: row.anonymous ? null : row.userImage,
-    });
-
-    if (writtenReviews.length === limit) {
-      break;
-    }
-  }
-
-  return writtenReviews;
+    };
+  });
 }

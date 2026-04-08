@@ -18,7 +18,7 @@ export type PublicReviewRecord = {
   itemSlug: string;
   rating: number;
   anonymous: boolean;
-  body: string;
+  body: string | null;
   createdAt: string;
   authorName: string;
   authorImage: string | null;
@@ -61,7 +61,7 @@ export function getReviewJsonLd(
       name: entry.authorName,
     },
     datePublished: entry.createdAt.slice(0, 10),
-    reviewBody: entry.body,
+    ...(entry.body ? { reviewBody: entry.body } : {}),
     reviewRating: {
       "@type": "Rating",
       ratingValue: entry.rating,
