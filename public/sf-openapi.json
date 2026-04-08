@@ -1234,6 +1234,96 @@
         }
       }
     },
+    "/v1/instances/p0/automation:setQuotaOverride": {
+      "post": {
+        "summary": "Set automation quota override",
+        "operationId": "soulfire_v1_AutomationService_SetAutomationQuotaOverride_POST",
+        "x-soulfire-transport": "http-json-transcoding",
+        "x-soulfire-grpc-service": "soulfire.v1.AutomationService",
+        "x-soulfire-grpc-method": "SetAutomationQuotaOverride",
+        "x-soulfire-unary-only": true,
+        "tags": ["AutomationService"],
+        "x-soulfire-permissions": ["UPDATE_INSTANCE_CONFIG"],
+        "x-soulfire-scope": "instance",
+        "x-soulfire-side-effects": [
+          "Overrides or clears one shared team quota such as blaze rods, pearls, eyes, arrows, or beds. Set target_count to 0 to restore automatic team-size-based behavior."
+        ],
+        "parameters": [
+          {
+            "name": "instance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "requirement_key": {
+                    "type": "string"
+                  },
+                  "target_count": {
+                    "type": "integer",
+                    "format": "int32"
+                  }
+                },
+                "required": ["requirement_key", "target_count"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/soulfire.v1.SetAutomationQuotaOverrideResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API authorization header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoulFireGrpcError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The authenticated user does not have the required permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoulFireGrpcError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server-side failure while handling the RPC.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoulFireGrpcError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/instances/p0/automation:setRoleOverride": {
       "post": {
         "summary": "Set automation role override",
@@ -1913,6 +2003,122 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/soulfire.v1.AutomationActionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API authorization header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoulFireGrpcError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The authenticated user does not have the required permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoulFireGrpcError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server-side failure while handling the RPC.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoulFireGrpcError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/instances/p0/automation:updateBotSettings": {
+      "post": {
+        "summary": "Update automation bot settings",
+        "operationId": "soulfire_v1_AutomationService_UpdateAutomationBotSettings_POST",
+        "x-soulfire-transport": "http-json-transcoding",
+        "x-soulfire-grpc-service": "soulfire.v1.AutomationService",
+        "x-soulfire-grpc-method": "UpdateAutomationBotSettings",
+        "x-soulfire-unary-only": true,
+        "tags": ["AutomationService"],
+        "x-soulfire-permissions": ["UPDATE_BOT_CONFIG"],
+        "x-soulfire-scope": "instance.bot",
+        "x-soulfire-side-effects": [
+          "Updates one or more persisted automation bot settings for the selected configured bots, including enablement, recovery, scan tuning, retreat thresholds, and role override."
+        ],
+        "parameters": [
+          {
+            "name": "instance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "bot_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "format": "uuid"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "allow_death_recovery": {
+                    "type": "boolean"
+                  },
+                  "memory_scan_radius": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "memory_scan_interval_ticks": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "retreat_health_threshold": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "retreat_food_threshold": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "role_override": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                },
+                "required": []
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/soulfire.v1.UpdateAutomationBotSettingsResponse"
                 }
               }
             }
@@ -10313,6 +10519,16 @@
         },
         "required": []
       },
+      "soulfire.v1.SetAutomationQuotaOverrideResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "settings": {
+            "$ref": "#/components/schemas/soulfire.v1.AutomationInstanceSettings"
+          }
+        },
+        "required": []
+      },
       "soulfire.v1.SetAutomationRoleOverrideResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -10371,6 +10587,19 @@
         "additionalProperties": false,
         "description": "Response after successfully setting an instance metadata entry.\nEmpty response indicates success.",
         "properties": {},
+        "required": []
+      },
+      "soulfire.v1.UpdateAutomationBotSettingsResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/soulfire.v1.AutomationBotActionResult"
+            }
+          }
+        },
         "required": []
       },
       "soulfire.v1.UpdateScriptResponse": {
@@ -10551,6 +10780,26 @@
           },
           "objective_override": {
             "$ref": "#/components/schemas/soulfire.v1.AutomationTeamObjective"
+          },
+          "target_blaze_rods": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "target_ender_pearls": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "target_ender_eyes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "target_arrows": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "target_beds": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "required": []
