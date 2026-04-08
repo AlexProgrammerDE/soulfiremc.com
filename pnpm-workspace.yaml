@@ -5,3 +5,4 @@ onlyBuiltDependencies:
   - msw
   - protobufjs
   - sharp
+  - vue-demi
