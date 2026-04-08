@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -37,6 +38,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         siteKey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string,
       }}
       optimistic
+      avatar={{
+        Image: Image
+      }}
       gravatar
       localization={{
         NAME: "Display Name",

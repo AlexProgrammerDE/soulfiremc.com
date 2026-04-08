@@ -81,11 +81,15 @@ const config: NextConfig = {
         protocol: "https",
       },
       {
+        hostname: "cdn.discordapp.com",
+        protocol: "https",
+      },
+      {
         hostname: "github.com",
         protocol: "https",
       },
       {
-        hostname: "cdn.discordapp.com",
+        hostname: "media.discordapp.net",
         protocol: "https",
       },
       {
