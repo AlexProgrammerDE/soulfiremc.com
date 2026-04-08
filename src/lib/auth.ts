@@ -2,7 +2,6 @@ import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { eq } from "drizzle-orm";
 import {
   admin,
   captcha,
@@ -15,11 +14,12 @@ import {
   username,
 } from "better-auth/plugins";
 import { emailHarmony } from "better-auth-harmony";
-import { db } from "@/lib/db";
-import { user as authUser } from "@/lib/db/auth-schema";
-import * as generatedAuthSchema from "@/lib/db/auth-schema";
-import * as schema from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import { getAvatarUrl } from "@/lib/avatar";
+import { db } from "@/lib/db";
+import * as generatedAuthSchema from "@/lib/db/auth-schema";
+import { user as authUser } from "@/lib/db/auth-schema";
+import * as schema from "@/lib/db/schema";
 import { authNotifications } from "./auth-notifications";
 
 const USERNAME_ADJECTIVES = [
@@ -175,10 +175,10 @@ export const auth = betterAuth({
     },
   },
   socialProviders: {
-    // google: {
-    //   clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    // },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    },
     discord: {
       clientId: process.env.DISCORD_CLIENT_ID ?? "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",

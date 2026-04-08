@@ -1,12 +1,12 @@
 "use client";
 
 import { AuthUIProvider } from "@daveyplate/better-auth-ui";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
 import { authClient } from "@/lib/auth-client";
-import Image from "next/image";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       replace={router.replace}
       onSessionChange={() => router.refresh()}
       Link={Link}
-      social={{ providers: [/* "google", */ "discord", "github"] }}
+      social={{ providers: ["google", "discord", "github"] }}
       emailOTP
       emailVerification
       changeEmail
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }}
       optimistic
       avatar={{
-        Image: Image
+        Image: Image,
       }}
       gravatar
       localization={{
