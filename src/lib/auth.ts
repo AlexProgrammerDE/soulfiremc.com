@@ -19,6 +19,7 @@ import { db } from "@/lib/db";
 import { user as authUser } from "@/lib/db/auth-schema";
 import * as generatedAuthSchema from "@/lib/db/auth-schema";
 import * as schema from "@/lib/db/schema";
+import { withGravatarFallback } from "@/lib/avatar";
 import { authNotifications } from "./auth-notifications";
 
 const USERNAME_ADJECTIVES = [
@@ -163,6 +164,7 @@ export const auth = betterAuth({
           return {
             data: {
               ...user,
+              image: withGravatarFallback(user.image, user.email),
               username: customTypedUser.username ?? uniqueUsername,
               displayUsername:
                 customTypedUser.displayUsername ?? uniqueUsername,
