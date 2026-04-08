@@ -96,6 +96,10 @@ const config: NextConfig = {
         hostname: "www.gravatar.com",
         protocol: "https",
       },
+      {
+        hostname: "gravatar.com",
+        protocol: "https",
+      },
     ],
   },
   redirects: async () => {

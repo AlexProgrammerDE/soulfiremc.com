@@ -8,6 +8,7 @@ const ALLOWED_AVATAR_HOSTNAMES = new Set([
   "github.com",
   "media.discordapp.net",
   "www.gravatar.com",
+  "gravatar.com",
 ]);
 
 function normalizeEmail(email: string) {
