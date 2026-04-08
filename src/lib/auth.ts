@@ -142,6 +142,9 @@ export const auth = betterAuth({
     },
   }),
   advanced: {
+    ipAddress: {
+      ipAddressHeaders: ["x-vercel-forwarded-for", "x-forwarded-for"],
+    },
     database: {
       generateId: "uuid",
     },
