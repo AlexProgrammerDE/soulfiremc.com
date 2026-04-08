@@ -116,12 +116,21 @@ export default async function ResourceDetailPage(props: {
   params: Promise<{ slug: string }>;
   searchParams: ReviewsPageSearchParams;
 }) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
+  return renderResourceDetailPage(params.slug, searchParams);
+}
+
+async function renderResourceDetailPage(
+  slug: string,
+  searchParams: Awaited<ReviewsPageSearchParams>,
+) {
   "use cache";
   cacheLife("hours");
 
-  const params = await props.params;
-  const { reviewsPage } = await loadReviewsSearchParams(props.searchParams);
-  const resource = getResourceBySlug(params.slug);
+  const { reviewsPage } = await loadReviewsSearchParams(searchParams);
+  const resource = getResourceBySlug(slug);
   if (!resource) notFound();
   const reviewSummaries = await getReviewSummaries("resource", [resource.slug]);
   const reviewSummary = reviewSummaries[resource.slug] ?? emptyReviewSummary();

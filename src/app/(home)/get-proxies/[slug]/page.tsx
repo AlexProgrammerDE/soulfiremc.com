@@ -123,12 +123,21 @@ export default async function ProxyProviderPage(props: {
   params: Promise<{ slug: string }>;
   searchParams: ReviewsPageSearchParams;
 }) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
+  return renderProxyProviderPage(params.slug, searchParams);
+}
+
+async function renderProxyProviderPage(
+  slug: string,
+  searchParams: Awaited<ReviewsPageSearchParams>,
+) {
   "use cache";
   cacheLife("hours");
 
-  const params = await props.params;
-  const { reviewsPage } = await loadReviewsSearchParams(props.searchParams);
-  const provider = getProviderBySlug(params.slug);
+  const { reviewsPage } = await loadReviewsSearchParams(searchParams);
+  const provider = getProviderBySlug(slug);
   if (!provider) notFound();
 
   const theme = provider.sponsorTheme

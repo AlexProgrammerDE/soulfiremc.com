@@ -248,12 +248,21 @@ export default async function AccountProviderPage(props: {
   params: Promise<{ slug: string }>;
   searchParams: ReviewsPageSearchParams;
 }) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
+  return renderAccountProviderPage(params.slug, searchParams);
+}
+
+async function renderAccountProviderPage(
+  slug: string,
+  searchParams: Awaited<ReviewsPageSearchParams>,
+) {
   "use cache";
   cacheLife("hours");
 
-  const params = await props.params;
-  const { reviewsPage } = await loadReviewsSearchParams(props.searchParams);
-  const shop = getShopBySlug(params.slug);
+  const { reviewsPage } = await loadReviewsSearchParams(searchParams);
+  const shop = getShopBySlug(slug);
   if (!shop) notFound();
 
   const categories = Object.entries(shop.listings) as [
