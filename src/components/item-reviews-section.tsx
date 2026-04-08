@@ -15,7 +15,6 @@ import type {
   ReviewSummary,
 } from "@/lib/review-core";
 import { ReviewStarInput, ReviewStars } from "./review-stars";
-import { ReviewSummaryBadge } from "./review-summary-badge";
 
 function initial(name: string) {
   return name.trim().charAt(0).toUpperCase() || "?";
@@ -119,7 +118,7 @@ export function ItemReviewsSection({
 
   return (
     <>
-      <section className="space-y-5">
+      <section className="space-y-6">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold">Ratings & reviews</h2>
           <p className="text-sm text-muted-foreground">
@@ -128,51 +127,76 @@ export function ItemReviewsSection({
           </p>
         </div>
 
-        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-          <Card className="gap-4 p-6">
-            <div className="space-y-3">
+        <Card className="gap-4 px-6 py-5">
+          {summary.averageRating !== null ? (
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex items-end gap-3">
-                <span className="text-4xl font-bold tracking-tight tabular-nums">
-                  {summary.averageRating?.toFixed(1) ?? "—"}
+                <span className="text-5xl font-bold tracking-tight tabular-nums">
+                  {summary.averageRating.toFixed(1)}
                 </span>
                 <div className="space-y-1 pb-1">
-                  {summary.averageRating !== null ? (
-                    <ReviewStars value={summary.averageRating} size="lg" />
-                  ) : (
-                    <ReviewSummaryBadge summary={summary} />
-                  )}
-                  {summary.averageRating !== null ? (
-                    <p className="text-sm text-muted-foreground">
-                      {reviewCountLabel}
-                    </p>
-                  ) : null}
+                  <ReviewStars value={summary.averageRating} size="lg" />
+                  <p className="text-sm text-muted-foreground">
+                    {reviewCountLabel}
+                  </p>
                 </div>
               </div>
-              <div className="rounded-xl border border-dashed px-4 py-3 text-sm text-muted-foreground">
-                Legacy likes were migrated into 5-star anonymous ratings, so the
-                count reflects both the imported history and new ratings.
+              <div className="grid grid-cols-2 gap-3 sm:min-w-64">
+                <div className="rounded-xl border border-border/70 bg-muted/20 px-4 py-3">
+                  <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                    Average
+                  </div>
+                  <div className="mt-1 text-2xl font-semibold tabular-nums">
+                    {summary.averageRating.toFixed(1)}
+                  </div>
+                </div>
+                <div className="rounded-xl border border-border/70 bg-muted/20 px-4 py-3">
+                  <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                    Total Ratings
+                  </div>
+                  <div className="mt-1 text-2xl font-semibold tabular-nums">
+                    {summary.reviewCount}
+                  </div>
+                </div>
               </div>
             </div>
-          </Card>
-
-          <Card className="gap-4 p-6">
-            <div className="space-y-1">
-              <h3 className="text-lg font-semibold">Your review</h3>
-              <p className="text-sm text-muted-foreground">
-                Leave a star rating, optionally add context, and decide whether
-                your profile is shown publicly.
-              </p>
+          ) : (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-1">
+                <div className="text-lg font-semibold">No ratings yet</div>
+                <p className="text-sm text-muted-foreground">
+                  Be the first person to leave a rating and written review.
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-dashed px-4 py-2 text-sm text-muted-foreground">
+                <MessageSquareText className="h-4 w-4" />
+                Waiting for the first rating
+              </div>
             </div>
+          )}
+        </Card>
 
-            <div className="space-y-4">
+        <Card className="gap-5 p-6">
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold">Your review</h3>
+            <p className="text-sm text-muted-foreground">
+              Leave a star rating, optionally add context, and decide whether
+              your profile is shown publicly.
+            </p>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)]">
+            <div className="space-y-5">
               <div className="space-y-2">
                 <span className="text-sm font-medium">Rating</span>
-                <ReviewStarInput
-                  value={rating}
-                  onChange={setRating}
-                  disabled={pending}
-                  size="lg"
-                />
+                <div className="rounded-xl border border-border/70 bg-muted/20 px-4 py-3">
+                  <ReviewStarInput
+                    value={rating}
+                    onChange={setRating}
+                    disabled={pending}
+                    size="lg"
+                  />
+                </div>
               </div>
 
               <label className="flex items-start gap-3 rounded-xl border border-border/70 px-4 py-3 text-sm">
@@ -193,57 +217,54 @@ export function ItemReviewsSection({
                   </span>
                 </span>
               </label>
+            </div>
 
-              <div className="space-y-2">
-                <label
-                  htmlFor={`review-body-${slug}`}
-                  className="text-sm font-medium"
-                >
-                  Written review
-                </label>
-                <textarea
-                  id={`review-body-${slug}`}
-                  value={body}
-                  onChange={(event) => setBody(event.target.value)}
-                  disabled={pending}
-                  rows={5}
-                  maxLength={2000}
-                  placeholder="What stood out? Delivery speed, support quality, stability, setup experience..."
-                  className="min-h-32 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary"
-                />
-                <div className="flex justify-end text-xs text-muted-foreground">
-                  {body.length}/2000
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  type="button"
-                  onClick={saveReview}
-                  disabled={pending || loading}
-                >
-                  {currentReview ? "Update review" : "Submit review"}
-                </Button>
-                {currentReview ? (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={removeReview}
-                    disabled={pending}
-                  >
-                    Remove review
-                  </Button>
-                ) : null}
+            <div className="space-y-3">
+              <label
+                htmlFor={`review-body-${slug}`}
+                className="text-sm font-medium"
+              >
+                Written review
+              </label>
+              <textarea
+                id={`review-body-${slug}`}
+                value={body}
+                onChange={(event) => setBody(event.target.value)}
+                disabled={pending}
+                rows={6}
+                maxLength={2000}
+                placeholder="What stood out? Delivery speed, support quality, stability, setup experience..."
+                className="min-h-40 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary"
+              />
+              <div className="flex justify-end text-xs text-muted-foreground">
+                {body.length}/2000
               </div>
             </div>
-          </Card>
-        </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              onClick={saveReview}
+              disabled={pending || loading}
+            >
+              {currentReview ? "Update review" : "Submit review"}
+            </Button>
+            {currentReview ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={removeReview}
+                disabled={pending}
+              >
+                Remove review
+              </Button>
+            ) : null}
+          </div>
+        </Card>
 
         <div className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <h3 className="text-lg font-semibold">Latest written reviews</h3>
-            <ReviewSummaryBadge summary={summary} compact />
-          </div>
+          <h3 className="text-lg font-semibold">Latest written reviews</h3>
 
           {hasWrittenReviews ? (
             <div className="grid gap-4">
