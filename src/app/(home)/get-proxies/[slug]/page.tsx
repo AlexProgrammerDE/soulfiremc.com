@@ -10,6 +10,7 @@ import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type {
   BreadcrumbList,
   ImageObject,
@@ -286,12 +287,14 @@ export default async function ProxyProviderPage(props: {
         </div>
       </Card>
 
-      <ItemReviewsSection
-        itemType="proxy"
-        slug={provider.slug}
-        initialSummary={reviewSummary}
-        initialWrittenReviews={writtenReviews}
-      />
+      <Suspense>
+        <ItemReviewsSection
+          itemType="proxy"
+          slug={provider.slug}
+          initialSummary={reviewSummary}
+          initialWrittenReviews={writtenReviews}
+        />
+      </Suspense>
 
       {/* Gallery */}
       {provider.gallery && provider.gallery.length > 0 && (

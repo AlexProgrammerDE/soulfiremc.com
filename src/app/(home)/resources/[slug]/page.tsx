@@ -12,6 +12,7 @@ import { cacheLife } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type {
   BreadcrumbList,
   SoftwareApplication,
@@ -257,12 +258,14 @@ export default async function ResourceDetailPage(props: {
         </div>
       </Card>
 
-      <ItemReviewsSection
-        itemType="resource"
-        slug={resource.slug}
-        initialSummary={reviewSummary}
-        initialWrittenReviews={writtenReviews}
-      />
+      <Suspense>
+        <ItemReviewsSection
+          itemType="resource"
+          slug={resource.slug}
+          initialSummary={reviewSummary}
+          initialWrittenReviews={writtenReviews}
+        />
+      </Suspense>
 
       {/* Gallery */}
       {resource.gallery && resource.gallery.length > 0 && (

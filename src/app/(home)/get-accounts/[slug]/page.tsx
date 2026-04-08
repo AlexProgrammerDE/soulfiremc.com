@@ -609,12 +609,14 @@ export default async function AccountProviderPage(props: {
         })}
       </div>
 
-      <ItemReviewsSection
-        itemType="account"
-        slug={shop.slug}
-        initialSummary={reviewSummary}
-        initialWrittenReviews={writtenReviews}
-      />
+      <Suspense>
+        <ItemReviewsSection
+          itemType="account"
+          slug={shop.slug}
+          initialSummary={reviewSummary}
+          initialWrittenReviews={writtenReviews}
+        />
+      </Suspense>
 
       {/* Gallery */}
       {shop.gallery && shop.gallery.length > 0 && (
