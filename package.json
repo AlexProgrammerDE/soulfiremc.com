@@ -41,7 +41,7 @@
     "fumadocs-core": "^16.7.10",
     "fumadocs-mdx": "^14.2.11",
     "fumadocs-openapi": "10.6.6",
-    "fumadocs-ui": "^16.7.10",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@16.7.11",
     "geist": "^1.7.0",
     "hast-util-to-jsx-runtime": "^2.3.6",
     "lucide-react": "^1.7.0",
