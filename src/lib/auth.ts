@@ -225,6 +225,7 @@ export const auth = betterAuth({
     emailHarmony(),
     twoFactor({
       otpOptions: {
+        storeOTP: "hashed",
         async sendOTP({ user, otp }): Promise<void> {
           await authNotifications.sendTwoFactorOTP({ user, otp });
         },
@@ -232,6 +233,7 @@ export const auth = betterAuth({
     }),
     username(),
     emailOTP({
+      storeOTP: "hashed",
       sendVerificationOnSignUp: false,
       async sendVerificationOTP({ email, otp, type }): Promise<void> {
         await authNotifications.sendEmailOTP({ email, otp, type });
