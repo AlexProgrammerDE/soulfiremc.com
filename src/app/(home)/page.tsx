@@ -115,7 +115,10 @@ const features = [
     name: "Open Source",
     description:
       "Fully open source under AGPL-3.0. Contribute features, report bugs, or fork it for your own projects. Community-driven development.",
-    href: getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK"),
+    href: getRequiredEnv(
+      process.env.NEXT_PUBLIC_GITHUB_LINK,
+      "NEXT_PUBLIC_GITHUB_LINK",
+    ),
     cta: "View on GitHub",
     className: "col-span-3 lg:col-span-1",
     background: (
@@ -171,7 +174,10 @@ const features = [
   },
 ];
 
-const githubLink = getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK");
+const githubLink = getRequiredEnv(
+  process.env.NEXT_PUBLIC_GITHUB_LINK,
+  "NEXT_PUBLIC_GITHUB_LINK",
+);
 
 const faqItems: {
   question: string;
@@ -417,7 +423,10 @@ export default function Page() {
                     </Button>
                   </Link>
                   <a
-                    href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
+                    href={getRequiredEnv(
+                      process.env.NEXT_PUBLIC_GITHUB_LINK,
+                      "NEXT_PUBLIC_GITHUB_LINK",
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -622,7 +631,10 @@ export default function Page() {
                 </Button>
               </Link>
               <a
-                href={getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK")}
+                href={getRequiredEnv(
+                  process.env.NEXT_PUBLIC_GITHUB_LINK,
+                  "NEXT_PUBLIC_GITHUB_LINK",
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
               >

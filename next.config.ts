@@ -98,17 +98,26 @@ const config: NextConfig = {
     return [
       {
         source: "/discord",
-        destination: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
+        destination: getRequiredEnv(
+          process.env.NEXT_PUBLIC_DISCORD_LINK,
+          "NEXT_PUBLIC_DISCORD_LINK",
+        ),
         permanent: false,
       },
       {
         source: "/github",
-        destination: getRequiredEnv("NEXT_PUBLIC_GITHUB_LINK"),
+        destination: getRequiredEnv(
+          process.env.NEXT_PUBLIC_GITHUB_LINK,
+          "NEXT_PUBLIC_GITHUB_LINK",
+        ),
         permanent: false,
       },
       {
         source: "/donate",
-        destination: getRequiredEnv("NEXT_PUBLIC_DONATE_LINK"),
+        destination: getRequiredEnv(
+          process.env.NEXT_PUBLIC_DONATE_LINK,
+          "NEXT_PUBLIC_DONATE_LINK",
+        ),
         permanent: false,
       },
       {

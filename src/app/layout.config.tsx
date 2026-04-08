@@ -18,7 +18,10 @@ export const baseOptions: BaseLayoutProps = {
       type: "icon",
       icon: <SiDiscord />,
       text: "Discord",
-      url: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
+      url: getRequiredEnv(
+        process.env.NEXT_PUBLIC_DISCORD_LINK,
+        "NEXT_PUBLIC_DISCORD_LINK",
+      ),
       external: true,
     },
     {

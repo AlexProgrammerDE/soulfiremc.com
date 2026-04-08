@@ -63,12 +63,18 @@ export default function RootLayout({
       "Advanced Minecraft bot tool for testing, automation, and development.",
     sameAs: [
       "https://github.com/AlexProgrammerDE/SoulFire",
-      getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
+      getRequiredEnv(
+        process.env.NEXT_PUBLIC_DISCORD_LINK,
+        "NEXT_PUBLIC_DISCORD_LINK",
+      ),
     ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Technical Support",
-      url: getRequiredEnv("NEXT_PUBLIC_DISCORD_LINK"),
+      url: getRequiredEnv(
+        process.env.NEXT_PUBLIC_DISCORD_LINK,
+        "NEXT_PUBLIC_DISCORD_LINK",
+      ),
     },
   };
 
