@@ -9,6 +9,25 @@
     {
       "url": "http://127.0.0.1:38765",
       "description": "Configured SoulFire public API address"
+    },
+    {
+      "url": "{scheme}://{host}:{port}/{basePath}",
+      "description": "User-selected server",
+      "variables": {
+        "scheme": {
+          "default": "http",
+          "enum": ["http", "https"]
+        },
+        "host": {
+          "default": "127.0.0.1"
+        },
+        "port": {
+          "default": "38765"
+        },
+        "basePath": {
+          "default": ""
+        }
+      }
     }
   ],
   "tags": [
