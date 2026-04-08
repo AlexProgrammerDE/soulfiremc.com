@@ -45,6 +45,10 @@ import {
   getReviewJsonLd,
   getReviewSummaries,
 } from "@/lib/reviews";
+import {
+  loadReviewsSearchParams,
+  type ReviewsPageSearchParams,
+} from "@/lib/reviews-search-params.server";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -110,11 +114,13 @@ function ResourceBadge({ badge }: { badge: Badge }) {
 
 export default async function ResourceDetailPage(props: {
   params: Promise<{ slug: string }>;
+  searchParams: ReviewsPageSearchParams;
 }) {
   "use cache";
   cacheLife("hours");
 
   const params = await props.params;
+  const { reviewsPage } = await loadReviewsSearchParams(props.searchParams);
   const resource = getResourceBySlug(params.slug);
   if (!resource) notFound();
   const reviewSummaries = await getReviewSummaries("resource", [resource.slug]);
@@ -123,6 +129,7 @@ export default async function ResourceDetailPage(props: {
     "resource",
     resource.slug,
     reviewSummary.reviewCount,
+    { page: reviewsPage },
   );
 
   const softwareJsonLd: WithContext<SoftwareApplication> = {

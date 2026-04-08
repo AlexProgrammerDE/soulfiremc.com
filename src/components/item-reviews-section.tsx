@@ -1,7 +1,7 @@
 "use client";
 
 import { MessageSquareText } from "lucide-react";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { SignInRequiredCredenza } from "@/components/sign-in-required-credenza";
@@ -15,11 +15,8 @@ import type {
   PaginatedPublicReviewRecords,
   ReviewSummary,
 } from "@/lib/review-core";
+import { reviewsPageParser } from "@/lib/reviews-search-params";
 import { ReviewStarInput, ReviewStars } from "./review-stars";
-
-const reviewsPageParser = parseAsInteger
-  .withDefault(1)
-  .withOptions({ clearOnDefault: true, shallow: false });
 
 function initial(name: string) {
   return name.trim().charAt(0).toUpperCase() || "?";

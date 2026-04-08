@@ -64,6 +64,10 @@ import {
   getReviewJsonLd,
   getReviewSummaries,
 } from "@/lib/reviews";
+import {
+  loadReviewsSearchParams,
+  type ReviewsPageSearchParams,
+} from "@/lib/reviews-search-params.server";
 import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -242,11 +246,13 @@ function SocialLinkButtons({
 
 export default async function AccountProviderPage(props: {
   params: Promise<{ slug: string }>;
+  searchParams: ReviewsPageSearchParams;
 }) {
   "use cache";
   cacheLife("hours");
 
   const params = await props.params;
+  const { reviewsPage } = await loadReviewsSearchParams(props.searchParams);
   const shop = getShopBySlug(params.slug);
   if (!shop) notFound();
 
@@ -268,6 +274,7 @@ export default async function AccountProviderPage(props: {
     "account",
     shop.slug,
     reviewSummary.reviewCount,
+    { page: reviewsPage },
   );
 
   const discordInviteUrl = getDiscordInviteUrl(shop);
