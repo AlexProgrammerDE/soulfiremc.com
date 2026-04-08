@@ -1,7 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, generateN } from "@/lib/utils";
 
 type Size = "sm" | "md" | "lg";
 
@@ -30,11 +30,11 @@ export function ReviewStars({
   return (
     <div
       className={cn("relative inline-flex items-center", className)}
-      aria-label={`${value.toFixed(1)} out of 5 stars`}
+      title={`${value.toFixed(1)} out of 5 stars`}
     >
       <div className="flex text-amber-200/70">
-        {Array.from({ length: 5 }, (_, index) => (
-          <Star key={index} className={sizeClass(size)} />
+        {generateN(5).map((i) => (
+          <Star key={i} className={sizeClass(size)} />
         ))}
       </div>
       <div
@@ -42,8 +42,8 @@ export function ReviewStars({
         style={{ width }}
       >
         <div className="flex">
-          {Array.from({ length: 5 }, (_, index) => (
-            <Star key={index} className={cn(sizeClass(size), "fill-current")} />
+          {generateN(5).map((i) => (
+            <Star key={i} className={cn(sizeClass(size), "fill-current")} />
           ))}
         </div>
       </div>
