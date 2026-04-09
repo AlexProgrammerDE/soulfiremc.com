@@ -2,6 +2,7 @@ import type { Offer } from "schema-dts";
 import type { Category, Shop } from "@/lib/accounts-data";
 
 const RAVEALTS_STOCK_URL = "https://api.ravealts.com/alts/stock";
+const LOCALTS_PRODUCTS_URL = "https://localts.store/v1/products";
 const OUT_OF_STOCK_THRESHOLD = 0;
 
 type LiveStockByCategory = Partial<Record<Category, number>>;
@@ -11,24 +12,30 @@ type LiveShopData = {
 };
 
 export async function getLiveShopData(shop: Shop): Promise<LiveShopData> {
-  if (shop.slug !== "ravealts") {
+  if (shop.slug !== "ravealts" && shop.slug !== "localts") {
     return {};
   }
 
   try {
-    const response = await fetch(RAVEALTS_STOCK_URL, {
-      next: { revalidate: 300 },
-      headers: {
-        Accept: "application/json",
+    const response = await fetch(
+      shop.slug === "ravealts" ? RAVEALTS_STOCK_URL : LOCALTS_PRODUCTS_URL,
+      {
+        next: { revalidate: 300 },
+        headers: {
+          Accept: "application/json",
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       return {};
     }
 
     const payload: unknown = await response.json();
-    const stockByCategory = parseRavealtsStockByCategory(payload);
+    const stockByCategory =
+      shop.slug === "ravealts"
+        ? parseRavealtsStockByCategory(payload)
+        : parseLocaltsStockByCategory(payload);
 
     if (!stockByCategory) {
       return {};
@@ -38,6 +45,64 @@ export async function getLiveShopData(shop: Shop): Promise<LiveShopData> {
   } catch {
     return {};
   }
+}
+
+function parseLocaltsStockByCategory(
+  payload: unknown,
+): LiveStockByCategory | undefined {
+  if (!isRecord(payload) || !Array.isArray(payload.products)) {
+    return undefined;
+  }
+
+  let nfaStock = 0;
+  let mfaStock = 0;
+  let hasNfaMatch = false;
+  let hasMfaMatch = false;
+
+  for (const product of payload.products) {
+    if (!isRecord(product) || typeof product.stock !== "number") {
+      continue;
+    }
+
+    const searchableText = [
+      product.name,
+      product.description,
+      product.category,
+      product.id,
+      product.type,
+    ]
+      .filter((value) => typeof value === "string")
+      .join(" ")
+      .toLowerCase();
+
+    if (includesAny(searchableText, ["mfa", "full access", "full-access"])) {
+      mfaStock += product.stock;
+      hasMfaMatch = true;
+      continue;
+    }
+
+    if (
+      includesAny(searchableText, [
+        "nfa",
+        "cookie",
+        "token",
+        "gamepass",
+        "hypixel",
+      ])
+    ) {
+      nfaStock += product.stock;
+      hasNfaMatch = true;
+    }
+  }
+
+  if (!hasNfaMatch && !hasMfaMatch) {
+    return undefined;
+  }
+
+  return {
+    ...(hasNfaMatch && { "nfa-accounts": nfaStock }),
+    ...(hasMfaMatch && { "mfa-accounts": mfaStock }),
+  };
 }
 
 export function getListingOffer(
@@ -172,4 +237,8 @@ function pickByTokens(
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object";
+}
+
+function includesAny(text: string, tokens: readonly string[]): boolean {
+  return tokens.some((token) => text.includes(token));
 }
