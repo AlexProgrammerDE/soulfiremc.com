@@ -168,8 +168,7 @@ export const auth = betterAuth({
               ...user,
               image: getAvatarUrl(user.image, user.email),
               username: user.username ?? uniqueUsername,
-              displayUsername:
-                user.displayUsername ?? uniqueUsername,
+              displayUsername: user.displayUsername ?? uniqueUsername,
             },
           };
         },
