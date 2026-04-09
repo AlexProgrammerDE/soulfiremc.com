@@ -23,6 +23,7 @@ import type {
   BreadcrumbList,
   ImageObject,
   Product,
+  WebPage,
   WithContext,
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
@@ -281,6 +282,7 @@ export default async function AccountProviderPage(props: {
   const productJsonLd: WithContext<Product> = {
     "@context": "https://schema.org",
     "@type": "Product",
+    "@id": `https://soulfiremc.com/get-accounts/${shop.slug}#product`,
     name: shop.name,
     description:
       Object.values(shop.listings)[0]?.summary ??
@@ -316,6 +318,7 @@ export default async function AccountProviderPage(props: {
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `https://soulfiremc.com/get-accounts/${shop.slug}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
@@ -338,8 +341,30 @@ export default async function AccountProviderPage(props: {
     ],
   };
 
+  const pageJsonLd: WithContext<WebPage> = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `https://soulfiremc.com/get-accounts/${shop.slug}#webpage`,
+    name: `${shop.name} | Minecraft Alt Shop`,
+    description: seoSummary,
+    url: `https://soulfiremc.com/get-accounts/${shop.slug}`,
+    inLanguage: "en-US",
+    breadcrumb: {
+      "@id": `https://soulfiremc.com/get-accounts/${shop.slug}#breadcrumb`,
+    },
+    mainEntity: {
+      "@id": `https://soulfiremc.com/get-accounts/${shop.slug}#product`,
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+  };
+
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-8">
+      <JsonLd data={pageJsonLd} />
       <JsonLd data={productJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 

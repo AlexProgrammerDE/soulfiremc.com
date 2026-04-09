@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import type {
   BreadcrumbList,
   SoftwareApplication,
+  WebPage,
   WithContext,
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
@@ -130,6 +131,7 @@ export default async function ResourceDetailPage(props: {
   const softwareJsonLd: WithContext<SoftwareApplication> = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": `https://soulfiremc.com/resources/${resource.slug}#software`,
     name: resource.name,
     description: resource.description,
     applicationCategory: resource.category === "plugin" ? "Plugin" : "Script",
@@ -153,6 +155,7 @@ export default async function ResourceDetailPage(props: {
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `https://soulfiremc.com/resources/${resource.slug}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
@@ -175,8 +178,30 @@ export default async function ResourceDetailPage(props: {
     ],
   };
 
+  const pageJsonLd: WithContext<WebPage> = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `https://soulfiremc.com/resources/${resource.slug}#webpage`,
+    name: `${resource.name} - SoulFire ${resource.category === "plugin" ? "Plugin" : "Script"}`,
+    description: resource.description,
+    url: `https://soulfiremc.com/resources/${resource.slug}`,
+    inLanguage: "en-US",
+    breadcrumb: {
+      "@id": `https://soulfiremc.com/resources/${resource.slug}#breadcrumb`,
+    },
+    mainEntity: {
+      "@id": `https://soulfiremc.com/resources/${resource.slug}#software`,
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+  };
+
   return (
     <main className="px-4 py-12 w-full max-w-5xl mx-auto space-y-8">
+      <JsonLd data={pageJsonLd} />
       <JsonLd data={softwareJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 
