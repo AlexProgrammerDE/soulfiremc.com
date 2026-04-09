@@ -62,7 +62,7 @@ export default function RootLayout({
     description:
       "Advanced Minecraft bot tool for testing, automation, and development.",
     sameAs: [
-      "https://github.com/AlexProgrammerDE/SoulFire",
+      "https://github.com/soulfiremc-com/SoulFire",
       getRequiredEnv(
         process.env.NEXT_PUBLIC_DISCORD_LINK,
         "NEXT_PUBLIC_DISCORD_LINK",

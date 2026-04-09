@@ -507,7 +507,7 @@ export function ResourcesClient({
         <p className="text-sm text-muted-foreground">
           Want to add your plugin or script? Submit a pull request on{" "}
           <a
-            href="https://github.com/AlexProgrammerDE/soulfiremc.com/edit/main/src/lib/resources-data.tsx"
+            href="https://github.com/soulfiremc-com/soulfiremc.com/edit/main/src/lib/resources-data.tsx"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-foreground"

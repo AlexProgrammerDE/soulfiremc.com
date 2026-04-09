@@ -59,12 +59,12 @@ export const resourcesFaqItems: {
   {
     question: "How can I share my plugin or script?",
     answerHtml:
-      'Submit a pull request on <a href="https://github.com/AlexProgrammerDE/soulfiremc.com">GitHub</a> to add your resource to this page, or share it in the SoulFire Discord server.',
+      'Submit a pull request on <a href="https://github.com/soulfiremc-com/soulfiremc.com">GitHub</a> to add your resource to this page, or share it in the SoulFire Discord server.',
     answerElement: (
       <>
         Submit a pull request on{" "}
         <a
-          href="https://github.com/AlexProgrammerDE/soulfiremc.com"
+          href="https://github.com/soulfiremc-com/soulfiremc.com"
           target="_blank"
           rel="noopener noreferrer"
           className="underline text-primary"

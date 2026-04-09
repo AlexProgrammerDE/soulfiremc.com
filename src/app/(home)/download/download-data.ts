@@ -8,9 +8,9 @@ export type PlatformRow = {
 };
 
 const GH_CLIENT_BASE =
-  "https://github.com/AlexProgrammerDE/SoulFireClient/releases/download";
+  "https://github.com/soulfiremc-com/SoulFireClient/releases/download";
 const GH_SERVER_BASE =
-  "https://github.com/AlexProgrammerDE/SoulFire/releases/download";
+  "https://github.com/soulfiremc-com/SoulFire/releases/download";
 const FLATHUB_URL = "https://flathub.org/apps/com.soulfiremc.soulfire";
 
 export function createClientDownloads(version: string): DownloadLinkMap {

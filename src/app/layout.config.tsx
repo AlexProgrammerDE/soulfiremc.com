@@ -29,7 +29,7 @@ export const baseOptions: BaseLayoutProps = {
       icon: <SiGithub />,
       text: "GitHub",
       label: "GitHub",
-      url: "https://github.com/AlexProgrammerDE/SoulFire",
+      url: "https://github.com/soulfiremc-com/SoulFire",
       external: true,
     },
   ],

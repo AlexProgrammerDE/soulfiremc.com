@@ -167,10 +167,10 @@ export const RESOURCES: Resource[] = [
     description:
       "Official template for creating SoulFire plugins. Demonstrates the plugin API, event handling, settings registration, and best practices.",
     author: "AlexProgrammerDE",
-    url: "https://github.com/AlexProgrammerDE/SoulFirePluginExample/releases",
+    url: "https://github.com/soulfiremc-com/SoulFirePluginExample/releases",
     category: "plugin",
     badges: ["plugin", "utility", "open-source"],
-    sourceUrl: "https://github.com/AlexProgrammerDE/SoulFirePluginExample",
+    sourceUrl: "https://github.com/soulfiremc-com/SoulFirePluginExample",
     startDate: "2024",
   },
 ];

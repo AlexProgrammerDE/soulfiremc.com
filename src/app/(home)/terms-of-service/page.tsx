@@ -251,11 +251,11 @@ export default function TermsOfService() {
         <li>
           <strong>GitHub:</strong>{" "}
           <a
-            href="https://github.com/AlexProgrammerDE/SoulFire"
+            href="https://github.com/soulfiremc-com/SoulFire"
             target="_blank"
             rel="noopener noreferrer"
           >
-            github.com/AlexProgrammerDE/SoulFire
+            github.com/soulfiremc-com/SoulFire
           </a>
         </li>
       </ul>

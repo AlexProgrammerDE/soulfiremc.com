@@ -757,7 +757,7 @@ export function GetAccountsClient(props: Props) {
         <p className="text-sm text-muted-foreground">
           Inaccurate information or broken links? Submit a pull request on{" "}
           <a
-            href="https://github.com/AlexProgrammerDE/soulfiremc.com/edit/main/src/lib/accounts-data.tsx"
+            href="https://github.com/soulfiremc-com/soulfiremc.com/edit/main/src/lib/accounts-data.tsx"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-foreground"
