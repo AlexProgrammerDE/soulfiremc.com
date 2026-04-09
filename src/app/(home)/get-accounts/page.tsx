@@ -10,7 +10,16 @@ import type {
 } from "schema-dts";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
-import { getDiscordInviteUrl, PROVIDERS } from "@/lib/accounts-data";
+import {
+  getDiscordInviteUrl,
+  getShopBySlug,
+  PROVIDERS,
+} from "@/lib/accounts-data";
+import {
+  getListingOffer,
+  getLiveShopData,
+  getShopAggregateOffer,
+} from "@/lib/accounts-offers";
 import { fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
@@ -46,6 +55,15 @@ export default async function GetAccountsPage() {
   const reviewSummaries = await getReviewSummaries("account", [
     ...new Set(PROVIDERS.map((provider) => provider.slug)),
   ]);
+  const liveShopDataEntries = await Promise.all(
+    providersBySlug.map(async (provider) => {
+      const shop = getShopBySlug(provider.slug);
+      if (!shop) return [provider.slug, {}] as const;
+      return [provider.slug, await getLiveShopData(shop)] as const;
+    }),
+  );
+  const liveShopDataBySlug = Object.fromEntries(liveShopDataEntries);
+
   const discordInvites = Promise.all(
     providersBySlug.map(async (provider) => {
       const discordInviteUrl = getDiscordInviteUrl(provider);
@@ -125,6 +143,7 @@ export default async function GetAccountsPage() {
           reviewCount: 0,
         },
       );
+      const shop = getShopBySlug(provider.slug);
 
       return {
         "@type": "ListItem",
@@ -139,13 +158,18 @@ export default async function GetAccountsPage() {
             provider.category === "mfa-accounts"
               ? "MFA full-access Minecraft accounts"
               : "NFA temporary Minecraft accounts",
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "USD",
-            price: provider.priceValue.toFixed(2),
-            availability: "https://schema.org/InStock",
-            url: `https://soulfiremc.com/get-accounts/${provider.slug}`,
-          } satisfies Offer,
+          ...(shop && {
+            aggregateOffer: getShopAggregateOffer(
+              shop,
+              liveShopDataBySlug[provider.slug],
+            ),
+            offers: getListingOffer(
+              shop,
+              provider.category,
+              provider.priceValue,
+              liveShopDataBySlug[provider.slug],
+            ) satisfies Offer,
+          }),
           ...(aggregateRating && { aggregateRating }),
         },
       };
