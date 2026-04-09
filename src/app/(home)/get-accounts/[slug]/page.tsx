@@ -55,6 +55,7 @@ import {
   type Shop,
   type SocialLink,
 } from "@/lib/accounts-data";
+import { getLiveShopData, getShopAggregateOffer } from "@/lib/accounts-offers";
 import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { imageMetadata } from "@/lib/metadata";
 import { getAccountPageImage } from "@/lib/og";
@@ -264,6 +265,8 @@ export default async function AccountProviderPage(props: {
   const hasAffiliate = categories.some(([, listing]) =>
     listing.badges.includes("affiliate"),
   );
+  const liveShopData = await getLiveShopData(shop);
+  const aggregateOffer = getShopAggregateOffer(shop, liveShopData);
   const reviewSummaries = await getReviewSummaries("account", [shop.slug]);
   const reviewSummary = reviewSummaries[shop.slug] ?? emptyReviewSummary();
   const writtenReviews = await getPaginatedWrittenReviews(
@@ -297,6 +300,9 @@ export default async function AccountProviderPage(props: {
     url: `https://soulfiremc.com/get-accounts/${shop.slug}`,
     category: "Minecraft Accounts",
     ...(shop.startDate && { dateCreated: shop.startDate }),
+    ...(aggregateOffer && {
+      offers: aggregateOffer,
+    }),
     ...(getAggregateRatingJsonLd(reviewSummary) && {
       aggregateRating: getAggregateRatingJsonLd(reviewSummary),
     }),
