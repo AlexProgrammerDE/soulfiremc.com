@@ -25,6 +25,201 @@ SoulFire currently has one shared AI transport layer and three user-facing AI in
 That means you do **not** configure OpenAI, Groq, or Ollama separately for each feature from scratch.
 You usually set the provider once in **AI Settings**, then choose the right model inside each AI feature.
 
+## Configure AI Chat Bot
+
+Use `AI Chat Bot` when you want players to trigger a short AI response in normal in-game chat without building a script graph.
+
+### What it does
+
+The plugin:
+
+- watches incoming chat for a configured keyword
+- sends the matching message to the configured model
+- keeps a short per-connection conversation history
+- posts the model's answer back into chat
+
+The current implementation also strips or truncates output to fit better into Minecraft chat.
+Responses are capped before sending, and blank responses are dropped.
+
+### Core settings
+
+| Setting | What it controls |
+| --- | --- |
+| **Enabled** | Turns the plugin on or off |
+| **Prompt** | The system prompt that defines the bot's personality and safety boundaries |
+| **Model** | Which model this plugin uses |
+| **Keyword** | The trigger text that must appear in chat |
+| **Filter keyword** | Whether the trigger keyword should be removed from the bot's own reply |
+| **History length** | How many recent conversation messages are retained |
+
+### How to set it up
+
+1. Configure a provider in **AI Settings** first.
+2. Enable **AI Chat Bot** in **Plugins**.
+3. Pick a text-capable model in the plugin settings.
+4. Set a clear trigger keyword such as `!ai`.
+5. Keep the prompt short and practical unless you have a strong reason to do otherwise.
+6. Test with one bot and one player before enabling it on a busy public server.
+
+### Keyword behavior
+
+The bot only responds when the incoming message contains the configured keyword.
+
+The current implementation also supports a reset pattern:
+
+- if a message contains `<keyword> reset`, SoulFire clears that connection's stored conversation history
+
+That is useful when a conversation has drifted or you want to start fresh without restarting the bot.
+
+### Prompt and history guidance
+
+Use the prompt to control tone and boundaries, not to overload the model with unnecessary rules.
+
+- Keep the prompt short enough to be maintainable.
+- Use `history-length` sparingly.
+- Increase history only if short conversational memory is actually useful for your use case.
+
+If you care more about cost and speed than nuanced replies, prefer a smaller fast model.
+If you care more about roleplay quality, choose a stronger text model and test it under real chat conditions.
+
+### Common failure patterns
+
+**The bot never replies**
+
+- the plugin is disabled
+- the keyword does not appear in the message
+- the provider settings are wrong
+- the selected model is invalid for that provider
+
+**The bot replies, but the answers feel wrong**
+
+- the prompt is poor
+- the chosen model is too weak for the task
+- the history is too short or too long for the intended behavior
+
+**The model echoes the trigger keyword**
+
+Enable **Filter keyword** if you do not want that reflected back into player-facing replies.
+
+## Configure Captcha Solver
+
+Use `Captcha Solver` when the target server requires either image-based captcha solving or a text code extracted from chat.
+
+### What it supports
+
+The current implementation supports two different workflows:
+
+- **Chat-triggered image solving**
+- **Text-based solving from regex capture**
+
+For image solving, the plugin can source the image from:
+
+- a map in the bot's hand
+- a software-rendered point-of-view image
+
+### Core settings
+
+| Setting | What it controls |
+| --- | --- |
+| **Enabled** | Turns the plugin on or off |
+| **Prompt** | The system instruction used for the model |
+| **Model** | Which model this plugin uses |
+| **Response Command** | How the extracted text is sent back |
+| **Image Source** | `MAP_IN_HAND` or `POV_RENDER` |
+| **Captcha Trigger** | `CHAT_MESSAGE` or `TEXT_BASED` |
+| **Text Trigger** | Text that must appear before image solving starts |
+| **Captcha Regex** | Regex with a capture group for text-based solving |
+| **POV Render Width/Height** | Image size used for POV rendering |
+
+### Choose the right trigger mode
+
+#### `CHAT_MESSAGE`
+
+Use this when the server shows or implies an image captcha and also sends a chat line that should trigger solving.
+
+The default text trigger is:
+
+```text
+/captcha
+```
+
+When the incoming message contains that trigger, SoulFire captures the configured image source and sends it to the model.
+
+#### `TEXT_BASED`
+
+Use this when the captcha text already appears in chat and only needs extraction.
+
+The default regex is:
+
+```text
+/captcha (\w+)
+```
+
+That means the plugin expects a capturing group and sends the captured value back through the configured response command.
+
+### Choose the right image source
+
+#### `MAP_IN_HAND`
+
+Use this when the captcha is rendered on a Minecraft map item the bot is holding.
+
+This is the most direct source when the server literally puts the captcha into the bot's hand.
+
+#### `POV_RENDER`
+
+Use this when the captcha exists in the world and must be read from what the bot is currently seeing.
+
+This mode is more sensitive to camera position, visibility, and render resolution.
+If it fails, do not assume the model is the only problem.
+
+### Response command guidance
+
+The solver does not have to send raw text.
+It formats the result through **Response Command**.
+
+Examples:
+
+**Send the captcha text as a normal chat message**
+
+```text
+%s
+```
+
+**Send the captcha text through a command**
+
+```text
+/captcha %s
+```
+
+### Practical setup workflow
+
+1. Configure the provider in **AI Settings**.
+2. Pick a vision-capable model if you are solving images.
+3. Enable **Captcha Solver**.
+4. Choose the trigger mode that matches the server.
+5. Set the response command to match the server's expected input.
+6. Test with one bot and observe one complete captcha cycle before scaling.
+
+### Common failure patterns
+
+**The solver triggers, but the answer is empty or useless**
+
+- the model is not vision-capable for image solving
+- the prompt is poor
+- the image source is wrong for that server
+
+**The solver never triggers**
+
+- the text trigger does not match the server's message
+- the regex does not match
+- the plugin is disabled
+
+**The image model is fine, but answers are still wrong**
+
+- the POV render does not show the captcha clearly
+- the map is not actually in hand
+- the response command format is wrong for the target server
+
 ## How the integrations actually work
 
 ### AI Settings

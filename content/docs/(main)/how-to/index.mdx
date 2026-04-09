@@ -10,7 +10,11 @@ import {
   Cloud,
   Blocks,
   Bot,
+  Globe,
+  KeyRound,
+  Radar,
   Server,
+  Sword,
   User,
 } from "lucide-react";
 import { Cards, Card } from 'fumadocs-ui/components/card';
@@ -53,6 +57,42 @@ Use these pages when you already know what you want to do and need the shortest 
     href="/docs/how-to/install-plugins"
   >
     Enable built-in plugins and install compatible community Fabric mods.
+  </Card>
+  <Card
+    icon={
+      <Radar/>
+    }
+    title="Server List Bypass"
+    href="/docs/how-to/server-list-bypass"
+  >
+    Ping the server list before joining on networks that expect that flow.
+  </Card>
+  <Card
+    icon={
+      <KeyRound/>
+    }
+    title="Auto Register"
+    href="/docs/how-to/auto-register"
+  >
+    Automate AuthMe-style register and login commands after join.
+  </Card>
+  <Card
+    icon={
+      <Globe/>
+    }
+    title="Fake Virtual Host"
+    href="/docs/how-to/fake-virtual-host"
+  >
+    Override the handshake hostname and port seen by the target network.
+  </Card>
+  <Card
+    icon={
+      <Sword/>
+    }
+    title="Kill Aura"
+    href="/docs/how-to/kill-aura"
+  >
+    Configure combat targeting ranges, cooldowns, and safety controls.
   </Card>
   <Card
     icon={
