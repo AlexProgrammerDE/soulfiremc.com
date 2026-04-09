@@ -5,6 +5,7 @@
     "import-accounts",
     "import-proxies",
     "install-plugins",
+    "forwarding-bypass",
     "ai-support",
     "mcp",
     "webdav",
