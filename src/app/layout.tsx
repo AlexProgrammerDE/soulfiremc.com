@@ -6,12 +6,12 @@ import type { Metadata, Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { Organization, WithContext } from "schema-dts";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/components/auth-provider";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { JsonLd } from "@/components/json-ld";
 import { getRequiredEnv } from "@/lib/env";
 import { imageMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
-import { AuthProvider } from '@/components/auth-provider';
 
 export const viewport: Viewport = {
   themeColor: "#3289BF",
