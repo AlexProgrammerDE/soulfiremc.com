@@ -161,19 +161,15 @@ export const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          const customTypedUser = user as unknown as typeof user & {
-            username?: string;
-            displayUsername?: string;
-          };
           const uniqueUsername = await generateUniqueUsername();
 
           return {
             data: {
               ...user,
               image: getAvatarUrl(user.image, user.email),
-              username: customTypedUser.username ?? uniqueUsername,
+              username: user.username ?? uniqueUsername,
               displayUsername:
-                customTypedUser.displayUsername ?? uniqueUsername,
+                user.displayUsername ?? uniqueUsername,
             },
           };
         },
