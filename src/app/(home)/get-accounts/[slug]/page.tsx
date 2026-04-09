@@ -189,6 +189,33 @@ function ProviderThemeDecoration() {
   );
 }
 
+function getLiveStockStatus(stock: number): {
+  label: string;
+  className: string;
+} {
+  if (stock <= 0) {
+    return {
+      label: "Out of stock",
+      className:
+        "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive-foreground",
+    };
+  }
+
+  if (stock <= 10) {
+    return {
+      label: `${stock} in stock`,
+      className:
+        "bg-amber-500/15 text-amber-700 dark:bg-amber-400/20 dark:text-amber-200",
+    };
+  }
+
+  return {
+    label: `${stock} in stock`,
+    className:
+      "bg-emerald-500/15 text-emerald-700 dark:bg-emerald-400/20 dark:text-emerald-200",
+  };
+}
+
 function SocialLinkButtons({
   socialLinks,
   className,
@@ -592,6 +619,11 @@ export default async function AccountProviderPage(props: {
       >
         {categories.map(([category, listing]) => {
           const catConfig = CATEGORY_CONFIG[category];
+          const stockValue = liveShopData.stockByCategory?.[category];
+          const stockStatus =
+            typeof stockValue === "number"
+              ? getLiveStockStatus(stockValue)
+              : undefined;
           return (
             <Card
               key={category}
@@ -613,6 +645,16 @@ export default async function AccountProviderPage(props: {
                     <PriceInfoBadge details={listing.priceDetails} />
                   )}
                 </span>
+                {stockStatus && (
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-full px-2.5 py-0.5 text-sm font-medium",
+                      stockStatus.className,
+                    )}
+                  >
+                    {stockStatus.label}
+                  </span>
+                )}
               </div>
               <p className="text-sm text-muted-foreground">
                 {catConfig.description}
