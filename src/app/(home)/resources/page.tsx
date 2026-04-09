@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import type { FAQPage, ItemList, WithContext } from "schema-dts";
+import type {
+  BreadcrumbList,
+  CollectionPage,
+  FAQPage,
+  ItemList,
+  WithContext,
+} from "schema-dts";
 import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
 import { JsonLd } from "@/components/json-ld";
 import { imageMetadata } from "@/lib/metadata";
@@ -37,9 +43,51 @@ export default async function ResourcesPage() {
     })),
   };
 
+  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": "https://soulfiremc.com/resources#breadcrumb",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://soulfiremc.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Resources",
+        item: "https://soulfiremc.com/resources",
+      },
+    ],
+  };
+
+  const pageJsonLd: WithContext<CollectionPage> = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "SoulFire Resources",
+    description:
+      "Community SoulFire plugins and scripts. Browse the registry to find plugins and scripts that extend your Minecraft bot automation.",
+    url: "https://soulfiremc.com/resources",
+    inLanguage: "en-US",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+    breadcrumb: {
+      "@id": "https://soulfiremc.com/resources#breadcrumb",
+    },
+    mainEntity: {
+      "@id": "https://soulfiremc.com/resources#resource-list",
+    },
+  };
+
   const itemListJsonLd: WithContext<ItemList> = {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "@id": "https://soulfiremc.com/resources#resource-list",
     name: "SoulFire Plugins & Scripts",
     description:
       "Community plugins and scripts for SoulFire Minecraft bot automation.",
@@ -69,8 +117,10 @@ export default async function ResourcesPage() {
 
   return (
     <>
+      <JsonLd data={pageJsonLd} />
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <ResourcesClient initialSummaries={reviewSummaries} />
     </>
   );

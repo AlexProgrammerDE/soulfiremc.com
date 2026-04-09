@@ -15,6 +15,7 @@ import type {
   BreadcrumbList,
   ImageObject,
   Product,
+  WebPage,
   WithContext,
 } from "schema-dts";
 import { GallerySection } from "@/app/(home)/components/gallery-section";
@@ -141,6 +142,7 @@ export default async function ProxyProviderPage(props: {
   const productJsonLd: WithContext<Product> = {
     "@context": "https://schema.org",
     "@type": "Product",
+    "@id": `https://soulfiremc.com/get-proxies/${provider.slug}#product`,
     name: provider.name,
     description: provider.summary,
     image: provider.logo
@@ -174,6 +176,7 @@ export default async function ProxyProviderPage(props: {
   const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": `https://soulfiremc.com/get-proxies/${provider.slug}#breadcrumb`,
     itemListElement: [
       {
         "@type": "ListItem",
@@ -196,8 +199,30 @@ export default async function ProxyProviderPage(props: {
     ],
   };
 
+  const pageJsonLd: WithContext<WebPage> = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `https://soulfiremc.com/get-proxies/${provider.slug}#webpage`,
+    name: `${provider.name} - Proxy Provider for SoulFire`,
+    description: provider.summary,
+    url: `https://soulfiremc.com/get-proxies/${provider.slug}`,
+    inLanguage: "en-US",
+    breadcrumb: {
+      "@id": `https://soulfiremc.com/get-proxies/${provider.slug}#breadcrumb`,
+    },
+    mainEntity: {
+      "@id": `https://soulfiremc.com/get-proxies/${provider.slug}#product`,
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+  };
+
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-8">
+      <JsonLd data={pageJsonLd} />
       <JsonLd data={productJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 

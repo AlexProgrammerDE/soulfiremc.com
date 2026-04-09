@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import type { FAQPage, ItemList, WithContext } from "schema-dts";
+import type {
+  BreadcrumbList,
+  CollectionPage,
+  FAQPage,
+  ItemList,
+  Offer,
+  WithContext,
+} from "schema-dts";
 import { accountFaqItems } from "@/app/(home)/get-accounts/accounts-faq";
 import { JsonLd } from "@/components/json-ld";
 import { getDiscordInviteUrl, PROVIDERS } from "@/lib/accounts-data";
@@ -62,9 +69,51 @@ export default async function GetAccountsPage() {
     })),
   };
 
+  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": "https://soulfiremc.com/get-accounts#breadcrumb",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://soulfiremc.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Get Accounts",
+        item: "https://soulfiremc.com/get-accounts",
+      },
+    ],
+  };
+
+  const pageJsonLd: WithContext<CollectionPage> = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Minecraft Alts, MFA & NFA Accounts",
+    description:
+      "Compare Minecraft alt shops and account providers for SoulFire. Browse MFA full-access accounts, NFA temporary accounts, and token or cookie alts with current pricing and delivery details.",
+    url: "https://soulfiremc.com/get-accounts",
+    inLanguage: "en-US",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+    breadcrumb: {
+      "@id": "https://soulfiremc.com/get-accounts#breadcrumb",
+    },
+    mainEntity: {
+      "@id": "https://soulfiremc.com/get-accounts#provider-list",
+    },
+  };
+
   const itemListJsonLd: WithContext<ItemList> = {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "@id": "https://soulfiremc.com/get-accounts#provider-list",
     name: "Minecraft Alt Shops and Account Providers",
     description:
       "Trusted Minecraft alt shops for SoulFire bot testing. Compare MFA full-access accounts, NFA temporary accounts, and token or cookie account options.",
@@ -86,6 +135,17 @@ export default async function GetAccountsPage() {
           name: provider.name,
           description: provider.summary,
           url: `https://soulfiremc.com/get-accounts/${provider.slug}`,
+          category:
+            provider.category === "mfa-accounts"
+              ? "MFA full-access Minecraft accounts"
+              : "NFA temporary Minecraft accounts",
+          offers: {
+            "@type": "Offer",
+            priceCurrency: "USD",
+            price: provider.priceValue.toFixed(2),
+            availability: "https://schema.org/InStock",
+            url: `https://soulfiremc.com/get-accounts/${provider.slug}`,
+          } satisfies Offer,
           ...(aggregateRating && { aggregateRating }),
         },
       };
@@ -94,8 +154,10 @@ export default async function GetAccountsPage() {
 
   return (
     <>
+      <JsonLd data={pageJsonLd} />
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <GetAccountsClient
         discordInvites={discordInvites}
         initialSummaries={reviewSummaries}

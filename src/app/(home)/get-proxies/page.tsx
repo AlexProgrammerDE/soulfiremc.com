@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import type { FAQPage, ItemList, WithContext } from "schema-dts";
+import type {
+  BreadcrumbList,
+  CollectionPage,
+  FAQPage,
+  ItemList,
+  WithContext,
+} from "schema-dts";
 import { proxiesFaqItems } from "@/app/(home)/get-proxies/proxies-faq";
 import { JsonLd } from "@/components/json-ld";
 import { imageMetadata } from "@/lib/metadata";
@@ -37,9 +43,51 @@ export default async function GetProxiesPage() {
     })),
   };
 
+  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": "https://soulfiremc.com/get-proxies#breadcrumb",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://soulfiremc.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Get Proxies",
+        item: "https://soulfiremc.com/get-proxies",
+      },
+    ],
+  };
+
+  const pageJsonLd: WithContext<CollectionPage> = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Get Proxies",
+    description:
+      "Best proxy providers for Minecraft bot testing. Compare residential, datacenter, ISP, and mobile proxies.",
+    url: "https://soulfiremc.com/get-proxies",
+    inLanguage: "en-US",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "SoulFire",
+      url: "https://soulfiremc.com",
+    },
+    breadcrumb: {
+      "@id": "https://soulfiremc.com/get-proxies#breadcrumb",
+    },
+    mainEntity: {
+      "@id": "https://soulfiremc.com/get-proxies#provider-list",
+    },
+  };
+
   const itemListJsonLd: WithContext<ItemList> = {
     "@context": "https://schema.org",
     "@type": "ItemList",
+    "@id": "https://soulfiremc.com/get-proxies#provider-list",
     name: "Proxy Providers for SoulFire",
     description:
       "Trusted proxy providers for Minecraft bot testing with SoulFire. Compare residential, datacenter, ISP, and mobile proxies.",
@@ -69,8 +117,10 @@ export default async function GetProxiesPage() {
 
   return (
     <>
+      <JsonLd data={pageJsonLd} />
       <JsonLd data={itemListJsonLd} />
       <JsonLd data={faqJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <GetProxiesClient initialSummaries={reviewSummaries} />
     </>
   );
