@@ -3,8 +3,8 @@ import type { paths } from "@octokit/openapi-types";
 export type LatestReleaseResponse =
   paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
 
-const CLIENT_REPO = "AlexProgrammerDE/SoulFireClient";
-const SERVER_REPO = "AlexProgrammerDE/SoulFire";
+const CLIENT_REPO = "soulfiremc-com/SoulFireClient";
+const SERVER_REPO = "soulfiremc-com/SoulFire";
 
 export async function getRepoInfo(
   repo: string,
