@@ -27,9 +27,6 @@ export const metadata: Metadata = {
     "Advanced Minecraft bot tool for testing, automation, and development. Run bot sessions on your servers.",
   applicationName: "SoulFire",
   generator: "Next.js",
-  appleWebApp: {
-    title: "SoulFire",
-  },
   other: {
     "msapplication-TileColor": "#3289BF",
   },
