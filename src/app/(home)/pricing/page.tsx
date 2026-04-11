@@ -61,7 +61,7 @@ export default function PricingPage() {
               <CardTitle className="text-xl">Free</CardTitle>
             </div>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-bold">$0</span>
+              <span className="text-4xl font-bold">0€</span>
               <span className="text-muted-foreground">/month</span>
             </div>
             <CardDescription>
@@ -97,7 +97,7 @@ export default function PricingPage() {
               <Badge>Popular</Badge>
             </div>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-bold">$5</span>
+              <span className="text-4xl font-bold">5€</span>
               <span className="text-muted-foreground">/month</span>
             </div>
             <CardDescription>
