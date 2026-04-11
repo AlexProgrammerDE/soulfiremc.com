@@ -115,20 +115,22 @@ export default async function BlogPost(props: PageProps<"/blog/[slug]">) {
   };
 
   return (
-    <article className="max-w-(--fd-layout-width) mx-auto py-12 px-4 max-w-(--fd-layout-width)">
+    <article className="mx-auto w-full max-w-(--fd-layout-width) px-4 py-8 sm:py-12">
       <JsonLd data={jsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 
-      <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-8">
+      <nav className="mb-8 flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
         <Link href="/" className="hover:text-foreground transition-colors">
           Home
         </Link>
-        <ChevronRight className="h-3.5 w-3.5" />
+        <ChevronRight className="h-3.5 w-3.5 shrink-0" />
         <Link href="/blog" className="hover:text-foreground transition-colors">
           Blog
         </Link>
-        <ChevronRight className="h-3.5 w-3.5" />
-        <span className="text-foreground truncate">{page.data.title}</span>
+        <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+        <span className="min-w-0 flex-1 truncate text-foreground">
+          {page.data.title}
+        </span>
       </nav>
 
       <header className="mb-8">
@@ -144,8 +146,8 @@ export default async function BlogPost(props: PageProps<"/blog/[slug]">) {
           </div>
         )}
 
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             {page.data.author && <span>By {page.data.author}</span>}
             {publishDate && (
               <time dateTime={publishDate.toISOString()}>
@@ -173,16 +175,20 @@ export default async function BlogPost(props: PageProps<"/blog/[slug]">) {
               {readingTime} min read
             </span>
           </div>
-          <ShareButton
-            title={page.data.title}
-            description={page.data.description}
-            url={`https://soulfiremc.com${page.url}`}
-          />
+          <div className="shrink-0">
+            <ShareButton
+              title={page.data.title}
+              description={page.data.description}
+              url={`https://soulfiremc.com${page.url}`}
+            />
+          </div>
         </div>
 
-        <h1 className="text-5xl font-bold mb-4">{page.data.title}</h1>
+        <h1 className="mb-4 text-4xl font-bold sm:text-5xl">
+          {page.data.title}
+        </h1>
         {page.data.description && (
-          <p className="text-xl text-muted-foreground mb-4">
+          <p className="mb-4 text-lg text-muted-foreground sm:text-xl">
             {page.data.description}
           </p>
         )}

@@ -65,11 +65,11 @@ export default function BlogIndex() {
   };
 
   return (
-    <div className="max-w-(--fd-layout-width) mx-auto py-12 px-4 max-w-(--fd-layout-width)">
+    <div className="mx-auto w-full max-w-(--fd-layout-width) px-4 py-8 sm:py-12">
       <JsonLd data={jsonLd} />
       <div className="mb-12">
-        <h1 className="text-5xl font-bold mb-4">Blog</h1>
-        <p className="text-xl text-muted-foreground">
+        <h1 className="mb-4 text-4xl font-bold sm:text-5xl">Blog</h1>
+        <p className="text-lg text-muted-foreground sm:text-xl">
           Latest updates, tutorials, and insights from the SoulFire team
         </p>
       </div>
@@ -92,7 +92,7 @@ export default function BlogIndex() {
             )}
             <div className="flex flex-1 flex-col p-6">
               <div className="flex-1">
-                <h2 className="text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                <h2 className="mb-2 text-xl font-semibold transition-colors group-hover:text-primary sm:text-2xl">
                   {post.data.title}
                 </h2>
                 {post.data.description && (
@@ -113,7 +113,7 @@ export default function BlogIndex() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground pt-4 border-t">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t pt-4 text-sm text-muted-foreground">
                 {post.data.author && <span>{post.data.author}</span>}
                 {post.data.date && (
                   <time dateTime={new Date(post.data.date).toISOString()}>
