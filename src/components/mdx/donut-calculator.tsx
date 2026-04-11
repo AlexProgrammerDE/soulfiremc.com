@@ -13,7 +13,7 @@ const METHODS = [
     name: "AFK Shards (Boosted 4x)",
     shardsPerDay: 5760,
     moneyPerDay: 0,
-    setupCost: "Amethyst Crate Key",
+    setupCost: "Amethyst / shard booster",
   },
   {
     name: "Kelp Farm (Small)",
@@ -22,22 +22,22 @@ const METHODS = [
     setupCost: "~5M for materials",
   },
   {
-    name: "Kelp Farm (1M/hr)",
+    name: "Kelp Farm (Large)",
     shardsPerDay: 0,
     moneyPerDay: 89_000_000 * 24,
     setupCost: "~50M for materials",
   },
   {
-    name: "Iron Golem Spawners (100)",
+    name: "Spawner Farm (100)",
     shardsPerDay: 0,
     moneyPerDay: 500_000_000,
     setupCost: "150K shards",
   },
   {
-    name: "Iron Golem Spawners (1728)",
+    name: "Spawner Farm (1728)",
     shardsPerDay: 0,
     moneyPerDay: 800_000_000 * 24,
-    setupCost: "2.6M shards",
+    setupCost: "2.59M shards",
   },
   {
     name: "Sell Multiplier Arbitrage (3x)",
@@ -56,7 +56,7 @@ function formatNumber(n: number): string {
 
 export function DonutCalculator() {
   const [botCount, setBotCount] = useState(5);
-  const [pricePerMillion, setPricePerMillion] = useState(0.035);
+  const [pricePerMillion, setPricePerMillion] = useState(0.05);
   const [selectedMethod, setSelectedMethod] = useState(0);
 
   const method = METHODS[selectedMethod];
@@ -142,7 +142,8 @@ export function DonutCalculator() {
       </div>
 
       <div className="mt-3 text-xs text-fd-muted-foreground">
-        Setup cost per bot: {method.setupCost}
+        Setup cost per bot: {method.setupCost}. These presets are rough sanity
+        checks, not live profitability models.
       </div>
     </div>
   );
