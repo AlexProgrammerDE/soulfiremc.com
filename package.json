@@ -30,7 +30,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@react-email/components": "^1.0.11",
     "@react-email/render": "^2.0.5",
-    "@scalar/api-client-react": "^1.4.20",
+    "@scalar/api-client-react": "^2.0.0",
     "@tailwindcss/typography": "^0.5.19",
     "@takumi-rs/image-response": "^0.73.1",
     "@types/mdx": "^2.0.13",
