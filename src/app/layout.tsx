@@ -102,6 +102,18 @@ export default function RootLayout({
             </AuthProvider>
           </RootProvider>
         </NuqsAdapter>
+        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+        {/** biome-ignore lint/security/noDangerouslySetInnerHtml: Setup widget */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+          kofiWidgetOverlay.draw('alexprogrammerde', {
+            'type': 'floating-chat',
+            'floating-chat.donateButton.text': 'Support me',
+            'floating-chat.donateButton.background-color': '#794bc4',
+            'floating-chat.donateButton.text-color': '#fff'
+          });
+        `
+        }}/>
       </body>
     </html>
   );

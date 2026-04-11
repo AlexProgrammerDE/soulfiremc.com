@@ -46,6 +46,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           url: "/resources",
           description: "SoulFire plugins and scripts",
         },
+        {
+          type: "main",
+          text: "Pricing",
+          url: "/pricing",
+          description: "Support SoulFire",
+        },
         ...(baseOptions.links || []),
         {
           type: "custom",
