@@ -183,10 +183,9 @@ function Footer({ items, accent }: { items?: string[]; accent: string }) {
             gap: 12,
             paddingRight: index === visibleItems.length - 1 ? 0 : 18,
             marginRight: index === visibleItems.length - 1 ? 0 : 18,
-            borderRight:
-              index === visibleItems.length - 1
-                ? undefined
-                : `1px solid ${theme.border}`,
+            ...(index === visibleItems.length - 1
+              ? {}
+              : { borderRight: `1px solid ${theme.border}` }),
             marginBottom: 14,
           }}
         >
@@ -251,12 +250,9 @@ function Sidebar({
         <div
           style={{
             paddingBottom: 24,
-            borderBottom:
-              rows && rows.length > 0
-                ? `1px solid ${theme.border}`
-                : visibleEntries.length > 0
-                  ? `1px solid ${theme.border}`
-                  : undefined,
+            ...((rows && rows.length > 0) || visibleEntries.length > 0
+            ? { borderBottom: `1px solid ${theme.border}` }
+            : {}),
           }}
         >
           {top}
@@ -284,12 +280,9 @@ function Sidebar({
                   index === rows.length - 1 && visibleEntries.length === 0
                     ? 0
                     : 18,
-                borderBottom:
-                  index === rows.length - 1
-                    ? visibleEntries.length > 0
-                      ? `1px solid ${theme.border}`
-                      : undefined
-                    : `1px solid ${theme.border}`,
+                ...(index === rows.length - 1 && visibleEntries.length === 0
+                  ? {}
+                  : { borderBottom: `1px solid ${theme.border}` }),
               }}
             >
               <div
