@@ -7,6 +7,17 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { authClient } from "@/lib/auth-client";
 
+function CustomImage({
+  src,
+  ...props
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) {
+  return src ? <Image src={src} {...props} /> : null;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
@@ -38,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }}
       optimistic
       avatar={{
-        Image: Image,
+        Image: CustomImage,
       }}
       gravatar
       localization={{
