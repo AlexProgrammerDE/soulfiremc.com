@@ -1,5 +1,5 @@
 import { SiKofi } from "@icons-pack/react-simple-icons";
-import { Check, Code, Heart, Users } from "lucide-react";
+import { Check, Code, Gift, Heart, Users } from "lucide-react";
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -144,6 +144,63 @@ export default function PricingPage() {
         . After subscribing on Ko-fi, you&apos;ll receive your supporter role
         and access to priority support channels.
       </p>
+      <div className="flex flex-col items-center text-center gap-4 mt-20 mb-12">
+        <div className="rounded-lg bg-muted p-3">
+          <Gift className="h-6 w-6" />
+        </div>
+        <h2 className="text-3xl font-bold tracking-tight">
+          One-time Donations
+        </h2>
+        <p className="text-lg text-muted-foreground max-w-2xl">
+          Want to support SoulFire without a recurring commitment? You can make
+          a one-time donation via Ko-fi or cryptocurrency.
+        </p>
+        <p className="text-sm text-muted-foreground max-w-2xl">
+          Only the Ko-fi <strong>membership</strong> grants supporter perks.
+          One-time payments via Ko-fi or NOWPayments do not grant any perks.
+        </p>
+      </div>
+      <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <SiKofi className="h-5 w-5" />
+              Ko-fi
+            </CardTitle>
+            <CardDescription>
+              Donate via PayPal or card — membership and one-time options
+              available
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1">
+            <iframe
+              src="https://ko-fi.com/alexprogrammerde/?hidefeed=true&widget=true&embed=true&preview=true"
+              className="border-none w-full"
+              height="712"
+              title="alexprogrammerde"
+            />
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle className="text-xl flex items-center gap-2">
+              💰 Crypto
+            </CardTitle>
+            <CardDescription>
+              Donate with cryptocurrency via NOWPayments
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1">
+            <iframe
+              src="https://nowpayments.io/embeds/donation-widget?api_key=99dbdb4c-b2d7-4470-a0d9-b8bb978c4881"
+              width="346"
+              height="623"
+              className="border-none overflow-y-hidden mx-auto"
+              title="NOWPayments Donation Widget"
+            />
+          </CardContent>
+        </Card>
+      </div>
     </main>
   );
 }

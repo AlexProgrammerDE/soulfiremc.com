@@ -251,8 +251,8 @@ function Sidebar({
           style={{
             paddingBottom: 24,
             ...((rows && rows.length > 0) || visibleEntries.length > 0
-            ? { borderBottom: `1px solid ${theme.border}` }
-            : {}),
+              ? { borderBottom: `1px solid ${theme.border}` }
+              : {}),
           }}
         >
           {top}
