@@ -6,3 +6,4 @@ onlyBuiltDependencies:
   - protobufjs
   - sharp
   - vue-demi
+  - workerd
