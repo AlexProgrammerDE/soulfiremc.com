@@ -8,7 +8,6 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import posthog from "posthog-js";
 import type { BreadcrumbList, WithContext } from "schema-dts";
 import { APIPage } from "@/components/api-page";
 import { Feedback } from "@/components/feedback";
@@ -74,14 +73,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
         <DocsBody>
           <APIPage {...page.data.getAPIPageProps()} />
         </DocsBody>
-        <Feedback
-          onRateAction={async (_url, feedback) => {
-            "use server";
-
-            posthog.capture("on_rate_docs", feedback);
-            return {};
-          }}
-        />
+        <Feedback />
       </DocsPage>
     );
   }
@@ -157,14 +149,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
           })}
         />
       </DocsBody>
-      <Feedback
-        onRateAction={async (_url, feedback) => {
-          "use server";
-
-          posthog.capture("on_rate_docs", feedback);
-          return {};
-        }}
-      />
+      <Feedback />
     </DocsPage>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+
 import { cva } from "class-variance-authority";
 import { buttonVariants } from "fumadocs-ui/components/ui/button";
 import {
@@ -7,6 +8,7 @@ import {
 } from "fumadocs-ui/components/ui/collapsible";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 
@@ -34,12 +36,9 @@ interface Result extends Feedback {
   response?: ActionResponse;
 }
 
-export function Feedback({
-  onRateAction,
-}: {
-  onRateAction: (url: string, feedback: Feedback) => Promise<ActionResponse>;
-}) {
+export function Feedback() {
   const url = usePathname();
+  const posthog = usePostHog();
   const [previous, setPrevious] = useState<Result | null>(null);
   const [opinion, setOpinion] = useState<"good" | "bad" | null>(null);
   const [message, setMessage] = useState("");
@@ -68,14 +67,10 @@ export function Feedback({
         message,
       };
 
-      void onRateAction(url, feedback).then((response) => {
-        setPrevious({
-          response,
-          ...feedback,
-        });
-        setMessage("");
-        setOpinion(null);
-      });
+      posthog.capture("on_rate_docs", feedback);
+      setPrevious(feedback);
+      setMessage("");
+      setOpinion(null);
     });
 
     e?.preventDefault();
