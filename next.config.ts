@@ -65,7 +65,7 @@ const config: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
   cacheComponents: true,
-  serverExternalPackages: ["@takumi-rs/image-response"],
+  serverExternalPackages: ["@takumi-rs/core"],
   experimental: {
     viewTransition: true,
   },
