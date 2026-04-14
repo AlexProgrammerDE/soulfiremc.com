@@ -1,4 +1,4 @@
-import { ImageResponse } from "@takumi-rs/image-response";
+import { ImageResponse } from "takumi-js/response";
 import { notFound } from "next/navigation";
 import { AccountOgImage } from "@/components/og/site";
 import { getShopBySlug, SHOPS } from "@/lib/accounts-data";
