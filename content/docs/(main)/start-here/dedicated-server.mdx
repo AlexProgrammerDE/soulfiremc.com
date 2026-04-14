@@ -11,8 +11,8 @@ If you are not sure whether you need a remote setup, read [Choose Your Setup](/d
 
 ## Automated Setup
 
-This guide walks you through deploying a SoulFire Dedicated Server on a remote Linux server.
-Our interactive setup script handles Docker installation, SSL configuration, and deployment automatically.
+This guide walks you through deploying a SoulFire dedicated server on a remote Linux machine.
+Our interactive setup script installs Docker, handles SSL, and deploys everything for you.
 
 <Steps>
   <Step>
@@ -32,11 +32,11 @@ Our interactive setup script handles Docker installation, SSL configuration, and
     | 1000+      | 32 GB+ | 4+   |
 
     <Callout type="info">
-      Get **20€ in free credits** on [Hetzner Cloud](https://hetzner.cloud/?ref=HWdu4W4iHCgA) — this also supports SoulFire development!
+      Get **20€ in free credits** on [Hetzner Cloud](https://hetzner.cloud/?ref=HWdu4W4iHCgA). It also supports SoulFire development.
     </Callout>
 
     When creating your server, choose the **Debian** image.
-    Take note of the server's **public IP address** — you'll need it in the next step.
+    Save the server's **public IP address**. You'll need it in the next step.
   </Step>
 
   <Step>
@@ -52,7 +52,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
     Replace `your-server-ip` with the IP address from the previous step.
     You'll be prompted for the password you set when creating the server (or it was emailed to you).
 
-    On **Windows**, use PowerShell or Windows Terminal — both have SSH built in.
+    On **Windows**, use PowerShell or Windows Terminal. Both have SSH built in.
     On **macOS/Linux**, your default terminal works out of the box.
 
     <Callout type="info">
@@ -71,7 +71,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
 
     The interactive setup will guide you through:
     - **System updates** and **Docker installation** (if needed)
-    - **SSL configuration** — choose between Cloudflared tunnel, Traefik with domain SSL, Traefik with IP SSL, or plain HTTP
+    - **SSL configuration**: choose between Cloudflared tunnel, Traefik with domain SSL, Traefik with IP SSL, or plain HTTP
     - **Deploying SoulFire** via Docker Compose to `/opt/soulfire/`
   </Step>
 
@@ -90,7 +90,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
     generate-token api
     ```
 
-    Copy the generated token — you'll need it to connect the GUI client.
+    Copy the generated token. You'll need it to connect the GUI client.
   </Step>
 
   <Step>
@@ -100,7 +100,7 @@ Our interactive setup script handles Docker installation, SSL configuration, and
     - **Server URL**: The HTTPS URL you configured (e.g. `https://your-domain.com` or `https://your-server-ip`)
     - **Access token**: The token from the previous step
 
-    That's it! You're now connected to your dedicated SoulFire server.
+    You are now connected to your dedicated SoulFire server.
   </Step>
 </Steps>
 
@@ -121,5 +121,5 @@ From the menu you can:
 
 ## Further reading
 
-- [Docker guide](/docs/how-to/docker) — manual Docker Compose setup, Pterodactyl/Pelican egg, and advanced HTTPS configuration
-- [Dedicated mode guide](/docs/how-to/dedicated-mode) — running SoulFire without Docker (bare metal Java)
+- [Docker guide](/docs/how-to/docker): manual Docker Compose setup, Pterodactyl/Pelican egg, and advanced HTTPS configuration
+- [Dedicated mode guide](/docs/how-to/dedicated-mode): running SoulFire without Docker (bare metal Java)

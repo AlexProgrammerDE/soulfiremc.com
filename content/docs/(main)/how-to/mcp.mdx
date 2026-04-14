@@ -6,12 +6,12 @@ icon: Cable
 
 ## What is MCP?
 
-MCP (Model Context Protocol) is an open standard that allows AI assistants to interact with external tools and services.
-SoulFire exposes its full API as MCP tools, enabling AI assistants to control bot instances, execute commands,
-manage configurations, and more — all through natural language.
+MCP (Model Context Protocol) is an open standard that lets AI assistants interact with external tools and services.
+SoulFire exposes its full API as MCP tools, so an assistant can control bot instances, execute commands,
+manage configurations, and more through natural language.
 
-This guide expects that you have SoulFire already installed and running.
-If you haven't done that yet, please refer to [Start Here](/docs/start-here).
+Make sure SoulFire is already installed and running before you start.
+If it isn't, head to [Start Here](/docs/start-here) first.
 
 ## What can AI assistants do with SoulFire?
 
@@ -74,7 +74,7 @@ claude mcp add soulfire --transport http http://your-server:port/mcp \
 
 ## Connecting Other MCP Clients
 
-Any MCP-compatible client can connect to SoulFire. The key parameters are:
+Any MCP-compatible client can connect to SoulFire. These are the settings you need:
 
 | Parameter | Value |
 |-----------|-------|
@@ -84,76 +84,76 @@ Any MCP-compatible client can connect to SoulFire. The key parameters are:
 
 ## Available Tools
 
-SoulFire exposes over 40 MCP tools organized into categories:
+SoulFire exposes more than 40 MCP tools, grouped into a few categories:
 
 ### Instance Management
-- `list_instances` — List all instances visible to the current user
-- `create_instance` — Create a new instance
-- `delete_instance` — Permanently delete an instance
-- `get_instance_info` — Get detailed instance information and configuration
-- `update_instance_meta` — Update instance name or icon
-- `change_instance_state` — Start, pause, or stop an instance
-- `update_instance_config_entry` — Update a configuration setting
-- `get_audit_log` — View the instance audit log
+- `list_instances`: List all instances visible to the current user
+- `create_instance`: Create a new instance
+- `delete_instance`: Permanently delete an instance
+- `get_instance_info`: Get detailed instance information and configuration
+- `update_instance_meta`: Update an instance name or icon
+- `change_instance_state`: Start, pause, or stop an instance
+- `update_instance_config_entry`: Update a configuration setting
+- `get_audit_log`: View the instance audit log
 
 ### Account & Proxy Management
-- `add_instance_account` — Add an offline Minecraft account
-- `remove_instance_account` — Remove an account
-- `add_instance_proxy` — Add a proxy (HTTP, SOCKS4, SOCKS5)
-- `remove_instance_proxy` — Remove a proxy
+- `add_instance_account`: Add an offline Minecraft account
+- `remove_instance_account`: Remove an account
+- `add_instance_proxy`: Add a proxy (HTTP, SOCKS4, SOCKS5)
+- `remove_instance_proxy`: Remove a proxy
 
 ### Command Execution
-- `execute_command` — Execute a SoulFire command (global, instance, or bot scope)
-- `tab_complete_command` — Get tab-completion suggestions
+- `execute_command`: Execute a SoulFire command (global, instance, or bot scope)
+- `tab_complete_command`: Get tab-completion suggestions
 
 ### Bot Control
-- `get_bot_list` — List all bots in an instance
-- `get_bot_info` — Get detailed bot information
-- `set_bot_movement` — Control WASD, jump, sneak, sprint
-- `reset_bot_movement` — Stop all movement
-- `set_bot_rotation` — Set view direction (yaw/pitch)
-- `set_bot_hotbar_slot` — Change active hotbar slot
-- `click_inventory_slot` — Click inventory slots
-- `get_inventory_state` — Get current inventory contents
-- `open_bot_inventory` — Open bot inventory
-- `close_bot_container` — Close open container
+- `get_bot_list`: List all bots in an instance
+- `get_bot_info`: Get detailed bot information
+- `set_bot_movement`: Control WASD, jump, sneak, sprint
+- `reset_bot_movement`: Stop all movement
+- `set_bot_rotation`: Set view direction (yaw/pitch)
+- `set_bot_hotbar_slot`: Change the active hotbar slot
+- `click_inventory_slot`: Click inventory slots
+- `get_inventory_state`: Get current inventory contents
+- `open_bot_inventory`: Open bot inventory
+- `close_bot_container`: Close an open container
 
 ### Server Configuration
-- `get_server_info` — Get server settings and plugins
-- `update_server_config_entry` — Update server settings
+- `get_server_info`: Get server settings and plugins
+- `update_server_config_entry`: Update server settings
 
 ### User Management
-- `list_users` — List all users
-- `create_user` — Create a new user
-- `delete_user` — Delete a user
-- `get_user_info` — Get user details
-- `generate_user_api_token` — Generate an API token for a user
+- `list_users`: List all users
+- `create_user`: Create a new user
+- `delete_user`: Delete a user
+- `get_user_info`: Get user details
+- `generate_user_api_token`: Generate an API token for a user
 
 ### Self/Client Tools
-- `get_client_data` — Get current user info and permissions
-- `generate_api_token` — Generate a new API token
+- `get_client_data`: Get current user info and permissions
+- `generate_api_token`: Generate a new API token
 
 ### Metrics & Logs
-- `get_instance_metrics` — Instance performance metrics
-- `get_server_metrics` — Server system metrics (CPU, memory, etc.)
-- `get_previous_logs` — Retrieve recent log entries
+- `get_instance_metrics`: Instance performance metrics
+- `get_server_metrics`: Server system metrics (CPU, memory, etc.)
+- `get_previous_logs`: Retrieve recent log entries
 
 ### Metadata
 - `get_instance_metadata` / `set_instance_metadata_entry` / `delete_instance_metadata_entry`
 - `get_account_metadata` / `set_account_metadata_entry` / `delete_account_metadata_entry`
 
 ### Scripts
-- `list_scripts` — List all scripts in an instance
-- `get_script` — Get script details and node graph
-- `delete_script` — Delete a script
-- `deactivate_script` — Stop a running script
-- `get_script_status` — Get script execution status
-- `get_node_types` — Get available script node types
-- `get_registry_data` — Get Minecraft registry data
+- `list_scripts`: List all scripts in an instance
+- `get_script`: Get script details and node graph
+- `delete_script`: Delete a script
+- `deactivate_script`: Stop a running script
+- `get_script_status`: Get script execution status
+- `get_node_types`: Get available script node types
+- `get_registry_data`: Get Minecraft registry data
 
 ## Example Conversation
 
-Once connected, you can interact with SoulFire through natural language:
+Once connected, you can talk to SoulFire in plain language:
 
 > **You**: Create a new instance called "Test Server" and add 5 offline accounts named bot1 through bot5
 
@@ -175,4 +175,4 @@ Once connected, you can interact with SoulFire through natural language:
 - Use HTTPS in production to encrypt API tokens in transit
 - API tokens have the same permissions as the user who generated them
 - Rotate tokens regularly using the `generate_api_token` tool
-- Use the principle of least privilege — create dedicated users with limited permissions for AI assistants
+- Use the principle of least privilege. Create dedicated users with limited permissions for AI assistants

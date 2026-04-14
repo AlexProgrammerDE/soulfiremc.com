@@ -13,29 +13,28 @@ import { Callout } from 'fumadocs-ui/components/callout';
 ## Docker Hub image
 
 Official Docker images are available on [Docker Hub](https://hub.docker.com/r/alexprogrammerde/soulfire).
-Those contain the SoulFire Dedicated Server.
-This guide assumes you know Docker and Docker compose well and are able to troubleshoot issues on your own.
+They run the SoulFire dedicated server.
+This page is for people who already know Docker and Docker Compose and are comfortable troubleshooting on their own.
 
 ## Pterodactyl/Pelican panel egg
 
-You want to use Docker without the hassle of setting up the container yourself?
-If you are a user of Pterodactyl/Pelican, you can use [the official egg](https://raw.githubusercontent.com/soulfiremc-com/SoulFire/main/soulfire_egg.json).
+If you want to use Docker without building the container yourself, and you already run Pterodactyl or Pelican, use [the official egg](https://raw.githubusercontent.com/soulfiremc-com/SoulFire/main/soulfire_egg.json).
 
-It is recommended to set up the [Cloudflared egg](https://github.com/Ym0T/pterodactyl-nginx-egg?tab=readme-ov-file#-cloudflared-tunnel-tutorial) to setup HTTPS to forward the SoulFire egg.
+We recommend pairing it with the [Cloudflared egg](https://github.com/Ym0T/pterodactyl-nginx-egg?tab=readme-ov-file#-cloudflared-tunnel-tutorial) if you want HTTPS in front of SoulFire.
 
 ## How to install Docker?
 
-Look at this [official guide](https://docs.docker.com/engine/install).
+Use the [official guide](https://docs.docker.com/engine/install).
 
 ## HTTPS setup
 
-SoulFire uses HTTP, but if you run a public domain endpoint you're going to need HTTPS set up for dedicated servers.
-You have two options, use Cloudflared as a HTTPS tunnel or set up a reverse proxy like Traefik with automatic HTTPS.
+SoulFire uses HTTP internally, but if you expose it on a public domain you should put HTTPS in front of it.
+The two practical options are Cloudflared as an HTTPS tunnel or a reverse proxy like Traefik with automatic certificates.
 
 ### Cloudflared tunnel (Recommended)
 
-You get the token from the Cloudflare Zero Trust dashboard.
-Follow the [official guide](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/) to learn how to get the Cloudflared tunnel token.
+Grab the token from the Cloudflare Zero Trust dashboard.
+Follow the [official guide](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/get-started/create-remote-tunnel/) if you need help creating the tunnel token.
 
 ```dotenv filename=".env"
 TUNNEL_TOKEN=mytokengoeshere
@@ -167,11 +166,11 @@ volumes:
 
 ## HTTP setup
 
-Just setup SoulFire with no extra configuration or other services.
+If you want the simplest possible setup, you can run SoulFire with no extra services or proxy layer.
 
-This will only serve SoulFire via HTTP. This means that traffic with SoulFire is unencrypted and insecure.
-All tokens/emails are sent in cleartext and are hijackable with Man In The Middle attacks.
-It is recommended to setup SoulFire using HTTPS.
+This only serves SoulFire over HTTP, which means the traffic is unencrypted.
+Tokens and email addresses travel in cleartext and can be intercepted in a man-in-the-middle attack.
+Use HTTPS unless you have a very specific reason not to.
 
 ```yaml filename="docker-compose.yml"
 services:
