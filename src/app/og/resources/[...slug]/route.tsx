@@ -1,4 +1,4 @@
-import { ImageResponse } from "takumi-js/response";
+import { ImageResponse } from "@takumi-rs/image-response";
 import { notFound } from "next/navigation";
 import { ResourceOgImage } from "@/components/og/site";
 import { getResourcePageImage, stripOgSuffix } from "@/lib/og";
