@@ -1,5 +1,3 @@
-"use cache";
-
 import "@/style.css";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { GeistMono } from "geist/font/mono";

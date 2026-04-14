@@ -1,5 +1,3 @@
-"use cache";
-
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import Link from "next/link";
 import { type ReactNode, Suspense } from "react";
