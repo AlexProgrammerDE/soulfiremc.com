@@ -28,19 +28,9 @@ export interface Feedback {
   message: string;
 }
 
-export type ActionResponse = object;
-
-interface Result extends Feedback {
-  response?: ActionResponse;
-}
-
-export function Feedback({
-  onRateAction,
-}: {
-  onRateAction: (url: string, feedback: Feedback) => Promise<ActionResponse>;
-}) {
+export function Feedback() {
   const url = usePathname();
-  const [previous, setPrevious] = useState<Result | null>(null);
+  const [previous, setPrevious] = useState<Feedback | null>(null);
   const [opinion, setOpinion] = useState<"good" | "bad" | null>(null);
   const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -49,7 +39,7 @@ export function Feedback({
     const item = localStorage.getItem(`docs-feedback-${url}`);
 
     if (item === null) return;
-    setPrevious(JSON.parse(item) as Result);
+    setPrevious(JSON.parse(item) as Feedback);
   }, [url]);
 
   useEffect(() => {
@@ -65,17 +55,20 @@ export function Feedback({
     startTransition(async () => {
       const feedback: Feedback = {
         opinion,
+        url,
         message,
       };
 
-      void onRateAction(url, feedback).then((response) => {
-        setPrevious({
-          response,
-          ...feedback,
-        });
-        setMessage("");
-        setOpinion(null);
-      });
+      try {
+        const { default: posthog } = await import("posthog-js");
+        posthog.capture("on_rate_docs", feedback);
+      } catch {
+        // Ignore analytics failures so static docs pages stay interactive.
+      }
+
+      setPrevious(feedback);
+      setMessage("");
+      setOpinion(null);
     });
 
     e?.preventDefault();
