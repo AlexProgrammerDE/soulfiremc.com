@@ -100,6 +100,10 @@ const config: NextConfig = {
         hostname: "gravatar.com",
         protocol: "https",
       },
+      {
+        hostname: "enderdash.com",
+        protocol: "https",
+      },
     ],
   },
   redirects: async () => {

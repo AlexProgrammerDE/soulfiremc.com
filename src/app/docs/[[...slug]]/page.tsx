@@ -10,6 +10,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { BreadcrumbList, WithContext } from "schema-dts";
 import { APIPage } from "@/components/api-page";
+import { EnderDashSponsor } from "@/components/enderdash-sponsor";
 import { Feedback } from "@/components/feedback";
 import { JsonLd } from "@/components/json-ld";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
@@ -74,6 +75,11 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
           <APIPage {...page.data.getAPIPageProps()} />
         </DocsBody>
         <Feedback />
+        <EnderDashSponsor
+          placement="docs-footer"
+          className="mt-8"
+          variant="footer"
+        />
       </DocsPage>
     );
   }
@@ -150,6 +156,11 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
         />
       </DocsBody>
       <Feedback />
+      <EnderDashSponsor
+        placement="docs-footer"
+        className="mt-8"
+        variant="footer"
+      />
     </DocsPage>
   );
 }

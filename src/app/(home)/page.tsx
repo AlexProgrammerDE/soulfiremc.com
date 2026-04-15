@@ -20,6 +20,7 @@ import type {
   SoftwareApplication,
   WithContext,
 } from "schema-dts";
+import { EnderDashSponsor } from "@/components/enderdash-sponsor";
 import { JsonLd } from "@/components/json-ld";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
@@ -607,6 +608,12 @@ export default function Page() {
               </Button>
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="mx-auto w-full max-w-5xl">
+          <EnderDashSponsor placement="homepage" variant="feature" />
         </div>
       </section>
 

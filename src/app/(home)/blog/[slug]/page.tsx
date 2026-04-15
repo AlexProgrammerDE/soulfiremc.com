@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { BlogPosting, BreadcrumbList, WithContext } from "schema-dts";
 import { ShareButton } from "@/components/blog/share-button";
+import { EnderDashSponsor } from "@/components/enderdash-sponsor";
 import { JsonLd } from "@/components/json-ld";
 import { getBlogPageImage } from "@/lib/og";
 import { blogSource } from "@/lib/source";
@@ -252,6 +253,12 @@ export default async function BlogPost(props: PageProps<"/blog/[slug]">) {
           </div>
         </aside>
       )}
+
+      <EnderDashSponsor
+        placement="blog-footer"
+        className="mt-16"
+        variant="footer"
+      />
     </article>
   );
 }
