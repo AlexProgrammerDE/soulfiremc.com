@@ -40,7 +40,7 @@ function SponsorLogo({ href }: { href: string }) {
       className="flex size-20 shrink-0 items-center justify-center rounded-lg border bg-background p-3 sm:size-24"
     >
       <Image
-        src="https://enderdash.com/logo.png"
+        src="/sponsors/enderdash-logo.png"
         alt="EnderDash logo"
         width={96}
         height={96}
