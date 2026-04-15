@@ -11,11 +11,23 @@ type EnderDashSponsorProps = {
   variant?: "feature" | "footer";
 };
 
-const sponsorTitle =
-  "Are you looking for an advanced administration panel for your server?";
+const featureTitle =
+  "Advanced administration for Minecraft servers without replacing your stack.";
 
-const sponsorDescription =
-  "EnderDash allows you to manage your existing Minecraft servers using an advanced dashboard by installing a single plugin, batteries included. Run commands with tab completion, read logs, manage files, invite your whole team, manage players, use Ocelot (AI Assistant), and keep working with your existing infrastructure and panels.";
+const featureDescription =
+  "EnderDash lets you manage your existing Minecraft servers from one dashboard by installing a single plugin. Run commands, read logs, manage files, invite your whole team, manage players, and keep Ocelot close at hand without changing your current infrastructure or panel.";
+
+const footerTitle = "Need a more capable admin panel for your server?";
+
+const footerDescription =
+  "EnderDash adds an advanced dashboard to your existing Minecraft servers with a single plugin, batteries included.";
+
+const featureHighlights = [
+  "Run commands with tab completion",
+  "Read logs and manage files",
+  "Invite your whole team",
+  "Manage players with Ocelot AI",
+];
 
 const sponsorCampaignByPlacement = {
   homepage: "homepage-sponsor",
@@ -31,22 +43,72 @@ function getSponsorHref(placement: EnderDashSponsorPlacement) {
   return url.toString();
 }
 
-function SponsorLogo({ href }: { href: string }) {
+function SponsorLogo({
+  href,
+  variant,
+}: {
+  href: string;
+  variant: "feature" | "footer";
+}) {
+  if (variant === "feature") {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        className="flex size-32 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-black p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:size-36"
+      >
+        <span className="flex size-full items-center justify-center rounded-xl border border-white/6 bg-zinc-950 p-4">
+          <Image
+            src="/sponsors/enderdash-logo.png"
+            alt="EnderDash logo"
+            width={96}
+            height={96}
+            className="h-auto w-full"
+          />
+        </span>
+      </a>
+    );
+  }
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer sponsored"
-      className="flex size-20 shrink-0 items-center justify-center rounded-lg border bg-background p-3 sm:size-24"
+      className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
     >
       <Image
         src="/sponsors/enderdash-logo.png"
         alt="EnderDash logo"
-        width={96}
-        height={96}
+        width={48}
+        height={48}
         className="h-auto w-full"
       />
     </a>
+  );
+}
+
+function SponsorButton({
+  href,
+  label,
+  size,
+}: {
+  href: string;
+  label: string;
+  size: "default" | "lg";
+}) {
+  return (
+    <Button
+      asChild
+      size={size}
+      className="w-fit gap-2 border border-white/10 bg-white text-zinc-950 shadow-none hover:bg-zinc-200"
+    >
+      <a href={href} target="_blank" rel="noopener noreferrer sponsored">
+        {label}
+        <ArrowUpRight />
+      </a>
+    </Button>
   );
 }
 
@@ -61,45 +123,39 @@ export function EnderDashSponsor({
     return (
       <section
         aria-label="Sponsored by EnderDash"
-        className={cn("rounded-xl border bg-card/50", className)}
+        className={cn(
+          "overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 text-zinc-50",
+          className,
+        )}
       >
-        <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div className="flex flex-col gap-4">
-            <p className="text-sm font-medium text-muted-foreground">
-              Sponsored by EnderDash
-            </p>
+        <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-10">
+          <div className="flex flex-col gap-5">
+            <p className="text-xs font-medium text-zinc-400">Sponsored</p>
             <div className="flex flex-col gap-3">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                {sponsorTitle}
+              <h2 className="max-w-4xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+                {featureTitle}
               </h2>
-              <p className="max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
-                {sponsorDescription}
+              <p className="max-w-3xl text-sm leading-6 text-zinc-400 sm:text-base">
+                {featureDescription}
               </p>
             </div>
+            <ul className="grid gap-x-8 gap-y-2 text-sm text-zinc-300 sm:grid-cols-2">
+              {featureHighlights.map((highlight) => (
+                <li key={highlight} className="flex items-start gap-3">
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-zinc-200" />
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="w-fit gap-2"
-              >
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer sponsored"
-                >
-                  Check it out
-                  <ArrowUpRight />
-                </a>
-              </Button>
-              <p className="text-sm text-muted-foreground">
-                Single-plugin setup with commands, logs, files, team access, and
-                AI assistance.
+              <SponsorButton href={href} label="Visit EnderDash" size="lg" />
+              <p className="text-sm text-zinc-400">
+                Works with existing infrastructure and panels.
               </p>
             </div>
           </div>
           <div className="flex justify-start lg:justify-end">
-            <SponsorLogo href={href} />
+            <SponsorLogo href={href} variant="feature" />
           </div>
         </div>
       </section>
@@ -109,29 +165,25 @@ export function EnderDashSponsor({
   return (
     <aside
       aria-label="Sponsored by EnderDash"
-      className={cn("rounded-lg border bg-card/50 p-4 sm:p-5", className)}
+      className={cn(
+        "overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 text-zinc-50",
+        className,
+      )}
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-start gap-4">
-          <SponsorLogo href={href} />
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-muted-foreground">
-              Sponsored
+      <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+        <div className="flex min-w-0 items-start gap-4">
+          <SponsorLogo href={href} variant="footer" />
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <p className="text-xs font-medium text-zinc-400">Sponsored</p>
+            <p className="text-base font-semibold tracking-tight text-balance">
+              {footerTitle}
             </p>
-            <p className="text-base font-semibold tracking-tight">
-              {sponsorTitle}
-            </p>
-            <p className="text-sm leading-6 text-muted-foreground">
-              {sponsorDescription}
+            <p className="max-w-2xl text-sm leading-6 text-zinc-400">
+              {footerDescription}
             </p>
           </div>
         </div>
-        <Button asChild variant="outline" className="w-fit gap-2 self-start">
-          <a href={href} target="_blank" rel="noopener noreferrer sponsored">
-            Check it out
-            <ArrowUpRight />
-          </a>
-        </Button>
+        <SponsorButton href={href} label="Check out EnderDash" size="default" />
       </div>
     </aside>
   );
