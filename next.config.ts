@@ -281,4 +281,4 @@ const config: NextConfig = {
 
 export default withMDX(config);
 
-import("@opennextjs/cloudflare").then((m) => m.initOpenNextCloudflareForDev());
+// import("@opennextjs/cloudflare").then((m) => m.initOpenNextCloudflareForDev());
