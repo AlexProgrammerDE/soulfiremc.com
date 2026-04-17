@@ -54,8 +54,6 @@ function SponsorLogo({
     return (
       <a
         href={href}
-        target="_blank"
-        rel="noopener noreferrer sponsored"
         className="flex size-32 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-black p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:size-36"
       >
         <span className="flex size-full items-center justify-center rounded-xl bg-zinc-950 p-4">
@@ -74,8 +72,6 @@ function SponsorLogo({
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer sponsored"
       className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-black p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
     >
       <Image
@@ -104,7 +100,7 @@ function SponsorButton({
       size={size}
       className="w-fit gap-2 border border-white/10 bg-white text-zinc-950 shadow-none hover:bg-zinc-200"
     >
-      <a href={href} target="_blank" rel="noopener noreferrer sponsored">
+      <a href={href}>
         {label}
         <ArrowUpRight />
       </a>
@@ -122,7 +118,7 @@ export function EnderDashSponsor({
   if (variant === "feature") {
     return (
       <section
-        aria-label="Sponsored by EnderDash"
+        aria-label="Partnered with EnderDash"
         className={cn(
           "overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-950 text-zinc-50",
           className,
@@ -130,7 +126,7 @@ export function EnderDashSponsor({
       >
         <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-10">
           <div className="flex flex-col gap-5">
-            <p className="text-xs font-medium text-zinc-400">Sponsored</p>
+            <p className="text-xs font-medium text-zinc-400">Partnership</p>
             <div className="flex flex-col gap-3">
               <h2 className="max-w-4xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
                 {featureTitle}
@@ -164,7 +160,7 @@ export function EnderDashSponsor({
 
   return (
     <aside
-      aria-label="Sponsored by EnderDash"
+      aria-label="Partnered with EnderDash"
       className={cn(
         "overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 text-zinc-50",
         className,
