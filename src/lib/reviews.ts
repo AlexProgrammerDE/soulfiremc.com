@@ -1,5 +1,3 @@
-import "server-only";
-
 import { and, desc, eq, inArray, sql } from "drizzle-orm";
 import { getAvatarUrl } from "@/lib/avatar";
 import { db } from "@/lib/db";

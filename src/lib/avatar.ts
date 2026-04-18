@@ -1,5 +1,3 @@
-import "server-only";
-
 import { createHash } from "node:crypto";
 
 const ALLOWED_AVATAR_HOSTNAMES = new Set([

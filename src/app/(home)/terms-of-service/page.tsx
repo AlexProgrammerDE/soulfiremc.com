@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Terms of Service",
-  description: "SoulFire Terms of Service.",
-};
+import { Link } from "@tanstack/react-router";
 
 export default function TermsOfService() {
   return (
@@ -163,9 +157,9 @@ export default function TermsOfService() {
       <h2>8. Privacy</h2>
       <p>
         Your use of the Service is also governed by our{" "}
-        <Link href="/privacy-policy">Privacy Policy</Link>, which describes how
+        <Link to="/privacy-policy">Privacy Policy</Link>, which describes how
         we collect, use, and protect your personal information, and our{" "}
-        <Link href="/cookie-policy">Cookie Policy</Link>, which describes how we
+        <Link to="/cookie-policy">Cookie Policy</Link>, which describes how we
         use cookies and similar technologies.
       </p>
 
@@ -206,9 +200,12 @@ export default function TermsOfService() {
       <h2>11. Account Termination</h2>
       <p>
         You may delete your account at any time from your{" "}
-        <Link href="/account/settings">account settings</Link>. Upon deletion,
+        <Link to="/account/$path" params={{ path: "settings" }}>
+          account settings
+        </Link>
+        . Upon deletion,
         your personal data will be removed in accordance with our{" "}
-        <Link href="/privacy-policy">Privacy Policy</Link>.
+        <Link to="/privacy-policy">Privacy Policy</Link>.
       </p>
       <p>
         We may suspend or terminate your account and access to the Service at

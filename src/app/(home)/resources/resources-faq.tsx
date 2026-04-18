@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 export const resourcesFaqItems: {
   question: string;
@@ -14,7 +14,11 @@ export const resourcesFaqItems: {
         SoulFire plugins are Fabric mods that extend the bot engine with
         low-level hooks, settings pages, Mixins, and direct Minecraft access.
         See the{" "}
-        <Link href="/docs/development" className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "development" }}
+          className="underline text-primary"
+        >
           Development docs
         </Link>{" "}
         for the full plugin authoring workflow.
@@ -30,13 +34,18 @@ export const resourcesFaqItems: {
         Download the plugin JAR file, place it in SoulFire&apos;s{" "}
         <code>minecraft/mods</code> directory, and restart SoulFire. Use the{" "}
         <Link
-          href="/docs/how-to/install-plugins"
+          to="/docs/$"
+          params={{ _splat: "how-to/install-plugins" }}
           className="underline text-primary"
         >
           install guide
         </Link>{" "}
         for loading plugins and the{" "}
-        <Link href="/docs/development" className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "development" }}
+          className="underline text-primary"
+        >
           Development docs
         </Link>{" "}
         if you are building your own.

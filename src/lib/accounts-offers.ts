@@ -20,7 +20,6 @@ export async function getLiveShopData(shop: Shop): Promise<LiveShopData> {
     const response = await fetch(
       shop.slug === "ravealts" ? RAVEALTS_STOCK_URL : LOCALTS_PRODUCTS_URL,
       {
-        next: { revalidate: 300 },
         headers: {
           Accept: "application/json",
         },

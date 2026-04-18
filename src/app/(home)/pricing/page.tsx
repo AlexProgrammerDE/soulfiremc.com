@@ -1,6 +1,5 @@
 import { SiKofi } from "@icons-pack/react-simple-icons";
 import { Check, Code, Gift, Heart, Users } from "lucide-react";
-import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,14 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getRequiredEnv } from "@/lib/env";
-import { imageMetadata } from "@/lib/metadata";
-
-export const metadata: Metadata = {
-  title: "Pricing",
-  description:
-    "SoulFire is free and open source. Support the project and get priority help.",
-  ...imageMetadata("/og/site/pricing/image.webp"),
-};
 
 const freeTierFeatures = [
   "Full SoulFire bot framework",
@@ -132,7 +123,7 @@ export default function PricingPage() {
         Supporter perks are delivered through our{" "}
         <a
           href={getRequiredEnv(
-            process.env.NEXT_PUBLIC_DISCORD_LINK,
+            import.meta.env.NEXT_PUBLIC_DISCORD_LINK,
             "NEXT_PUBLIC_DISCORD_LINK",
           )}
           target="_blank"

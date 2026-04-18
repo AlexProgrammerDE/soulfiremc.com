@@ -1,4 +1,5 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Link } from "@tanstack/react-router";
 import {
   AppWindow,
   ArrowRight,
@@ -12,8 +13,6 @@ import {
   Rocket,
   Zap,
 } from "lucide-react";
-import type { Metadata } from "next";
-import Link from "next/link";
 import type {
   BreadcrumbList,
   FAQPage,
@@ -33,17 +32,12 @@ import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
-import { imageMetadata } from "@/lib/metadata";
 import {
   HeroBackground,
   HomeFaq,
   ScriptingAnimation,
   TerminalAnimation,
-} from "./page.client";
-
-export const metadata: Metadata = {
-  ...imageMetadata("/og/site/home/image.webp"),
-};
+} from "./page-interactive";
 
 const plugins = [
   "Kill Aura",
@@ -117,7 +111,7 @@ const features = [
     description:
       "Fully open source under AGPL-3.0. Contribute features, report bugs, or fork it for your own projects. Community-driven development.",
     href: getRequiredEnv(
-      process.env.NEXT_PUBLIC_GITHUB_LINK,
+      import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
       "NEXT_PUBLIC_GITHUB_LINK",
     ),
     cta: "View on GitHub",
@@ -176,7 +170,7 @@ const features = [
 ];
 
 const githubLink = getRequiredEnv(
-  process.env.NEXT_PUBLIC_GITHUB_LINK,
+  import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
   "NEXT_PUBLIC_GITHUB_LINK",
 );
 
@@ -195,7 +189,7 @@ const faqItems: {
         client code. Bots use actual Minecraft physics, networking, and protocol
         handling, so servers can't tell them apart from real players. It's built
         for stress testing servers, automating tasks, and development.{" "}
-        <Link href="/docs" className="underline text-primary">
+        <Link to="/docs/$" params={{ _splat: "" }} className="underline text-primary">
           Read the docs
         </Link>{" "}
         to learn more.
@@ -208,7 +202,7 @@ const faqItems: {
     answerElement: (
       <>
         Yes. SoulFire is fully open source under the AGPL-3.0 license. You can{" "}
-        <Link href="/download" className="underline text-primary">
+        <Link to="/download" className="underline text-primary">
           download it
         </Link>
         , use it, modify it, and contribute back to the project at no cost.
@@ -235,10 +229,7 @@ const faqItems: {
         release, including Beta, Combat Snapshots, April Fools editions, and
         Bedrock Edition. Version translation is handled automatically via
         built-in protocol support. See the{" "}
-        <Link
-          href="/docs/reference/versions"
-          className="underline text-primary"
-        >
+        <Link to="/docs/$" params={{ _splat: "reference/versions" }} className="underline text-primary">
           full version list
         </Link>
         .
@@ -264,12 +255,12 @@ const faqItems: {
       '<a href="https://soulfiremc.com/download">Download</a> the native installer for your platform (Windows, macOS, or Linux). No Java required, everything is bundled. Just install and run. See the <a href="https://soulfiremc.com/docs/start-here">start-here guide</a> for a full walkthrough.',
     answerElement: (
       <>
-        <Link href="/download" className="underline text-primary">
+        <Link to="/download" className="underline text-primary">
           Download
         </Link>{" "}
         the native installer for your platform (Windows, macOS, or Linux). No
         Java required, everything is bundled. Just install and run. See the{" "}
-        <Link href="/docs/start-here" className="underline text-primary">
+        <Link to="/docs/$" params={{ _splat: "start-here" }} className="underline text-primary">
           start-here guide
         </Link>{" "}
         for a full walkthrough.
@@ -285,10 +276,7 @@ const faqItems: {
         Yes. SoulFire can connect to Bedrock Edition servers via built-in
         protocol translation. Some features are still being added, but core
         functionality like joining, moving, and interacting works. See{" "}
-        <Link
-          href="/docs/reference/versions"
-          className="underline text-primary"
-        >
+        <Link to="/docs/$" params={{ _splat: "reference/versions" }} className="underline text-primary">
           supported versions
         </Link>{" "}
         for details.
@@ -304,7 +292,7 @@ const faqItems: {
         Yes. SoulFire plugins are Fabric mods with full access to Minecraft and
         SoulFire internals. Use scripting for high-level automation, and move to
         the{" "}
-        <Link href="/docs/development" className="underline text-primary">
+        <Link to="/docs/$" params={{ _splat: "development" }} className="underline text-primary">
           Development docs
         </Link>{" "}
         when you need low-level hooks, custom settings, Mixins, or direct bot
@@ -322,7 +310,7 @@ const faqItems: {
         nodes. Build automation workflows by connecting triggers, actions, and
         logic nodes, no programming required. The built-in script editor
         supports real-time debugging, AI/LLM integration, and more. See the{" "}
-        <Link href="/docs/scripting" className="underline text-primary">
+        <Link to="/docs/$" params={{ _splat: "scripting" }} className="underline text-primary">
           scripting docs
         </Link>{" "}
         to get started.
@@ -414,7 +402,7 @@ export default function Page() {
                   The best Minecraft bot tool, undetectable and fast.
                 </h1>
                 <div className="flex flex-col gap-4 sm:flex-row">
-                  <Link href="/download">
+                  <Link to="/download">
                     <Button
                       size="lg"
                       className="gap-2 h-14 px-8 text-lg font-semibold"
@@ -425,7 +413,7 @@ export default function Page() {
                   </Link>
                   <a
                     href={getRequiredEnv(
-                      process.env.NEXT_PUBLIC_GITHUB_LINK,
+                      import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
                       "NEXT_PUBLIC_GITHUB_LINK",
                     )}
                     target="_blank"
@@ -576,7 +564,7 @@ export default function Page() {
             </div>
           </div>
           <div className="flex mt-8">
-            <Link href="/docs/scripting">
+            <Link to="/docs/$" params={{ _splat: "scripting" }}>
               <Button variant="outline" className="gap-2">
                 Explore scripting docs
                 <ArrowRight className="w-4 h-4" />
@@ -601,7 +589,7 @@ export default function Page() {
           </div>
           <TerminalAnimation />
           <div className="flex mt-8">
-            <Link href="/docs/reference/commands">
+            <Link to="/docs/$" params={{ _splat: "reference/commands" }}>
               <Button variant="outline" className="gap-2">
                 View all commands
                 <ArrowRight className="w-4 h-4" />
@@ -631,7 +619,7 @@ export default function Page() {
               their Minecraft servers with SoulFire
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <Link href="/download">
+              <Link to="/download">
                 <Button size="lg" className="gap-2 h-12 px-8">
                   <Download className="w-5 h-5" />
                   <span>Get SoulFire</span>
@@ -639,7 +627,7 @@ export default function Page() {
               </Link>
               <a
                 href={getRequiredEnv(
-                  process.env.NEXT_PUBLIC_GITHUB_LINK,
+                  import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
                   "NEXT_PUBLIC_GITHUB_LINK",
                 )}
                 target="_blank"

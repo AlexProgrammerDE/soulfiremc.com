@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Imprint",
-  description: "SoulFire Legal Notice (Impressum).",
-};
+import { Link } from "@tanstack/react-router";
 
 export default function Imprint() {
   return (
@@ -77,13 +71,13 @@ export default function Imprint() {
       <h2>Related Legal Documents</h2>
       <ul>
         <li>
-          <Link href="/privacy-policy">Privacy Policy</Link>
+          <Link to="/privacy-policy">Privacy Policy</Link>
         </li>
         <li>
-          <Link href="/terms-of-service">Terms of Service</Link>
+          <Link to="/terms-of-service">Terms of Service</Link>
         </li>
         <li>
-          <Link href="/cookie-policy">Cookie Policy</Link>
+          <Link to="/cookie-policy">Cookie Policy</Link>
         </li>
       </ul>
     </main>

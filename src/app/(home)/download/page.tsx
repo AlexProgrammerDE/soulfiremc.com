@@ -1,6 +1,5 @@
 import { BookOpen, Heart, PlayCircle, Server, Terminal } from "lucide-react";
-import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { imageMetadata } from "@/lib/metadata";
 import {
   getClientRelease,
   getReleaseVersion,
@@ -29,21 +27,19 @@ const SERVER_ICONS = {
   "SoulFire Dedicated": <Server className="h-5 w-5" />,
 } as const;
 
-export const metadata: Metadata = {
-  title: "Download SoulFire",
-  description: "Pick your OS and CPU to grab the right SoulFire build.",
-  ...imageMetadata("/og/site/download/image.webp"),
-};
-
 export default async function DownloadPage() {
   const [clientRelease, serverRelease] = await Promise.all([
-    getClientRelease(),
-    getServerRelease(),
+    getClientRelease().catch(() => null),
+    getServerRelease().catch(() => null),
   ]);
   const fallbackVersion = "latest";
-  const clientVersion = getReleaseVersion(clientRelease) ?? fallbackVersion;
+  const clientVersion =
+    (clientRelease ? getReleaseVersion(clientRelease) : undefined) ??
+    fallbackVersion;
   const serverVersion =
-    getReleaseVersion(serverRelease) ?? clientVersion ?? fallbackVersion;
+    (serverRelease ? getReleaseVersion(serverRelease) : undefined) ??
+    clientVersion ??
+    fallbackVersion;
   const serverDownloads = createServerDownloads(serverVersion);
   const releaseName =
     clientRelease?.name ??
@@ -104,7 +100,9 @@ export default async function DownloadPage() {
               account setup, plugins, and tuning tips for realistic bot testing.
             </p>
             <Button asChild variant="outline">
-              <Link href="/docs/start-here">Open the docs</Link>
+              <Link to="/docs/$" params={{ _splat: "start-here" }}>
+                Open the docs
+              </Link>
             </Button>
           </CardContent>
         </Card>

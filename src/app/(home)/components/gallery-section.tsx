@@ -1,7 +1,6 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,12 +36,10 @@ export function GallerySection({
             onClick={() => setOpenIndex(i)}
             className="relative aspect-video overflow-hidden rounded-lg bg-muted ring-offset-background transition-shadow hover:ring-2 hover:ring-ring hover:ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            <Image
+            <img
               src={img.src}
               alt={img.alt}
-              fill
-              sizes="(max-width: 640px) 50vw, 33vw"
-              className="object-cover"
+              className="size-full object-cover"
             />
           </button>
         ))}
@@ -64,12 +61,10 @@ export function GallerySection({
           </DialogDescription>
           {openIndex !== null && (
             <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg bg-black/40">
-              <Image
+              <img
                 src={images[openIndex].src}
                 alt={images[openIndex].alt}
-                fill
-                sizes="96vw"
-                className="object-contain"
+                className="size-full object-contain"
               />
               <DialogClose asChild>
                 <Button

@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Cookie Policy",
-  description: "SoulFire Cookie Policy.",
-};
+import { Link } from "@tanstack/react-router";
 
 export default function CookiePolicy() {
   return (
@@ -377,7 +371,7 @@ export default function CookiePolicy() {
       <h2>7. More Information</h2>
       <p>
         For more details on how we handle your personal data, please see our{" "}
-        <Link href="/privacy-policy">Privacy Policy</Link>.
+        <Link to="/privacy-policy">Privacy Policy</Link>.
       </p>
     </main>
   );

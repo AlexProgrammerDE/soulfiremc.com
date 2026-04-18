@@ -6,8 +6,8 @@ import {
   Collapsible,
   CollapsibleContent,
 } from "fumadocs-ui/components/ui/collapsible";
+import { useLocation } from "@tanstack/react-router";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
-import { usePathname } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,8 @@ interface Result extends Feedback {
 }
 
 export function Feedback() {
-  const url = usePathname();
+  const location = useLocation();
+  const url = location.pathname;
   const posthog = usePostHog();
   const [previous, setPrevious] = useState<Result | null>(null);
   const [opinion, setOpinion] = useState<"good" | "bad" | null>(null);

@@ -5,22 +5,34 @@ import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import { openapiPlugin, openapiSource } from "fumadocs-openapi/server";
 import { openapi } from "@/lib/docs/openapi";
 
-export const source = loader(
-  multiple({
-    docs: docs.toFumadocsSource(),
-    openapi: await openapiSource(openapi, {
-      baseDir: "openapi/(generated)",
-      meta: {
-        folderStyle: "separator",
-      },
-      groupBy: "tag",
+async function createDocsSource() {
+  return loader(
+    multiple({
+      docs: docs.toFumadocsSource(),
+      openapi: await openapiSource(openapi, {
+        baseDir: "openapi/(generated)",
+        meta: {
+          folderStyle: "separator",
+        },
+        groupBy: "tag",
+      }),
     }),
-  }),
-  {
-    baseUrl: "/docs",
-    plugins: [lucideIconsPlugin(), openapiPlugin()],
-  },
-);
+    {
+      baseUrl: "/docs",
+      plugins: [lucideIconsPlugin(), openapiPlugin()],
+    },
+  );
+}
+
+let cachedSource: undefined | ReturnType<typeof createDocsSource>;
+
+export function getSource() {
+  if (!cachedSource) {
+    cachedSource ??= createDocsSource();
+  }
+
+  return cachedSource;
+}
 
 export const blogSource = loader({
   baseUrl: "/blog",

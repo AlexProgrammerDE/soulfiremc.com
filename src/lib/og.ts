@@ -1,6 +1,3 @@
-import type { InferPageType } from "fumadocs-core/source";
-import type { blogSource, source } from "@/lib/source";
-
 const OG_FILE_NAME = "image.webp";
 
 export type SiteOgPage =
@@ -33,11 +30,11 @@ export function stripOgSuffix(slug: string[]) {
   return slug.at(-1) === OG_FILE_NAME ? slug.slice(0, -1) : slug;
 }
 
-export function getDocsPageImage(page: InferPageType<typeof source>) {
+export function getDocsPageImage(page: { slugs: string[] }) {
   return createOgImage("/og/docs", page.slugs);
 }
 
-export function getBlogPageImage(page: InferPageType<typeof blogSource>) {
+export function getBlogPageImage(page: { slugs: string[] }) {
   return createOgImage("/og/blog", page.slugs);
 }
 

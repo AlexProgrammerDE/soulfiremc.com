@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 export const proxiesFaqItems: {
   question: string;
@@ -15,7 +15,8 @@ export const proxiesFaqItems: {
         bot a different IP address, avoiding rate limits and IP bans. Learn more
         in the{" "}
         <Link
-          href="/docs/how-to/import-proxies"
+          to="/docs/$"
+          params={{ _splat: "how-to/import-proxies" }}
           className="underline text-primary"
         >
           Proxy Guide
@@ -34,7 +35,8 @@ export const proxiesFaqItems: {
         proxies are faster and cheaper but easier to block. ISP proxies offer a
         middle ground. See the{" "}
         <Link
-          href="/docs/how-to/import-proxies"
+          to="/docs/$"
+          params={{ _splat: "how-to/import-proxies" }}
           className="underline text-primary"
         >
           Proxy Guide

@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "SoulFire Privacy Policy.",
-};
+import { Link } from "@tanstack/react-router";
 
 export default function PrivacyPolicy() {
   return (
@@ -90,7 +84,7 @@ export default function PrivacyPolicy() {
         <li>
           <strong>Device and usage information</strong> &mdash; collected via
           analytics cookies (see our{" "}
-          <Link href="/cookie-policy">Cookie Policy</Link>)
+          <Link to="/cookie-policy">Cookie Policy</Link>)
         </li>
       </ul>
 
@@ -322,7 +316,7 @@ export default function PrivacyPolicy() {
         Yes. We use cookies and similar tracking technologies to access and
         store information. For details on what cookies we use and how you can
         manage them, please see our{" "}
-        <Link href="/cookie-policy">Cookie Policy</Link>.
+        <Link to="/cookie-policy">Cookie Policy</Link>.
       </p>
 
       <h2>5. How Long Do We Keep Your Information?</h2>
@@ -378,7 +372,10 @@ export default function PrivacyPolicy() {
         <li>
           <strong>Deletion</strong> &mdash; request deletion of your account and
           associated data. You can initiate account deletion from your{" "}
-          <Link href="/account/settings">account settings</Link>.
+          <Link to="/account/$path" params={{ path: "settings" }}>
+            account settings
+          </Link>
+          .
         </li>
         <li>
           <strong>Withdraw consent</strong> &mdash; you can withdraw consent for

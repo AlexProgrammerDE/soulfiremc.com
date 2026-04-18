@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Calendar,
@@ -7,11 +8,6 @@ import {
   ExternalLink,
   User,
 } from "lucide-react";
-import type { Metadata } from "next";
-import { cacheLife } from "next/cache";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type {
   BreadcrumbList,
@@ -30,53 +26,33 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { imageMetadata } from "@/lib/metadata";
-import { getResourcePageImage } from "@/lib/og";
 import {
   BADGE_CONFIG,
   type Badge,
-  getResourceBySlug,
-  RESOURCES,
   type Resource,
 } from "@/lib/resources-data";
-import {
-  emptyReviewSummary,
-  getAggregateRatingJsonLd,
-  getPaginatedWrittenReviews,
-  getReviewJsonLd,
-  getReviewSummaries,
-} from "@/lib/reviews";
+import type {
+  PaginatedPublicReviewRecords,
+  ReviewSummary,
+} from "@/lib/review-core";
 import { cn } from "@/lib/utils";
 
-export function generateStaticParams() {
-  return RESOURCES.map((resource) => ({ slug: resource.slug }));
-}
-
-export async function generateMetadata(props: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const params = await props.params;
-  const resource = getResourceBySlug(params.slug);
-  if (!resource) notFound();
-
-  return {
-    title: `${resource.name} - SoulFire ${resource.category === "plugin" ? "Plugin" : "Script"}`,
-    description: resource.description,
-    alternates: {
-      canonical: "./",
-    },
-    ...imageMetadata(getResourcePageImage(resource.slug).url),
-  };
-}
+export type ResourceDetailPageData = {
+  breadcrumbJsonLd: WithContext<BreadcrumbList>;
+  pageJsonLd: WithContext<WebPage>;
+  resource: Resource;
+  reviewSummary: ReviewSummary;
+  softwareJsonLd: WithContext<SoftwareApplication>;
+  writtenReviews: PaginatedPublicReviewRecords;
+};
 
 function ResourceLogo({ resource }: { resource: Resource }) {
   if (resource.logo) {
     return (
-      <Image
+      <img
         src={resource.logo}
         alt={`${resource.name} logo`}
-        fill
-        className="object-contain p-3"
+        className="size-full object-contain p-3"
       />
     );
   }
@@ -109,121 +85,37 @@ function ResourceBadge({ badge }: { badge: Badge }) {
   );
 }
 
-export default async function ResourceDetailPage(props: {
-  params: Promise<{ slug: string }>;
-}) {
-  "use cache";
-  cacheLife("hours");
-
-  const params = await props.params;
-  const slug = params.slug;
-  const resource = getResourceBySlug(slug);
-  if (!resource) notFound();
-  const reviewSummaries = await getReviewSummaries("resource", [resource.slug]);
-  const reviewSummary = reviewSummaries[resource.slug] ?? emptyReviewSummary();
-  const writtenReviews = await getPaginatedWrittenReviews(
-    "resource",
-    resource.slug,
-    reviewSummary.reviewCount,
-    { page: 1 },
-  );
-
-  const softwareJsonLd: WithContext<SoftwareApplication> = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "@id": `https://soulfiremc.com/resources/${resource.slug}#software`,
-    name: resource.name,
-    description: resource.description,
-    applicationCategory: resource.category === "plugin" ? "Plugin" : "Script",
-    author: { "@type": "Person", name: resource.author },
-    ...(resource.version && { softwareVersion: resource.version }),
-    ...(resource.startDate && { dateCreated: resource.startDate }),
-    image: resource.logo
-      ? `https://soulfiremc.com${resource.logo}`
-      : "https://soulfiremc.com/logo.png",
-    url: `https://soulfiremc.com/resources/${resource.slug}`,
-    downloadUrl: resource.url,
-    ...(resource.sourceUrl && { sameAs: resource.sourceUrl }),
-    ...(getAggregateRatingJsonLd(reviewSummary) && {
-      aggregateRating: getAggregateRatingJsonLd(reviewSummary),
-    }),
-    ...(getReviewJsonLd(writtenReviews.entries) && {
-      review: getReviewJsonLd(writtenReviews.entries),
-    }),
-  };
-
-  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `https://soulfiremc.com/resources/${resource.slug}#breadcrumb`,
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://soulfiremc.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Resources",
-        item: "https://soulfiremc.com/resources",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: resource.name,
-        item: `https://soulfiremc.com/resources/${resource.slug}`,
-      },
-    ],
-  };
-
-  const pageJsonLd: WithContext<WebPage> = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": `https://soulfiremc.com/resources/${resource.slug}#webpage`,
-    name: `${resource.name} - SoulFire ${resource.category === "plugin" ? "Plugin" : "Script"}`,
-    description: resource.description,
-    url: `https://soulfiremc.com/resources/${resource.slug}`,
-    inLanguage: "en-US",
-    breadcrumb: {
-      "@id": `https://soulfiremc.com/resources/${resource.slug}#breadcrumb`,
-    },
-    mainEntity: {
-      "@id": `https://soulfiremc.com/resources/${resource.slug}#software`,
-    },
-    isPartOf: {
-      "@type": "WebSite",
-      name: "SoulFire",
-      url: "https://soulfiremc.com",
-    },
-  };
-
+export default function ResourceDetailPageContent({
+  breadcrumbJsonLd,
+  pageJsonLd,
+  resource,
+  reviewSummary,
+  softwareJsonLd,
+  writtenReviews,
+}: ResourceDetailPageData) {
   return (
-    <main className="px-4 py-12 w-full max-w-5xl mx-auto space-y-8">
+    <main className="mx-auto w-full max-w-5xl space-y-8 px-4 py-12">
       <JsonLd data={pageJsonLd} />
       <JsonLd data={softwareJsonLd} />
       <JsonLd data={breadcrumbJsonLd} />
 
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
-        <Link href="/" className="hover:text-foreground transition-colors">
+        <Link to="/" className="transition-colors hover:text-foreground">
           Home
         </Link>
         <ChevronRight className="h-3.5 w-3.5" />
         <Link
-          href="/resources"
-          className="hover:text-foreground transition-colors"
+          to="/resources"
+          className="transition-colors hover:text-foreground"
         >
           Resources
         </Link>
         <ChevronRight className="h-3.5 w-3.5" />
-        <span className="text-foreground truncate">{resource.name}</span>
+        <span className="truncate text-foreground">{resource.name}</span>
       </nav>
 
-      {/* Main content card */}
-      <Card className="p-6 gap-5">
-        <div className="flex flex-col sm:flex-row gap-6">
+      <Card className="gap-5 p-6">
+        <div className="flex flex-col gap-6 sm:flex-row">
           <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
             <ResourceLogo resource={resource} />
           </div>
@@ -236,17 +128,17 @@ export default async function ResourceDetailPage(props: {
                 <User className="h-3.5 w-3.5" />
                 {resource.author}
               </span>
-              {resource.version && (
+              {resource.version ? (
                 <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                   <Code className="h-3.5 w-3.5" />v{resource.version}
                 </span>
-              )}
-              {resource.startDate && (
+              ) : null}
+              {resource.startDate ? (
                 <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                   <Calendar className="h-3.5 w-3.5" />
                   Since {resource.startDate}
                 </span>
-              )}
+              ) : null}
             </div>
             <p className="text-lg text-muted-foreground">
               {resource.description}
@@ -267,7 +159,7 @@ export default async function ResourceDetailPage(props: {
                   Download {resource.name}
                 </a>
               </Button>
-              {resource.sourceUrl && (
+              {resource.sourceUrl ? (
                 <Button variant="outline" size="lg" asChild>
                   <a
                     href={resource.sourceUrl}
@@ -278,7 +170,7 @@ export default async function ResourceDetailPage(props: {
                     <ExternalLink className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-              )}
+              ) : null}
               <ReviewSummaryBadge summary={reviewSummary} />
             </div>
           </div>
@@ -294,15 +186,13 @@ export default async function ResourceDetailPage(props: {
         />
       </Suspense>
 
-      {/* Gallery */}
-      {resource.gallery && resource.gallery.length > 0 && (
+      {resource.gallery && resource.gallery.length > 0 ? (
         <GallerySection images={resource.gallery} />
-      )}
+      ) : null}
 
-      {/* Back link */}
       <Link
-        href="/resources"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        to="/resources"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Browse all resources

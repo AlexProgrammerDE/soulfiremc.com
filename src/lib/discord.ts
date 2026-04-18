@@ -130,9 +130,6 @@ export async function resolveDiscordInviteCode(
 
     const response: Response | null = await fetch(currentUrl, {
       redirect: "manual",
-      next: {
-        revalidate: 60 * 60,
-      },
     }).catch(() => null);
 
     if (!response || !isRedirectStatus(response.status)) {
@@ -173,9 +170,6 @@ export async function fetchDiscordInvite(
     `${DISCORD_API_BASE}/invites/${inviteCode}?with_counts=true`,
     {
       headers,
-      next: {
-        revalidate: 60 * 60,
-      },
     },
   );
 

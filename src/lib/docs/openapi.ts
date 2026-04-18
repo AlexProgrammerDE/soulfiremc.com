@@ -1,9 +1,12 @@
 import { createOpenAPI } from "fumadocs-openapi/server";
 import type { ApiPageProps } from "fumadocs-openapi/ui";
+import type { ClientApiPageProps } from "fumadocs-openapi/ui/create-client";
+import openApiDocument from "../../../public/sf-openapi.json";
 
-type OpenApiPageLike = {
+export type OpenApiPageLike = {
   data: {
     description?: string;
+    getClientAPIPageProps: () => Promise<ClientApiPageProps>;
     getAPIPageProps: () => ApiPageProps;
     title: string;
     type?: string;
@@ -48,7 +51,9 @@ type OpenApiDocument = {
 };
 
 export const openapi = createOpenAPI({
-  input: ["./public/sf-openapi.json"],
+  input: async () => ({
+    sf: openApiDocument as Record<string, unknown>,
+  }),
 });
 
 export function isOpenApiPage(page: {

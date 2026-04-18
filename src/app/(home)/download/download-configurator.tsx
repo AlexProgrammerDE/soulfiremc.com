@@ -1,9 +1,8 @@
 "use client";
 
 import { SiGithub } from "@icons-pack/react-simple-icons";
+import { useRouterState } from "@tanstack/react-router";
 import { CircuitBoard, Coffee, Cpu, Download, Heart } from "lucide-react";
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import { useQueryStates } from "nuqs";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -140,7 +139,10 @@ export function DownloadSelectionComponent({
 }: {
   clientVersion: string;
 }) {
-  const searchParams = useSearchParams();
+  const search = useRouterState({
+    select: (state) => state.location.searchStr,
+  });
+  const searchParams = new URLSearchParams(search);
   const selection = loadDownloadSearchParams(searchParams);
   const clientDownloads = createClientDownloads(clientVersion);
 
@@ -245,11 +247,9 @@ function DownloadConfigurator(props: {
               >
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-primary/10 p-2 text-primary">
-                    <Image
+                    <img
                       src={option.iconSrc}
                       alt={option.iconAlt}
-                      width={28}
-                      height={28}
                       className="size-7"
                     />
                   </div>

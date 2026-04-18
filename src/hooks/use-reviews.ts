@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useReviewTurnstile } from "@/components/review-turnstile-provider";
-import { authClient } from "@/lib/auth-client";
 import {
   emptyReviewSummary,
   type ItemType,
@@ -10,6 +9,7 @@ import {
   type ReviewSummary,
   type UserReviewRecord,
 } from "@/lib/review-core";
+import { useSession } from "@/lib/auth-hooks";
 
 type UseReviewsOptions = {
   initialSummaries?: Record<string, ReviewSummary>;
@@ -42,7 +42,7 @@ export function useReviews(
   slugs: string[],
   options?: UseReviewsOptions,
 ) {
-  const { data: session, isPending: sessionPending } = authClient.useSession();
+  const { data: session, isPending: sessionPending } = useSession();
   const { executeTurnstile } = useReviewTurnstile();
   const includeWrittenReviews = options?.includeWrittenReviews ?? false;
   const writtenReviewsPage = Math.max(1, options?.writtenReviewsPage ?? 1);

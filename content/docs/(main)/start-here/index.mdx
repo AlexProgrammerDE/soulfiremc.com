@@ -7,7 +7,6 @@ icon: Rocket
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 import { Download, Monitor, Server, Terminal } from 'lucide-react';
-import Image from "next/image";
 
 Use this section if you are new to SoulFire or if you want the shortest path to a working setup.
 If you get stuck, ask in our [Discord server](https://soulfiremc.com/discord).
@@ -46,11 +45,12 @@ Read these pages in order for the least confusing first run:
   </Card>
   <Card
     icon={
-      <Image
+      <img
         src="/platform/windows.png"
         alt="Windows"
         width={32}
-        height={32}/>
+        height={32}
+      />
     }
     title="Windows (.exe)"
     href="/docs/start-here/windows"
@@ -59,11 +59,12 @@ Read these pages in order for the least confusing first run:
   </Card>
   <Card
     icon={
-      <Image
+      <img
         src="/platform/macos.png"
         alt="macOS"
         width={32}
-        height={32}/>
+        height={32}
+      />
     }
     title="macOS (.dmg)"
     href="/docs/start-here/macos"
@@ -72,11 +73,12 @@ Read these pages in order for the least confusing first run:
   </Card>
   <Card
     icon={
-      <Image
+      <img
         src="/platform/linux.png"
         alt="Linux"
         width={32}
-        height={32}/>
+        height={32}
+      />
     }
     title="Linux (.flatpak)"
     href="/docs/start-here/linux"

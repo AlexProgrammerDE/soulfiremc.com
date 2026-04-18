@@ -2,7 +2,6 @@ import { dash, sentinel } from "@better-auth/infra";
 import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { nextCookies } from "better-auth/next-js";
 import {
   admin,
   captcha,
@@ -14,6 +13,7 @@ import {
   twoFactor,
   username,
 } from "better-auth/plugins";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { emailHarmony } from "better-auth-harmony";
 import { eq } from "drizzle-orm";
 import { getAvatarUrl } from "@/lib/avatar";
@@ -255,7 +255,13 @@ export const auth = betterAuth({
       },
     }),
     sentinel(),
-    nextCookies(),
+    tanstackStartCookies(),
   ],
-  trustedOrigins: ["https://soulfiremc.com"],
+  trustedOrigins: [
+    "https://soulfiremc.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+  ],
 });

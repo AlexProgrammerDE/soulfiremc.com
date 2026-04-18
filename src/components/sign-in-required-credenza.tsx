@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import {
   Credenza,
@@ -53,7 +53,7 @@ export function SignInRequiredCredenza({
                   ? "/"
                   : `${window.location.pathname}${window.location.search}`;
               const target = `/auth/sign-in?redirectTo=${encodeURIComponent(currentPath)}`;
-              router.push(target);
+              void router.navigate({ href: target });
             }}
           >
             Sign In
