@@ -1,8 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { createServerFn } from "@tanstack/react-start";
 import { SiteShell } from "@/components/site-shell";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllBlogPostSummaries } from "@/lib/blog";
-import { createBreadcrumbStructuredData, createStructuredDataGraph, createWebPageStructuredData, getCanonicalLinks, getPageMeta, jsonLdScript } from "@/lib/seo";
+import {
+  createBreadcrumbStructuredData,
+  createStructuredDataGraph,
+  createWebPageStructuredData,
+  getCanonicalLinks,
+  getPageMeta,
+  jsonLdScript,
+} from "@/lib/seo";
+
+const blogIndexLoader = createServerFn({ method: "GET" }).handler(async () => {
+  return {
+    posts: getAllBlogPostSummaries(),
+  };
+});
 
 export const Route = createFileRoute("/blog/")({
   head: () => {
@@ -39,9 +53,7 @@ export const Route = createFileRoute("/blog/")({
       ],
     };
   },
-  loader: async () => ({
-    posts: await getAllBlogPostSummaries(),
-  }),
+  loader: async () => blogIndexLoader(),
   component: BlogIndexPage,
 });
 

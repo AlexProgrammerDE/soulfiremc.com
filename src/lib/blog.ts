@@ -1,11 +1,7 @@
 import type { InferPageType } from "fumadocs-core/source";
+import { blogSource } from "@/lib/source";
 
-async function getBlogSource() {
-  const { blogSource } = await import("@/lib/source");
-  return blogSource;
-}
-
-type BlogPage = InferPageType<Awaited<ReturnType<typeof getBlogSource>>>;
+type BlogPage = InferPageType<typeof blogSource>;
 
 function normalizeDate(value: string | Date | undefined) {
   if (!value) {
@@ -24,8 +20,7 @@ export function getReadingTime(structuredData?: {
   return Math.max(1, Math.round(words / 200));
 }
 
-export async function getSortedBlogPages() {
-  const blogSource = await getBlogSource();
+export function getSortedBlogPages() {
   return blogSource.getPages().sort((left, right) => {
     const leftDate = left.data.date ? new Date(left.data.date).getTime() : 0;
     const rightDate = right.data.date ? new Date(right.data.date).getTime() : 0;
@@ -52,12 +47,11 @@ export function getBlogPostSummary(page: BlogPage) {
   };
 }
 
-export async function getAllBlogPostSummaries() {
-  return (await getSortedBlogPages()).map(getBlogPostSummary);
+export function getAllBlogPostSummaries() {
+  return getSortedBlogPages().map(getBlogPostSummary);
 }
 
-export async function getBlogPostData(slug: string) {
-  const blogSource = await getBlogSource();
+export function getBlogPostData(slug: string) {
   const page = blogSource.getPage([slug]);
   if (!page) {
     return undefined;
@@ -66,7 +60,7 @@ export async function getBlogPostData(slug: string) {
   const post = getBlogPostSummary(page);
   const relatedPosts =
     post.tags.length > 0
-      ? (await getAllBlogPostSummaries())
+      ? getAllBlogPostSummaries()
           .filter((candidate) => candidate.slug !== slug)
           .filter((candidate) =>
             candidate.tags.some((tag) => post.tags.includes(tag)),

@@ -38,6 +38,7 @@ import {
   getPageMeta,
   jsonLdScript,
 } from "@/lib/seo";
+import { getSource } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
 const docsSlugsInputSchema = z.array(z.string());
@@ -69,16 +70,13 @@ const serverLoader = createServerFn({
 })
   .inputValidator(docsSlugsInputSchema)
   .handler(async ({ data: slugs }) => {
-    const { getSource } = await import("@/lib/source");
     const source = await getSource();
     const page = source.getPage(slugs);
     if (!page) {
       throw notFound();
     }
 
-    const pageTree = JSON.parse(
-      JSON.stringify(await source.serializePageTree(source.getPageTree())),
-    );
+    const pageTree = await source.serializePageTree(source.getPageTree());
     const title = page.data.title ?? page.slugs.at(-1) ?? "Docs";
     const imageUrl = getDocsPageImage(page).url;
 
@@ -88,15 +86,11 @@ const serverLoader = createServerFn({
         description: page.data.description,
         imageUrl,
         pageTree,
-        props: JSON.parse(
-          JSON.stringify(
-            await (
-              page.data as unknown as {
-                getClientAPIPageProps: () => Promise<ClientApiPageProps>;
-              }
-            ).getClientAPIPageProps(),
-          ),
-        ),
+        props: await (
+          page.data as unknown as {
+            getClientAPIPageProps: () => Promise<ClientApiPageProps>;
+          }
+        ).getClientAPIPageProps(),
         title,
         url: page.url,
       };
@@ -262,21 +256,27 @@ function DocsPageRoute() {
     <DocsLayout tree={page.pageTree} {...getBaseLayoutOptions()}>
       <Suspense>
         {page.type === "openapi" ? (
-          <DocsPage full>
-            <div className="mb-6 flex flex-col gap-2 border-b pb-6">
-              <DocsTitle>{page.title}</DocsTitle>
-              <DocsDescription>{page.description}</DocsDescription>
-            </div>
-            <DocsBody>
-              <APIPage {...(page.props as any)} />
-            </DocsBody>
-            <Feedback />
-            <EnderDashSponsor
-              placement="docs-footer"
-              className="mt-8"
-              variant="footer"
-            />
-          </DocsPage>
+          (() => {
+            const openApiPage = page as OpenApiPageLoaderData;
+
+            return (
+              <DocsPage full>
+                <div className="mb-6 flex flex-col gap-2 border-b pb-6">
+                  <DocsTitle>{openApiPage.title}</DocsTitle>
+                  <DocsDescription>{openApiPage.description}</DocsDescription>
+                </div>
+                <DocsBody>
+                  <APIPage {...openApiPage.props} />
+                </DocsBody>
+                <Feedback />
+                <EnderDashSponsor
+                  placement="docs-footer"
+                  className="mt-8"
+                  variant="footer"
+                />
+              </DocsPage>
+            );
+          })()
         ) : (
           <DocsMarkdownContent
             markdownUrl={page.markdownUrl}

@@ -5,9 +5,16 @@ import { Suspense } from "react";
 import * as z from "zod";
 import { SiteShell } from "@/components/site-shell";
 import { getBlogPostData } from "@/lib/blog";
-import { getMDXComponents } from "@/mdx-components";
 import { getBlogPageImage } from "@/lib/og";
-import { createBreadcrumbStructuredData, createStructuredDataGraph, createWebPageStructuredData, getCanonicalLinks, getPageMeta, jsonLdScript } from "@/lib/seo";
+import {
+  createBreadcrumbStructuredData,
+  createStructuredDataGraph,
+  createWebPageStructuredData,
+  getCanonicalLinks,
+  getPageMeta,
+  jsonLdScript,
+} from "@/lib/seo";
+import { getMDXComponents } from "@/mdx-components";
 
 const blogPostLoader = createServerFn({ method: "GET" })
   .inputValidator(z.object({ slug: z.string().min(1) }))
@@ -67,9 +74,7 @@ const clientLoader = browserCollections.blog.createClientLoader<{
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
-    const data = await blogPostLoader({ data: { slug: params.slug } });
-    await clientLoader.preload(data.path);
-    return data;
+    return await blogPostLoader({ data: { slug: params.slug } });
   },
   head: ({ loaderData }) => {
     const data = loaderData;
@@ -86,7 +91,9 @@ export const Route = createFileRoute("/blog/$slug")({
         description,
         path,
         imageUrl,
-        imageAlt: data ? `${data.post.title} blog preview` : "SoulFire blog preview",
+        imageAlt: data
+          ? `${data.post.title} blog preview`
+          : "SoulFire blog preview",
         ogType: "article",
       }),
       links: getCanonicalLinks(path),
@@ -125,7 +132,10 @@ function BlogPostPage() {
               Home
             </Link>
             <span>/</span>
-            <Link to="/blog" className="transition-colors hover:text-foreground">
+            <Link
+              to="/blog"
+              className="transition-colors hover:text-foreground"
+            >
               Blog
             </Link>
             <span>/</span>
