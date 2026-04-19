@@ -1,23 +1,68 @@
 import browserCollections from "fumadocs-mdx:collections/browser";
-import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  redirect,
+} from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import type { SerializedPageTree } from "fumadocs-core/source/client";
+import { useFumadocsLoader } from "fumadocs-core/source/client";
+import type { ClientApiPageProps } from "fumadocs-openapi/ui/create-client";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page";
+import {
+  DocsBody,
+  DocsDescription,
+  DocsPage,
+  DocsTitle,
+} from "fumadocs-ui/page";
 import { Suspense } from "react";
 import * as z from "zod";
 import { APIPage } from "@/components/api-page";
 import { EnderDashSponsor } from "@/components/enderdash-sponsor";
 import { Feedback } from "@/components/feedback";
 import { LLMCopyButton, ViewOptions } from "@/components/page-actions";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { docsRedirects } from "@/lib/docs/redirects";
 import { getBaseLayoutOptions } from "@/lib/layout-options";
 import { getDocsPageImage } from "@/lib/og";
-import { createBreadcrumbStructuredData, createStructuredDataGraph, createWebPageStructuredData, getCanonicalLinks, getPageMeta, jsonLdScript } from "@/lib/seo";
+import {
+  createBreadcrumbStructuredData,
+  createStructuredDataGraph,
+  createWebPageStructuredData,
+  getCanonicalLinks,
+  getPageMeta,
+  jsonLdScript,
+} from "@/lib/seo";
 import { getMDXComponents } from "@/mdx-components";
 
 const docsSlugsInputSchema = z.array(z.string());
-type DocsLoaderData = any;
+
+type BaseDocsLoaderData = {
+  description?: string;
+  imageUrl: string;
+  pageTree: SerializedPageTree;
+  title: string;
+  url: string;
+};
+
+type DocsPageLoaderData = BaseDocsLoaderData & {
+  githubUrl: string;
+  markdownUrl: string;
+  path: string;
+  type: "docs";
+};
+
+type OpenApiPageLoaderData = BaseDocsLoaderData & {
+  props: ClientApiPageProps;
+  type: "openapi";
+};
+
+type DocsLoaderData = DocsPageLoaderData | OpenApiPageLoaderData;
 
 const serverLoader = createServerFn({
   method: "GET",
@@ -45,9 +90,11 @@ const serverLoader = createServerFn({
         pageTree,
         props: JSON.parse(
           JSON.stringify(
-            await (page.data as unknown as {
-              getClientAPIPageProps: () => Promise<Record<string, unknown>>;
-            }).getClientAPIPageProps(),
+            await (
+              page.data as unknown as {
+                getClientAPIPageProps: () => Promise<ClientApiPageProps>;
+              }
+            ).getClientAPIPageProps(),
           ),
         ),
         title,
@@ -155,7 +202,9 @@ export const Route = createFileRoute("/docs/$")({
     return data as DocsLoaderData;
   },
   head: ({ loaderData }) => {
-    const title = loaderData ? `${loaderData.title} - SoulFire` : "Docs - SoulFire";
+    const title = loaderData
+      ? `${loaderData.title} - SoulFire`
+      : "Docs - SoulFire";
     const description = loaderData?.description ?? "SoulFire documentation";
     const path = loaderData?.url ?? "/docs";
     const imageUrl = loaderData?.imageUrl ?? `${path}/image.webp`;
@@ -196,11 +245,21 @@ export const Route = createFileRoute("/docs/$")({
   component: DocsPageRoute,
 });
 
+function DocsMarkdownContent({
+  markdownUrl,
+  path,
+}: Pick<DocsPageLoaderData, "markdownUrl" | "path">) {
+  return clientLoader.useContent(path, {
+    currentPath: path,
+    markdownUrl,
+  });
+}
+
 function DocsPageRoute() {
-  const page = Route.useLoaderData() as DocsLoaderData;
+  const page = useFumadocsLoader(Route.useLoaderData() as DocsLoaderData);
 
   return (
-    <DocsLayout tree={page.pageTree as never} {...getBaseLayoutOptions()}>
+    <DocsLayout tree={page.pageTree} {...getBaseLayoutOptions()}>
       <Suspense>
         {page.type === "openapi" ? (
           <DocsPage full>
@@ -219,10 +278,10 @@ function DocsPageRoute() {
             />
           </DocsPage>
         ) : (
-          clientLoader.useContent(page.path, {
-            currentPath: page.path,
-            markdownUrl: page.markdownUrl,
-          })
+          <DocsMarkdownContent
+            markdownUrl={page.markdownUrl}
+            path={page.path}
+          />
         )}
       </Suspense>
     </DocsLayout>
