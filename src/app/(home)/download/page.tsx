@@ -1,5 +1,5 @@
-import { BookOpen, Heart, PlayCircle, Server, Terminal } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { BookOpen, Heart, PlayCircle, Server, Terminal } from "lucide-react";
 import { Suspense } from "react";
 import { CustomTimeAgo } from "@/components/time-ago";
 import { Button } from "@/components/ui/button";
@@ -12,50 +12,43 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  getClientRelease,
-  getReleaseVersion,
-  getServerRelease,
-} from "@/lib/releases";
-import {
   DownloadSelectionComponent,
   DownloadSelectionSkeleton,
 } from "./download-configurator";
-import { createServerDownloads } from "./download-data";
 
 const SERVER_ICONS = {
   "SoulFire CLI": <Terminal className="h-5 w-5" />,
   "SoulFire Dedicated": <Server className="h-5 w-5" />,
 } as const;
 
-export default async function DownloadPage() {
-  const [clientRelease, serverRelease] = await Promise.all([
-    getClientRelease().catch(() => null),
-    getServerRelease().catch(() => null),
-  ]);
-  const fallbackVersion = "latest";
-  const clientVersion =
-    (clientRelease ? getReleaseVersion(clientRelease) : undefined) ??
-    fallbackVersion;
-  const serverVersion =
-    (serverRelease ? getReleaseVersion(serverRelease) : undefined) ??
-    clientVersion ??
-    fallbackVersion;
-  const serverDownloads = createServerDownloads(serverVersion);
-  const releaseName =
-    clientRelease?.name ??
-    clientRelease?.tag_name ??
-    `Version ${clientVersion}`;
-  const releaseDate = clientRelease?.published_at ?? clientRelease?.created_at;
+type ServerDownload = {
+  name: string;
+  description: string;
+  url: string;
+};
 
+type DownloadPageContentProps = {
+  clientVersion: string;
+  releaseDate: string | null;
+  releaseName: string;
+  serverDownloads: ServerDownload[];
+};
+
+export default function DownloadPageContent({
+  clientVersion,
+  releaseDate,
+  releaseName,
+  serverDownloads,
+}: DownloadPageContentProps) {
   return (
-    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
+    <main className="mx-auto w-full max-w-(--fd-layout-width) space-y-10 px-4 py-12">
       <div className="space-y-6">
         <div className="space-y-4">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               Download SoulFire
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="max-w-2xl text-lg text-muted-foreground">
               Pick your operating system and CPU architecture. We&apos;ll give
               you the right download plus links to help you learn how everything
               works.
