@@ -32,7 +32,6 @@
     "open-next.config.ts",
     "load-next-env.ts",
     "load-next-env-direct.ts",
-    "auth.loader.ts",
-    "src/app/**/*"
+    "auth.loader.ts"
   ]
 }

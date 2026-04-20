@@ -1,11 +1,647 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { resourcesFaqItems } from "@/app/(home)/resources/resources-faq";
-import { ResourcesClient } from "@/app/(home)/resources/page-grid";
+import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { SiteShell } from "@/components/site-shell";
-import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
-import { RESOURCES } from "@/lib/resources-data";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { useReviews } from "@/hooks/use-reviews";
+import { BADGE_CONFIG, type Badge, type Category, FILTER_TAGS, type FilterableTag, type Resource, RESOURCES } from "@/lib/resources-data";
+import { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
+import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
+import { cn } from "@/lib/utils";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { ArrowDownWideNarrow, BookOpen, Calendar, Code, Download, ExternalLink, Filter, ImageIcon, Star, User } from "lucide-react";
+import { useQueryStates } from "nuqs";
+import { createLoader, createSearchParamsCache, parseAsArrayOf, parseAsStringLiteral, type SearchParams } from "nuqs/server";
+import { Suspense, useMemo, useState } from "react";
+
+const resourcesFaqItems: {
+  question: string;
+  answerHtml: string;
+  answerElement: React.ReactNode;
+}[] = [
+  {
+    question: "What are SoulFire plugins?",
+    answerHtml:
+      'SoulFire plugins are Fabric mods that extend the bot engine with low-level hooks, settings pages, Mixins, and direct Minecraft access. See the <a href="https://soulfiremc.com/docs/development">Development docs</a> for the full plugin authoring workflow.',
+    answerElement: (
+      <>
+        SoulFire plugins are Fabric mods that extend the bot engine with
+        low-level hooks, settings pages, Mixins, and direct Minecraft access.
+        See the{" "}
+        <Link
+          to="/docs/$"
+          params={{ _splat: "development" }}
+          className="underline text-primary"
+        >
+          Development docs
+        </Link>{" "}
+        for the full plugin authoring workflow.
+      </>
+    ),
+  },
+  {
+    question: "How do I install a SoulFire plugin?",
+    answerHtml:
+      'Download the plugin JAR file, place it in SoulFire&apos;s <code>minecraft/mods</code> directory, and restart SoulFire. Use the <a href="https://soulfiremc.com/docs/how-to/install-plugins">install guide</a> for loading plugins and the <a href="https://soulfiremc.com/docs/development">Development docs</a> if you are building your own.',
+    answerElement: (
+      <>
+        Download the plugin JAR file, place it in SoulFire&apos;s{" "}
+        <code>minecraft/mods</code> directory, and restart SoulFire. Use the{" "}
+        <Link
+          to="/docs/$"
+          params={{ _splat: "how-to/install-plugins" }}
+          className="underline text-primary"
+        >
+          install guide
+        </Link>{" "}
+        for loading plugins and the{" "}
+        <Link
+          to="/docs/$"
+          params={{ _splat: "development" }}
+          className="underline text-primary"
+        >
+          Development docs
+        </Link>{" "}
+        if you are building your own.
+      </>
+    ),
+  },
+  {
+    question: "What are SoulFire scripts?",
+    answerHtml:
+      "SoulFire scripts automate bot behavior with SoulFire&apos;s visual scripting system. You build flows from triggers, actions, logic, and data nodes in the editor, then run them directly inside SoulFire without writing a full plugin.",
+    answerElement: (
+      <>
+        SoulFire scripts automate bot behavior with SoulFire&apos;s visual
+        scripting system. You build flows from triggers, actions, logic, and
+        data nodes in the editor, then run them directly inside SoulFire without
+        writing a full plugin.
+      </>
+    ),
+  },
+  {
+    question: "How can I share my plugin or script?",
+    answerHtml:
+      'Submit a pull request on <a href="https://github.com/soulfiremc-com/soulfiremc.com">GitHub</a> to add your resource to this page, or share it in the SoulFire Discord server.',
+    answerElement: (
+      <>
+        Submit a pull request on{" "}
+        <a
+          href="https://github.com/soulfiremc-com/soulfiremc.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline text-primary"
+        >
+          GitHub
+        </a>{" "}
+        to add your resource to this page, or share it in the SoulFire Discord
+        server.
+      </>
+    ),
+  },
+  {
+    question: "Are community resources safe to use?",
+    answerHtml:
+      "Always review the source code of any third-party plugin or script before using it. Prefer open-source resources where you can inspect the code. Only download from trusted sources and authors.",
+    answerElement: (
+      <>
+        Always review the source code of any third-party plugin or script before
+        using it. Prefer open-source resources where you can inspect the code.
+        Only download from trusted sources and authors.
+      </>
+    ),
+  },
+];
+
+const CATEGORIES = ["plugin", "script"] as const;
+
+
+const TAGS = [
+  "combat",
+  "farming",
+  "utility",
+  "movement",
+  "building",
+  "pvp",
+  "survival",
+  "minigame",
+  "automation",
+  "open-source",
+] as const;
+
+
+const SORT_OPTIONS = ["default", "best-rated"] as const;
+
+
+const resourcesSearchParams = {
+  category: parseAsStringLiteral([...CATEGORIES]).withDefault(null as never),
+  tags: parseAsArrayOf(parseAsStringLiteral([...TAGS])).withDefault([]),
+  sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
+};
+
+
+const resourcesSearchParamsCache = createSearchParamsCache(
+  resourcesSearchParams,
+);
+
+
+const loadResourcesSearchParams = createLoader(resourcesSearchParams);
+
+
+type ResourcesSelection = Awaited<
+  ReturnType<typeof loadResourcesSearchParams>
+>;
+
+type ResourcesPageSearchParams = Promise<SearchParams>;
+
+const SORT_CONFIG = {
+  default: {
+    label: "Most Rated",
+    icon: <ArrowDownWideNarrow className="h-3 w-3" />,
+  },
+  "best-rated": {
+    label: "Best Rated",
+    icon: <Star className="h-3 w-3 fill-current" />,
+  },
+} as const;
+
+
+function ResourceBadge({ badge }: { badge: Badge }) {
+  const config = BADGE_CONFIG[badge];
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <span
+          className={cn(
+            "inline-flex cursor-help items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+            config.className,
+          )}
+        >
+          {config.icon}
+          {config.label}
+        </span>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-64 text-sm">
+        <p>{config.description}</p>
+      </HoverCardContent>
+    </HoverCard>
+  );
+}
+
+
+function ResourceLogo({ resource }: { resource: Resource }) {
+  if (resource.logo) {
+    return (
+      <img
+        src={resource.logo}
+        alt={`${resource.name} logo`}
+        className="size-full object-contain p-2"
+      />
+    );
+  }
+  return (
+    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5 text-2xl font-bold text-primary">
+      {resource.name.charAt(0).toUpperCase()}
+    </div>
+  );
+}
+
+
+function ResourceCard({
+  resource,
+  reviewSummary,
+  userReview,
+  reviewPending,
+  onRate,
+  onClearRating,
+}: {
+  resource: Resource;
+  reviewSummary: ReviewSummary;
+  userReview?: UserReviewRecord;
+  reviewPending: boolean;
+  onRate: (
+    slug: string,
+    rating: number,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
+  onClearRating: (
+    slug: string,
+  ) => Promise<{ error: "unauthorized" | "verification" | null }>;
+}) {
+  return (
+    <Card className="transition-all duration-300 hover:shadow-lg">
+      <div className="flex flex-col sm:flex-row gap-4 p-6">
+        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
+          <ResourceLogo resource={resource} />
+        </div>
+        <div className="flex-1 space-y-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <h3 className="text-xl font-semibold">
+              <Link
+                to="/resources/$slug"
+                params={{ slug: resource.slug }}
+                className="hover:underline"
+              >
+                {resource.name}
+              </Link>
+            </h3>
+            <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+              <User className="h-3 w-3" />
+              {resource.author}
+            </span>
+            {resource.version && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Code className="h-3 w-3" />v{resource.version}
+              </span>
+            )}
+            {resource.startDate && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                <Calendar className="h-3 w-3" />
+                Since {resource.startDate}
+              </span>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {resource.badges.map((badge) => (
+                <ResourceBadge key={badge} badge={badge} />
+              ))}
+            </div>
+          </div>
+          <p className="text-muted-foreground">{resource.description}</p>
+          {resource.gallery && resource.gallery.length > 0 && (
+            <Link
+              to="/resources/$slug"
+              params={{ slug: resource.slug }}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ImageIcon className="h-3 w-3" />
+              {resource.gallery.length} photo
+              {resource.gallery.length !== 1 && "s"}
+            </Link>
+          )}
+          <div className="flex flex-wrap gap-2">
+            <Button asChild>
+              <a
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download
+              </a>
+            </Button>
+            {resource.sourceUrl && (
+              <Button variant="outline" asChild>
+                <a
+                  href={resource.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Source
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </div>
+          <ReviewInlineActions
+            summary={reviewSummary}
+            currentRating={userReview?.rating}
+            pending={reviewPending}
+            onRate={(rating) => onRate(resource.slug, rating)}
+            onClear={() => onClearRating(resource.slug)}
+          />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+
+function MainContent({
+  initialSummaries,
+}: {
+  initialSummaries: Record<string, ReviewSummary>;
+}) {
+  const resources = RESOURCES;
+  const slugs = useMemo(() => resources.map((r) => r.slug), []);
+  const { summaries, userReviews, pendingBySlug, upsertReview, deleteReview } =
+    useReviews("resource", slugs, { initialSummaries });
+  const [{ category, tags, sort }, setParams] = useQueryStates(
+    resourcesSearchParams,
+    {
+      shallow: false,
+    },
+  );
+
+  const toggleCategory = (cat: Category) => {
+    setParams({ category: category === cat ? null : cat });
+  };
+
+  const toggleTag = (tag: FilterableTag) => {
+    const newTags = tags.includes(tag)
+      ? tags.filter((t) => t !== tag)
+      : [...tags, tag];
+    setParams({ tags: newTags });
+  };
+
+  const clearFilters = () => {
+    setParams({ category: null, tags: [], sort: "default" });
+  };
+
+  const activeFilterCount =
+    tags.length +
+    (category !== null && category !== undefined ? 1 : 0) +
+    (sort !== "default" ? 1 : 0);
+
+  const filteredResources = useMemo(() => {
+    const filtered = resources.filter((resource) => {
+      if (category && resource.category !== category) return false;
+      if (
+        tags.length > 0 &&
+        !tags.every((tag) => resource.badges.includes(tag))
+      )
+        return false;
+      return true;
+    });
+
+    return [...filtered].sort((a, b) => {
+      const summaryA = summaries[a.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+      const summaryB = summaries[b.slug] ?? {
+        averageRating: null,
+        reviewCount: 0,
+      };
+
+      if (sort === "best-rated") {
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
+
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+      } else {
+        if (summaryB.reviewCount !== summaryA.reviewCount) {
+          return summaryB.reviewCount - summaryA.reviewCount;
+        }
+
+        if (summaryB.averageRating !== summaryA.averageRating) {
+          return (summaryB.averageRating ?? 0) - (summaryA.averageRating ?? 0);
+        }
+      }
+
+      return a.name.localeCompare(b.name);
+    });
+  }, [category, sort, tags, summaries]);
+
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const filterContent = (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Filter className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-medium">Filters</span>
+        {activeFilterCount > 0 && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="text-xs text-muted-foreground hover:text-foreground underline ml-auto"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+      <div className="space-y-2">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          Category
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {CATEGORIES.map((cat) => {
+            const config = BADGE_CONFIG[cat.value];
+            const isActive = category === cat.value;
+            return (
+              <button
+                type="button"
+                key={cat.value}
+                onClick={() => toggleCategory(cat.value)}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                  isActive
+                    ? cn(
+                        config.className,
+                        "ring-2 ring-offset-2 ring-offset-background ring-current",
+                      )
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
+                )}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="space-y-2">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          Tags
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {FILTER_TAGS.map((tag) => {
+            const config = BADGE_CONFIG[tag];
+            const isActive = tags.includes(tag);
+            return (
+              <button
+                type="button"
+                key={tag}
+                onClick={() => toggleTag(tag)}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                  isActive
+                    ? cn(
+                        config.className,
+                        "ring-2 ring-offset-2 ring-offset-background ring-current",
+                      )
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
+                )}
+              >
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="space-y-2">
+        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          Sort
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {SORT_OPTIONS.map((option) => {
+            const config = SORT_CONFIG[option];
+            const isActive = sort === option;
+            return (
+              <button
+                type="button"
+                key={option}
+                onClick={() => setParams({ sort: option })}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium outline-none transition-all",
+                  isActive
+                    ? "bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-background ring-primary"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80",
+                )}
+              >
+                {config.icon}
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col lg:flex-row gap-6 max-w-(--fd-layout-width) mx-auto w-full">
+      {/* Mobile filter toggle */}
+      <button
+        type="button"
+        onClick={() => setFiltersOpen(!filtersOpen)}
+        className="lg:hidden inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors self-start"
+      >
+        <Filter className="h-4 w-4" />
+        Filters
+        {activeFilterCount > 0 && (
+          <span className="inline-flex items-center justify-center rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
+            {activeFilterCount}
+          </span>
+        )}
+      </button>
+
+      {/* Mobile filter panel */}
+      {filtersOpen && (
+        <div className="lg:hidden rounded-lg border p-4">{filterContent}</div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:block lg:w-56 lg:shrink-0">
+        <div className="lg:sticky lg:top-20 lg:self-start">{filterContent}</div>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex-1">
+        {filteredResources.length === 0 ? (
+          <Card className="p-8 text-center">
+            <p className="text-muted-foreground">
+              {resources.length === 0
+                ? "No resources have been added yet. Be the first to contribute!"
+                : "No resources match the selected filters. Try removing some filters."}
+            </p>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            {filteredResources.map((resource) => (
+              <ResourceCard
+                key={resource.slug}
+                resource={resource}
+                reviewSummary={
+                  summaries[resource.slug] ??
+                  initialSummaries[resource.slug] ?? {
+                    averageRating: null,
+                    reviewCount: 0,
+                  }
+                }
+                userReview={userReviews[resource.slug]}
+                reviewPending={pendingBySlug[resource.slug] ?? false}
+                onRate={(slug, rating) =>
+                  upsertReview(slug, { rating, anonymous: true })
+                }
+                onClearRating={deleteReview}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+function ResourcesClient({
+  initialSummaries,
+}: {
+  initialSummaries: Record<string, ReviewSummary>;
+}) {
+  return (
+    <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
+      <div className="space-y-4 text-center max-w-5xl mx-auto">
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          Resources
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Community plugins and scripts to extend your SoulFire bots. Browse the
+          registry to find tools built by the community.
+        </p>
+        <p className="text-sm text-muted-foreground">
+          <BookOpen className="inline h-4 w-4 align-text-bottom" /> Learn how to
+          build advanced plugins in the{" "}
+          <Link
+            to="/docs/$"
+            params={{ _splat: "development" }}
+            className="underline hover:text-foreground"
+          >
+            Development docs
+          </Link>
+          .
+        </p>
+      </div>
+
+      <Suspense>
+        <MainContent initialSummaries={initialSummaries} />
+      </Suspense>
+
+      {/* FAQ Section */}
+      <div className="max-w-3xl mx-auto w-full space-y-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold">Frequently Asked Questions</h2>
+          <p className="text-sm text-muted-foreground">
+            Common questions about SoulFire plugins and scripts
+          </p>
+        </div>
+        <Accordion type="single" collapsible className="w-full">
+          {resourcesFaqItems.map((item, i) => (
+            <AccordionItem key={item.question} value={`faq-${i}`}>
+              <AccordionTrigger>{item.question}</AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                {item.answerElement}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+
+      <div className="border-t pt-6 max-w-5xl mx-auto text-center space-y-2">
+        <p className="text-sm text-muted-foreground">
+          Want to add your plugin or script? Submit a pull request on{" "}
+          <a
+            href="https://github.com/soulfiremc-com/soulfiremc.com/edit/main/src/lib/resources-data.tsx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-foreground"
+          >
+            GitHub
+          </a>{" "}
+          or contact us in our{" "}
+          <Link to="/discord" className="underline hover:text-foreground">
+            Discord
+          </Link>
+          .
+        </p>
+      </div>
+    </main>
+  );
+}
 
 const resourcesPageLoader = createServerFn({ method: "GET" }).handler(
   async () => {
@@ -109,6 +745,7 @@ const resourcesPageLoader = createServerFn({ method: "GET" }).handler(
   },
 );
 
+
 export const Route = createFileRoute("/resources/")({
   head: () => ({
     meta: getPageMeta({
@@ -124,6 +761,7 @@ export const Route = createFileRoute("/resources/")({
   loader: async () => resourcesPageLoader(),
   component: ResourcesPage,
 });
+
 
 function ResourcesPage() {
   const data = Route.useLoaderData();

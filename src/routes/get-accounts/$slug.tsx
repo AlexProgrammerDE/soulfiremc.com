@@ -1,54 +1,220 @@
-import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import {
-  ArrowLeft,
-  Calendar,
-  ChevronRight,
-  ExternalLink,
-  Globe,
-} from "lucide-react";
-import { Suspense } from "react";
-import { GallerySection } from "@/app/(home)/components/gallery-section";
-import { DiscordMemberBadge } from "@/app/(home)/get-accounts/discord-badge";
-import { CouponCode, LinkDiscountNotice } from "@/app/(home)/get-proxies/coupon-code";
 import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
 import { ReviewSummaryBadge } from "@/components/review-summary-badge";
+import { SiteShell } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { SiteShell } from "@/components/site-shell";
-import {
-  BADGE_CONFIG,
-  CATEGORY_CONFIG,
-  getDiscordInviteUrl,
-  getShopBySlug,
-  PROVIDERS,
-  PROVIDER_THEMES,
-  type Badge,
-  type Category,
-  type SocialLink,
-} from "@/lib/accounts-data";
-import {
-  getListingOffer,
-  getLiveShopData,
-  getShopAggregateOffer,
-} from "@/lib/accounts-offers";
-import { fetchDiscordInvite } from "@/lib/discord";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { BADGE_CONFIG, type Badge, CATEGORY_CONFIG, type Category, getDiscordInviteUrl, getShopBySlug, PROVIDER_THEMES, PROVIDERS, type SocialLink } from "@/lib/accounts-data";
+import { getListingOffer, getLiveShopData, getShopAggregateOffer } from "@/lib/accounts-offers";
+import { DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { getAccountPageImage } from "@/lib/og";
-import {
-  emptyReviewSummary,
-  getAggregateRatingJsonLd,
-  getPaginatedWrittenReviews,
-  getReviewJsonLd,
-  getReviewSummaries,
-} from "@/lib/reviews";
+import { emptyReviewSummary, getAggregateRatingJsonLd, getPaginatedWrittenReviews, getReviewJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { ArrowLeft, Calendar, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Globe, Users, X } from "lucide-react";
+import { Suspense, useState } from "react";
+
+function GallerySection({
+  images,
+}: {
+  images: { src: string; alt: string }[];
+}) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const prev = () =>
+    setOpenIndex((i) =>
+      i !== null ? (i - 1 + images.length) % images.length : null,
+    );
+  const next = () =>
+    setOpenIndex((i) => (i !== null ? (i + 1) % images.length : null));
+
+  return (
+    <section className="space-y-4">
+      <h2 className="text-2xl font-semibold">Gallery</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {images.map((img, i) => (
+          <button
+            key={img.src}
+            type="button"
+            onClick={() => setOpenIndex(i)}
+            className="relative aspect-video overflow-hidden rounded-lg bg-muted ring-offset-background transition-shadow hover:ring-2 hover:ring-ring hover:ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <img
+              src={img.src}
+              alt={img.alt}
+              className="size-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
+
+      <Dialog
+        open={openIndex !== null}
+        onOpenChange={(open) => !open && setOpenIndex(null)}
+      >
+        <DialogContent
+          showCloseButton={false}
+          className="flex h-[calc(100vh-1rem)] max-h-[calc(100vh-1rem)] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] flex-col gap-0 overflow-hidden border-white/10 bg-black/90 p-2 shadow-2xl sm:h-[calc(100vh-3rem)] sm:max-h-[calc(100vh-3rem)] sm:w-[calc(100vw-3rem)] sm:max-w-[calc(100vw-3rem)] sm:p-4"
+        >
+          <DialogTitle className="sr-only">
+            {openIndex !== null ? images[openIndex].alt : "Gallery image"}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            Image {openIndex !== null ? openIndex + 1 : 0} of {images.length}
+          </DialogDescription>
+          {openIndex !== null && (
+            <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg bg-black/40">
+              <img
+                src={images[openIndex].src}
+                alt={images[openIndex].alt}
+                className="size-full object-contain"
+              />
+              <DialogClose asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-3 right-3 z-10 h-11 w-11 rounded-full border border-white/10 bg-black/65 text-white hover:bg-black/80 hover:text-white"
+                >
+                  <X className="h-5 w-5" />
+                  <span className="sr-only">Close gallery</span>
+                </Button>
+              </DialogClose>
+              {images.length > 1 && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={prev}
+                    className="absolute left-3 top-1/2 z-10 h-11 w-11 -translate-y-1/2 rounded-full border border-white/10 bg-black/65 text-white hover:bg-black/80 hover:text-white"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                    <span className="sr-only">Previous image</span>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={next}
+                    className="absolute right-3 top-1/2 z-10 h-11 w-11 -translate-y-1/2 rounded-full border border-white/10 bg-black/65 text-white hover:bg-black/80 hover:text-white"
+                  >
+                    <ChevronRight className="h-5 w-5" />
+                    <span className="sr-only">Next image</span>
+                  </Button>
+                </>
+              )}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-black/85 via-black/30 to-transparent p-3 sm:p-4">
+                <p className="max-w-[75%] text-sm text-white/80">
+                  {images[openIndex].alt}
+                </p>
+                <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1 text-xs font-medium text-white/75">
+                  {openIndex + 1} / {images.length}
+                </span>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </section>
+  );
+}
+
+function formatNumber(num: number): string {
+  if (num >= 1000) {
+    return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+  }
+  return num.toString();
+}
+
+
+function DiscordMemberBadge({
+  info,
+}: {
+  info: DiscordInviteResponse | null;
+}) {
+  if (!info?.approximate_member_count) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-[#5865F2]/10 px-2.5 py-0.5 text-xs font-medium text-[#5865F2]/50">
+        <Users className="h-3 w-3" />
+        unknown
+      </span>
+    );
+  }
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <span className="inline-flex cursor-help items-center gap-1 rounded-full bg-[#5865F2]/10 px-2.5 py-0.5 text-xs font-medium text-[#5865F2]">
+          <Users className="h-3 w-3" />
+          {formatNumber(info.approximate_member_count)}
+        </span>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-auto text-sm">
+        {info.guild?.name && <p className="font-medium">{info.guild.name}</p>}
+        <p>{info.approximate_member_count?.toLocaleString()} members</p>
+        {info.approximate_presence_count && (
+          <p className="text-green-500">
+            {info.approximate_presence_count.toLocaleString()} online
+          </p>
+        )}
+      </HoverCardContent>
+    </HoverCard>
+  );
+}
+
+function CouponCode({
+  code,
+  discount,
+}: {
+  code: string;
+  discount?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex items-center gap-2 rounded-lg bg-pink-500/10 p-3">
+      <div className="flex-1">
+        <p className="text-xs text-muted-foreground">
+          {discount ? `Use code for ${discount}` : "Coupon code"}
+        </p>
+        <p className="font-mono font-semibold text-pink-600 dark:text-pink-400">
+          {code}
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="rounded-md p-2 hover:bg-pink-500/10 transition-colors"
+        aria-label="Copy coupon code"
+      >
+        {copied ? (
+          <Check className="h-4 w-4 text-green-500" />
+        ) : (
+          <Copy className="h-4 w-4 text-muted-foreground" />
+        )}
+      </button>
+    </div>
+  );
+}
+
+
+function LinkDiscountNotice({ message }: { message: string }) {
+  return (
+    <div className="rounded-lg bg-pink-500/10 p-3">
+      <p className="text-sm font-medium text-pink-600 dark:text-pink-400">
+        {message}
+      </p>
+    </div>
+  );
+}
 
 const accountDetailLoader = createServerFn({ method: "GET" })
   .inputValidator((value: { slug: string }) => value)
@@ -172,6 +338,7 @@ const accountDetailLoader = createServerFn({ method: "GET" })
     };
   });
 
+
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
   return (
@@ -193,6 +360,7 @@ function ProviderBadge({ badge }: { badge: Badge }) {
     </HoverCard>
   );
 }
+
 
 function ShopLogo({
   src,
@@ -218,6 +386,7 @@ function ShopLogo({
   );
 }
 
+
 function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
   if (!links?.length) {
     return null;
@@ -235,6 +404,7 @@ function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
     </div>
   );
 }
+
 
 export const Route = createFileRoute("/get-accounts/$slug")({
   loader: async ({ params }) => accountDetailLoader({ data: { slug: params.slug } }),
@@ -260,6 +430,7 @@ export const Route = createFileRoute("/get-accounts/$slug")({
   },
   component: AccountDetailPage,
 });
+
 
 function AccountDetailPage() {
   const data = Route.useLoaderData() as any;
