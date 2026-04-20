@@ -9,7 +9,9 @@ const SERVER_REPO = "soulfiremc-com/SoulFire";
 export async function getRepoInfo(
   repo: string,
 ): Promise<LatestReleaseResponse> {
-  const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
+  const response = await fetch(
+    `https://api.github.com/repos/${repo}/releases/latest`,
+  );
   return await response.json();
 }
 

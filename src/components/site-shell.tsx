@@ -1,6 +1,6 @@
-import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Link } from "@tanstack/react-router";
-import { Suspense, type ReactNode } from "react";
+import { HomeLayout } from "fumadocs-ui/layouts/home";
+import { type ReactNode, Suspense } from "react";
 import { getBaseLayoutOptions } from "@/lib/layout-options";
 import { CopyrightYear } from "./copyright-year";
 import { UserNav } from "./user-nav";

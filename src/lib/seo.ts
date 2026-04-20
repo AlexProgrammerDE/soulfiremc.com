@@ -149,4 +149,10 @@ export function getWebsiteStructuredData() {
   };
 }
 
-export { absoluteUrl, defaultSocialImageUrl, siteDescription, siteName, siteUrl };
+export {
+  absoluteUrl,
+  defaultSocialImageUrl,
+  siteDescription,
+  siteName,
+  siteUrl,
+};

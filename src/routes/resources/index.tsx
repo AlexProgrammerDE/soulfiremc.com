@@ -1,21 +1,55 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import {
+  ArrowDownWideNarrow,
+  BookOpen,
+  Calendar,
+  Code,
+  Download,
+  ExternalLink,
+  Filter,
+  ImageIcon,
+  Star,
+  User,
+} from "lucide-react";
+import { useQueryStates } from "nuqs";
+import {
+  createLoader,
+  createSearchParamsCache,
+  parseAsArrayOf,
+  parseAsStringLiteral,
+  type SearchParams,
+} from "nuqs/server";
+import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { SiteShell } from "@/components/site-shell";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useReviews } from "@/hooks/use-reviews";
-import { BADGE_CONFIG, type Badge, type Category, FILTER_TAGS, type FilterableTag, type Resource, RESOURCES } from "@/lib/resources-data";
-import { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
+import {
+  BADGE_CONFIG,
+  type Badge,
+  type Category,
+  FILTER_TAGS,
+  type FilterableTag,
+  RESOURCES,
+  type Resource,
+} from "@/lib/resources-data";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { ArrowDownWideNarrow, BookOpen, Calendar, Code, Download, ExternalLink, Filter, ImageIcon, Star, User } from "lucide-react";
-import { useQueryStates } from "nuqs";
-import { createLoader, createSearchParamsCache, parseAsArrayOf, parseAsStringLiteral, type SearchParams } from "nuqs/server";
-import { Suspense, useMemo, useState } from "react";
 
 const resourcesFaqItems: {
   question: string;
@@ -118,7 +152,6 @@ const resourcesFaqItems: {
 
 const CATEGORIES = ["plugin", "script"] as const;
 
-
 const TAGS = [
   "combat",
   "farming",
@@ -132,9 +165,7 @@ const TAGS = [
   "open-source",
 ] as const;
 
-
 const SORT_OPTIONS = ["default", "best-rated"] as const;
-
 
 const resourcesSearchParams = {
   category: parseAsStringLiteral([...CATEGORIES]).withDefault(null as never),
@@ -142,18 +173,13 @@ const resourcesSearchParams = {
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
-
-const resourcesSearchParamsCache = createSearchParamsCache(
+const _resourcesSearchParamsCache = createSearchParamsCache(
   resourcesSearchParams,
 );
 
-
 const loadResourcesSearchParams = createLoader(resourcesSearchParams);
 
-
-type ResourcesSelection = Awaited<
-  ReturnType<typeof loadResourcesSearchParams>
->;
+type ResourcesSelection = Awaited<ReturnType<typeof loadResourcesSearchParams>>;
 
 type ResourcesPageSearchParams = Promise<SearchParams>;
 
@@ -167,7 +193,6 @@ const SORT_CONFIG = {
     icon: <Star className="h-3 w-3 fill-current" />,
   },
 } as const;
-
 
 function ResourceBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -191,7 +216,6 @@ function ResourceBadge({ badge }: { badge: Badge }) {
   );
 }
 
-
 function ResourceLogo({ resource }: { resource: Resource }) {
   if (resource.logo) {
     return (
@@ -208,7 +232,6 @@ function ResourceLogo({ resource }: { resource: Resource }) {
     </div>
   );
 }
-
 
 function ResourceCard({
   resource,
@@ -316,7 +339,6 @@ function ResourceCard({
     </Card>
   );
 }
-
 
 function MainContent({
   initialSummaries,
@@ -567,7 +589,6 @@ function MainContent({
   );
 }
 
-
 function ResourcesClient({
   initialSummaries,
 }: {
@@ -648,7 +669,13 @@ const resourcesPageLoader = createServerFn({ method: "GET" }).handler(
     const reviewSummaries = await getReviewSummaries(
       "resource",
       RESOURCES.map((resource) => resource.slug),
-    ).catch(() => ({} as Record<string, { averageRating: number | null; reviewCount: number }>));
+    ).catch(
+      () =>
+        ({}) as Record<
+          string,
+          { averageRating: number | null; reviewCount: number }
+        >,
+    );
 
     const faqJsonLd = {
       "@context": "https://schema.org",
@@ -745,7 +772,6 @@ const resourcesPageLoader = createServerFn({ method: "GET" }).handler(
   },
 );
 
-
 export const Route = createFileRoute("/resources/")({
   head: () => ({
     meta: getPageMeta({
@@ -761,7 +787,6 @@ export const Route = createFileRoute("/resources/")({
   loader: async () => resourcesPageLoader(),
   component: ResourcesPage,
 });
-
 
 function ResourcesPage() {
   const data = Route.useLoaderData();

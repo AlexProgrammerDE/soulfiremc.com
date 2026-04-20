@@ -5,8 +5,8 @@ export const Route = createFileRoute("/github")({
   beforeLoad: () => {
     throw redirect({
       href: getRequiredEnv(
-        import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
-        "NEXT_PUBLIC_GITHUB_LINK",
+        import.meta.env.VITE_GITHUB_LINK,
+        "VITE_GITHUB_LINK",
       ),
     });
   },

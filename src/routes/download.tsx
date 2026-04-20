@@ -1,19 +1,53 @@
-import { SiteShell } from "@/components/site-shell";
-import { CustomTimeAgo } from "@/components/time-ago";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Credenza, CredenzaBody, CredenzaClose, CredenzaContent, CredenzaDescription, CredenzaFooter, CredenzaHeader, CredenzaTitle } from "@/components/ui/credenza";
-import { Skeleton } from "@/components/ui/skeleton";
-import { getClientRelease, getReleaseVersion, getServerRelease } from "@/lib/releases";
-import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
-import { cn } from "@/lib/utils";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { createFileRoute, Link, useRouterState } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { BookOpen, CircuitBoard, Coffee, Cpu, Download, Heart, PlayCircle, Server, Terminal } from "lucide-react";
+import {
+  BookOpen,
+  CircuitBoard,
+  Coffee,
+  Cpu,
+  Download,
+  Heart,
+  PlayCircle,
+  Server,
+  Terminal,
+} from "lucide-react";
 import { useQueryStates } from "nuqs";
-import { createLoader, createSearchParamsCache, parseAsStringLiteral, type SearchParams } from "nuqs/server";
+import {
+  createLoader,
+  createSearchParamsCache,
+  parseAsStringLiteral,
+  type SearchParams,
+} from "nuqs/server";
 import { Suspense, useEffect, useState } from "react";
+import { SiteShell } from "@/components/site-shell";
+import { CustomTimeAgo } from "@/components/time-ago";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Credenza,
+  CredenzaBody,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+} from "@/components/ui/credenza";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  getClientRelease,
+  getReleaseVersion,
+  getServerRelease,
+} from "@/lib/releases";
+import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
 type DownloadLinkMap = Record<string, Record<string, string>>;
 
@@ -25,7 +59,6 @@ type PlatformRow = {
   url: string;
 };
 
-
 const GH_CLIENT_BASE =
   "https://github.com/soulfiremc-com/SoulFireClient/releases/download";
 
@@ -33,7 +66,6 @@ const GH_SERVER_BASE =
   "https://github.com/soulfiremc-com/SoulFire/releases/download";
 
 const FLATHUB_URL = "https://flathub.org/apps/com.soulfiremc.soulfire";
-
 
 function createClientDownloads(version: string): DownloadLinkMap {
   return {
@@ -52,10 +84,7 @@ function createClientDownloads(version: string): DownloadLinkMap {
   };
 }
 
-
-function createPlatformRows(
-  clientDownloads: DownloadLinkMap,
-): PlatformRow[] {
+function _createPlatformRows(clientDownloads: DownloadLinkMap): PlatformRow[] {
   return [
     {
       label: "Windows (x86_64)",
@@ -101,7 +130,6 @@ function createPlatformRows(
     },
   ];
 }
-
 
 function createServerDownloads(version: string) {
   return [
@@ -181,23 +209,17 @@ const OS_IDS = OS_OPTIONS.map((option) => option.id);
 
 const CPU_IDS = CPU_OPTIONS.map((option) => option.id);
 
-
 const downloadSearchParams = {
   os: parseAsStringLiteral(OS_IDS).withDefault(DEFAULT_OS.id),
   cpu: parseAsStringLiteral(CPU_IDS).withDefault(DEFAULT_CPU.id),
 };
 
-
-const downloadSearchParamsCache =
+const _downloadSearchParamsCache =
   createSearchParamsCache(downloadSearchParams);
-
 
 const loadDownloadSearchParams = createLoader(downloadSearchParams);
 
-
-type DownloadSelection = Awaited<
-  ReturnType<typeof loadDownloadSearchParams>
->;
+type DownloadSelection = Awaited<ReturnType<typeof loadDownloadSearchParams>>;
 
 type DownloadPageSearchParams = Promise<SearchParams>;
 
@@ -233,7 +255,6 @@ function detectBrowserOS(): OsOption["id"] | null {
 
   return null;
 }
-
 
 function detectBrowserCPU(): CpuOption["id"] | null {
   if (typeof window === "undefined") return null;
@@ -286,7 +307,6 @@ function detectBrowserCPU(): CpuOption["id"] | null {
   return null;
 }
 
-
 interface NavigatorWithUAData extends Navigator {
   userAgentData?: {
     platform?: string;
@@ -295,7 +315,6 @@ interface NavigatorWithUAData extends Navigator {
     ) => Promise<{ architecture?: string }>;
   };
 }
-
 
 function DownloadSelectionComponent({
   clientVersion,
@@ -323,7 +342,6 @@ function DownloadSelectionComponent({
     </>
   );
 }
-
 
 function DownloadConfigurator(props: {
   links: DownloadLinkMap;
@@ -539,7 +557,7 @@ function DownloadConfigurator(props: {
               </Button>
               <Button asChild variant="outline" className="w-full gap-2">
                 <a
-                  href={import.meta.env.NEXT_PUBLIC_GITHUB_LINK}
+                  href={import.meta.env.VITE_GITHUB_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -559,7 +577,6 @@ function DownloadConfigurator(props: {
     </Card>
   );
 }
-
 
 function DownloadTip(props: { selection: DownloadSelection }) {
   const selectedOs =
@@ -583,7 +600,6 @@ function DownloadTip(props: { selection: DownloadSelection }) {
     </div>
   );
 }
-
 
 function DownloadSelectionSkeleton() {
   return (
@@ -657,13 +673,11 @@ const SERVER_ICONS = {
   "SoulFire Dedicated": <Server className="h-5 w-5" />,
 } as const;
 
-
 type ServerDownload = {
   name: string;
   description: string;
   url: string;
 };
-
 
 type DownloadPageContentProps = {
   clientVersion: string;
@@ -671,7 +685,6 @@ type DownloadPageContentProps = {
   releaseName: string;
   serverDownloads: ServerDownload[];
 };
-
 
 function DownloadPageContent({
   clientVersion,
@@ -864,7 +877,6 @@ const downloadPageLoader = createServerFn({ method: "GET" }).handler(
   },
 );
 
-
 export const Route = createFileRoute("/download")({
   head: () => ({
     meta: getPageMeta({
@@ -879,7 +891,6 @@ export const Route = createFileRoute("/download")({
   loader: async () => downloadPageLoader(),
   component: DownloadPage,
 });
-
 
 function DownloadPage() {
   const data = Route.useLoaderData();

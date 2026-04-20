@@ -1,22 +1,54 @@
-import { JsonLd } from "@/components/json-ld";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import {
+  ArrowDownWideNarrow,
+  BookOpen,
+  Calendar,
+  Check,
+  Copy,
+  ExternalLink,
+  Filter,
+  ImageIcon,
+  Star,
+} from "lucide-react";
+import { useQueryStates } from "nuqs";
+import {
+  createLoader,
+  createSearchParamsCache,
+  parseAsArrayOf,
+  parseAsStringLiteral,
+  type SearchParams,
+} from "nuqs/server";
+import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { SiteShell } from "@/components/site-shell";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useReviews } from "@/hooks/use-reviews";
-import { BADGE_CONFIG, type Badge, FILTER_BADGES, type FilterableBadge, type Provider, PROVIDERS, SPONSOR_THEMES } from "@/lib/proxies-data";
-import { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
+import {
+  BADGE_CONFIG,
+  type Badge,
+  FILTER_BADGES,
+  type FilterableBadge,
+  PROVIDERS,
+  type Provider,
+  SPONSOR_THEMES,
+} from "@/lib/proxies-data";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { ArrowDownWideNarrow, BookOpen, Calendar, Check, Copy, ExternalLink, Filter, ImageIcon, Star } from "lucide-react";
-import { useQueryStates } from "nuqs";
-import { createLoader, createSearchParamsCache, parseAsArrayOf, parseAsStringLiteral, type SearchParams } from "nuqs/server";
-import { Suspense, useMemo, useState } from "react";
 
 const proxiesFaqItems: {
   question: string;
@@ -99,13 +131,7 @@ const proxiesFaqItems: {
   },
 ];
 
-function CouponCode({
-  code,
-  discount,
-}: {
-  code: string;
-  discount?: string;
-}) {
+function CouponCode({ code, discount }: { code: string; discount?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -140,8 +166,7 @@ function CouponCode({
   );
 }
 
-
-function LinkDiscountNotice({ message }: { message: string }) {
+function _LinkDiscountNotice({ message }: { message: string }) {
   return (
     <div className="rounded-lg bg-pink-500/10 p-3">
       <p className="text-sm font-medium text-pink-600 dark:text-pink-400">
@@ -163,26 +188,18 @@ const BADGES = [
   "high-quality",
 ] as const;
 
-
 const SORT_OPTIONS = ["default", "best-rated"] as const;
-
 
 const proxiesSearchParams = {
   badges: parseAsArrayOf(parseAsStringLiteral([...BADGES])).withDefault([]),
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
-
-const proxiesSearchParamsCache =
-  createSearchParamsCache(proxiesSearchParams);
-
+const _proxiesSearchParamsCache = createSearchParamsCache(proxiesSearchParams);
 
 const loadProxiesSearchParams = createLoader(proxiesSearchParams);
 
-
-type ProxiesSelection = Awaited<
-  ReturnType<typeof loadProxiesSearchParams>
->;
+type ProxiesSelection = Awaited<ReturnType<typeof loadProxiesSearchParams>>;
 
 type ProxiesPageSearchParams = Promise<SearchParams>;
 
@@ -196,7 +213,6 @@ const SORT_CONFIG = {
     icon: <Star className="h-3 w-3 fill-current" />,
   },
 } as const;
-
 
 function ProviderBadge({
   badge,
@@ -226,7 +242,6 @@ function ProviderBadge({
   );
 }
 
-
 function ProviderLogo({ provider }: { provider: Provider }) {
   if (provider.logo) {
     return (
@@ -243,7 +258,6 @@ function ProviderLogo({ provider }: { provider: Provider }) {
     </div>
   );
 }
-
 
 function ProviderCard({
   provider,
@@ -351,7 +365,6 @@ function ProviderCard({
     </Card>
   );
 }
-
 
 function MainContent({
   initialSummaries,
@@ -556,7 +569,6 @@ function MainContent({
   );
 }
 
-
 function GetProxiesClient({
   initialSummaries,
 }: {
@@ -644,10 +656,10 @@ const proxiesPageLoader = createServerFn({ method: "GET" }).handler(
       PROVIDERS.map((provider) => provider.slug),
     ).catch(
       () =>
-        ({} as Record<
+        ({}) as Record<
           string,
           { averageRating: number | null; reviewCount: number }
-        >),
+        >,
     );
 
     const faqJsonLd = {
@@ -745,7 +757,6 @@ const proxiesPageLoader = createServerFn({ method: "GET" }).handler(
   },
 );
 
-
 export const Route = createFileRoute("/get-proxies/")({
   head: () => ({
     meta: getPageMeta({
@@ -761,7 +772,6 @@ export const Route = createFileRoute("/get-proxies/")({
   loader: async () => proxiesPageLoader(),
   component: GetProxiesPage,
 });
-
 
 function GetProxiesPage() {
   const data = Route.useLoaderData();

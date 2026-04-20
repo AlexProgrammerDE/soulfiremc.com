@@ -1,6 +1,6 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
-import { createFileRoute, Link } from "@tanstack/react-router";
 
 function TermsOfService() {
   return (
@@ -159,8 +159,8 @@ function TermsOfService() {
       <h2>8. Privacy</h2>
       <p>
         Your use of the Service is also governed by our{" "}
-        <Link to="/privacy-policy">Privacy Policy</Link>, which describes how
-        we collect, use, and protect your personal information, and our{" "}
+        <Link to="/privacy-policy">Privacy Policy</Link>, which describes how we
+        collect, use, and protect your personal information, and our{" "}
         <Link to="/cookie-policy">Cookie Policy</Link>, which describes how we
         use cookies and similar technologies.
       </p>
@@ -205,9 +205,8 @@ function TermsOfService() {
         <Link to="/account/$path" params={{ path: "settings" }}>
           account settings
         </Link>
-        . Upon deletion,
-        your personal data will be removed in accordance with our{" "}
-        <Link to="/privacy-policy">Privacy Policy</Link>.
+        . Upon deletion, your personal data will be removed in accordance with
+        our <Link to="/privacy-policy">Privacy Policy</Link>.
       </p>
       <p>
         We may suspend or terminate your account and access to the Service at
@@ -273,7 +272,6 @@ export const Route = createFileRoute("/terms-of-service")({
   }),
   component: TermsPage,
 });
-
 
 function TermsPage() {
   return (

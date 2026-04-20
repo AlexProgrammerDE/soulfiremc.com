@@ -1,9 +1,23 @@
 import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
-import { ClientOnly, createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
+import {
+  ClientOnly,
+  createRootRouteWithContext,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
 import { Providers } from "@/components/providers";
-import { createStructuredDataGraph, getOrganizationStructuredData, getWebsiteStructuredData, jsonLdScript, siteDescription, siteName, siteUrl } from "@/lib/seo";
+import {
+  createStructuredDataGraph,
+  getOrganizationStructuredData,
+  getWebsiteStructuredData,
+  jsonLdScript,
+  siteDescription,
+  siteName,
+  siteUrl,
+} from "@/lib/seo";
 
 import appCss from "../style.css?url";
 

@@ -1,6 +1,6 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
-import { createFileRoute, Link } from "@tanstack/react-router";
 
 function PrivacyPolicy() {
   return (
@@ -446,7 +446,6 @@ export const Route = createFileRoute("/privacy-policy")({
   }),
   component: PrivacyPolicyPage,
 });
-
 
 function PrivacyPolicyPage() {
   return (

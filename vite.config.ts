@@ -14,8 +14,8 @@ const securityHeaders = {
   "X-Content-Type-Options": "nosniff",
 };
 
-export default defineConfig(({ mode }) => ({
-  envPrefix: ["VITE_", "NEXT_PUBLIC_"],
+export default defineConfig(() => ({
+  envPrefix: ["VITE_"],
   resolve: {
     dedupe: [
       "react",
@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => ({
             path.startsWith("/api") ||
             path.startsWith("/og") ||
             path.startsWith("//") ||
+            (path !== "/" && path.endsWith("/")) ||
             path.includes("://") ||
             path === "/discord" ||
             path === "/github" ||
@@ -57,7 +58,7 @@ export default defineConfig(({ mode }) => ({
             path === "/demo-video"
           ),
       },
-      }),
+    }),
     react(),
   ],
   server: {

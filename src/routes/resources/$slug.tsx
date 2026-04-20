@@ -1,22 +1,61 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import {
+  ArrowLeft,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Code,
+  Download,
+  ExternalLink,
+  User,
+  X,
+} from "lucide-react";
+import { Suspense, useState } from "react";
+import type {
+  BreadcrumbList,
+  SoftwareApplication,
+  WebPage,
+  WithContext,
+} from "schema-dts";
 import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
 import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { SiteShell } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { getResourcePageImage } from "@/lib/og";
-import { BADGE_CONFIG, type Badge, getResourceBySlug, type Resource } from "@/lib/resources-data";
-import { PaginatedPublicReviewRecords, ReviewSummary } from "@/lib/review-core";
-import { emptyReviewSummary, getAggregateRatingJsonLd, getPaginatedWrittenReviews, getReviewJsonLd, getReviewSummaries } from "@/lib/reviews";
+import {
+  BADGE_CONFIG,
+  type Badge,
+  getResourceBySlug,
+  type Resource,
+} from "@/lib/resources-data";
+import type {
+  PaginatedPublicReviewRecords,
+  ReviewSummary,
+} from "@/lib/review-core";
+import {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getPaginatedWrittenReviews,
+  getReviewJsonLd,
+  getReviewSummaries,
+} from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Calendar, ChevronLeft, ChevronRight, Code, Download, ExternalLink, User, X } from "lucide-react";
-import { Suspense, useState } from "react";
-import { BreadcrumbList, SoftwareApplication, WebPage, WithContext } from "schema-dts";
 
 function GallerySection({
   images,
@@ -130,7 +169,6 @@ type ResourceDetailPageData = {
   writtenReviews: PaginatedPublicReviewRecords;
 };
 
-
 function ResourceLogo({ resource }: { resource: Resource }) {
   if (resource.logo) {
     return (
@@ -147,7 +185,6 @@ function ResourceLogo({ resource }: { resource: Resource }) {
     </div>
   );
 }
-
 
 function ResourceBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
@@ -170,7 +207,6 @@ function ResourceBadge({ badge }: { badge: Badge }) {
     </HoverCard>
   );
 }
-
 
 function ResourceDetailPageContent({
   breadcrumbJsonLd,
@@ -296,14 +332,17 @@ const resourceDetailLoader = createServerFn({ method: "GET" })
       throw notFound();
     }
 
-    const reviewSummaries = await getReviewSummaries("resource", [resource.slug]).catch(
+    const reviewSummaries = await getReviewSummaries("resource", [
+      resource.slug,
+    ]).catch(
       () =>
-        ({} as Record<
+        ({}) as Record<
           string,
           { averageRating: number | null; reviewCount: number }
-        >),
+        >,
     );
-    const reviewSummary = reviewSummaries[resource.slug] ?? emptyReviewSummary();
+    const reviewSummary =
+      reviewSummaries[resource.slug] ?? emptyReviewSummary();
     const writtenReviews = await getPaginatedWrittenReviews(
       "resource",
       resource.slug,
@@ -398,9 +437,9 @@ const resourceDetailLoader = createServerFn({ method: "GET" })
     };
   });
 
-
 export const Route = createFileRoute("/resources/$slug")({
-  loader: async ({ params }) => resourceDetailLoader({ data: { slug: params.slug } }),
+  loader: async ({ params }) =>
+    resourceDetailLoader({ data: { slug: params.slug } }),
   head: ({ loaderData }) => {
     const data = loaderData;
 
@@ -423,7 +462,6 @@ export const Route = createFileRoute("/resources/$slug")({
   },
   component: ResourceDetailPage,
 });
-
 
 function ResourceDetailPage() {
   const data = Route.useLoaderData();

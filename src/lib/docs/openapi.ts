@@ -1,7 +1,9 @@
 import { createOpenAPI } from "fumadocs-openapi/server";
 import type { ApiPageProps } from "fumadocs-openapi/ui";
 import type { ClientApiPageProps } from "fumadocs-openapi/ui/create-client";
-import openApiDocument from "../../../public/sf-openapi.json";
+import openApiDocument from "../../../public/sf-openapi.json" with {
+  type: "json",
+};
 
 export type OpenApiPageLike = {
   data: {

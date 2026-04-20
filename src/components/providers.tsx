@@ -1,9 +1,9 @@
 import { AuthQueryProvider } from "@daveyplate/better-auth-tanstack";
 import { AuthUIProviderTanstack } from "@daveyplate/better-auth-ui/tanstack";
+import { useRouter } from "@tanstack/react-router";
 import { RootProvider } from "fumadocs-ui/provider/tanstack";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
-import { useRouter } from "@tanstack/react-router";
 import { Toaster } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { PostHogProvider } from "@/lib/integrations/posthog";
@@ -31,7 +31,7 @@ function AuthUIProviders({ children }: { children: React.ReactNode }) {
         twoFactor={["otp", "totp"]}
         captcha={{
           provider: "cloudflare-turnstile",
-          siteKey: import.meta.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string,
+          siteKey: import.meta.env.VITE_TURNSTILE_SITE_KEY as string,
         }}
         optimistic
         avatar={{

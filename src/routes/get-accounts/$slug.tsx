@@ -1,22 +1,62 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import {
+  ArrowLeft,
+  Calendar,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  ExternalLink,
+  Globe,
+  Users,
+  X,
+} from "lucide-react";
+import { Suspense, useState } from "react";
 import { ItemReviewsSection } from "@/components/item-reviews-section";
-import { JsonLd } from "@/components/json-ld";
 import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { SiteShell } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { BADGE_CONFIG, type Badge, CATEGORY_CONFIG, type Category, getDiscordInviteUrl, getShopBySlug, PROVIDER_THEMES, PROVIDERS, type SocialLink } from "@/lib/accounts-data";
-import { getListingOffer, getLiveShopData, getShopAggregateOffer } from "@/lib/accounts-offers";
-import { DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import {
+  BADGE_CONFIG,
+  type Badge,
+  CATEGORY_CONFIG,
+  type Category,
+  getDiscordInviteUrl,
+  getShopBySlug,
+  PROVIDER_THEMES,
+  PROVIDERS,
+  type SocialLink,
+} from "@/lib/accounts-data";
+import {
+  getListingOffer,
+  getLiveShopData,
+  getShopAggregateOffer,
+} from "@/lib/accounts-offers";
+import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import { getAccountPageImage } from "@/lib/og";
-import { emptyReviewSummary, getAggregateRatingJsonLd, getPaginatedWrittenReviews, getReviewJsonLd, getReviewSummaries } from "@/lib/reviews";
+import {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getPaginatedWrittenReviews,
+  getReviewJsonLd,
+  getReviewSummaries,
+} from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Calendar, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Globe, Users, X } from "lucide-react";
-import { Suspense, useState } from "react";
 
 function GallerySection({
   images,
@@ -128,12 +168,7 @@ function formatNumber(num: number): string {
   return num.toString();
 }
 
-
-function DiscordMemberBadge({
-  info,
-}: {
-  info: DiscordInviteResponse | null;
-}) {
+function DiscordMemberBadge({ info }: { info: DiscordInviteResponse | null }) {
   if (!info?.approximate_member_count) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-[#5865F2]/10 px-2.5 py-0.5 text-xs font-medium text-[#5865F2]/50">
@@ -164,13 +199,7 @@ function DiscordMemberBadge({
   );
 }
 
-function CouponCode({
-  code,
-  discount,
-}: {
-  code: string;
-  discount?: string;
-}) {
+function CouponCode({ code, discount }: { code: string; discount?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -205,7 +234,6 @@ function CouponCode({
   );
 }
 
-
 function LinkDiscountNotice({ message }: { message: string }) {
   return (
     <div className="rounded-lg bg-pink-500/10 p-3">
@@ -224,13 +252,17 @@ const accountDetailLoader = createServerFn({ method: "GET" })
       throw notFound();
     }
 
-    const providers = PROVIDERS.filter((provider) => provider.slug === shop.slug);
-    const reviewSummaries = await getReviewSummaries("account", [shop.slug]).catch(
+    const providers = PROVIDERS.filter(
+      (provider) => provider.slug === shop.slug,
+    );
+    const reviewSummaries = await getReviewSummaries("account", [
+      shop.slug,
+    ]).catch(
       () =>
-        ({} as Record<
+        ({}) as Record<
           string,
           { averageRating: number | null; reviewCount: number }
-        >),
+        >,
     );
     const reviewSummary = reviewSummaries[shop.slug] ?? emptyReviewSummary();
     const writtenReviews = await getPaginatedWrittenReviews(
@@ -338,7 +370,6 @@ const accountDetailLoader = createServerFn({ method: "GET" })
     };
   });
 
-
 function ProviderBadge({ badge }: { badge: Badge }) {
   const config = BADGE_CONFIG[badge];
   return (
@@ -361,14 +392,7 @@ function ProviderBadge({ badge }: { badge: Badge }) {
   );
 }
 
-
-function ShopLogo({
-  src,
-  name,
-}: {
-  src?: string;
-  name: string;
-}) {
+function ShopLogo({ src, name }: { src?: string; name: string }) {
   if (src) {
     return (
       <img
@@ -385,7 +409,6 @@ function ShopLogo({
     </div>
   );
 }
-
 
 function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
   if (!links?.length) {
@@ -405,9 +428,9 @@ function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
   );
 }
 
-
 export const Route = createFileRoute("/get-accounts/$slug")({
-  loader: async ({ params }) => accountDetailLoader({ data: { slug: params.slug } }),
+  loader: async ({ params }) =>
+    accountDetailLoader({ data: { slug: params.slug } }),
   head: ({ loaderData }) => {
     const data = loaderData as any;
 
@@ -430,7 +453,6 @@ export const Route = createFileRoute("/get-accounts/$slug")({
   },
   component: AccountDetailPage,
 });
-
 
 function AccountDetailPage() {
   const data = Route.useLoaderData() as any;
@@ -507,8 +529,8 @@ function AccountDetailPage() {
                     data.providers.flatMap((provider: any) => provider.badges),
                   ),
                 ].map((badge: any) => (
-                    <ProviderBadge key={badge} badge={badge} />
-                  ))}
+                  <ProviderBadge key={badge} badge={badge} />
+                ))}
               </div>
 
               <SocialLinkButtons links={data.shop.socialLinks} />

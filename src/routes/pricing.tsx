@@ -1,12 +1,25 @@
-import { SiteShell } from "@/components/site-shell";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getRequiredEnv } from "@/lib/env";
-import { createStructuredDataGraph, createWebPageStructuredData, getCanonicalLinks, getPageMeta, jsonLdScript } from "@/lib/seo";
 import { SiKofi } from "@icons-pack/react-simple-icons";
 import { createFileRoute } from "@tanstack/react-router";
 import { Check, Code, Gift, Heart, Users } from "lucide-react";
+import { SiteShell } from "@/components/site-shell";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getRequiredEnv } from "@/lib/env";
+import {
+  createStructuredDataGraph,
+  createWebPageStructuredData,
+  getCanonicalLinks,
+  getPageMeta,
+  jsonLdScript,
+} from "@/lib/seo";
 
 const freeTierFeatures = [
   "Full SoulFire bot framework",
@@ -18,7 +31,6 @@ const freeTierFeatures = [
   "Open source (AGPL-3.0)",
 ];
 
-
 const supporterTierFeatures = [
   "Priority support via Discord",
   "Priority with feature requests",
@@ -26,7 +38,6 @@ const supporterTierFeatures = [
   "Support ongoing development",
   "Help keep the project alive",
 ];
-
 
 function PricingPageContent() {
   return (
@@ -121,8 +132,8 @@ function PricingPageContent() {
         Supporter perks are delivered through our{" "}
         <a
           href={getRequiredEnv(
-            import.meta.env.NEXT_PUBLIC_DISCORD_LINK,
-            "NEXT_PUBLIC_DISCORD_LINK",
+            import.meta.env.VITE_DISCORD_LINK,
+            "VITE_DISCORD_LINK",
           )}
           target="_blank"
           rel="noopener noreferrer"
@@ -221,7 +232,6 @@ export const Route = createFileRoute("/pricing")({
   }),
   component: PricingPage,
 });
-
 
 function PricingPage() {
   return (

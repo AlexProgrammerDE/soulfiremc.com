@@ -1,22 +1,62 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import {
+  ArrowLeft,
+  Calendar,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  ExternalLink,
+  X,
+} from "lucide-react";
+import { Suspense, useState } from "react";
+import type {
+  BreadcrumbList,
+  ImageObject,
+  Product,
+  WebPage,
+  WithContext,
+} from "schema-dts";
 import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
 import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { SiteShell } from "@/components/site-shell";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { getProxyPageImage } from "@/lib/og";
-import { BADGE_CONFIG, type Badge, getProviderBySlug, type Provider, SPONSOR_THEMES } from "@/lib/proxies-data";
-import { PaginatedPublicReviewRecords, ReviewSummary } from "@/lib/review-core";
-import { emptyReviewSummary, getAggregateRatingJsonLd, getPaginatedWrittenReviews, getReviewJsonLd, getReviewSummaries } from "@/lib/reviews";
+import {
+  BADGE_CONFIG,
+  type Badge,
+  getProviderBySlug,
+  type Provider,
+  SPONSOR_THEMES,
+} from "@/lib/proxies-data";
+import type {
+  PaginatedPublicReviewRecords,
+  ReviewSummary,
+} from "@/lib/review-core";
+import {
+  emptyReviewSummary,
+  getAggregateRatingJsonLd,
+  getPaginatedWrittenReviews,
+  getReviewJsonLd,
+  getReviewSummaries,
+} from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Calendar, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Heart, X } from "lucide-react";
-import { Suspense, useState } from "react";
-import { BreadcrumbList, ImageObject, Product, WebPage, WithContext } from "schema-dts";
 
 function GallerySection({
   images,
@@ -121,13 +161,7 @@ function GallerySection({
   );
 }
 
-function CouponCode({
-  code,
-  discount,
-}: {
-  code: string;
-  discount?: string;
-}) {
+function CouponCode({ code, discount }: { code: string; discount?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -162,8 +196,7 @@ function CouponCode({
   );
 }
 
-
-function LinkDiscountNotice({ message }: { message: string }) {
+function _LinkDiscountNotice({ message }: { message: string }) {
   return (
     <div className="rounded-lg bg-pink-500/10 p-3">
       <p className="text-sm font-medium text-pink-600 dark:text-pink-400">
@@ -182,7 +215,6 @@ type ProxyDetailPageData = {
   writtenReviews: PaginatedPublicReviewRecords;
 };
 
-
 function ProviderLogo({ provider }: { provider: Provider }) {
   if (provider.logo) {
     return (
@@ -199,7 +231,6 @@ function ProviderLogo({ provider }: { provider: Provider }) {
     </div>
   );
 }
-
 
 function ProviderBadge({
   badge,
@@ -228,7 +259,6 @@ function ProviderBadge({
     </HoverCard>
   );
 }
-
 
 function ProxyProviderPageContent({
   breadcrumbJsonLd,
@@ -354,14 +384,17 @@ const proxyDetailLoader = createServerFn({ method: "GET" })
       throw notFound();
     }
 
-    const reviewSummaries = await getReviewSummaries("proxy", [provider.slug]).catch(
+    const reviewSummaries = await getReviewSummaries("proxy", [
+      provider.slug,
+    ]).catch(
       () =>
-        ({} as Record<
+        ({}) as Record<
           string,
           { averageRating: number | null; reviewCount: number }
-        >),
+        >,
     );
-    const reviewSummary = reviewSummaries[provider.slug] ?? emptyReviewSummary();
+    const reviewSummary =
+      reviewSummaries[provider.slug] ?? emptyReviewSummary();
     const writtenReviews = await getPaginatedWrittenReviews(
       "proxy",
       provider.slug,
@@ -466,9 +499,9 @@ const proxyDetailLoader = createServerFn({ method: "GET" })
     };
   });
 
-
 export const Route = createFileRoute("/get-proxies/$slug")({
-  loader: async ({ params }) => proxyDetailLoader({ data: { slug: params.slug } }),
+  loader: async ({ params }) =>
+    proxyDetailLoader({ data: { slug: params.slug } }),
   head: ({ loaderData }) => {
     const data = loaderData;
 
@@ -489,7 +522,6 @@ export const Route = createFileRoute("/get-proxies/$slug")({
   },
   component: GetProxyDetailPage,
 });
-
 
 function GetProxyDetailPage() {
   const data = Route.useLoaderData();

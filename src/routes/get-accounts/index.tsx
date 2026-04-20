@@ -1,24 +1,77 @@
+import {
+  SiDiscord,
+  SiTelegram,
+  SiTiktok,
+  SiTrustpilot,
+  SiX,
+  SiYoutube,
+} from "@icons-pack/react-simple-icons";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import {
+  BookOpen,
+  Calendar,
+  Check,
+  Copy,
+  ExternalLink,
+  Filter,
+  Globe,
+  ImageIcon,
+  Info,
+  Users,
+} from "lucide-react";
+import { useQueryStates } from "nuqs";
+import {
+  createLoader,
+  createSearchParamsCache,
+  parseAsArrayOf,
+  parseAsStringLiteral,
+  type SearchParams,
+} from "nuqs/server";
+import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { SiteShell } from "@/components/site-shell";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { useReviews } from "@/hooks/use-reviews";
-import { BADGE_CONFIG, type Badge, CATEGORY_CONFIG, type Category, FILTER_BADGES, FILTER_CATEGORIES, type FilterableBadge, getDiscordInviteUrl, getShopBySlug, PROVIDER_THEMES, type Provider, PROVIDERS, type SocialLink, SORT_CONFIG, type SortOption } from "@/lib/accounts-data";
-import { getListingOffer, getLiveShopData, getShopAggregateOffer } from "@/lib/accounts-offers";
-import { DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
-import { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
+import {
+  BADGE_CONFIG,
+  type Badge,
+  CATEGORY_CONFIG,
+  type Category,
+  FILTER_BADGES,
+  FILTER_CATEGORIES,
+  type FilterableBadge,
+  getDiscordInviteUrl,
+  getShopBySlug,
+  PROVIDER_THEMES,
+  PROVIDERS,
+  type Provider,
+  SORT_CONFIG,
+  type SocialLink,
+  type SortOption,
+} from "@/lib/accounts-data";
+import {
+  getListingOffer,
+  getLiveShopData,
+  getShopAggregateOffer,
+} from "@/lib/accounts-offers";
+import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
+import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { SiDiscord, SiTelegram, SiTiktok, SiTrustpilot, SiX, SiYoutube } from "@icons-pack/react-simple-icons";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { BookOpen, Calendar, Check, Copy, ExternalLink, Filter, Globe, ImageIcon, Info, Users } from "lucide-react";
-import { useQueryStates } from "nuqs";
-import { createLoader, createSearchParamsCache, parseAsArrayOf, parseAsStringLiteral, type SearchParams } from "nuqs/server";
-import { Suspense, useMemo, useState } from "react";
 
 const accountFaqItems: {
   question: string;
@@ -173,12 +226,7 @@ function formatNumber(num: number): string {
   return num.toString();
 }
 
-
-function DiscordMemberBadge({
-  info,
-}: {
-  info: DiscordInviteResponse | null;
-}) {
+function DiscordMemberBadge({ info }: { info: DiscordInviteResponse | null }) {
   if (!info?.approximate_member_count) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-[#5865F2]/10 px-2.5 py-0.5 text-xs font-medium text-[#5865F2]/50">
@@ -209,13 +257,7 @@ function DiscordMemberBadge({
   );
 }
 
-function CouponCode({
-  code,
-  discount,
-}: {
-  code: string;
-  discount?: string;
-}) {
+function CouponCode({ code, discount }: { code: string; discount?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -250,7 +292,6 @@ function CouponCode({
   );
 }
 
-
 function LinkDiscountNotice({ message }: { message: string }) {
   return (
     <div className="rounded-lg bg-pink-500/10 p-3">
@@ -263,7 +304,6 @@ function LinkDiscountNotice({ message }: { message: string }) {
 
 const CATEGORIES = ["nfa-accounts", "mfa-accounts"] as const;
 
-
 const BADGES = [
   "free",
   "high-quality",
@@ -273,7 +313,6 @@ const BADGES = [
   "bulk-discount",
 ] as const;
 
-
 const SORT_OPTIONS = [
   "default",
   "best-rated",
@@ -281,35 +320,27 @@ const SORT_OPTIONS = [
   "price-desc",
 ] as const;
 
-
 const accountsSearchParams = {
   category: parseAsStringLiteral([...CATEGORIES]),
   badges: parseAsArrayOf(parseAsStringLiteral([...BADGES])).withDefault([]),
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
-
-const accountsSearchParamsCache =
+const _accountsSearchParamsCache =
   createSearchParamsCache(accountsSearchParams);
-
 
 const loadAccountsSearchParams = createLoader(accountsSearchParams);
 
-
-type AccountsSelection = Awaited<
-  ReturnType<typeof loadAccountsSearchParams>
->;
+type AccountsSelection = Awaited<ReturnType<typeof loadAccountsSearchParams>>;
 
 type AccountsPageSearchParams = Promise<SearchParams>;
 
 type DiscordInvites = Record<string, DiscordInviteResponse | null>;
 
-
 type Props = {
   discordInvites: DiscordInvites;
   initialSummaries: Record<string, ReviewSummary>;
 };
-
 
 function ProviderBadge({
   badge,
@@ -339,7 +370,6 @@ function ProviderBadge({
   );
 }
 
-
 function ProviderThemeDecoration() {
   return (
     <div
@@ -351,7 +381,6 @@ function ProviderThemeDecoration() {
     </div>
   );
 }
-
 
 function SocialLinkButtons({
   socialLinks,
@@ -406,7 +435,6 @@ function SocialLinkButtons({
   );
 }
 
-
 function ProviderLogo({ provider }: { provider: Provider }) {
   if (provider.logo) {
     return (
@@ -423,7 +451,6 @@ function ProviderLogo({ provider }: { provider: Provider }) {
     </div>
   );
 }
-
 
 function ProviderCard({
   provider,
@@ -515,11 +542,11 @@ function ProviderCard({
           </div>
           <p className="text-muted-foreground">{provider.summary}</p>
           {provider.gallery && provider.gallery.length > 0 && (
-              <Link
-                to="/get-accounts/$slug"
-                params={{ slug: provider.slug }}
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
+            <Link
+              to="/get-accounts/$slug"
+              params={{ slug: provider.slug }}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
               <ImageIcon className="h-3 w-3" />
               {provider.gallery.length} photo
               {provider.gallery.length !== 1 && "s"}
@@ -606,7 +633,6 @@ function ProviderCard({
   );
 }
 
-
 function sortProviders(
   providers: Provider[],
   sort: SortOption,
@@ -650,7 +676,6 @@ function sortProviders(
       : b.priceValue - a.priceValue,
   );
 }
-
 
 function MainContent(props: Props) {
   const providers = PROVIDERS;
@@ -931,7 +956,6 @@ function MainContent(props: Props) {
   );
 }
 
-
 function GetAccountsClient(props: Props) {
   return (
     <main className="px-4 py-12 w-full max-w-(--fd-layout-width) mx-auto space-y-10">
@@ -1028,22 +1052,27 @@ function GetAccountsClient(props: Props) {
 const accountsPageLoader = createServerFn({ method: "GET" }).handler(
   async () => {
     const providersBySlug = [
-      ...new Map(PROVIDERS.map((provider) => [provider.slug, provider])).values(),
+      ...new Map(
+        PROVIDERS.map((provider) => [provider.slug, provider]),
+      ).values(),
     ];
     const reviewSummaries = await getReviewSummaries("account", [
       ...new Set(PROVIDERS.map((provider) => provider.slug)),
     ]).catch(
       () =>
-        ({} as Record<
+        ({}) as Record<
           string,
           { averageRating: number | null; reviewCount: number }
-        >),
+        >,
     );
     const liveShopDataEntries = await Promise.all(
       providersBySlug.map(async (provider) => {
         const shop = getShopBySlug(provider.slug);
         if (!shop) return [provider.slug, {}] as const;
-        return [provider.slug, await getLiveShopData(shop).catch(() => ({}))] as const;
+        return [
+          provider.slug,
+          await getLiveShopData(shop).catch(() => ({})),
+        ] as const;
       }),
     );
     const liveShopDataBySlug = Object.fromEntries(liveShopDataEntries);
@@ -1175,7 +1204,6 @@ const accountsPageLoader = createServerFn({ method: "GET" }).handler(
   },
 );
 
-
 export const Route = createFileRoute("/get-accounts/")({
   head: () => ({
     meta: getPageMeta({
@@ -1191,7 +1219,6 @@ export const Route = createFileRoute("/get-accounts/")({
   loader: async () => accountsPageLoader(),
   component: GetAccountsPage,
 });
-
 
 function GetAccountsPage() {
   const data = Route.useLoaderData();

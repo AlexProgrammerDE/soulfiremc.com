@@ -5,8 +5,8 @@ export const Route = createFileRoute("/donate")({
   beforeLoad: () => {
     throw redirect({
       href: getRequiredEnv(
-        import.meta.env.NEXT_PUBLIC_DONATE_LINK,
-        "NEXT_PUBLIC_DONATE_LINK",
+        import.meta.env.VITE_DONATE_LINK,
+        "VITE_DONATE_LINK",
       ),
     });
   },

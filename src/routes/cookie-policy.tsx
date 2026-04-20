@@ -1,6 +1,6 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/site-shell";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
-import { createFileRoute, Link } from "@tanstack/react-router";
 
 function CookiePolicy() {
   return (
@@ -390,7 +390,6 @@ export const Route = createFileRoute("/cookie-policy")({
   }),
   component: CookiePolicyPage,
 });
-
 
 function CookiePolicyPage() {
   return (

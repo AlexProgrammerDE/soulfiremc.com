@@ -1,7 +1,7 @@
-import logoSvgUrl from "@/assets/logo-square.svg?inline";
 import { ImageResponse } from "@takumi-rs/image-response/wasm";
 import takumiWasmModule from "@takumi-rs/wasm/next";
 import type { ReactElement } from "react";
+import logoSvgUrl from "@/assets/logo-square.svg?inline";
 
 const baseImageOptions = {
   format: "webp" as const,

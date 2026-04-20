@@ -1,7 +1,45 @@
+import { SiGithub } from "@icons-pack/react-simple-icons";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  AppWindow,
+  ArrowRight,
+  Blocks,
+  Box,
+  Brain,
+  Bug,
+  CloudDownload,
+  Download,
+  MousePointerClick,
+  Rocket,
+  TerminalIcon,
+  Workflow,
+  Zap,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import {
+  type ComponentType,
+  type ReactElement,
+  type RefObject,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
+import type {
+  BreadcrumbList,
+  FAQPage,
+  SoftwareApplication,
+  WithContext,
+} from "schema-dts";
 import { EnderDashSponsor } from "@/components/enderdash-sponsor";
 import { JsonLd } from "@/components/json-ld";
 import { SiteShell } from "@/components/site-shell";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
@@ -13,20 +51,19 @@ import { Meteors } from "@/components/ui/meteors";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { Ripple } from "@/components/ui/ripple";
 import { getRequiredEnv } from "@/lib/env";
-import { createStructuredDataGraph, createWebPageStructuredData, getCanonicalLinks, getPageMeta, jsonLdScript, siteDescription } from "@/lib/seo";
+import {
+  createStructuredDataGraph,
+  createWebPageStructuredData,
+  getCanonicalLinks,
+  getPageMeta,
+  jsonLdScript,
+  siteDescription,
+} from "@/lib/seo";
 import { cn } from "@/lib/utils";
-import { SiGithub } from "@icons-pack/react-simple-icons";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { AppWindow, ArrowRight, Blocks, Box, Brain, Bug, CloudDownload, Download, MousePointerClick, Rocket, TerminalIcon, Workflow, Zap } from "lucide-react";
-import { useTheme } from "next-themes";
-import { type ComponentType, type ReactElement, type RefObject, useEffect, useId, useRef, useState } from "react";
-import { BreadcrumbList, FAQPage, SoftwareApplication, WithContext } from "schema-dts";
 
 type ShaderModule = typeof import("@paper-design/shaders-react");
 
-
 let cachedShaderModule: ShaderModule | null = null;
-
 
 function useShaderModule() {
   const [shaderModule, setShaderModule] = useState<ShaderModule | null>(
@@ -55,7 +92,6 @@ function useShaderModule() {
   return shaderModule;
 }
 
-
 // Intersection observer for visibility detection
 let observer: IntersectionObserver;
 
@@ -63,7 +99,6 @@ const observerTargets = new WeakMap<
   Element,
   (entry: IntersectionObserverEntry) => void
 >();
-
 
 function useIsVisible(ref: RefObject<HTMLElement | null>) {
   const [visible, setVisible] = useState(false);
@@ -91,7 +126,6 @@ function useIsVisible(ref: RefObject<HTMLElement | null>) {
   return visible;
 }
 
-
 function HeroBackground() {
   const { resolvedTheme } = useTheme();
   const ref = useRef<HTMLDivElement | null>(null);
@@ -105,7 +139,9 @@ function HeroBackground() {
     | undefined;
 
   if (!GrainGradient || !Dithering) {
-    return <div ref={ref} className="absolute inset-0 overflow-hidden rounded-2xl" />;
+    return (
+      <div ref={ref} className="absolute inset-0 overflow-hidden rounded-2xl" />
+    );
   }
 
   return (
@@ -143,7 +179,6 @@ function HeroBackground() {
     </div>
   );
 }
-
 
 function TerminalAnimation() {
   const tickTime = 100;
@@ -268,15 +303,14 @@ function TerminalAnimation() {
   );
 }
 
-
 // ---- Editor-style scripting animation data ----
 
 const ED_H = 26;
- // header height
+// header height
 const ED_R = 20;
- // port row height
+// port row height
 const ED_P = 4;
- // bottom padding
+// bottom padding
 
 type SPort = { name: string; type: "exec" | "data" };
 
@@ -292,11 +326,9 @@ type SNode = {
   rows: SRow[];
 };
 
-
 function sHeight(n: SNode) {
   return ED_H + n.rows.length * ED_R + ED_P;
 }
-
 
 function sPortXY(nodeId: string, portName: string, side: "left" | "right") {
   const n = sNodes.find((candidate) => candidate.id === nodeId);
@@ -312,12 +344,10 @@ function sPortXY(nodeId: string, portName: string, side: "left" | "right") {
   };
 }
 
-
 function sBezier(x1: number, y1: number, x2: number, y2: number) {
   const cp = x2 >= x1 ? Math.max((x2 - x1) * 0.45, 25) : 40;
   return `M${x1},${y1} C${x1 + cp},${y1} ${x2 - cp},${y2} ${x2},${y2}`;
 }
-
 
 const sNodes: SNode[] = [
   {
@@ -402,7 +432,6 @@ const sNodes: SNode[] = [
   },
 ];
 
-
 type SEdge = {
   id: string;
   from: string;
@@ -413,7 +442,6 @@ type SEdge = {
   ts: "left" | "right";
   type: "exec" | "data";
 };
-
 
 const sEdges: SEdge[] = [
   {
@@ -478,13 +506,11 @@ const sEdges: SEdge[] = [
   },
 ];
 
-
 const sEdgePaths = sEdges.map((e) => {
   const f = sPortXY(e.from, e.fp, e.fs);
   const t = sPortXY(e.to, e.tp, e.ts);
   return { ...e, d: sBezier(f.x, f.y, t.x, t.y) };
 });
-
 
 const sPhases = [
   { nodes: ["trigger"], edges: [] as string[], ticks: 8 },
@@ -499,9 +525,7 @@ const sPhases = [
   { nodes: [] as string[], edges: [] as string[], ticks: 12 },
 ];
 
-
 const sTotalTicks = sPhases.reduce((s, p) => s + p.ticks, 0);
-
 
 const sLogs = [
   {
@@ -541,7 +565,6 @@ const sLogs = [
     color: "text-cyan-400",
   },
 ];
-
 
 function ScriptingAnimation() {
   const tickTime = 120;
@@ -865,7 +888,6 @@ function ScriptingAnimation() {
   );
 }
 
-
 function HomeFaq({
   items,
 }: {
@@ -896,7 +918,6 @@ const plugins = [
   "Auto Register",
 ];
 
-
 const versions = [
   "Release (1.0.0 - latest)",
   "Beta (b1.0 - b1.8.1)",
@@ -906,7 +927,6 @@ const versions = [
   "Combat Snapshots (Combat Test 8c)",
   "Bedrock Edition 1.21.130 (Some features are missing)",
 ];
-
 
 const features = [
   {
@@ -958,10 +978,7 @@ const features = [
     name: "Open Source",
     description:
       "Fully open source under AGPL-3.0. Contribute features, report bugs, or fork it for your own projects. Community-driven development.",
-    href: getRequiredEnv(
-      import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
-      "NEXT_PUBLIC_GITHUB_LINK",
-    ),
+    href: getRequiredEnv(import.meta.env.VITE_GITHUB_LINK, "VITE_GITHUB_LINK"),
     cta: "View on GitHub",
     className: "col-span-3 lg:col-span-1",
     background: (
@@ -1017,12 +1034,10 @@ const features = [
   },
 ];
 
-
 const githubLink = getRequiredEnv(
-  import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
-  "NEXT_PUBLIC_GITHUB_LINK",
+  import.meta.env.VITE_GITHUB_LINK,
+  "VITE_GITHUB_LINK",
 );
-
 
 const faqItems: {
   question: string;
@@ -1039,7 +1054,11 @@ const faqItems: {
         client code. Bots use actual Minecraft physics, networking, and protocol
         handling, so servers can't tell them apart from real players. It's built
         for stress testing servers, automating tasks, and development.{" "}
-        <Link to="/docs/$" params={{ _splat: "" }} className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "" }}
+          className="underline text-primary"
+        >
           Read the docs
         </Link>{" "}
         to learn more.
@@ -1079,7 +1098,11 @@ const faqItems: {
         release, including Beta, Combat Snapshots, April Fools editions, and
         Bedrock Edition. Version translation is handled automatically via
         built-in protocol support. See the{" "}
-        <Link to="/docs/$" params={{ _splat: "reference/versions" }} className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "reference/versions" }}
+          className="underline text-primary"
+        >
           full version list
         </Link>
         .
@@ -1110,7 +1133,11 @@ const faqItems: {
         </Link>{" "}
         the native installer for your platform (Windows, macOS, or Linux). No
         Java required, everything is bundled. Just install and run. See the{" "}
-        <Link to="/docs/$" params={{ _splat: "start-here" }} className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "start-here" }}
+          className="underline text-primary"
+        >
           start-here guide
         </Link>{" "}
         for a full walkthrough.
@@ -1126,7 +1153,11 @@ const faqItems: {
         Yes. SoulFire can connect to Bedrock Edition servers via built-in
         protocol translation. Some features are still being added, but core
         functionality like joining, moving, and interacting works. See{" "}
-        <Link to="/docs/$" params={{ _splat: "reference/versions" }} className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "reference/versions" }}
+          className="underline text-primary"
+        >
           supported versions
         </Link>{" "}
         for details.
@@ -1142,7 +1173,11 @@ const faqItems: {
         Yes. SoulFire plugins are Fabric mods with full access to Minecraft and
         SoulFire internals. Use scripting for high-level automation, and move to
         the{" "}
-        <Link to="/docs/$" params={{ _splat: "development" }} className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "development" }}
+          className="underline text-primary"
+        >
           Development docs
         </Link>{" "}
         when you need low-level hooks, custom settings, Mixins, or direct bot
@@ -1160,7 +1195,11 @@ const faqItems: {
         nodes. Build automation workflows by connecting triggers, actions, and
         logic nodes, no programming required. The built-in script editor
         supports real-time debugging, AI/LLM integration, and more. See the{" "}
-        <Link to="/docs/$" params={{ _splat: "scripting" }} className="underline text-primary">
+        <Link
+          to="/docs/$"
+          params={{ _splat: "scripting" }}
+          className="underline text-primary"
+        >
           scripting docs
         </Link>{" "}
         to get started.
@@ -1168,7 +1207,6 @@ const faqItems: {
     ),
   },
 ];
-
 
 function Page() {
   const softwareJsonLd: WithContext<SoftwareApplication> = {
@@ -1264,8 +1302,8 @@ function Page() {
                   </Link>
                   <a
                     href={getRequiredEnv(
-                      import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
-                      "NEXT_PUBLIC_GITHUB_LINK",
+                      import.meta.env.VITE_GITHUB_LINK,
+                      "VITE_GITHUB_LINK",
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1478,8 +1516,8 @@ function Page() {
               </Link>
               <a
                 href={getRequiredEnv(
-                  import.meta.env.NEXT_PUBLIC_GITHUB_LINK,
-                  "NEXT_PUBLIC_GITHUB_LINK",
+                  import.meta.env.VITE_GITHUB_LINK,
+                  "VITE_GITHUB_LINK",
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1522,7 +1560,6 @@ export const Route = createFileRoute("/")({
   }),
   component: HomePage,
 });
-
 
 function HomePage() {
   return (

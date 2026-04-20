@@ -19,8 +19,8 @@ export function getBaseLayoutOptions(): BaseLayoutProps {
         icon: <SiDiscord />,
         text: "Discord",
         url: getRequiredEnv(
-          import.meta.env.NEXT_PUBLIC_DISCORD_LINK,
-          "NEXT_PUBLIC_DISCORD_LINK",
+          import.meta.env.VITE_DISCORD_LINK,
+          "VITE_DISCORD_LINK",
         ),
         external: true,
       },

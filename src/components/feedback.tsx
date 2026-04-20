@@ -1,12 +1,12 @@
 "use client";
 
+import { useLocation } from "@tanstack/react-router";
 import { cva } from "class-variance-authority";
 import { buttonVariants } from "fumadocs-ui/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
 } from "fumadocs-ui/components/ui/collapsible";
-import { useLocation } from "@tanstack/react-router";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { type SyntheticEvent, useEffect, useState, useTransition } from "react";
