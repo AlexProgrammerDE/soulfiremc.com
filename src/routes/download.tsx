@@ -539,7 +539,7 @@ function DownloadConfigurator(props: {
               </Button>
               <Button asChild variant="outline" className="w-full gap-2">
                 <a
-                  href={process.env.NEXT_PUBLIC_GITHUB_LINK}
+                  href={import.meta.env.NEXT_PUBLIC_GITHUB_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

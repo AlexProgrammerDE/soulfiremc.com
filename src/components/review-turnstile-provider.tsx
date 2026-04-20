@@ -48,7 +48,7 @@ function toError(message: string, error?: unknown) {
 }
 
 export function ReviewTurnstileProvider({ children }: { children: ReactNode }) {
-  const siteKey = process.env.NEXT_PUBLIC_REVIEW_TURNSTILE_SITE_KEY;
+  const siteKey = import.meta.env.NEXT_PUBLIC_REVIEW_TURNSTILE_SITE_KEY;
   const widgetRef = useRef<BoundTurnstileObject | null>(null);
   const pendingRef = useRef<PendingChallenge | null>(null);
 
@@ -137,7 +137,7 @@ export function ReviewTurnstileProvider({ children }: { children: ReactNode }) {
         );
       }
     });
-  }, [clearPending, siteKey]);
+  }, [clearPending]);
 
   const handleLoad = useCallback<NonNullable<TurnstileProps["onLoad"]>>(
     (_widgetId, boundTurnstile) => {
@@ -204,7 +204,7 @@ export function ReviewTurnstileProvider({ children }: { children: ReactNode }) {
       enabled: Boolean(siteKey),
       executeTurnstile,
     }),
-    [executeTurnstile, siteKey],
+    [executeTurnstile],
   );
 
   return (
