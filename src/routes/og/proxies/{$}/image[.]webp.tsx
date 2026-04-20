@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ProxyOgImage } from "@/components/og/site";
 import { stripOgSuffix } from "@/lib/og";
-import { createOgImageResponse } from "@/lib/og-image";
+import { createOgImageResponse, getEmbeddedLogo } from "@/lib/og-image";
 import { getProviderBySlug } from "@/lib/proxies-data";
 
 export const Route = createFileRoute("/og/proxies/{$}/image.webp")({
@@ -22,6 +22,7 @@ export const Route = createFileRoute("/og/proxies/{$}/image.webp")({
             summary={provider.summary}
             badges={provider.badges}
             sponsor={provider.sponsor}
+            logoSrc={getEmbeddedLogo(provider.logo)}
           />,
         );
       },

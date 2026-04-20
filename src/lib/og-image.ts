@@ -18,3 +18,20 @@ export function createOgImageResponse(element: ReactElement) {
 }
 
 export const soulfireLogoDataUri = logoSvgUrl;
+
+const embeddedLogos = import.meta.glob<string>(
+  "/src/assets/{accounts,providers}/*.{png,svg,gif,jpg,jpeg,webp}",
+  { query: "?inline", import: "default", eager: true },
+);
+
+const logosByPublicPath = new Map<string, string>(
+  Object.entries(embeddedLogos).map(([modulePath, dataUri]) => {
+    const publicPath = modulePath.replace(/^.*\/src\/assets/, "");
+    return [publicPath, dataUri];
+  }),
+);
+
+export function getEmbeddedLogo(publicPath?: string) {
+  if (!publicPath) return undefined;
+  return logosByPublicPath.get(publicPath);
+}

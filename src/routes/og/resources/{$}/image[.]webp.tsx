@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ResourceOgImage } from "@/components/og/site";
 import { stripOgSuffix } from "@/lib/og";
-import { createOgImageResponse } from "@/lib/og-image";
+import { createOgImageResponse, getEmbeddedLogo } from "@/lib/og-image";
 import { getResourceBySlug } from "@/lib/resources-data";
 
 export const Route = createFileRoute("/og/resources/{$}/image.webp")({
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/og/resources/{$}/image.webp")({
             category={resource.category}
             badges={resource.badges}
             version={resource.version}
+            logoSrc={getEmbeddedLogo(resource.logo)}
           />,
         );
       },

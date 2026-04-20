@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AccountOgImage } from "@/components/og/site";
 import { getShopBySlug } from "@/lib/accounts-data";
 import { stripOgSuffix } from "@/lib/og";
-import { createOgImageResponse } from "@/lib/og-image";
+import { createOgImageResponse, getEmbeddedLogo } from "@/lib/og-image";
 
 export const Route = createFileRoute("/og/accounts/{$}/image.webp")({
   server: {
@@ -29,6 +29,7 @@ export const Route = createFileRoute("/og/accounts/{$}/image.webp")({
             name={shop.name}
             listings={listings}
             description={description}
+            logoSrc={getEmbeddedLogo(shop.logo)}
           />,
         );
       },
