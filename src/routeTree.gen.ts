@@ -41,12 +41,14 @@ import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as AccountPathRouteImport } from './routes/account/$path'
 import { Route as OgDocsImageDotwebpRouteImport } from './routes/og/docs/image[.]webp'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiDiscordLinkedRoleIndexRouteImport } from './routes/api/discord/linked-role/index'
 import { Route as OgSiteChar123Char125ImageDotwebpRouteImport } from './routes/og/site/{$}/image[.]webp'
 import { Route as OgResourcesChar123Char125ImageDotwebpRouteImport } from './routes/og/resources/{$}/image[.]webp'
 import { Route as OgProxiesChar123Char125ImageDotwebpRouteImport } from './routes/og/proxies/{$}/image[.]webp'
 import { Route as OgDocsChar123Char125ImageDotwebpRouteImport } from './routes/og/docs/{$}/image[.]webp'
 import { Route as OgBlogChar123Char125ImageDotwebpRouteImport } from './routes/og/blog/{$}/image[.]webp'
 import { Route as OgAccountsChar123Char125ImageDotwebpRouteImport } from './routes/og/accounts/{$}/image[.]webp'
+import { Route as ApiDiscordLinkedRoleCallbackRouteImport } from './routes/api/discord/linked-role/callback'
 
 const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
   id: '/terms-of-service',
@@ -209,6 +211,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDiscordLinkedRoleIndexRoute =
+  ApiDiscordLinkedRoleIndexRouteImport.update({
+    id: '/api/discord/linked-role/',
+    path: '/api/discord/linked-role/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OgSiteChar123Char125ImageDotwebpRoute =
   OgSiteChar123Char125ImageDotwebpRouteImport.update({
     id: '/og/site/{$}/image.webp',
@@ -245,6 +253,12 @@ const OgAccountsChar123Char125ImageDotwebpRoute =
     path: '/og/accounts/{$}/image.webp',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiDiscordLinkedRoleCallbackRoute =
+  ApiDiscordLinkedRoleCallbackRouteImport.update({
+    id: '/api/discord/linked-role/callback',
+    path: '/api/discord/linked-role/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -279,12 +293,14 @@ export interface FileRoutesByFullPath {
   '/resources/': typeof ResourcesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/og/docs/image.webp': typeof OgDocsImageDotwebpRoute
+  '/api/discord/linked-role/callback': typeof ApiDiscordLinkedRoleCallbackRoute
   '/og/accounts/{$}/image.webp': typeof OgAccountsChar123Char125ImageDotwebpRoute
   '/og/blog/{$}/image.webp': typeof OgBlogChar123Char125ImageDotwebpRoute
   '/og/docs/{$}/image.webp': typeof OgDocsChar123Char125ImageDotwebpRoute
   '/og/proxies/{$}/image.webp': typeof OgProxiesChar123Char125ImageDotwebpRoute
   '/og/resources/{$}/image.webp': typeof OgResourcesChar123Char125ImageDotwebpRoute
   '/og/site/{$}/image.webp': typeof OgSiteChar123Char125ImageDotwebpRoute
+  '/api/discord/linked-role/': typeof ApiDiscordLinkedRoleIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -319,12 +335,14 @@ export interface FileRoutesByTo {
   '/resources': typeof ResourcesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/og/docs/image.webp': typeof OgDocsImageDotwebpRoute
+  '/api/discord/linked-role/callback': typeof ApiDiscordLinkedRoleCallbackRoute
   '/og/accounts/{$}/image.webp': typeof OgAccountsChar123Char125ImageDotwebpRoute
   '/og/blog/{$}/image.webp': typeof OgBlogChar123Char125ImageDotwebpRoute
   '/og/docs/{$}/image.webp': typeof OgDocsChar123Char125ImageDotwebpRoute
   '/og/proxies/{$}/image.webp': typeof OgProxiesChar123Char125ImageDotwebpRoute
   '/og/resources/{$}/image.webp': typeof OgResourcesChar123Char125ImageDotwebpRoute
   '/og/site/{$}/image.webp': typeof OgSiteChar123Char125ImageDotwebpRoute
+  '/api/discord/linked-role': typeof ApiDiscordLinkedRoleIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -360,12 +378,14 @@ export interface FileRoutesById {
   '/resources/': typeof ResourcesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/og/docs/image.webp': typeof OgDocsImageDotwebpRoute
+  '/api/discord/linked-role/callback': typeof ApiDiscordLinkedRoleCallbackRoute
   '/og/accounts/{$}/image.webp': typeof OgAccountsChar123Char125ImageDotwebpRoute
   '/og/blog/{$}/image.webp': typeof OgBlogChar123Char125ImageDotwebpRoute
   '/og/docs/{$}/image.webp': typeof OgDocsChar123Char125ImageDotwebpRoute
   '/og/proxies/{$}/image.webp': typeof OgProxiesChar123Char125ImageDotwebpRoute
   '/og/resources/{$}/image.webp': typeof OgResourcesChar123Char125ImageDotwebpRoute
   '/og/site/{$}/image.webp': typeof OgSiteChar123Char125ImageDotwebpRoute
+  '/api/discord/linked-role/': typeof ApiDiscordLinkedRoleIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -402,12 +422,14 @@ export interface FileRouteTypes {
     | '/resources/'
     | '/api/auth/$'
     | '/og/docs/image.webp'
+    | '/api/discord/linked-role/callback'
     | '/og/accounts/{$}/image.webp'
     | '/og/blog/{$}/image.webp'
     | '/og/docs/{$}/image.webp'
     | '/og/proxies/{$}/image.webp'
     | '/og/resources/{$}/image.webp'
     | '/og/site/{$}/image.webp'
+    | '/api/discord/linked-role/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -442,12 +464,14 @@ export interface FileRouteTypes {
     | '/resources'
     | '/api/auth/$'
     | '/og/docs/image.webp'
+    | '/api/discord/linked-role/callback'
     | '/og/accounts/{$}/image.webp'
     | '/og/blog/{$}/image.webp'
     | '/og/docs/{$}/image.webp'
     | '/og/proxies/{$}/image.webp'
     | '/og/resources/{$}/image.webp'
     | '/og/site/{$}/image.webp'
+    | '/api/discord/linked-role'
   id:
     | '__root__'
     | '/'
@@ -482,12 +506,14 @@ export interface FileRouteTypes {
     | '/resources/'
     | '/api/auth/$'
     | '/og/docs/image.webp'
+    | '/api/discord/linked-role/callback'
     | '/og/accounts/{$}/image.webp'
     | '/og/blog/{$}/image.webp'
     | '/og/docs/{$}/image.webp'
     | '/og/proxies/{$}/image.webp'
     | '/og/resources/{$}/image.webp'
     | '/og/site/{$}/image.webp'
+    | '/api/discord/linked-role/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -523,12 +549,14 @@ export interface RootRouteChildren {
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   OgDocsImageDotwebpRoute: typeof OgDocsImageDotwebpRoute
+  ApiDiscordLinkedRoleCallbackRoute: typeof ApiDiscordLinkedRoleCallbackRoute
   OgAccountsChar123Char125ImageDotwebpRoute: typeof OgAccountsChar123Char125ImageDotwebpRoute
   OgBlogChar123Char125ImageDotwebpRoute: typeof OgBlogChar123Char125ImageDotwebpRoute
   OgDocsChar123Char125ImageDotwebpRoute: typeof OgDocsChar123Char125ImageDotwebpRoute
   OgProxiesChar123Char125ImageDotwebpRoute: typeof OgProxiesChar123Char125ImageDotwebpRoute
   OgResourcesChar123Char125ImageDotwebpRoute: typeof OgResourcesChar123Char125ImageDotwebpRoute
   OgSiteChar123Char125ImageDotwebpRoute: typeof OgSiteChar123Char125ImageDotwebpRoute
+  ApiDiscordLinkedRoleIndexRoute: typeof ApiDiscordLinkedRoleIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -757,6 +785,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/discord/linked-role/': {
+      id: '/api/discord/linked-role/'
+      path: '/api/discord/linked-role'
+      fullPath: '/api/discord/linked-role/'
+      preLoaderRoute: typeof ApiDiscordLinkedRoleIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/og/site/{$}/image.webp': {
       id: '/og/site/{$}/image.webp'
       path: '/og/site/{$}/image.webp'
@@ -799,6 +834,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OgAccountsChar123Char125ImageDotwebpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/discord/linked-role/callback': {
+      id: '/api/discord/linked-role/callback'
+      path: '/api/discord/linked-role/callback'
+      fullPath: '/api/discord/linked-role/callback'
+      preLoaderRoute: typeof ApiDiscordLinkedRoleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -835,6 +877,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResourcesIndexRoute: ResourcesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   OgDocsImageDotwebpRoute: OgDocsImageDotwebpRoute,
+  ApiDiscordLinkedRoleCallbackRoute: ApiDiscordLinkedRoleCallbackRoute,
   OgAccountsChar123Char125ImageDotwebpRoute:
     OgAccountsChar123Char125ImageDotwebpRoute,
   OgBlogChar123Char125ImageDotwebpRoute: OgBlogChar123Char125ImageDotwebpRoute,
@@ -844,6 +887,7 @@ const rootRouteChildren: RootRouteChildren = {
   OgResourcesChar123Char125ImageDotwebpRoute:
     OgResourcesChar123Char125ImageDotwebpRoute,
   OgSiteChar123Char125ImageDotwebpRoute: OgSiteChar123Char125ImageDotwebpRoute,
+  ApiDiscordLinkedRoleIndexRoute: ApiDiscordLinkedRoleIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
