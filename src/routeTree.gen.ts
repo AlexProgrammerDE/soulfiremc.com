@@ -38,7 +38,6 @@ import { Route as BlogFeedDotxmlRouteImport } from './routes/blog/feed[.]xml'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as AuthPathRouteImport } from './routes/auth/$path'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
-import { Route as ApiReviewsRouteImport } from './routes/api/reviews'
 import { Route as AccountPathRouteImport } from './routes/account/$path'
 import { Route as OgDocsImageDotwebpRouteImport } from './routes/og/docs/image[.]webp'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -195,11 +194,6 @@ const ApiSearchRoute = ApiSearchRouteImport.update({
   path: '/api/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiReviewsRoute = ApiReviewsRouteImport.update({
-  id: '/api/reviews',
-  path: '/api/reviews',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AccountPathRoute = AccountPathRouteImport.update({
   id: '/account/$path',
   path: '/account/$path',
@@ -270,7 +264,6 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/account/$path': typeof AccountPathRoute
-  '/api/reviews': typeof ApiReviewsRoute
   '/api/search': typeof ApiSearchRoute
   '/auth/$path': typeof AuthPathRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -311,7 +304,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/account/$path': typeof AccountPathRoute
-  '/api/reviews': typeof ApiReviewsRoute
   '/api/search': typeof ApiSearchRoute
   '/auth/$path': typeof AuthPathRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -353,7 +345,6 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/account/$path': typeof AccountPathRoute
-  '/api/reviews': typeof ApiReviewsRoute
   '/api/search': typeof ApiSearchRoute
   '/auth/$path': typeof AuthPathRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -396,7 +387,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/account/$path'
-    | '/api/reviews'
     | '/api/search'
     | '/auth/$path'
     | '/blog/$slug'
@@ -437,7 +427,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/account/$path'
-    | '/api/reviews'
     | '/api/search'
     | '/auth/$path'
     | '/blog/$slug'
@@ -478,7 +467,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/account/$path'
-    | '/api/reviews'
     | '/api/search'
     | '/auth/$path'
     | '/blog/$slug'
@@ -520,7 +508,6 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   AccountPathRoute: typeof AccountPathRoute
-  ApiReviewsRoute: typeof ApiReviewsRoute
   ApiSearchRoute: typeof ApiSearchRoute
   AuthPathRoute: typeof AuthPathRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -749,13 +736,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/reviews': {
-      id: '/api/reviews'
-      path: '/api/reviews'
-      fullPath: '/api/reviews'
-      preLoaderRoute: typeof ApiReviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/account/$path': {
       id: '/account/$path'
       path: '/account/$path'
@@ -840,7 +820,6 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
   AccountPathRoute: AccountPathRoute,
-  ApiReviewsRoute: ApiReviewsRoute,
   ApiSearchRoute: ApiSearchRoute,
   AuthPathRoute: AuthPathRoute,
   BlogSlugRoute: BlogSlugRoute,
@@ -871,7 +850,6 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true

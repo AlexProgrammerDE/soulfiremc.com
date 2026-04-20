@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useReviewTurnstile } from "@/components/review-turnstile-provider";
+import { useSession } from "@/lib/auth-hooks";
 import {
   emptyReviewSummary,
   type ItemType,
@@ -9,7 +10,11 @@ import {
   type ReviewSummary,
   type UserReviewRecord,
 } from "@/lib/review-core";
-import { useSession } from "@/lib/auth-hooks";
+import {
+  deleteReviewServerFn,
+  getReviewsServerFn,
+  submitReviewServerFn,
+} from "@/lib/reviews-actions";
 
 type UseReviewsOptions = {
   initialSummaries?: Record<string, ReviewSummary>;
@@ -67,26 +72,15 @@ export function useReviews(
         return;
       }
 
-      const params = new URLSearchParams({
-        type: itemType,
-        slugs: targetSlugs.join(","),
+      const data = await getReviewsServerFn({
+        data: {
+          itemType,
+          slugs: targetSlugs,
+          includeWrittenReviews:
+            includeWrittenReviews && targetSlugs.length === 1,
+          reviewsPage: writtenReviewsPage,
+        },
       });
-
-      if (includeWrittenReviews && targetSlugs.length === 1) {
-        params.set("includeWrittenReviews", "1");
-        params.set("reviewsPage", String(writtenReviewsPage));
-      }
-
-      const res = await fetch(`/api/reviews?${params.toString()}`);
-      if (!res.ok) {
-        throw new Error("Failed to fetch reviews");
-      }
-
-      const data = (await res.json()) as {
-        summaries: Record<string, ReviewSummary>;
-        userReviews: Record<string, UserReviewRecord>;
-        writtenReviews?: PaginatedPublicReviewRecords;
-      };
 
       setState((prev) => {
         const nextSummaries = { ...prev.summaries };
@@ -191,29 +185,19 @@ export function useReviews(
       }
 
       try {
-        const res = await fetch("/api/reviews", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        const result = await submitReviewServerFn({
+          data: {
             itemType,
             itemSlug: slug,
             rating: nextReview.rating,
             anonymous: nextReview.anonymous ?? true,
             body: nextReview.body ?? null,
             turnstileToken,
-          }),
+          },
         });
 
-        if (res.status === 401) {
-          return { error: "unauthorized" };
-        }
-
-        if (res.status === 403) {
-          return { error: "verification" };
-        }
-
-        if (!res.ok) {
-          throw new Error("Failed to save review");
+        if (!result.ok) {
+          return { error: result.error };
         }
 
         await refreshReviews([slug]);
@@ -248,21 +232,15 @@ export function useReviews(
       setPending(slug, true);
 
       try {
-        const res = await fetch("/api/reviews", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        const result = await deleteReviewServerFn({
+          data: {
             itemType,
             itemSlug: slug,
-          }),
+          },
         });
 
-        if (res.status === 401) {
-          return { error: "unauthorized" };
-        }
-
-        if (!res.ok) {
-          throw new Error("Failed to delete review");
+        if (!result.ok) {
+          return { error: result.error };
         }
 
         await refreshReviews([slug]);
