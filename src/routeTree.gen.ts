@@ -40,7 +40,14 @@ import { Route as AuthPathRouteImport } from './routes/auth/$path'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as ApiReviewsRouteImport } from './routes/api/reviews'
 import { Route as AccountPathRouteImport } from './routes/account/$path'
+import { Route as OgDocsImageDotwebpRouteImport } from './routes/og/docs/image[.]webp'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as OgSiteChar123Char125ImageDotwebpRouteImport } from './routes/og/site/{$}/image[.]webp'
+import { Route as OgResourcesChar123Char125ImageDotwebpRouteImport } from './routes/og/resources/{$}/image[.]webp'
+import { Route as OgProxiesChar123Char125ImageDotwebpRouteImport } from './routes/og/proxies/{$}/image[.]webp'
+import { Route as OgDocsChar123Char125ImageDotwebpRouteImport } from './routes/og/docs/{$}/image[.]webp'
+import { Route as OgBlogChar123Char125ImageDotwebpRouteImport } from './routes/og/blog/{$}/image[.]webp'
+import { Route as OgAccountsChar123Char125ImageDotwebpRouteImport } from './routes/og/accounts/{$}/image[.]webp'
 
 const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
   id: '/terms-of-service',
@@ -198,11 +205,52 @@ const AccountPathRoute = AccountPathRouteImport.update({
   path: '/account/$path',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgDocsImageDotwebpRoute = OgDocsImageDotwebpRouteImport.update({
+  id: '/og/docs/image.webp',
+  path: '/og/docs/image.webp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OgSiteChar123Char125ImageDotwebpRoute =
+  OgSiteChar123Char125ImageDotwebpRouteImport.update({
+    id: '/og/site/{$}/image.webp',
+    path: '/og/site/{$}/image.webp',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const OgResourcesChar123Char125ImageDotwebpRoute =
+  OgResourcesChar123Char125ImageDotwebpRouteImport.update({
+    id: '/og/resources/{$}/image.webp',
+    path: '/og/resources/{$}/image.webp',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const OgProxiesChar123Char125ImageDotwebpRoute =
+  OgProxiesChar123Char125ImageDotwebpRouteImport.update({
+    id: '/og/proxies/{$}/image.webp',
+    path: '/og/proxies/{$}/image.webp',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const OgDocsChar123Char125ImageDotwebpRoute =
+  OgDocsChar123Char125ImageDotwebpRouteImport.update({
+    id: '/og/docs/{$}/image.webp',
+    path: '/og/docs/{$}/image.webp',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const OgBlogChar123Char125ImageDotwebpRoute =
+  OgBlogChar123Char125ImageDotwebpRouteImport.update({
+    id: '/og/blog/{$}/image.webp',
+    path: '/og/blog/{$}/image.webp',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const OgAccountsChar123Char125ImageDotwebpRoute =
+  OgAccountsChar123Char125ImageDotwebpRouteImport.update({
+    id: '/og/accounts/{$}/image.webp',
+    path: '/og/accounts/{$}/image.webp',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -237,6 +285,13 @@ export interface FileRoutesByFullPath {
   '/get-proxies/': typeof GetProxiesIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/og/docs/image.webp': typeof OgDocsImageDotwebpRoute
+  '/og/accounts/{$}/image.webp': typeof OgAccountsChar123Char125ImageDotwebpRoute
+  '/og/blog/{$}/image.webp': typeof OgBlogChar123Char125ImageDotwebpRoute
+  '/og/docs/{$}/image.webp': typeof OgDocsChar123Char125ImageDotwebpRoute
+  '/og/proxies/{$}/image.webp': typeof OgProxiesChar123Char125ImageDotwebpRoute
+  '/og/resources/{$}/image.webp': typeof OgResourcesChar123Char125ImageDotwebpRoute
+  '/og/site/{$}/image.webp': typeof OgSiteChar123Char125ImageDotwebpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -271,6 +326,13 @@ export interface FileRoutesByTo {
   '/get-proxies': typeof GetProxiesIndexRoute
   '/resources': typeof ResourcesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/og/docs/image.webp': typeof OgDocsImageDotwebpRoute
+  '/og/accounts/{$}/image.webp': typeof OgAccountsChar123Char125ImageDotwebpRoute
+  '/og/blog/{$}/image.webp': typeof OgBlogChar123Char125ImageDotwebpRoute
+  '/og/docs/{$}/image.webp': typeof OgDocsChar123Char125ImageDotwebpRoute
+  '/og/proxies/{$}/image.webp': typeof OgProxiesChar123Char125ImageDotwebpRoute
+  '/og/resources/{$}/image.webp': typeof OgResourcesChar123Char125ImageDotwebpRoute
+  '/og/site/{$}/image.webp': typeof OgSiteChar123Char125ImageDotwebpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -306,6 +368,13 @@ export interface FileRoutesById {
   '/get-proxies/': typeof GetProxiesIndexRoute
   '/resources/': typeof ResourcesIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/og/docs/image.webp': typeof OgDocsImageDotwebpRoute
+  '/og/accounts/{$}/image.webp': typeof OgAccountsChar123Char125ImageDotwebpRoute
+  '/og/blog/{$}/image.webp': typeof OgBlogChar123Char125ImageDotwebpRoute
+  '/og/docs/{$}/image.webp': typeof OgDocsChar123Char125ImageDotwebpRoute
+  '/og/proxies/{$}/image.webp': typeof OgProxiesChar123Char125ImageDotwebpRoute
+  '/og/resources/{$}/image.webp': typeof OgResourcesChar123Char125ImageDotwebpRoute
+  '/og/site/{$}/image.webp': typeof OgSiteChar123Char125ImageDotwebpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -342,6 +411,13 @@ export interface FileRouteTypes {
     | '/get-proxies/'
     | '/resources/'
     | '/api/auth/$'
+    | '/og/docs/image.webp'
+    | '/og/accounts/{$}/image.webp'
+    | '/og/blog/{$}/image.webp'
+    | '/og/docs/{$}/image.webp'
+    | '/og/proxies/{$}/image.webp'
+    | '/og/resources/{$}/image.webp'
+    | '/og/site/{$}/image.webp'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -376,6 +452,13 @@ export interface FileRouteTypes {
     | '/get-proxies'
     | '/resources'
     | '/api/auth/$'
+    | '/og/docs/image.webp'
+    | '/og/accounts/{$}/image.webp'
+    | '/og/blog/{$}/image.webp'
+    | '/og/docs/{$}/image.webp'
+    | '/og/proxies/{$}/image.webp'
+    | '/og/resources/{$}/image.webp'
+    | '/og/site/{$}/image.webp'
   id:
     | '__root__'
     | '/'
@@ -410,6 +493,13 @@ export interface FileRouteTypes {
     | '/get-proxies/'
     | '/resources/'
     | '/api/auth/$'
+    | '/og/docs/image.webp'
+    | '/og/accounts/{$}/image.webp'
+    | '/og/blog/{$}/image.webp'
+    | '/og/docs/{$}/image.webp'
+    | '/og/proxies/{$}/image.webp'
+    | '/og/resources/{$}/image.webp'
+    | '/og/site/{$}/image.webp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -445,6 +535,13 @@ export interface RootRouteChildren {
   GetProxiesIndexRoute: typeof GetProxiesIndexRoute
   ResourcesIndexRoute: typeof ResourcesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  OgDocsImageDotwebpRoute: typeof OgDocsImageDotwebpRoute
+  OgAccountsChar123Char125ImageDotwebpRoute: typeof OgAccountsChar123Char125ImageDotwebpRoute
+  OgBlogChar123Char125ImageDotwebpRoute: typeof OgBlogChar123Char125ImageDotwebpRoute
+  OgDocsChar123Char125ImageDotwebpRoute: typeof OgDocsChar123Char125ImageDotwebpRoute
+  OgProxiesChar123Char125ImageDotwebpRoute: typeof OgProxiesChar123Char125ImageDotwebpRoute
+  OgResourcesChar123Char125ImageDotwebpRoute: typeof OgResourcesChar123Char125ImageDotwebpRoute
+  OgSiteChar123Char125ImageDotwebpRoute: typeof OgSiteChar123Char125ImageDotwebpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -666,11 +763,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountPathRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/og/docs/image.webp': {
+      id: '/og/docs/image.webp'
+      path: '/og/docs/image.webp'
+      fullPath: '/og/docs/image.webp'
+      preLoaderRoute: typeof OgDocsImageDotwebpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/site/{$}/image.webp': {
+      id: '/og/site/{$}/image.webp'
+      path: '/og/site/{$}/image.webp'
+      fullPath: '/og/site/{$}/image.webp'
+      preLoaderRoute: typeof OgSiteChar123Char125ImageDotwebpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/resources/{$}/image.webp': {
+      id: '/og/resources/{$}/image.webp'
+      path: '/og/resources/{$}/image.webp'
+      fullPath: '/og/resources/{$}/image.webp'
+      preLoaderRoute: typeof OgResourcesChar123Char125ImageDotwebpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/proxies/{$}/image.webp': {
+      id: '/og/proxies/{$}/image.webp'
+      path: '/og/proxies/{$}/image.webp'
+      fullPath: '/og/proxies/{$}/image.webp'
+      preLoaderRoute: typeof OgProxiesChar123Char125ImageDotwebpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/docs/{$}/image.webp': {
+      id: '/og/docs/{$}/image.webp'
+      path: '/og/docs/{$}/image.webp'
+      fullPath: '/og/docs/{$}/image.webp'
+      preLoaderRoute: typeof OgDocsChar123Char125ImageDotwebpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/blog/{$}/image.webp': {
+      id: '/og/blog/{$}/image.webp'
+      path: '/og/blog/{$}/image.webp'
+      fullPath: '/og/blog/{$}/image.webp'
+      preLoaderRoute: typeof OgBlogChar123Char125ImageDotwebpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/accounts/{$}/image.webp': {
+      id: '/og/accounts/{$}/image.webp'
+      path: '/og/accounts/{$}/image.webp'
+      fullPath: '/og/accounts/{$}/image.webp'
+      preLoaderRoute: typeof OgAccountsChar123Char125ImageDotwebpRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -709,6 +855,16 @@ const rootRouteChildren: RootRouteChildren = {
   GetProxiesIndexRoute: GetProxiesIndexRoute,
   ResourcesIndexRoute: ResourcesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  OgDocsImageDotwebpRoute: OgDocsImageDotwebpRoute,
+  OgAccountsChar123Char125ImageDotwebpRoute:
+    OgAccountsChar123Char125ImageDotwebpRoute,
+  OgBlogChar123Char125ImageDotwebpRoute: OgBlogChar123Char125ImageDotwebpRoute,
+  OgDocsChar123Char125ImageDotwebpRoute: OgDocsChar123Char125ImageDotwebpRoute,
+  OgProxiesChar123Char125ImageDotwebpRoute:
+    OgProxiesChar123Char125ImageDotwebpRoute,
+  OgResourcesChar123Char125ImageDotwebpRoute:
+    OgResourcesChar123Char125ImageDotwebpRoute,
+  OgSiteChar123Char125ImageDotwebpRoute: OgSiteChar123Char125ImageDotwebpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
