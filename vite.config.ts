@@ -43,6 +43,7 @@ export default defineConfig(({ mode }) => ({
       prerender: {
         enabled: true,
         crawlLinks: true,
+        autoSubfolderIndex: false,
         filter: ({ path }: { path: string }) =>
           !(
             path.startsWith("/_") ||

@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": "src/server.ts",
   "name": "soulfire-website",
+  "assets": {
+    "html_handling": "drop-trailing-slash"
+  },
   "keep_vars": true,
   "compatibility_date": "2026-04-13",
   "compatibility_flags": ["nodejs_compat"],
