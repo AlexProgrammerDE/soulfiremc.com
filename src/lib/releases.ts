@@ -1,32 +1,27 @@
-import type { paths } from "@octokit/openapi-types";
+import type { ClientReleaseManifest } from "@/lib/download-links";
+import { normalizeServerVersion } from "@/lib/download-links";
 
-export type LatestReleaseResponse =
-  paths["/repos/{owner}/{repo}/releases/latest"]["get"]["responses"]["200"]["content"]["application/json"];
+const CLIENT_LATEST_JSON_URL =
+  "https://github.com/soulfiremc-com/SoulFireClient/releases/latest/download/latest.json";
+const SERVER_VERSION_URL =
+  "https://raw.githubusercontent.com/soulfiremc-com/SoulFireClient/refs/heads/main/soulfire-server-version.txt";
 
-const CLIENT_REPO = "soulfiremc-com/SoulFireClient";
-const SERVER_REPO = "soulfiremc-com/SoulFire";
+async function fetchOk(input: string): Promise<Response> {
+  const response = await fetch(input);
 
-export async function getRepoInfo(
-  repo: string,
-): Promise<LatestReleaseResponse> {
-  const response = await fetch(
-    `https://api.github.com/repos/${repo}/releases/latest`,
-  );
-  return await response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${input}: ${response.status}`);
+  }
+
+  return response;
 }
 
-export async function getClientRelease(): Promise<LatestReleaseResponse> {
-  return getRepoInfo(CLIENT_REPO);
+export async function getClientReleaseManifest(): Promise<ClientReleaseManifest> {
+  const response = await fetchOk(CLIENT_LATEST_JSON_URL);
+  return (await response.json()) as ClientReleaseManifest;
 }
 
-export async function getServerRelease(): Promise<LatestReleaseResponse> {
-  return getRepoInfo(SERVER_REPO);
-}
-
-export function getReleaseVersion(
-  release: LatestReleaseResponse,
-): string | undefined {
-  const raw = release?.tag_name ?? release?.name;
-  if (!raw) return undefined;
-  return raw.trim().replace(/^v/i, "");
+export async function getServerVersion(): Promise<string | undefined> {
+  const response = await fetchOk(SERVER_VERSION_URL);
+  return normalizeServerVersion(await response.text());
 }

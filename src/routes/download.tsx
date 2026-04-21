@@ -41,54 +41,13 @@ import {
 } from "@/components/ui/credenza";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  getClientRelease,
-  getReleaseVersion,
-  getServerRelease,
-} from "@/lib/releases";
+  createClientDownloads,
+  createServerDownloads,
+  type DownloadLinkMap,
+} from "@/lib/download-links";
+import { getClientReleaseManifest, getServerVersion } from "@/lib/releases";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
-
-type DownloadLinkMap = Record<string, Record<string, string>>;
-
-const GH_CLIENT_BASE =
-  "https://github.com/soulfiremc-com/SoulFireClient/releases/download";
-
-const GH_SERVER_BASE =
-  "https://github.com/soulfiremc-com/SoulFire/releases/download";
-
-const FLATHUB_URL = "https://flathub.org/apps/com.soulfiremc.soulfire";
-
-function createClientDownloads(version: string): DownloadLinkMap {
-  return {
-    windows: {
-      x64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_x64-setup.exe`,
-      arm64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_arm64-setup.exe`,
-    },
-    macos: {
-      x64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_x64.dmg`,
-      arm64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_aarch64.dmg`,
-    },
-    linux: {
-      x64: FLATHUB_URL,
-      arm64: FLATHUB_URL,
-    },
-  };
-}
-
-function createServerDownloads(version: string) {
-  return [
-    {
-      name: "SoulFire CLI",
-      description: "Headless command-line client",
-      url: `${GH_SERVER_BASE}/${version}/SoulFireCLI-${version}.jar`,
-    },
-    {
-      name: "SoulFire Dedicated",
-      description: "Dedicated server controller",
-      url: `${GH_SERVER_BASE}/${version}/SoulFireDedicated-${version}.jar`,
-    },
-  ];
-}
 
 const FALLBACK_CPU = {
   id: "x64",
@@ -258,16 +217,15 @@ interface NavigatorWithUAData extends Navigator {
 }
 
 function DownloadSelectionComponent({
-  clientVersion,
+  clientDownloads,
 }: {
-  clientVersion: string;
+  clientDownloads: DownloadLinkMap;
 }) {
   const search = useRouterState({
     select: (state) => state.location.searchStr,
   });
   const searchParams = new URLSearchParams(search);
   const selection = loadDownloadSearchParams(searchParams);
-  const clientDownloads = createClientDownloads(clientVersion);
 
   // Check if the user explicitly set search params
   const hasExplicitParams = searchParams.has("os") || searchParams.has("cpu");
@@ -614,21 +572,15 @@ const SERVER_ICONS = {
   "SoulFire Dedicated": <Server className="h-5 w-5" />,
 } as const;
 
-type ServerDownload = {
-  name: string;
-  description: string;
-  url: string;
-};
-
 type DownloadPageContentProps = {
-  clientVersion: string;
+  clientDownloads: DownloadLinkMap;
   releaseDate: string | null;
   releaseName: string;
-  serverDownloads: ServerDownload[];
+  serverDownloads: ReturnType<typeof createServerDownloads>;
 };
 
 function DownloadPageContent({
-  clientVersion,
+  clientDownloads,
   releaseDate,
   releaseName,
   serverDownloads,
@@ -667,7 +619,7 @@ function DownloadPageContent({
         </div>
       </div>
       <Suspense fallback={<DownloadSelectionSkeleton />}>
-        <DownloadSelectionComponent clientVersion={clientVersion} />
+        <DownloadSelectionComponent clientDownloads={clientDownloads} />
       </Suspense>
       <div className="grid gap-6 sm:grid-cols-2">
         <Card>
@@ -792,27 +744,18 @@ function DownloadPageContent({
 
 const downloadPageLoader = createServerFn({ method: "GET" }).handler(
   async () => {
-    const [clientRelease, serverRelease] = await Promise.all([
-      getClientRelease().catch(() => null),
-      getServerRelease().catch(() => null),
+    const [clientManifest, serverVersionFile] = await Promise.all([
+      getClientReleaseManifest().catch(() => null),
+      getServerVersion().catch(() => undefined),
     ]);
-    const fallbackVersion = "latest";
-    const clientVersion =
-      (clientRelease ? getReleaseVersion(clientRelease) : undefined) ??
-      fallbackVersion;
     const serverVersion =
-      (serverRelease ? getReleaseVersion(serverRelease) : undefined) ??
-      clientVersion ??
-      fallbackVersion;
+      serverVersionFile ?? clientManifest?.version?.trim() ?? "latest";
+    const clientVersion = clientManifest?.version?.trim() ?? "latest";
 
     return {
-      clientVersion,
-      releaseDate:
-        clientRelease?.published_at ?? clientRelease?.created_at ?? null,
-      releaseName:
-        clientRelease?.name ??
-        clientRelease?.tag_name ??
-        `Version ${clientVersion}`,
+      clientDownloads: createClientDownloads(clientManifest),
+      releaseDate: clientManifest?.pub_date?.trim() || null,
+      releaseName: `Version ${clientVersion}`,
       serverDownloads: createServerDownloads(serverVersion),
     };
   },
@@ -839,7 +782,7 @@ function DownloadPage() {
   return (
     <SiteShell>
       <DownloadPageContent
-        clientVersion={data.clientVersion}
+        clientDownloads={data.clientDownloads}
         releaseDate={data.releaseDate}
         releaseName={data.releaseName}
         serverDownloads={data.serverDownloads}
