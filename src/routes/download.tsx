@@ -17,6 +17,7 @@ import {
   createLoader,
   createSearchParamsCache,
   parseAsStringLiteral,
+  type SearchParams,
 } from "nuqs/server";
 import { Suspense, useEffect, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
@@ -41,16 +42,14 @@ import {
 } from "@/components/ui/credenza";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  createClientDownloads,
-  type DownloadLinkMap,
-} from "@/lib/client-downloads";
-import {
   getClientRelease,
   getReleaseVersion,
   getServerRelease,
 } from "@/lib/releases";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
+
+type DownloadLinkMap = Record<string, Record<string, string>>;
 
 type PlatformRow = {
   label: string;
@@ -60,8 +59,30 @@ type PlatformRow = {
   url: string;
 };
 
+const GH_CLIENT_BASE =
+  "https://github.com/soulfiremc-com/SoulFireClient/releases/download";
+
 const GH_SERVER_BASE =
   "https://github.com/soulfiremc-com/SoulFire/releases/download";
+
+const FLATHUB_URL = "https://flathub.org/apps/com.soulfiremc.soulfire";
+
+function createClientDownloads(version: string): DownloadLinkMap {
+  return {
+    windows: {
+      x64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_x64-setup.exe`,
+      arm64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_arm64-setup.exe`,
+    },
+    macos: {
+      x64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_x64.dmg`,
+      arm64: `${GH_CLIENT_BASE}/${version}/SoulFire_${version}_aarch64.dmg`,
+    },
+    linux: {
+      x64: FLATHUB_URL,
+      arm64: FLATHUB_URL,
+    },
+  };
+}
 
 function _createPlatformRows(clientDownloads: DownloadLinkMap): PlatformRow[] {
   return [
@@ -98,14 +119,14 @@ function _createPlatformRows(clientDownloads: DownloadLinkMap): PlatformRow[] {
       os: "linux",
       arch: "x64",
       archLabel: "x86_64 / AMD64",
-      url: clientDownloads.linux?.x64 ?? "#",
+      url: clientDownloads.linux?.x64 ?? FLATHUB_URL,
     },
     {
       label: "Linux (AArch64)",
       os: "linux",
       arch: "arm64",
       archLabel: "AArch64 / ARM64",
-      url: clientDownloads.linux?.arm64 ?? "#",
+      url: clientDownloads.linux?.arm64 ?? FLATHUB_URL,
     },
   ];
 }
@@ -199,6 +220,8 @@ const _downloadSearchParamsCache =
 const loadDownloadSearchParams = createLoader(downloadSearchParams);
 
 type DownloadSelection = Awaited<ReturnType<typeof loadDownloadSearchParams>>;
+
+type DownloadPageSearchParams = Promise<SearchParams>;
 
 function detectBrowserOS(): OsOption["id"] | null {
   if (typeof window === "undefined") return null;
@@ -294,15 +317,16 @@ interface NavigatorWithUAData extends Navigator {
 }
 
 function DownloadSelectionComponent({
-  clientDownloads,
+  clientVersion,
 }: {
-  clientDownloads: DownloadLinkMap;
+  clientVersion: string;
 }) {
   const search = useRouterState({
     select: (state) => state.location.searchStr,
   });
   const searchParams = new URLSearchParams(search);
   const selection = loadDownloadSearchParams(searchParams);
+  const clientDownloads = createClientDownloads(clientVersion);
 
   // Check if the user explicitly set search params
   const hasExplicitParams = searchParams.has("os") || searchParams.has("cpu");
@@ -656,14 +680,14 @@ type ServerDownload = {
 };
 
 type DownloadPageContentProps = {
-  clientDownloads: DownloadLinkMap;
+  clientVersion: string;
   releaseDate: string | null;
   releaseName: string;
   serverDownloads: ServerDownload[];
 };
 
 function DownloadPageContent({
-  clientDownloads,
+  clientVersion,
   releaseDate,
   releaseName,
   serverDownloads,
@@ -702,7 +726,7 @@ function DownloadPageContent({
         </div>
       </div>
       <Suspense fallback={<DownloadSelectionSkeleton />}>
-        <DownloadSelectionComponent clientDownloads={clientDownloads} />
+        <DownloadSelectionComponent clientVersion={clientVersion} />
       </Suspense>
       <div className="grid gap-6 sm:grid-cols-2">
         <Card>
@@ -841,7 +865,7 @@ const downloadPageLoader = createServerFn({ method: "GET" }).handler(
       fallbackVersion;
 
     return {
-      clientDownloads: createClientDownloads(clientRelease),
+      clientVersion,
       releaseDate:
         clientRelease?.published_at ?? clientRelease?.created_at ?? null,
       releaseName:
@@ -874,7 +898,7 @@ function DownloadPage() {
   return (
     <SiteShell>
       <DownloadPageContent
-        clientDownloads={data.clientDownloads}
+        clientVersion={data.clientVersion}
         releaseDate={data.releaseDate}
         releaseName={data.releaseName}
         serverDownloads={data.serverDownloads}
