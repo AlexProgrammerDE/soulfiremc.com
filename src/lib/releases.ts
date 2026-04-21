@@ -15,21 +15,6 @@ export async function getRepoInfo(
   return await response.json();
 }
 
-export async function getReleaseData(): Promise<{
-  clientData: LatestReleaseResponse;
-  serverData: LatestReleaseResponse;
-}> {
-  const [clientData, serverData] = await Promise.all([
-    getRepoInfo(CLIENT_REPO),
-    getRepoInfo(SERVER_REPO),
-  ]);
-
-  return {
-    clientData,
-    serverData,
-  };
-}
-
 export async function getClientRelease(): Promise<LatestReleaseResponse> {
   return getRepoInfo(CLIENT_REPO);
 }

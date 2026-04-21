@@ -17,7 +17,6 @@ import {
   createLoader,
   createSearchParamsCache,
   parseAsStringLiteral,
-  type SearchParams,
 } from "nuqs/server";
 import { Suspense, useEffect, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
@@ -51,14 +50,6 @@ import { cn } from "@/lib/utils";
 
 type DownloadLinkMap = Record<string, Record<string, string>>;
 
-type PlatformRow = {
-  label: string;
-  os: "windows" | "macos" | "linux";
-  arch: "x64" | "arm64";
-  archLabel: string;
-  url: string;
-};
-
 const GH_CLIENT_BASE =
   "https://github.com/soulfiremc-com/SoulFireClient/releases/download";
 
@@ -82,53 +73,6 @@ function createClientDownloads(version: string): DownloadLinkMap {
       arm64: FLATHUB_URL,
     },
   };
-}
-
-function _createPlatformRows(clientDownloads: DownloadLinkMap): PlatformRow[] {
-  return [
-    {
-      label: "Windows (x86_64)",
-      os: "windows",
-      arch: "x64",
-      archLabel: "x86_64 / AMD64",
-      url: clientDownloads.windows?.x64 ?? "#",
-    },
-    {
-      label: "Windows (AArch64)",
-      os: "windows",
-      arch: "arm64",
-      archLabel: "AArch64 / ARM64",
-      url: clientDownloads.windows?.arm64 ?? "#",
-    },
-    {
-      label: "macOS (Intel)",
-      os: "macos",
-      arch: "x64",
-      archLabel: "x86_64 / AMD64",
-      url: clientDownloads.macos?.x64 ?? "#",
-    },
-    {
-      label: "macOS (Apple Silicon)",
-      os: "macos",
-      arch: "arm64",
-      archLabel: "AArch64 / ARM64",
-      url: clientDownloads.macos?.arm64 ?? "#",
-    },
-    {
-      label: "Linux (x86_64)",
-      os: "linux",
-      arch: "x64",
-      archLabel: "x86_64 / AMD64",
-      url: clientDownloads.linux?.x64 ?? FLATHUB_URL,
-    },
-    {
-      label: "Linux (AArch64)",
-      os: "linux",
-      arch: "arm64",
-      archLabel: "AArch64 / ARM64",
-      url: clientDownloads.linux?.arm64 ?? FLATHUB_URL,
-    },
-  ];
 }
 
 function createServerDownloads(version: string) {
@@ -214,14 +158,11 @@ const downloadSearchParams = {
   cpu: parseAsStringLiteral(CPU_IDS).withDefault(DEFAULT_CPU.id),
 };
 
-const _downloadSearchParamsCache =
-  createSearchParamsCache(downloadSearchParams);
+createSearchParamsCache(downloadSearchParams);
 
 const loadDownloadSearchParams = createLoader(downloadSearchParams);
 
 type DownloadSelection = Awaited<ReturnType<typeof loadDownloadSearchParams>>;
-
-type DownloadPageSearchParams = Promise<SearchParams>;
 
 function detectBrowserOS(): OsOption["id"] | null {
   if (typeof window === "undefined") return null;
