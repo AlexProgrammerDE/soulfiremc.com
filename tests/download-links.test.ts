@@ -46,11 +46,11 @@ test("createClientDownloads uses latest.json platform URLs and keeps Linux on Fl
   );
   assert.equal(
     downloads.macos.x64,
-    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_x64.app.tar.gz",
+    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_x64.dmg",
   );
   assert.equal(
     downloads.macos.arm64,
-    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_aarch64.app.tar.gz",
+    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_aarch64.dmg",
   );
   assert.equal(
     downloads.linux.x64,
