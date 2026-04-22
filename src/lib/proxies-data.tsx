@@ -48,6 +48,11 @@ export type Provider = {
 };
 
 export const SPONSOR_THEMES: Record<string, SponsorTheme> = {
+  green: {
+    ring: "ring-green-500/50",
+    bg: "bg-gradient-to-r from-green-500/5 to-emerald-500/5",
+    badge: "bg-green-500/10 text-green-600 dark:text-green-400",
+  },
   pink: {
     ring: "ring-pink-500/50",
     bg: "bg-gradient-to-r from-pink-500/5 to-purple-500/5",
@@ -167,42 +172,26 @@ export const FILTER_BADGES: FilterableBadge[] = [
 export const PROVIDERS: Provider[] = [
   // Sponsor always first
   {
-    slug: "thordata",
-    name: "Thordata",
-    logo: "/providers/thordata.png",
+    slug: "legionproxy",
+    name: "LegionProxy",
+    logo: "/providers/legionproxy.png",
     summary:
-      "60M+ residential IPs across 190+ countries with 99.9% uptime. Offers residential, mobile, datacenter, and static ISP proxies.",
-    url: "https://affiliate.thordata.com/soulfire",
+      "74M+ IPs across 195+ countries with residential, static ISP, datacenter, and IPv6 proxies. Proxy from $0.6/GB. GB credits never expire, unlimited daily plans available, and crypto payments are supported.",
+    url: "https://app.legionproxy.io/a?code=WRQHVD24V2TXS6P8",
     badges: [
       "sponsor",
       "bedrock-udp",
-      "high-quality",
+      "budget-friendly",
+      "unlimited-bandwidth",
       "residential",
-      "mobile",
+      "datacenter",
       "isp",
     ],
     sponsor: true,
-    sponsorTheme: "pink",
-    couponCode: "THORDATA",
-    couponDiscount: "20% off",
+    sponsorTheme: "green",
     socialLinks: [
-      { platform: "whatsapp", url: "https://wa.me/qr/6G5OORTHEZC2I1" },
-      {
-        platform: "teams",
-        url: "https://teams.live.com/l/invite/FEATRmC-rTYA8c1rwM",
-      },
-      { platform: "email", url: "mailto:support@thordata.com" },
-      {
-        platform: "facebook",
-        url: "https://www.facebook.com/people/Thordata/61573084117410/",
-      },
-      { platform: "discord", url: "https://discord.gg/pjXxRvVKGE" },
-      {
-        platform: "linkedin",
-        url: "https://www.linkedin.com/company/thordata/",
-      },
-      { platform: "youtube", url: "https://www.youtube.com/@Thordata" },
-      { platform: "x", url: "https://x.com/ThordataTeam" },
+      { platform: "discord", url: "https://discord.gg/legionproxy" },
+      { platform: "telegram", url: "https://t.me/legionproxy" },
     ],
   },
   {
@@ -252,6 +241,36 @@ export const PROVIDERS: Provider[] = [
     ],
   },
   // Higher recommends
+  {
+    slug: "thordata",
+    name: "Thordata",
+    logo: "/providers/thordata.png",
+    summary:
+      "60M+ residential IPs across 190+ countries with 99.9% uptime. Offers residential, mobile, datacenter, and static ISP proxies.",
+    url: "https://affiliate.thordata.com/soulfire",
+    badges: ["bedrock-udp", "high-quality", "residential", "mobile", "isp"],
+    couponCode: "THORDATA",
+    couponDiscount: "20% off",
+    socialLinks: [
+      { platform: "whatsapp", url: "https://wa.me/qr/6G5OORTHEZC2I1" },
+      {
+        platform: "teams",
+        url: "https://teams.live.com/l/invite/FEATRmC-rTYA8c1rwM",
+      },
+      { platform: "email", url: "mailto:support@thordata.com" },
+      {
+        platform: "facebook",
+        url: "https://www.facebook.com/people/Thordata/61573084117410/",
+      },
+      { platform: "discord", url: "https://discord.gg/pjXxRvVKGE" },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/thordata/",
+      },
+      { platform: "youtube", url: "https://www.youtube.com/@Thordata" },
+      { platform: "x", url: "https://x.com/ThordataTeam" },
+    ],
+  },
   {
     slug: "webshare",
     name: "Webshare",
@@ -336,26 +355,6 @@ export const PROVIDERS: Provider[] = [
       { platform: "x", url: "https://x.com/flameproxies_" },
       { platform: "discord", url: "https://discord.com/invite/flameproxy" },
       { platform: "telegram", url: "https://t.me/flameproxies" },
-    ],
-  },
-  {
-    slug: "legionproxy",
-    name: "LegionProxy",
-    logo: "/providers/legionproxy.png",
-    summary:
-      "74M+ IPs across 195+ countries with residential, static ISP, datacenter, and IPv6 proxies. GB credits never expire, unlimited daily plans available, and crypto payments are supported.",
-    url: "https://app.legionproxy.io/a?code=WRQHVD24V2TXS6P8",
-    badges: [
-      "bedrock-udp",
-      "budget-friendly",
-      "unlimited-bandwidth",
-      "residential",
-      "datacenter",
-      "isp",
-    ],
-    socialLinks: [
-      { platform: "discord", url: "https://discord.gg/legionproxy" },
-      { platform: "telegram", url: "https://t.me/legionproxy" },
     ],
   },
   // Enterprise tier
