@@ -187,7 +187,7 @@ export const PROVIDERS: Provider[] = [
   {
     slug: "proxy-seller",
     name: "Proxy-Seller",
-    logo: "/providers/proxyseller.svg",
+    logo: "/providers/proxyseller.png",
     summary:
       "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
     url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
