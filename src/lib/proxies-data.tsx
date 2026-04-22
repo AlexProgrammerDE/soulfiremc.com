@@ -177,7 +177,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/legionproxy.png",
     summary:
       "74M+ IPs across 195+ countries with residential, static ISP, datacenter, and IPv6 proxies. Proxy from $0.6/GB. GB credits never expire, unlimited daily plans available, and crypto payments are supported.",
-    url: "https://app.legionproxy.io/a?code=WRQHVD24V2TXS6P8",
+    url: "https://legionproxy.io/?utm_source=github&utm_campaign=soulfire",
     badges: [
       "sponsor",
       "bedrock-udp",
@@ -200,7 +200,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/proxyseller.png",
     summary:
       "Dedicated datacenter proxies in 40+ countries. Unlimited bandwidth with 72-hour refund policy. From $0.9/IP.",
-    url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP",
+    url: "https://proxy-seller.com/?partner=GRJY71PA3XWPPP&utm_source=get-proxies&utm_campaign=soulfire",
     badges: [
       "sponsor",
       "budget-friendly",
@@ -247,7 +247,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/thordata.png",
     summary:
       "60M+ residential IPs across 190+ countries with 99.9% uptime. Offers residential, mobile, datacenter, and static ISP proxies.",
-    url: "https://affiliate.thordata.com/soulfire",
+    url: "https://affiliate.thordata.com/soulfire?utm_source=get-proxies&utm_campaign=soulfire",
     badges: ["bedrock-udp", "high-quality", "residential", "mobile", "isp"],
     couponCode: "THORDATA",
     couponDiscount: "20% off",
@@ -277,7 +277,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/webshare.svg",
     summary:
       "80M+ rotating residential IPs from 195 countries, plus fast datacenter proxies. Offers 10 free proxies to get started.",
-    url: "https://www.webshare.io/?referral_code=36gneippfiwt",
+    url: "https://www.webshare.io/?referral_code=36gneippfiwt&utm_source=get-proxies&utm_campaign=soulfire",
     badges: ["free-tier", "residential", "datacenter", "budget-friendly"],
     socialLinks: [
       { platform: "email", url: "mailto:support@webshare.io" },
@@ -294,7 +294,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/proxyscrape.svg",
     summary:
       "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume bot testing.",
-    url: "https://proxyscrape.com/?ref=mge4mtc",
+    url: "https://proxyscrape.com/?ref=mge4mtc&utm_source=get-proxies&utm_campaign=soulfire",
     badges: ["bedrock-udp", "unlimited-bandwidth", "residential"],
     socialLinks: [
       {
@@ -316,7 +316,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/plainproxies.png",
     summary:
       "German provider with 10M+ IPs. 10Gbps datacenter proxies and unlimited residential options with rate-limit free rotation.",
-    url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS",
+    url: "https://dashboard.plainproxies.com/?ref=wTOIS7dS&utm_source=get-proxies&utm_campaign=soulfire",
     badges: [
       "bedrock-udp",
       "unlimited-bandwidth",
@@ -341,7 +341,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/flameproxies.svg",
     summary:
       "81M+ residential IPs across 180+ countries, plus mobile, datacenter, and rotating ISP options. Pay-as-you-go from $0.50/GB with sticky sessions and SOCKS5 support.",
-    url: "https://flameproxies.com/register?referral=42M1SH76",
+    url: "https://flameproxies.com/register?referral=42M1SH76&utm_source=get-proxies&utm_campaign=soulfire",
     badges: [
       "bedrock-udp",
       "budget-friendly",
@@ -364,7 +364,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/brightdata.png",
     summary:
       "Market leader with 770K+ datacenter IPs and massive residential network. ISO 27001 & SOC 2 certified with 99.99% uptime.",
-    url: "https://get.brightdata.com/soulfire",
+    url: "https://get.brightdata.com/soulfire?utm_source=get-proxies&utm_campaign=soulfire",
     badges: [
       "bedrock-udp",
       "enterprise",
@@ -394,7 +394,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/oxylabs.png",
     summary:
       "175M+ residential IPs across 195+ countries. Largest proxy network globally with 99.95% success rate and 0.6s avg response time.",
-    url: "https://oxylabs.go2cloud.org/aff_c?offer_id=7&aff_id=1896&url_id=144",
+    url: "https://oxylabs.go2cloud.org/aff_c?offer_id=7&aff_id=1896&url_id=144&utm_source=get-proxies&utm_campaign=soulfire",
     badges: [
       "bedrock-udp",
       "enterprise",
@@ -423,7 +423,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/decodo.svg",
     summary:
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
-    url: "https://visit.decodo.com/K0rr7e",
+    url: "https://visit.decodo.com/K0rr7e?utm_source=get-proxies&utm_campaign=soulfire",
     badges: ["bedrock-udp", "high-quality", "residential", "datacenter"],
     socialLinks: [
       { platform: "email", url: "mailto:sales@decodo.com" },
@@ -442,7 +442,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/iproyal.svg",
     summary:
       "32M+ residential IPs across 195+ countries. Non-expiring traffic with unlimited bandwidth and threads. Great value.",
-    url: "https://iproyal.com/?r=soulfire",
+    url: "https://iproyal.com/?r=soulfire&utm_source=get-proxies&utm_campaign=soulfire",
     badges: [
       "bedrock-udp",
       "budget-friendly",
@@ -468,7 +468,7 @@ export const PROVIDERS: Provider[] = [
     logo: "/providers/netnut.svg",
     summary:
       "85M+ residential IPs with ISP-based network for fast speeds. Direct ISP connectivity reduces latency.",
-    url: "https://netnut.io?ref=odblmzc",
+    url: "https://netnut.io?ref=odblmzc&utm_source=get-proxies&utm_campaign=soulfire",
     badges: ["high-quality", "residential", "isp"],
     socialLinks: [
       { platform: "email", url: "mailto:sales@netnut.io" },
