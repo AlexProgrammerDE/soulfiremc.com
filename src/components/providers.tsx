@@ -9,6 +9,18 @@ import { authClient } from "@/lib/auth-client";
 import { PostHogProvider } from "@/lib/integrations/posthog";
 import { AuthLink } from "./auth-link";
 
+function AuthAvatarImage({
+  src,
+  alt,
+  className,
+}: {
+  src?: string | null;
+  alt?: string;
+  className?: string;
+}) {
+  return src ? <img src={src} alt={alt} className={className} /> : null;
+}
+
 function AuthUIProviders({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
@@ -35,8 +47,7 @@ function AuthUIProviders({ children }: { children: React.ReactNode }) {
         }}
         optimistic
         avatar={{
-          Image: ({ src, alt, className }) =>
-            src ? <img src={src} alt={alt} className={className} /> : null,
+          Image: AuthAvatarImage,
         }}
         gravatar
         localization={{
