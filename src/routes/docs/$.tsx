@@ -257,7 +257,7 @@ function DocsPageRoute() {
       <Suspense>
         {page.type === "openapi" ? (
           (() => {
-            const openApiPage = page as OpenApiPageLoaderData;
+            const openApiPage = page as unknown as OpenApiPageLoaderData;
 
             return (
               <DocsPage full>
