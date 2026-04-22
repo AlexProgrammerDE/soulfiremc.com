@@ -40,6 +40,7 @@ import { useReviews } from "@/hooks/use-reviews";
 import {
   BADGE_CONFIG,
   type Badge,
+  CATEGORIES,
   type Category,
   FILTER_TAGS,
   type FilterableTag,
@@ -150,8 +151,6 @@ const resourcesFaqItems: {
   },
 ];
 
-const CATEGORIES = ["plugin", "script"] as const;
-
 const TAGS = [
   "combat",
   "farming",
@@ -166,9 +165,12 @@ const TAGS = [
 ] as const;
 
 const SORT_OPTIONS = ["default", "best-rated"] as const;
+const CATEGORY_VALUES = ["plugin", "script"] as const;
 
 const resourcesSearchParams = {
-  category: parseAsStringLiteral([...CATEGORIES]).withDefault(null as never),
+  category: parseAsStringLiteral([...CATEGORY_VALUES]).withDefault(
+    null as never,
+  ),
   tags: parseAsArrayOf(parseAsStringLiteral([...TAGS])).withDefault([]),
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
