@@ -22,6 +22,7 @@ import {
 } from "nuqs/server";
 import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
+import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
 import { SiteShell } from "@/components/site-shell";
 import {
   Accordion,
@@ -620,9 +621,11 @@ function ResourcesClient({
         </p>
       </div>
 
-      <Suspense>
-        <MainContent initialSummaries={initialSummaries} />
-      </Suspense>
+      <ReviewTurnstileProvider>
+        <Suspense>
+          <MainContent initialSummaries={initialSummaries} />
+        </Suspense>
+      </ReviewTurnstileProvider>
 
       {/* FAQ Section */}
       <div className="max-w-3xl mx-auto w-full space-y-4">
