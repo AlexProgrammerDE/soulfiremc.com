@@ -258,6 +258,7 @@ export const PROVIDERS: Provider[] = [
   {
     slug: "legionproxy",
     name: "LegionProxy",
+    logo: "/providers/legionproxy.png",
     summary:
       "74M+ IPs across 195+ countries with residential, static ISP, datacenter, and IPv6 proxies. GB credits never expire, unlimited daily plans available, and crypto payments are supported.",
     url: "https://app.legionproxy.io/a?code=WRQHVD24V2TXS6P8",
