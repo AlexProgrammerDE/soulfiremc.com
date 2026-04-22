@@ -375,7 +375,6 @@ function ProviderThemeDecoration() {
   );
 }
 
-
 function ProviderLogo({ provider }: { provider: Provider }) {
   if (provider.logo) {
     return (
