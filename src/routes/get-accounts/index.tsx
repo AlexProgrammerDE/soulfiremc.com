@@ -1,11 +1,4 @@
-import {
-  SiDiscord,
-  SiTelegram,
-  SiTiktok,
-  SiTrustpilot,
-  SiX,
-  SiYoutube,
-} from "@icons-pack/react-simple-icons";
+import { SiDiscord, SiTrustpilot } from "@icons-pack/react-simple-icons";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import {
@@ -31,6 +24,7 @@ import {
 import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { SiteShell } from "@/components/site-shell";
+import { SocialLinkButtons } from "@/components/social-link-buttons";
 import {
   Accordion,
   AccordionContent,
@@ -59,7 +53,6 @@ import {
   PROVIDERS,
   type Provider,
   SORT_CONFIG,
-  type SocialLink,
   type SortOption,
 } from "@/lib/accounts-data";
 import {
@@ -382,58 +375,6 @@ function ProviderThemeDecoration() {
   );
 }
 
-function SocialLinkButtons({
-  socialLinks,
-  className,
-}: {
-  socialLinks?: SocialLink[];
-  className?: string;
-}) {
-  if (!socialLinks?.length) {
-    return null;
-  }
-
-  const icons = {
-    youtube: SiYoutube,
-    tiktok: SiTiktok,
-    telegram: SiTelegram,
-    x: SiX,
-  } as const;
-
-  const labels = {
-    youtube: "YouTube",
-    tiktok: "TikTok",
-    telegram: "Telegram",
-    x: "X",
-  } as const;
-
-  return (
-    <>
-      {socialLinks.map((socialLink) => {
-        const Icon = icons[socialLink.platform];
-        return (
-          <Button
-            key={`${socialLink.platform}-${socialLink.url}`}
-            asChild
-            variant="secondary"
-            size="icon-sm"
-            className={className}
-          >
-            <a
-              href={socialLink.url}
-              target="_blank"
-              rel="noopener nofollow"
-              aria-label={labels[socialLink.platform]}
-              title={labels[socialLink.platform]}
-            >
-              <Icon className="h-4 w-4" />
-            </a>
-          </Button>
-        );
-      })}
-    </>
-  );
-}
 
 function ProviderLogo({ provider }: { provider: Provider }) {
   if (provider.logo) {
@@ -616,7 +557,7 @@ function ProviderCard({
               </Button>
             )}
             <SocialLinkButtons
-              socialLinks={provider.socialLinks}
+              links={provider.socialLinks}
               className={theme?.secondaryButton}
             />
           </div>

@@ -10,6 +10,13 @@ import {
   Zap,
 } from "lucide-react";
 
+import type {
+  SocialLink,
+  SocialPlatform,
+} from "@/components/social-link-buttons";
+
+export type { SocialLink, SocialPlatform };
+
 export type FilterableBadge =
   | "free"
   | "high-quality"
@@ -30,13 +37,6 @@ export type ProviderTheme = {
   primaryButton: string;
   secondaryButton: string;
   accentText: string;
-};
-
-export type SocialPlatform = "youtube" | "tiktok" | "telegram" | "x";
-
-export type SocialLink = {
-  platform: SocialPlatform;
-  url: string;
 };
 
 export type Category = "nfa-accounts" | "mfa-accounts";

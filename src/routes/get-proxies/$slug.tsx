@@ -22,6 +22,7 @@ import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { JsonLd } from "@/components/json-ld";
 import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { SiteShell } from "@/components/site-shell";
+import { SocialLinkButtons } from "@/components/social-link-buttons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -348,6 +349,11 @@ function ProxyProviderPageContent({
               </Button>
               <ReviewSummaryBadge summary={reviewSummary} />
             </div>
+            {provider.socialLinks?.length ? (
+              <div className="flex flex-wrap gap-2">
+                <SocialLinkButtons links={provider.socialLinks} />
+              </div>
+            ) : null}
           </div>
         </div>
       </Card>

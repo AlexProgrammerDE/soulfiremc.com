@@ -1,9 +1,3 @@
-import {
-  SiTelegram,
-  SiTiktok,
-  SiX,
-  SiYoutube,
-} from "@icons-pack/react-simple-icons";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import {
@@ -22,6 +16,10 @@ import { Suspense, useState } from "react";
 import { ItemReviewsSection } from "@/components/item-reviews-section";
 import { ReviewSummaryBadge } from "@/components/review-summary-badge";
 import { SiteShell } from "@/components/site-shell";
+import {
+  type SocialLink,
+  SocialLinkButtons,
+} from "@/components/social-link-buttons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -45,7 +43,6 @@ import {
   getShopBySlug,
   PROVIDER_THEMES,
   PROVIDERS,
-  type SocialLink,
 } from "@/lib/accounts-data";
 import {
   getListingOffer,
@@ -416,49 +413,13 @@ function ShopLogo({ src, name }: { src?: string; name: string }) {
   );
 }
 
-const SOCIAL_ICONS = {
-  youtube: SiYoutube,
-  tiktok: SiTiktok,
-  telegram: SiTelegram,
-  x: SiX,
-} as const;
-
-const SOCIAL_LABELS = {
-  youtube: "YouTube",
-  tiktok: "TikTok",
-  telegram: "Telegram",
-  x: "X",
-} as const;
-
-function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
+function SocialLinks({ links }: { links?: SocialLink[] }) {
   if (!links?.length) {
     return null;
   }
-
   return (
     <div className="flex flex-wrap gap-2">
-      {links.map((link) => {
-        const Icon = SOCIAL_ICONS[link.platform];
-        const label = SOCIAL_LABELS[link.platform];
-        return (
-          <Button
-            key={link.url}
-            asChild
-            variant="secondary"
-            size="icon-sm"
-          >
-            <a
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer nofollow"
-              aria-label={label}
-              title={label}
-            >
-              <Icon className="h-4 w-4" />
-            </a>
-          </Button>
-        );
-      })}
+      <SocialLinkButtons links={links} />
     </div>
   );
 }
@@ -568,7 +529,7 @@ function AccountDetailPage() {
                 ))}
               </div>
 
-              <SocialLinkButtons links={data.shop.socialLinks} />
+              <SocialLinks links={data.shop.socialLinks} />
 
               <div className="flex flex-wrap gap-2">
                 {data.shop.websiteUrl ? (

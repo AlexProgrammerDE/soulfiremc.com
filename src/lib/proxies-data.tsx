@@ -10,6 +10,7 @@ import {
   Star,
   Wifi,
 } from "lucide-react";
+import type { SocialLink } from "@/components/social-link-buttons";
 
 export type FilterableBadge =
   | "residential"
@@ -43,6 +44,7 @@ export type Provider = {
   couponDiscount?: string;
   startDate?: string;
   gallery?: { src: string; alt: string }[];
+  socialLinks?: SocialLink[];
 };
 
 export const SPONSOR_THEMES: Record<string, SponsorTheme> = {
@@ -183,6 +185,25 @@ export const PROVIDERS: Provider[] = [
     sponsorTheme: "pink",
     couponCode: "THORDATA",
     couponDiscount: "20% off",
+    socialLinks: [
+      { platform: "whatsapp", url: "https://wa.me/qr/6G5OORTHEZC2I1" },
+      {
+        platform: "teams",
+        url: "https://teams.live.com/l/invite/FEATRmC-rTYA8c1rwM",
+      },
+      { platform: "email", url: "mailto:support@thordata.com" },
+      {
+        platform: "facebook",
+        url: "https://www.facebook.com/people/Thordata/61573084117410/",
+      },
+      { platform: "discord", url: "https://discord.gg/pjXxRvVKGE" },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/thordata/",
+      },
+      { platform: "youtube", url: "https://www.youtube.com/@Thordata" },
+      { platform: "x", url: "https://x.com/ThordataTeam" },
+    ],
   },
   {
     slug: "proxy-seller",
@@ -204,6 +225,31 @@ export const PROVIDERS: Provider[] = [
     couponCode: "SOULFIREMC",
     couponDiscount:
       "15% off IPv4/IPv6/ISP - 39% off Residential - 10% off Mobile proxies",
+    socialLinks: [
+      {
+        platform: "teams",
+        url: "https://teams.live.com/l/invite/FEA7dpU6RtxI1t58QI",
+      },
+      { platform: "email", url: "mailto:support@proxy-seller.com" },
+      { platform: "discord", url: "https://discord.gg/QNew393mVK" },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/proxyseller/",
+      },
+      {
+        platform: "youtube",
+        url: "https://www.youtube.com/channel/UC93BysELhgDHyOZJuNdluxA",
+      },
+      {
+        platform: "facebook",
+        url: "https://www.facebook.com/sellerproxy",
+      },
+      {
+        platform: "instagram",
+        url: "https://www.instagram.com/proxy_seller_com/",
+      },
+      { platform: "telegram", url: "https://t.me/proxy_seller" },
+    ],
   },
   // Higher recommends
   {
@@ -214,6 +260,14 @@ export const PROVIDERS: Provider[] = [
       "80M+ rotating residential IPs from 195 countries, plus fast datacenter proxies. Offers 10 free proxies to get started.",
     url: "https://www.webshare.io/?referral_code=36gneippfiwt",
     badges: ["free-tier", "residential", "datacenter", "budget-friendly"],
+    socialLinks: [
+      { platform: "email", url: "mailto:support@webshare.io" },
+      { platform: "facebook", url: "https://www.facebook.com/webshareproxy/" },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/webshare-software/",
+      },
+    ],
   },
   {
     slug: "proxyscrape",
@@ -223,6 +277,19 @@ export const PROVIDERS: Provider[] = [
       "55M+ residential IPs with 99.9% success rate. Unlimited bandwidth plans available for high-volume bot testing.",
     url: "https://proxyscrape.com/?ref=mge4mtc",
     badges: ["bedrock-udp", "unlimited-bandwidth", "residential"],
+    socialLinks: [
+      {
+        platform: "facebook",
+        url: "https://www.facebook.com/ProxyScrape-2293011407635184/",
+      },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/proxyscrape/",
+      },
+      { platform: "x", url: "https://x.com/proxyscrape_" },
+      { platform: "telegram", url: "https://t.me/proxyscrape" },
+      { platform: "discord", url: "https://discord.gg/scrape" },
+    ],
   },
   {
     slug: "plainproxies",
@@ -237,6 +304,16 @@ export const PROVIDERS: Provider[] = [
       "residential",
       "datacenter",
       "isp",
+    ],
+    socialLinks: [
+      { platform: "email", url: "mailto:support@plainproxies.com" },
+      {
+        platform: "linkedin",
+        url: "https://linkedin.com/company/plainproxies",
+      },
+      { platform: "x", url: "https://twitter.com/plainproxies" },
+      { platform: "telegram", url: "https://t.me/plainproxies" },
+      { platform: "instagram", url: "https://instagram.com/plainproxies" },
     ],
   },
   {
@@ -254,6 +331,12 @@ export const PROVIDERS: Provider[] = [
       "mobile",
       "isp",
     ],
+    socialLinks: [
+      { platform: "email", url: "mailto:support@flameproxies.com" },
+      { platform: "x", url: "https://x.com/flameproxies_" },
+      { platform: "discord", url: "https://discord.com/invite/flameproxy" },
+      { platform: "telegram", url: "https://t.me/flameproxies" },
+    ],
   },
   {
     slug: "legionproxy",
@@ -269,6 +352,10 @@ export const PROVIDERS: Provider[] = [
       "residential",
       "datacenter",
       "isp",
+    ],
+    socialLinks: [
+      { platform: "discord", url: "https://discord.gg/legionproxy" },
+      { platform: "telegram", url: "https://t.me/legionproxy" },
     ],
   },
   // Enterprise tier
@@ -287,6 +374,20 @@ export const PROVIDERS: Provider[] = [
       "datacenter",
       "mobile",
     ],
+    socialLinks: [
+      { platform: "whatsapp", url: "https://wa.me/972543536332" },
+      { platform: "email", url: "mailto:sales@brightdata.com" },
+      { platform: "telegram", url: "https://t.me/bright_data" },
+      {
+        platform: "linkedin",
+        url: "https://il.linkedin.com/company/bright-data",
+      },
+      {
+        platform: "youtube",
+        url: "https://www.youtube.com/channel/UCM_0cG1ljAoEUcZIyoUIq6g",
+      },
+      { platform: "github", url: "https://github.com/luminati-io" },
+    ],
   },
   {
     slug: "oxylabs",
@@ -302,6 +403,19 @@ export const PROVIDERS: Provider[] = [
       "residential",
       "datacenter",
     ],
+    socialLinks: [
+      { platform: "email", url: "mailto:hello@oxylabs.io" },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/oxylabs-io/",
+      },
+      { platform: "instagram", url: "https://www.instagram.com/oxylabs.io/" },
+      { platform: "facebook", url: "https://www.facebook.com/oxylabs.io/" },
+      {
+        platform: "youtube",
+        url: "https://www.youtube.com/channel/UCvVIcCb6kpeSVyRkZjGowQw",
+      },
+    ],
   },
   // Mid tier
   {
@@ -312,6 +426,16 @@ export const PROVIDERS: Provider[] = [
       "115M+ ethically-sourced residential IPs across 195+ locations. User-friendly with 99.86% success rate. Great for SMBs.",
     url: "https://visit.decodo.com/K0rr7e",
     badges: ["bedrock-udp", "high-quality", "residential", "datacenter"],
+    socialLinks: [
+      { platform: "email", url: "mailto:sales@decodo.com" },
+      {
+        platform: "youtube",
+        url: "https://www.youtube.com/channel/UCqHoe4Ixju1bcOy0jHPO8Kg",
+      },
+      { platform: "github", url: "https://github.com/Decodo" },
+      { platform: "linkedin", url: "https://www.linkedin.com/company/decodo/" },
+      { platform: "discord", url: "https://discord.gg/WQHGnpgJfC" },
+    ],
   },
   {
     slug: "iproyal",
@@ -327,6 +451,17 @@ export const PROVIDERS: Provider[] = [
       "datacenter",
       "isp",
     ],
+    socialLinks: [
+      { platform: "email", url: "mailto:support@iproyal.com" },
+      { platform: "discord", url: "https://discord.com/invite/SUA5yjpnZQ" },
+      { platform: "x", url: "https://x.com/IPRoyal_proxies" },
+      { platform: "facebook", url: "https://www.facebook.com/IProyal/" },
+      {
+        platform: "linkedin",
+        url: "https://www.linkedin.com/company/iproyal/",
+      },
+      { platform: "youtube", url: "https://www.youtube.com/@IPRoyalOfficial" },
+    ],
   },
   {
     slug: "netnut",
@@ -336,5 +471,13 @@ export const PROVIDERS: Provider[] = [
       "85M+ residential IPs with ISP-based network for fast speeds. Direct ISP connectivity reduces latency.",
     url: "https://netnut.io?ref=odblmzc",
     badges: ["high-quality", "residential", "isp"],
+    socialLinks: [
+      { platform: "email", url: "mailto:sales@netnut.io" },
+      { platform: "facebook", url: "https://www.facebook.com/NetNut.io" },
+      { platform: "x", url: "https://twitter.com/netnut_io" },
+      { platform: "linkedin", url: "https://www.linkedin.com/company/netnut/" },
+      { platform: "discord", url: "https://discord.gg/BUjgwh6eVG" },
+      { platform: "telegram", url: "https://t.me/netnut_io" },
+    ],
   },
 ];

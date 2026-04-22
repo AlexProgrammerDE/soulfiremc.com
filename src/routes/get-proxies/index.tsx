@@ -22,6 +22,7 @@ import {
 import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { SiteShell } from "@/components/site-shell";
+import { SocialLinkButtons } from "@/components/social-link-buttons";
 import {
   Accordion,
   AccordionContent,
@@ -352,6 +353,7 @@ function ProviderCard({
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
             </Button>
+            <SocialLinkButtons links={provider.socialLinks} />
           </div>
           <ReviewInlineActions
             summary={reviewSummary}
