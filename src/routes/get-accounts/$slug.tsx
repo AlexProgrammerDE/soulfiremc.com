@@ -1,3 +1,9 @@
+import {
+  SiTelegram,
+  SiTiktok,
+  SiX,
+  SiYoutube,
+} from "@icons-pack/react-simple-icons";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import {
@@ -410,6 +416,20 @@ function ShopLogo({ src, name }: { src?: string; name: string }) {
   );
 }
 
+const SOCIAL_ICONS = {
+  youtube: SiYoutube,
+  tiktok: SiTiktok,
+  telegram: SiTelegram,
+  x: SiX,
+} as const;
+
+const SOCIAL_LABELS = {
+  youtube: "YouTube",
+  tiktok: "TikTok",
+  telegram: "Telegram",
+  x: "X",
+} as const;
+
 function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
   if (!links?.length) {
     return null;
@@ -417,13 +437,28 @@ function SocialLinkButtons({ links }: { links?: SocialLink[] }) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {links.map((link) => (
-        <Button key={link.url} asChild variant="secondary" size="sm">
-          <a href={link.url} target="_blank" rel="noopener noreferrer nofollow">
-            {link.platform}
-          </a>
-        </Button>
-      ))}
+      {links.map((link) => {
+        const Icon = SOCIAL_ICONS[link.platform];
+        const label = SOCIAL_LABELS[link.platform];
+        return (
+          <Button
+            key={link.url}
+            asChild
+            variant="secondary"
+            size="icon-sm"
+          >
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              aria-label={label}
+              title={label}
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          </Button>
+        );
+      })}
     </div>
   );
 }
