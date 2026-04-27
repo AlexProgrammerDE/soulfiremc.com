@@ -357,6 +357,27 @@ export const PROVIDERS: Provider[] = [
       { platform: "telegram", url: "https://t.me/flameproxies" },
     ],
   },
+  {
+    slug: "flashproxy",
+    name: "FlashProxy",
+    summary:
+      "100M+ residential IPs across 195+ countries, plus datacenter, ISP, mobile, and IPv6 proxies. Pay-as-you-go from $0.10/GB with HTTP/SOCKS5/UDP support and unlimited bandwidth options.",
+    url: "https://flashproxy.com/auth/register?r=3iBXdeFq44ez75bmNsOr6P04l4x1&utm_source=get-proxies&utm_campaign=soulfire",
+    badges: [
+      "bedrock-udp",
+      "budget-friendly",
+      "unlimited-bandwidth",
+      "residential",
+      "datacenter",
+      "isp",
+      "mobile",
+    ],
+    socialLinks: [
+      { platform: "email", url: "mailto:support@flashproxy.io" },
+      { platform: "discord", url: "https://discord.gg/zbyAvBHaEv" },
+      { platform: "telegram", url: "https://t.me/flashproxyofficial" },
+    ],
+  },
   // Enterprise tier
   {
     slug: "bright-data",
