@@ -360,6 +360,7 @@ export const PROVIDERS: Provider[] = [
   {
     slug: "flashproxy",
     name: "FlashProxy",
+    logo: "/providers/flashproxy.png",
     summary:
       "100M+ residential IPs across 195+ countries, plus datacenter, ISP, mobile, and IPv6 proxies. Pay-as-you-go from $0.10/GB with HTTP/SOCKS5/UDP support and unlimited bandwidth options.",
     url: "https://flashproxy.com/auth/register?r=3iBXdeFq44ez75bmNsOr6P04l4x1&utm_source=get-proxies&utm_campaign=soulfire",
