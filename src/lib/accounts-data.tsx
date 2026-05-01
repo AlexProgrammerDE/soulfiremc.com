@@ -483,21 +483,21 @@ export const SHOPS: Shop[] = [
     slug: "skycron",
     name: "Skycron",
     logo: "/accounts/skycron.png",
-    url: "https://discord.gg/5sZNDb4UMy",
-    websiteUrl: "https://www.skycron.xyz",
+    url: "https://skycron.mysellauth.com/",
+    websiteUrl: "https://skycron.mysellauth.com/",
     discordUrl: "https://discord.gg/5sZNDb4UMy",
     startDate: "Feb 2026",
     listings: {
       "nfa-accounts": {
         summary:
-          "NFA generator with a web dashboard. Hypixel unbanned, DonutSMP unbanned, Nitro and banned alts. Short cooldowns (2 min banned, 4 min unbanned).",
+          "Discord bot-based NFA generator with Hypixel, DonutSMP, Minemen, GommeHD, and CubeCraft unbans plus banned alts. Short cooldowns keep generation moving.",
         badges: ["instant-delivery"],
         price: "Subscription",
         priceValue: 0,
         couponCode: "SOULFIRE",
         couponDiscount: "5% off",
         priceDetails:
-          "One-time key for lifetime dashboard access. One account at a time with short cooldowns (2 min banned, 4 min unbanned).",
+          "Generator access runs through the Discord bot. Includes Hypixel, DonutSMP, Minemen, GommeHD, and CubeCraft unbans.",
       },
     },
   },
