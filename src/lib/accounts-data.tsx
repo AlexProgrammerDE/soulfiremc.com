@@ -383,6 +383,35 @@ export const SHOPS: Shop[] = [
     },
   },
   {
+    slug: "4d4p-shop",
+    name: "4D4P Shop",
+    logo: "/accounts/4d4p.webp",
+    url: "https://4d4pshop.com/products/minecraft-accounts",
+    websiteUrl: "https://4d4pshop.com/",
+    discordUrl: "https://discord.com/invite/4d4pshop",
+    trustpilotUrl: "https://www.trustpilot.com/review/4d4pshop.com",
+    socialLinks: [{ platform: "telegram", url: "https://t.me/shop4d4ps" }],
+    startDate: "2019",
+    listings: {
+      "mfa-accounts": {
+        summary:
+          "Full-access Minecraft account store operating since 2019 with Hypixel and DonutSMP unbanned accounts, Hypixel ranked accounts, rare cape accounts, and 4-letter usernames. Public feedback shows 600+ customer reviews, and orders advertise instant automated delivery plus lifetime warranty.",
+        badges: [
+          "affiliate",
+          "high-quality",
+          "instant-delivery",
+          "lifetime-warranty",
+        ],
+        price: "$7.50+",
+        priceValue: 7.5,
+        couponCode: "SOULFIRE",
+        couponDiscount: "5% off",
+        priceDetails:
+          "Public Minecraft catalog lists Hypixel and DonutSMP full-access accounts from $7.50, Hypixel ranked accounts from $11-$20, 4-letter usernames from $15, and cape accounts from $8.50+.",
+      },
+    },
+  },
+  {
     slug: "zzxgp",
     name: "ZZXGP",
     logo: "/accounts/zzxgp.png",
