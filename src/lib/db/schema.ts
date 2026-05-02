@@ -3,6 +3,7 @@ import {
   check,
   index,
   integer,
+  pgEnum,
   pgTable,
   // biome-ignore lint/suspicious/noDeprecatedImports: Drizzle marks the legacy overload on this symbol as deprecated, but the object form used below is the current API.
   primaryKey,
@@ -13,6 +14,18 @@ import {
 } from "drizzle-orm/pg-core";
 import { user } from "@/lib/db/auth-schema";
 
+export const reviewCommentStatus = pgEnum("review_comment_status", [
+  "approved",
+  "pending",
+  "rejected",
+]);
+
+export const reviewItemType = pgEnum("review_item_type", [
+  "account",
+  "proxy",
+  "resource",
+]);
+
 export const review = pgTable(
   "review",
   {
@@ -20,12 +33,11 @@ export const review = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    itemType: text("item_type", {
-      enum: ["account", "proxy", "resource"],
-    }).notNull(),
+    itemType: reviewItemType("item_type").notNull(),
     itemSlug: text("item_slug").notNull(),
     rating: integer("rating").notNull().default(5),
     body: text("body"),
+    commentStatus: reviewCommentStatus("comment_status"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")
       .defaultNow()
@@ -44,6 +56,7 @@ export const review = pgTable(
       table.itemSlug,
       table.createdAt,
     ),
+    index("review_comment_status_idx").on(table.commentStatus),
     check(
       "review_rating_range",
       sql`${table.rating} >= 1 AND ${table.rating} <= 5`,
@@ -54,9 +67,7 @@ export const review = pgTable(
 export const reviewItemOwner = pgTable(
   "review_item_owner",
   {
-    itemType: text("item_type", {
-      enum: ["account", "proxy", "resource"],
-    }).notNull(),
+    itemType: reviewItemType("item_type").notNull(),
     itemSlug: text("item_slug").notNull(),
     userId: uuid("user_id")
       .notNull()

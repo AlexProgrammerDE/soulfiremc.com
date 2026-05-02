@@ -40,6 +40,17 @@ export default defineConfig(() => ({
         enabled: true,
         host: "https://soulfiremc.com",
       },
+      pages: [
+        {
+          path: "/admin",
+          prerender: {
+            enabled: false,
+          },
+          sitemap: {
+            exclude: true,
+          },
+        },
+      ],
       prerender: {
         enabled: true,
         crawlLinks: true,
@@ -55,7 +66,8 @@ export default defineConfig(() => ({
             path === "/discord" ||
             path === "/github" ||
             path === "/donate" ||
-            path === "/demo-video"
+            path === "/demo-video" ||
+            path === "/admin"
           ),
       },
     }),

@@ -2,6 +2,8 @@ import type { AggregateRating, Review as SchemaReview } from "schema-dts";
 
 export type ItemType = "account" | "proxy" | "resource";
 
+export type ReviewCommentStatus = "approved" | "pending" | "rejected";
+
 export type ReviewSummary = {
   averageRating: number | null;
   reviewCount: number;
@@ -10,6 +12,7 @@ export type ReviewSummary = {
 export type UserReviewRecord = {
   rating: number;
   body: string | null;
+  commentStatus: ReviewCommentStatus;
 };
 
 export type PublicReviewRecord = {
@@ -17,6 +20,7 @@ export type PublicReviewRecord = {
   itemSlug: string;
   rating: number;
   body: string | null;
+  commentStatus: ReviewCommentStatus;
   createdAt: string;
   authorName: string;
   authorImage: string | null;

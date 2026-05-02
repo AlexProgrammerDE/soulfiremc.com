@@ -22,6 +22,7 @@ import { Route as DocsDotmdxRouteImport } from './routes/docs[.]mdx'
 import { Route as DiscordRouteImport } from './routes/discord'
 import { Route as DemoVideoRouteImport } from './routes/demo-video'
 import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResourcesIndexRouteImport } from './routes/resources/index'
 import { Route as GetProxiesIndexRouteImport } from './routes/get-proxies/index'
@@ -111,6 +112,11 @@ const DemoVideoRoute = DemoVideoRouteImport.update({
 const CookiePolicyRoute = CookiePolicyRouteImport.update({
   id: '/cookie-policy',
   path: '/cookie-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -250,6 +256,7 @@ const ApiDiscordLinkedRoleCallbackRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/cookie-policy': typeof CookiePolicyRoute
   '/demo-video': typeof DemoVideoRoute
   '/discord': typeof DiscordRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/cookie-policy': typeof CookiePolicyRoute
   '/demo-video': typeof DemoVideoRoute
   '/discord': typeof DiscordRoute
@@ -331,6 +339,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/cookie-policy': typeof CookiePolicyRoute
   '/demo-video': typeof DemoVideoRoute
   '/discord': typeof DiscordRoute
@@ -373,6 +382,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/cookie-policy'
     | '/demo-video'
     | '/discord'
@@ -413,6 +423,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/cookie-policy'
     | '/demo-video'
     | '/discord'
@@ -453,6 +464,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/cookie-policy'
     | '/demo-video'
     | '/discord'
@@ -494,6 +506,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CookiePolicyRoute: typeof CookiePolicyRoute
   DemoVideoRoute: typeof DemoVideoRoute
   DiscordRoute: typeof DiscordRoute
@@ -624,6 +637,13 @@ declare module '@tanstack/react-router' {
       path: '/cookie-policy'
       fullPath: '/cookie-policy'
       preLoaderRoute: typeof CookiePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -806,6 +826,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CookiePolicyRoute: CookiePolicyRoute,
   DemoVideoRoute: DemoVideoRoute,
   DiscordRoute: DiscordRoute,

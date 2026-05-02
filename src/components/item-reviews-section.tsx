@@ -150,13 +150,24 @@ function ItemReviewsSectionContent({
   }, [summary.reviewCount]);
 
   const saveReview = async () => {
+    const normalizedBody = body.trim();
+    const submittedForReview =
+      normalizedBody.length > 0 &&
+      (currentReview?.commentStatus !== "approved" ||
+        (currentReview.body?.trim() ?? "") !== normalizedBody);
     const result = await upsertReview(slug, {
       rating,
       body,
     });
     handleMutationError(result.error, () => setShowSignInPrompt(true));
     if (!result.error) {
-      toast(currentReview ? "Review updated" : "Review saved");
+      toast(
+        submittedForReview
+          ? "Review submitted for moderation"
+          : currentReview
+            ? "Review updated"
+            : "Review saved",
+      );
     }
   };
 
@@ -178,8 +189,8 @@ function ItemReviewsSectionContent({
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold">Ratings & reviews</h2>
           <p className="text-sm text-muted-foreground">
-            Ratings affect the average immediately. Public reviews can include
-            either a written comment or a star-only rating.
+            Ratings affect the average immediately. Written comments are
+            reviewed before publication.
           </p>
         </div>
 
@@ -259,7 +270,7 @@ function ItemReviewsSectionContent({
                 htmlFor={`review-body-${slug}`}
                 className="text-sm font-medium"
               >
-                Written review
+                Written review (optional, will be reviewed)
               </label>
               <textarea
                 id={`review-body-${slug}`}
@@ -372,11 +383,11 @@ function ItemReviewsSectionContent({
                     <p className="text-sm leading-6 text-muted-foreground">
                       {entry.body}
                     </p>
-                  ) : (
+                  ) : entry.commentStatus === "pending" ? (
                     <p className="text-sm italic text-muted-foreground/80">
-                      No written comment provided.
+                      Review pending.
                     </p>
-                  )}
+                  ) : null}
                 </Card>
               ))}
             </div>

@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { getAvatarUrl } from "@/lib/avatar";
 import { db } from "@/lib/db";
 import { user } from "@/lib/db/auth-schema";
@@ -8,6 +8,7 @@ import {
   type ItemType,
   type PaginatedPublicReviewRecords,
   type PublicReviewRecord,
+  type ReviewCommentStatus,
   type ReviewSummary,
   type UserReviewRecord,
 } from "@/lib/review-core";
@@ -16,6 +17,7 @@ export type {
   ItemType,
   PaginatedPublicReviewRecords,
   PublicReviewRecord,
+  ReviewCommentStatus,
   ReviewSummary,
   UserReviewRecord,
 } from "@/lib/review-core";
@@ -68,6 +70,7 @@ export async function getUserReviews(
       itemSlug: review.itemSlug,
       rating: review.rating,
       body: review.body,
+      commentStatus: review.commentStatus,
     })
     .from(review)
     .where(
@@ -84,9 +87,52 @@ export async function getUserReviews(
       {
         rating: row.rating,
         body: row.body,
+        commentStatus: getEffectiveCommentStatus({
+          body: row.body,
+          commentStatus: row.commentStatus,
+        }),
       },
     ]),
   );
+}
+
+function getEffectiveCommentStatus({
+  body,
+  commentStatus,
+}: {
+  body: string | null;
+  commentStatus: ReviewCommentStatus | null;
+}): ReviewCommentStatus {
+  if (!body?.trim()) {
+    return "approved";
+  }
+
+  return commentStatus ?? "pending";
+}
+
+function getPublicComment({
+  body,
+  commentStatus,
+}: {
+  body: string | null;
+  commentStatus: ReviewCommentStatus | null;
+}): {
+  body: string | null;
+  commentStatus: ReviewCommentStatus;
+} {
+  const trimmedBody = body?.trim() || null;
+  if (!trimmedBody) {
+    return { body: null, commentStatus: "approved" };
+  }
+
+  if (commentStatus === "approved") {
+    return { body: trimmedBody, commentStatus };
+  }
+
+  return {
+    body: null,
+    commentStatus: getEffectiveCommentStatus({ body, commentStatus }),
+  };
 }
 
 export async function getWrittenReviews(
@@ -107,6 +153,7 @@ export async function getWrittenReviews(
       itemSlug: review.itemSlug,
       rating: review.rating,
       body: review.body,
+      commentStatus: review.commentStatus,
       createdAt: review.createdAt,
       userName: user.name,
       username: user.username,
@@ -123,12 +170,17 @@ export async function getWrittenReviews(
 
   return rows.map((row) => {
     const authorName = row.displayUsername ?? row.username ?? "User";
+    const publicComment = getPublicComment({
+      body: row.body,
+      commentStatus: row.commentStatus,
+    });
 
     return {
       id: row.id,
       itemSlug: row.itemSlug,
       rating: row.rating,
-      body: row.body?.trim() || null,
+      body: publicComment.body,
+      commentStatus: publicComment.commentStatus,
       createdAt: row.createdAt.toISOString(),
       authorName,
       authorImage: getAvatarUrl(row.userImage, row.userEmail),
@@ -167,4 +219,73 @@ export async function getPaginatedWrittenReviews(
     totalCount,
     totalPages,
   };
+}
+
+export type PendingReviewCommentRecord = {
+  id: string;
+  itemType: ItemType;
+  itemSlug: string;
+  rating: number;
+  body: string;
+  createdAt: string;
+  authorName: string;
+  authorEmail: string | null;
+  authorImage: string | null;
+};
+
+export async function getPendingReviewComments(): Promise<
+  PendingReviewCommentRecord[]
+> {
+  const rows = await db
+    .select({
+      id: review.id,
+      itemType: review.itemType,
+      itemSlug: review.itemSlug,
+      rating: review.rating,
+      body: review.body,
+      createdAt: review.createdAt,
+      userName: user.name,
+      username: user.username,
+      displayUsername: user.displayUsername,
+      userEmail: user.email,
+      userImage: user.image,
+    })
+    .from(review)
+    .leftJoin(user, eq(review.userId, user.id))
+    .where(
+      and(
+        or(eq(review.commentStatus, "pending"), isNull(review.commentStatus)),
+        sql`${review.body} IS NOT NULL`,
+        sql`btrim(${review.body}) <> ''`,
+      ),
+    )
+    .orderBy(desc(review.createdAt));
+
+  return rows.flatMap((row) => {
+    const body = row.body?.trim();
+    if (!body) {
+      return [];
+    }
+
+    return [
+      {
+        id: row.id,
+        itemType: row.itemType,
+        itemSlug: row.itemSlug,
+        rating: row.rating,
+        body,
+        createdAt: row.createdAt.toISOString(),
+        authorName: row.displayUsername ?? row.username ?? "User",
+        authorEmail: row.userEmail,
+        authorImage: getAvatarUrl(row.userImage, row.userEmail),
+      },
+    ];
+  });
+}
+
+export async function updateReviewCommentStatus(
+  reviewId: string,
+  commentStatus: Extract<ReviewCommentStatus, "approved" | "rejected">,
+) {
+  await db.update(review).set({ commentStatus }).where(eq(review.id, reviewId));
 }

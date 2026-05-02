@@ -7,13 +7,17 @@ import { db } from "@/lib/db";
 import { review } from "@/lib/db/schema";
 import type {
   PaginatedPublicReviewRecords,
+  ReviewCommentStatus,
   ReviewSummary,
   UserReviewRecord,
 } from "@/lib/review-core";
 import {
   getPaginatedWrittenReviews,
+  getPendingReviewComments,
   getReviewSummaries,
   getUserReviews,
+  type PendingReviewCommentRecord,
+  updateReviewCommentStatus,
 } from "@/lib/reviews";
 import {
   getExpectedTurnstileHostname,
@@ -47,6 +51,11 @@ const deleteReviewInputSchema = z.object({
   itemSlug: z.string().min(1),
 });
 
+const moderateReviewCommentInputSchema = z.object({
+  reviewId: z.string().uuid(),
+  commentStatus: z.enum(["approved", "rejected"]),
+});
+
 export type GetReviewsResult = {
   summaries: Record<string, ReviewSummary>;
   userReviews: Record<string, UserReviewRecord>;
@@ -62,6 +71,14 @@ export type DeleteReviewResult =
   | { ok: true }
   | { ok: false; error: "unauthorized" };
 
+export type GetPendingReviewCommentsResult =
+  | { ok: true; comments: PendingReviewCommentRecord[] }
+  | { ok: false; error: "unauthorized" };
+
+export type ModerateReviewCommentResult =
+  | { ok: true }
+  | { ok: false; error: "unauthorized" };
+
 function normalizeBody(value: string | null): string | null {
   if (value === null) {
     return null;
@@ -73,6 +90,50 @@ function normalizeBody(value: string | null): string | null {
   }
 
   return trimmed.slice(0, 2_000);
+}
+
+function hasAdminRole(role: string | null | undefined): boolean {
+  return (
+    role
+      ?.split(",")
+      .map((value) => value.trim().toLowerCase())
+      .includes("admin") ?? false
+  );
+}
+
+async function getAdminSession() {
+  const session = await auth.api.getSession({
+    headers: getRequest().headers,
+  });
+
+  if (!session?.user || !hasAdminRole(session.user.role)) {
+    return null;
+  }
+
+  return session;
+}
+
+function getSubmittedCommentStatus({
+  existingBody,
+  existingCommentStatus,
+  nextBody,
+}: {
+  existingBody?: string | null;
+  existingCommentStatus?: ReviewCommentStatus | null;
+  nextBody: string | null;
+}): ReviewCommentStatus {
+  if (!nextBody) {
+    return "approved";
+  }
+
+  if (
+    existingCommentStatus === "approved" &&
+    (existingBody?.trim() || null) === nextBody
+  ) {
+    return "approved";
+  }
+
+  return "pending";
 }
 
 export const getReviewsServerFn = createServerFn({ method: "GET" })
@@ -141,7 +202,11 @@ export const submitReviewServerFn = createServerFn({ method: "POST" })
     }
 
     const existing = await db
-      .select({ id: review.id })
+      .select({
+        id: review.id,
+        body: review.body,
+        commentStatus: review.commentStatus,
+      })
       .from(review)
       .where(
         and(
@@ -153,6 +218,11 @@ export const submitReviewServerFn = createServerFn({ method: "POST" })
       .limit(1);
 
     const normalizedBody = normalizeBody(data.body);
+    const commentStatus = getSubmittedCommentStatus({
+      existingBody: existing[0]?.body,
+      existingCommentStatus: existing[0]?.commentStatus,
+      nextBody: normalizedBody,
+    });
 
     if (existing.length === 0) {
       const turnstileValidation = await validateTurnstileToken({
@@ -172,6 +242,7 @@ export const submitReviewServerFn = createServerFn({ method: "POST" })
 
       await db.insert(review).values({
         body: normalizedBody,
+        commentStatus,
         itemSlug: data.itemSlug,
         itemType: data.itemType,
         rating: data.rating,
@@ -180,9 +251,36 @@ export const submitReviewServerFn = createServerFn({ method: "POST" })
     } else {
       await db
         .update(review)
-        .set({ rating: data.rating, body: normalizedBody })
+        .set({ rating: data.rating, body: normalizedBody, commentStatus })
         .where(eq(review.id, existing[0].id));
     }
+
+    return { ok: true };
+  });
+
+export const getPendingReviewCommentsServerFn = createServerFn({
+  method: "GET",
+}).handler(async (): Promise<GetPendingReviewCommentsResult> => {
+  const session = await getAdminSession();
+  if (!session) {
+    return { ok: false, error: "unauthorized" };
+  }
+
+  return {
+    ok: true,
+    comments: await getPendingReviewComments(),
+  };
+});
+
+export const moderateReviewCommentServerFn = createServerFn({ method: "POST" })
+  .inputValidator(moderateReviewCommentInputSchema)
+  .handler(async ({ data }): Promise<ModerateReviewCommentResult> => {
+    const session = await getAdminSession();
+    if (!session) {
+      return { ok: false, error: "unauthorized" };
+    }
+
+    await updateReviewCommentStatus(data.reviewId, data.commentStatus);
 
     return { ok: true };
   });
