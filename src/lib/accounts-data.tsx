@@ -254,7 +254,7 @@ export const SHOPS: Shop[] = [
     theme: "rave",
     url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
-    discordUrl: "https://discord.ravealts.com/",
+    discordUrl: "https://discord.ravealts.com",
     trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
     socialLinks: [
       { platform: "youtube", url: "https://www.youtube.com/@ravealts" },
@@ -387,7 +387,7 @@ export const SHOPS: Shop[] = [
     name: "4D4P Shop",
     logo: "/accounts/4d4p.webp",
     url: "https://4d4pshop.com/products/minecraft-accounts",
-    websiteUrl: "https://4d4pshop.com/",
+    websiteUrl: "https://4d4pshop.com",
     discordUrl: "https://discord.com/invite/4d4pshop",
     trustpilotUrl: "https://www.trustpilot.com/review/4d4pshop.com",
     socialLinks: [{ platform: "telegram", url: "https://t.me/shop4d4ps" }],
@@ -512,8 +512,8 @@ export const SHOPS: Shop[] = [
     slug: "skycron",
     name: "Skycron",
     logo: "/accounts/skycron.png",
-    url: "https://skycron.mysellauth.com/",
-    websiteUrl: "https://skycron.mysellauth.com/",
+    url: "https://skycron.mysellauth.com",
+    websiteUrl: "https://skycron.mysellauth.com",
     discordUrl: "https://discord.gg/5sZNDb4UMy",
     startDate: "Feb 2026",
     listings: {
