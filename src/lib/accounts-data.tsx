@@ -255,7 +255,7 @@ export const SHOPS: Shop[] = [
     url: "https://dash.ravealts.com",
     websiteUrl: "https://ravealts.com",
     discordUrl: "https://discord.ravealts.com",
-    trustpilotUrl: "https://trustpilot.com/review/ravealts.com",
+    trustpilotUrl: "https://www.trustpilot.com/review/ravealts.com",
     socialLinks: [
       { platform: "youtube", url: "https://www.youtube.com/@ravealts" },
       { platform: "tiktok", url: "https://www.tiktok.com/@ravealts" },
