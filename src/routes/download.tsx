@@ -12,12 +12,12 @@ import {
   Server,
   Terminal,
 } from "lucide-react";
-import { useQueryStates } from "nuqs";
 import {
   createLoader,
-  createSearchParamsCache,
+  createStandardSchemaV1,
   parseAsStringLiteral,
-} from "nuqs/server";
+  useQueryStates,
+} from "nuqs";
 import { Suspense, useEffect, useState } from "react";
 import { SiteShell } from "@/components/site-shell";
 import { CustomTimeAgo } from "@/components/time-ago";
@@ -117,9 +117,10 @@ const downloadSearchParams = {
   cpu: parseAsStringLiteral(CPU_IDS).withDefault(DEFAULT_CPU.id),
 };
 
-createSearchParamsCache(downloadSearchParams);
-
 const loadDownloadSearchParams = createLoader(downloadSearchParams);
+const validateDownloadSearch = createStandardSchemaV1(downloadSearchParams, {
+  partialOutput: true,
+});
 
 type DownloadSelection = Awaited<ReturnType<typeof loadDownloadSearchParams>>;
 
@@ -762,6 +763,7 @@ const downloadPageLoader = createServerFn({ method: "GET" }).handler(
 );
 
 export const Route = createFileRoute("/download")({
+  validateSearch: validateDownloadSearch,
   head: () => ({
     meta: getPageMeta({
       title: "Download SoulFire - SoulFire",

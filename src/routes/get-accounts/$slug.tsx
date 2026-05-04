@@ -58,6 +58,7 @@ import {
   getReviewJsonLd,
   getReviewSummaries,
 } from "@/lib/reviews";
+import { validateReviewsSearch } from "@/lib/reviews-search-params";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -248,7 +249,7 @@ function LinkDiscountNotice({ message }: { message: string }) {
 }
 
 const accountDetailLoader = createServerFn({ method: "GET" })
-  .inputValidator((value: { slug: string }) => value)
+  .inputValidator((value: { reviewsPage: number; slug: string }) => value)
   .handler(async ({ data }) => {
     const shop = getShopBySlug(data.slug);
     if (!shop) {
@@ -272,7 +273,7 @@ const accountDetailLoader = createServerFn({ method: "GET" })
       "account",
       shop.slug,
       reviewSummary.reviewCount,
-      { page: 1 },
+      { page: data.reviewsPage },
     ).catch(() => ({
       entries: [],
       page: 1,
@@ -425,8 +426,14 @@ function SocialLinks({ links }: { links?: SocialLink[] }) {
 }
 
 export const Route = createFileRoute("/get-accounts/$slug")({
-  loader: async ({ params }) =>
-    accountDetailLoader({ data: { slug: params.slug } }),
+  validateSearch: validateReviewsSearch,
+  loaderDeps: ({ search }) => ({
+    reviewsPage: search.reviewsPage ?? 1,
+  }),
+  loader: async ({ deps, params }) =>
+    accountDetailLoader({
+      data: { reviewsPage: deps.reviewsPage, slug: params.slug },
+    }),
   head: ({ loaderData }) => {
     const data = loaderData as any;
 

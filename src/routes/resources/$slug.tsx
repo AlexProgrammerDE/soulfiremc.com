@@ -54,6 +54,7 @@ import {
   getReviewJsonLd,
   getReviewSummaries,
 } from "@/lib/reviews";
+import { validateReviewsSearch } from "@/lib/reviews-search-params";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -325,7 +326,7 @@ function ResourceDetailPageContent({
 }
 
 const resourceDetailLoader = createServerFn({ method: "GET" })
-  .inputValidator((value: { slug: string }) => value)
+  .inputValidator((value: { reviewsPage: number; slug: string }) => value)
   .handler(async ({ data }) => {
     const resource = getResourceBySlug(data.slug);
     if (!resource) {
@@ -347,7 +348,7 @@ const resourceDetailLoader = createServerFn({ method: "GET" })
       "resource",
       resource.slug,
       reviewSummary.reviewCount,
-      { page: 1 },
+      { page: data.reviewsPage },
     ).catch(() => ({
       entries: [],
       page: 1,
@@ -438,8 +439,14 @@ const resourceDetailLoader = createServerFn({ method: "GET" })
   });
 
 export const Route = createFileRoute("/resources/$slug")({
-  loader: async ({ params }) =>
-    resourceDetailLoader({ data: { slug: params.slug } }),
+  validateSearch: validateReviewsSearch,
+  loaderDeps: ({ search }) => ({
+    reviewsPage: search.reviewsPage ?? 1,
+  }),
+  loader: async ({ deps, params }) =>
+    resourceDetailLoader({
+      data: { reviewsPage: deps.reviewsPage, slug: params.slug },
+    }),
   head: ({ loaderData }) => {
     const data = loaderData;
 

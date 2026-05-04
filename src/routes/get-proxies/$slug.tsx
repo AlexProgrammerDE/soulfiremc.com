@@ -56,6 +56,7 @@ import {
   getReviewJsonLd,
   getReviewSummaries,
 } from "@/lib/reviews";
+import { validateReviewsSearch } from "@/lib/reviews-search-params";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -383,7 +384,7 @@ function ProxyProviderPageContent({
 }
 
 const proxyDetailLoader = createServerFn({ method: "GET" })
-  .inputValidator((value: { slug: string }) => value)
+  .inputValidator((value: { reviewsPage: number; slug: string }) => value)
   .handler(async ({ data }) => {
     const provider = getProviderBySlug(data.slug);
     if (!provider) {
@@ -405,7 +406,7 @@ const proxyDetailLoader = createServerFn({ method: "GET" })
       "proxy",
       provider.slug,
       reviewSummary.reviewCount,
-      { page: 1 },
+      { page: data.reviewsPage },
     ).catch(() => ({
       entries: [],
       page: 1,
@@ -506,8 +507,14 @@ const proxyDetailLoader = createServerFn({ method: "GET" })
   });
 
 export const Route = createFileRoute("/get-proxies/$slug")({
-  loader: async ({ params }) =>
-    proxyDetailLoader({ data: { slug: params.slug } }),
+  validateSearch: validateReviewsSearch,
+  loaderDeps: ({ search }) => ({
+    reviewsPage: search.reviewsPage ?? 1,
+  }),
+  loader: async ({ deps, params }) =>
+    proxyDetailLoader({
+      data: { reviewsPage: deps.reviewsPage, slug: params.slug },
+    }),
   head: ({ loaderData }) => {
     const data = loaderData;
 

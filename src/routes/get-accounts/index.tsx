@@ -13,14 +13,11 @@ import {
   Info,
   Users,
 } from "lucide-react";
-import { useQueryStates } from "nuqs";
 import {
-  createLoader,
-  createSearchParamsCache,
-  parseAsArrayOf,
+  createStandardSchemaV1,
   parseAsStringLiteral,
-  type SearchParams,
-} from "nuqs/server";
+  useQueryStates,
+} from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
@@ -64,6 +61,7 @@ import {
 import { type DiscordInviteResponse, fetchDiscordInvite } from "@/lib/discord";
 import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
+import { parseAsNativeOrDelimitedArrayOf } from "@/lib/search-param-parsers";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -316,18 +314,13 @@ const SORT_OPTIONS = [
 
 const accountsSearchParams = {
   category: parseAsStringLiteral([...CATEGORIES]),
-  badges: parseAsArrayOf(parseAsStringLiteral([...BADGES])).withDefault([]),
+  badges: parseAsNativeOrDelimitedArrayOf(parseAsStringLiteral([...BADGES])),
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
-const _accountsSearchParamsCache =
-  createSearchParamsCache(accountsSearchParams);
-
-const loadAccountsSearchParams = createLoader(accountsSearchParams);
-
-type AccountsSelection = Awaited<ReturnType<typeof loadAccountsSearchParams>>;
-
-type AccountsPageSearchParams = Promise<SearchParams>;
+const validateAccountsSearch = createStandardSchemaV1(accountsSearchParams, {
+  partialOutput: true,
+});
 
 type DiscordInvites = Record<string, DiscordInviteResponse | null>;
 
@@ -1148,6 +1141,7 @@ const accountsPageLoader = createServerFn({ method: "GET" }).handler(
 );
 
 export const Route = createFileRoute("/get-accounts/")({
+  validateSearch: validateAccountsSearch,
   head: () => ({
     meta: getPageMeta({
       title: "Minecraft Alts, MFA & NFA Accounts - SoulFire",

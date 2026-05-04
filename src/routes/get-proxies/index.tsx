@@ -11,14 +11,11 @@ import {
   ImageIcon,
   Star,
 } from "lucide-react";
-import { useQueryStates } from "nuqs";
 import {
-  createLoader,
-  createSearchParamsCache,
-  parseAsArrayOf,
+  createStandardSchemaV1,
   parseAsStringLiteral,
-  type SearchParams,
-} from "nuqs/server";
+  useQueryStates,
+} from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
@@ -49,6 +46,7 @@ import {
 } from "@/lib/proxies-data";
 import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
+import { parseAsNativeOrDelimitedArrayOf } from "@/lib/search-param-parsers";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -193,17 +191,13 @@ const BADGES = [
 const SORT_OPTIONS = ["default", "best-rated"] as const;
 
 const proxiesSearchParams = {
-  badges: parseAsArrayOf(parseAsStringLiteral([...BADGES])).withDefault([]),
+  badges: parseAsNativeOrDelimitedArrayOf(parseAsStringLiteral([...BADGES])),
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
-const _proxiesSearchParamsCache = createSearchParamsCache(proxiesSearchParams);
-
-const loadProxiesSearchParams = createLoader(proxiesSearchParams);
-
-type ProxiesSelection = Awaited<ReturnType<typeof loadProxiesSearchParams>>;
-
-type ProxiesPageSearchParams = Promise<SearchParams>;
+const validateProxiesSearch = createStandardSchemaV1(proxiesSearchParams, {
+  partialOutput: true,
+});
 
 const SORT_CONFIG = {
   default: {
@@ -763,6 +757,7 @@ const proxiesPageLoader = createServerFn({ method: "GET" }).handler(
 );
 
 export const Route = createFileRoute("/get-proxies/")({
+  validateSearch: validateProxiesSearch,
   head: () => ({
     meta: getPageMeta({
       title: "Get Proxies - SoulFire",

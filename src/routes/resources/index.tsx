@@ -12,14 +12,11 @@ import {
   Star,
   User,
 } from "lucide-react";
-import { useQueryStates } from "nuqs";
 import {
-  createLoader,
-  createSearchParamsCache,
-  parseAsArrayOf,
+  createStandardSchemaV1,
   parseAsStringLiteral,
-  type SearchParams,
-} from "nuqs/server";
+  useQueryStates,
+} from "nuqs";
 import { Suspense, useMemo, useState } from "react";
 import { ReviewInlineActions } from "@/components/review-inline-actions";
 import { ReviewTurnstileProvider } from "@/components/review-turnstile-provider";
@@ -50,6 +47,7 @@ import {
 } from "@/lib/resources-data";
 import type { ReviewSummary, UserReviewRecord } from "@/lib/review-core";
 import { getAggregateRatingJsonLd, getReviewSummaries } from "@/lib/reviews";
+import { parseAsNativeOrDelimitedArrayOf } from "@/lib/search-param-parsers";
 import { getCanonicalLinks, getPageMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -169,22 +167,14 @@ const SORT_OPTIONS = ["default", "best-rated"] as const;
 const CATEGORY_VALUES = ["plugin", "script"] as const;
 
 const resourcesSearchParams = {
-  category: parseAsStringLiteral([...CATEGORY_VALUES]).withDefault(
-    null as never,
-  ),
-  tags: parseAsArrayOf(parseAsStringLiteral([...TAGS])).withDefault([]),
+  category: parseAsStringLiteral([...CATEGORY_VALUES]),
+  tags: parseAsNativeOrDelimitedArrayOf(parseAsStringLiteral([...TAGS])),
   sort: parseAsStringLiteral([...SORT_OPTIONS]).withDefault("default"),
 };
 
-const _resourcesSearchParamsCache = createSearchParamsCache(
-  resourcesSearchParams,
-);
-
-const loadResourcesSearchParams = createLoader(resourcesSearchParams);
-
-type ResourcesSelection = Awaited<ReturnType<typeof loadResourcesSearchParams>>;
-
-type ResourcesPageSearchParams = Promise<SearchParams>;
+const validateResourcesSearch = createStandardSchemaV1(resourcesSearchParams, {
+  partialOutput: true,
+});
 
 const SORT_CONFIG = {
   default: {
@@ -778,6 +768,7 @@ const resourcesPageLoader = createServerFn({ method: "GET" }).handler(
 );
 
 export const Route = createFileRoute("/resources/")({
+  validateSearch: validateResourcesSearch,
   head: () => ({
     meta: getPageMeta({
       title: "Resources - SoulFire",
