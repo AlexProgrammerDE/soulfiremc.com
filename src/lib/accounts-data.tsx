@@ -353,7 +353,7 @@ export const SHOPS: Shop[] = [
     logo: "/accounts/nicealts.png",
     url: "https://nicealts.com",
     websiteUrl: "https://nicealts.com",
-    discordUrl: "https://nicealts.com/discord",
+    discordUrl: "https://discord.gg/QdFhNQ5rcv",
     trustpilotUrl: "https://www.trustpilot.com/review/nicealts.com",
     startDate: "Mar 2025",
     listings: {
