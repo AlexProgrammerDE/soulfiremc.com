@@ -351,8 +351,10 @@ export const SHOPS: Shop[] = [
     slug: "nicealts",
     name: "Nicealts",
     logo: "/accounts/nicealts.png",
-    url: "https://discord.gg/nicealts",
-    websiteUrl: "https://status.nicealts.com",
+    url: "https://nicealts.com",
+    websiteUrl: "https://nicealts.com",
+    discordUrl: "https://nicealts.com/discord",
+    trustpilotUrl: "https://www.trustpilot.com/review/nicealts.com",
     startDate: "Mar 2025",
     listings: {
       "nfa-accounts": {
