@@ -417,7 +417,7 @@ export const SHOPS: Shop[] = [
     logo: "/accounts/zzxgp.png",
     url: "https://zzxgp.me",
     websiteUrl: "https://shop.zzxgp.me",
-    discordUrl: "https://discord.gg/gycmTvrfnj",
+    discordUrl: "https://discord.zzxgp.me",
     startDate: "Dec 2025",
     listings: {
       "nfa-accounts": {
