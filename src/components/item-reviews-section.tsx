@@ -124,12 +124,6 @@ function ItemReviewsSectionContent({
     }
   }, [reviewPage, setReviewPage]);
 
-  useEffect(() => {
-    if (reviewPageData.page !== activeReviewPage) {
-      void setReviewPage(reviewPageData.page);
-    }
-  }, [activeReviewPage, reviewPageData.page, setReviewPage]);
-
   const hasWrittenReviews = visibleReviews.length > 0;
   const hasPreviousPage = reviewPageData.page > 1;
   const hasNextPage = reviewPageData.page < reviewPageData.totalPages;

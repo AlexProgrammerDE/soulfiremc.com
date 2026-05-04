@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReviewTurnstile } from "@/components/review-turnstile-provider";
 import { useSession } from "@/lib/auth-hooks";
 import {
@@ -51,11 +51,11 @@ export function useReviews(
   const { executeTurnstile } = useReviewTurnstile();
   const includeWrittenReviews = options?.includeWrittenReviews ?? false;
   const writtenReviewsPage = Math.max(1, options?.writtenReviewsPage ?? 1);
-  const _slugsKey = useMemo(() => slugs.join(","), [slugs]);
   const normalizedSlugs = useMemo(
     () => slugs.map((slug) => slug.trim()).filter(Boolean),
-    [slugs.map],
+    [slugs],
   );
+  const refreshRequestIdRef = useRef(0);
 
   const [state, setState] = useState<ReviewState>({
     summaries: withEmptySummaries(normalizedSlugs, options?.initialSummaries),
@@ -67,6 +67,9 @@ export function useReviews(
 
   const refreshReviews = useCallback(
     async (targetSlugs: string[]) => {
+      refreshRequestIdRef.current += 1;
+      const requestId = refreshRequestIdRef.current;
+
       if (targetSlugs.length === 0) {
         setState((prev) => ({ ...prev, loading: false }));
         return;
@@ -83,6 +86,10 @@ export function useReviews(
       });
 
       setState((prev) => {
+        if (requestId !== refreshRequestIdRef.current) {
+          return prev;
+        }
+
         const nextSummaries = { ...prev.summaries };
         for (const slug of targetSlugs) {
           nextSummaries[slug] = data.summaries[slug] ?? emptyReviewSummary();
@@ -121,7 +128,7 @@ export function useReviews(
     setState((prev) => ({
       ...prev,
       summaries: withEmptySummaries(normalizedSlugs, options?.initialSummaries),
-      writtenReviews: options?.initialWrittenReviews ?? {},
+      writtenReviews: options?.initialWrittenReviews ?? prev.writtenReviews,
       loading: normalizedSlugs.length > 0,
     }));
 
