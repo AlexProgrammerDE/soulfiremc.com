@@ -42,37 +42,17 @@ const GH_SERVER_BASE =
 const CLIENT_RELEASE_DOWNLOAD_BASE =
   "https://github.com/soulfiremc-com/SoulFireClient/releases/download";
 
-const CLIENT_PLATFORM_KEYS: Record<
-  Exclude<ClientDownloadOs, "linux">,
-  Record<ClientDownloadArch, ClientReleaseManifestPlatformKey>
-> = {
-  windows: {
-    x64: "windows-x86_64",
-    arm64: "windows-aarch64",
-  },
-  macos: {
-    x64: "darwin-x86_64",
-    arm64: "darwin-aarch64",
-  },
-};
-
-function getClientPlatformUrl(
-  manifest: ClientReleaseManifest | null,
-  platform: ClientReleaseManifestPlatformKey,
-): string | undefined {
-  return manifest?.platforms[platform]?.url;
-}
-
-function buildMacosDmgUrl(
+function buildClientInstallerUrl(
   version: string | undefined,
+  os: Exclude<ClientDownloadOs, "linux">,
   arch: ClientDownloadArch,
 ): string | undefined {
   if (!version) {
     return undefined;
   }
 
-  const normalizedArch = arch === "arm64" ? "aarch64" : "x64";
-  return `${CLIENT_RELEASE_DOWNLOAD_BASE}/${version}/SoulFire_${version}_${normalizedArch}.dmg`;
+  const extension = os === "windows" ? "exe" : "dmg";
+  return `${CLIENT_RELEASE_DOWNLOAD_BASE}/${version}/SoulFire-${version}-${arch}.${extension}`;
 }
 
 export function createClientDownloads(
@@ -83,15 +63,18 @@ export function createClientDownloads(
   return {
     windows: {
       x64:
-        getClientPlatformUrl(manifest, CLIENT_PLATFORM_KEYS.windows.x64) ??
+        buildClientInstallerUrl(version, "windows", "x64") ??
         CLIENT_RELEASES_URL,
       arm64:
-        getClientPlatformUrl(manifest, CLIENT_PLATFORM_KEYS.windows.arm64) ??
+        buildClientInstallerUrl(version, "windows", "arm64") ??
         CLIENT_RELEASES_URL,
     },
     macos: {
-      x64: buildMacosDmgUrl(version, "x64") ?? CLIENT_RELEASES_URL,
-      arm64: buildMacosDmgUrl(version, "arm64") ?? CLIENT_RELEASES_URL,
+      x64:
+        buildClientInstallerUrl(version, "macos", "x64") ?? CLIENT_RELEASES_URL,
+      arm64:
+        buildClientInstallerUrl(version, "macos", "arm64") ??
+        CLIENT_RELEASES_URL,
     },
     linux: {
       x64: FLATHUB_URL,

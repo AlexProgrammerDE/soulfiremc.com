@@ -7,29 +7,29 @@ import {
   normalizeServerVersion,
 } from "@/lib/download-links";
 
-test("createClientDownloads uses latest.json platform URLs and keeps Linux on Flathub", () => {
+test("createClientDownloads builds desktop installer URLs and keeps Linux on Flathub", () => {
   const manifest = {
-    version: "2.8.1",
+    version: "2.8.6",
     pub_date: "2026-04-14T19:49:44.763Z",
     notes: "See the assets to download this version and install.",
     platforms: {
       "windows-x86_64": {
-        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_x64-setup.exe",
+        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire_2.8.6_x64-setup.exe",
       },
       "windows-aarch64": {
-        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_arm64-setup.exe",
+        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire_2.8.6_arm64-setup.exe",
       },
       "darwin-x86_64": {
-        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_x64.app.tar.gz",
+        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire_x64.app.tar.gz",
       },
       "darwin-aarch64": {
-        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_aarch64.app.tar.gz",
+        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire_aarch64.app.tar.gz",
       },
       "linux-x86_64": {
-        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/soulfire_2.8.1_amd64.AppImage",
+        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/soulfire_2.8.6_amd64.AppImage",
       },
       "linux-aarch64": {
-        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/soulfire_2.8.1_aarch64.AppImage",
+        url: "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/soulfire_2.8.6_aarch64.AppImage",
       },
     },
   } satisfies ClientReleaseManifest;
@@ -38,19 +38,19 @@ test("createClientDownloads uses latest.json platform URLs and keeps Linux on Fl
 
   assert.equal(
     downloads.windows.x64,
-    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_x64-setup.exe",
+    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire-2.8.6-x64.exe",
   );
   assert.equal(
     downloads.windows.arm64,
-    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_arm64-setup.exe",
+    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire-2.8.6-arm64.exe",
   );
   assert.equal(
     downloads.macos.x64,
-    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_x64.dmg",
+    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire-2.8.6-x64.dmg",
   );
   assert.equal(
     downloads.macos.arm64,
-    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.1/SoulFire_2.8.1_aarch64.dmg",
+    "https://github.com/soulfiremc-com/SoulFireClient/releases/download/2.8.6/SoulFire-2.8.6-arm64.dmg",
   );
   assert.equal(
     downloads.linux.x64,
